@@ -109,9 +109,16 @@ const MonthFormule: React.FC<MonthFormuleProps> = ({ budget, counter, type }) =>
           </li>
         ))}
       </ul>
-
+      <p className="mb-3"> 
+        {checkedItems.length} Livraison{checkedItems.length > 1 ? "s" : ""} to {generateDates(checkedDays).length} day{generateDates(checkedDays).length > 1 ? "s" : ""} 
+        <span className="badge text-bg-danger ms-3">{( checkedItems.length * 500 * generateDates(checkedDays).length )} XOF</span>
+      </p>
       <button type="button" className="btn btn-light py-3">
-        Total Budget: {calculateTotalBudget() * generateDates(checkedDays).length * counter} XOF
+        Total Budget: {
+        (calculateTotalBudget() * generateDates(checkedDays).length * counter) 
+        +
+        (checkedItems.length * 500 * generateDates(checkedDays).length)
+        } XOF
       </button>
     </div>
   );

@@ -1,3 +1,8 @@
+#root {
+  width: 100vw;
+  min-height: 100vh;
+  overflow-y: auto;
+}
 :root {
   --bs-primary-rgb: 153, 33, 251;
   --bs-primary: #9921fb;
@@ -36,13 +41,13 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 /* Thème sombre */
-body.dark-theme {
+main.dark-theme {
   background-color: var(--theme-bg);
   color: var(--theme-color);
 }
 
 /* Thème clair */
-body.light-theme {
+main.light-theme {
   background-color: var(--theme-color);
   color: var(--theme-bg);
 }

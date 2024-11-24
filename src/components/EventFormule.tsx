@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Accordion from "./Accordion";
-import { useAppStore } from "@/store/appStore";
+import { useAppStore } from "../store/appStore";
+
 interface EventFormuleProps {
   budget: 'normal' | 'vip',
   counter: number,
@@ -44,9 +45,19 @@ const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {
     }
     return total
   };
+  const [documentValue, setDocumentValue] = useState<Document | null>(null)
+  
+  useEffect(() => {
+    // Access document safely here
+    if (document) {
+      setDocumentValue(document)
+    }
+  }, [])
 
   const openDatePicker = () => {
-    document?.getElementById('datePickerRef')?.focus();
+    if (documentValue) {
+      documentValue?.getElementById('datePickerRef')?.focus();
+    }
   };
   return (
     <div className={`col-12 formule d-flex flex-column justify-content-between shadow-sm p-4 h-100 rounded-4 text-bg-${theme}`}>
@@ -95,9 +106,16 @@ const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {
           </li>
         ))}
       </ul>
-      
+      <p className="mb-3"> 
+        1 Livraison to {dates.length} day{dates.length > 1 ? "s" : ""}
+        <span className="badge text-bg-danger ms-3">{( 1000 * dates.length )} XOF</span>
+      </p>
       <button type="button" className="btn btn-primary py-3">
-      Total Budget: {calculateTotalBudget()*dates.length*counter} XOF
+        Total Budget: {
+        (calculateTotalBudget()*dates.length*counter) 
+        +
+         ( 1000 * dates.length )
+        } XOF
       </button>
     </div>
   );
