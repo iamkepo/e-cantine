@@ -11,11 +11,10 @@ interface EventFormuleProps {
 }
 const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {  
   const { theme } = useAppStore();
-  const tomorrow = new DateObject().add(1, "day")
 
   const [checkedItems, setCheckedItems] = useState<string[]>(['event-2']);
 
-  const [dates, setDates] = useState<DateObject[]>([tomorrow])
+  const [dates, setDates] = useState<DateObject[]>([])
 
   const title = "Special event day";
   const items = [
@@ -45,19 +44,21 @@ const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {
     }
     return total
   };
-  const [documentValue, setDocumentValue] = useState<Document | null>(null)
   
   useEffect(() => {
-    // Access document safely here
-    if (document) {
-      setDocumentValue(document)
-    }
+    setDates(generateDates(1))
   }, [])
-
-  const openDatePicker = () => {
-    if (documentValue) {
-      documentValue?.getElementById('datePickerRef')?.focus();
+  const generateDates = (limit: number) => {
+    const dateList: DateObject[] = [];
+    for (let i = 0; i < limit; i++) {
+      const tomorrow = new DateObject().add(i+1, "day")
+      dateList.push(tomorrow);
     }
+
+    return dateList;
+  };
+  const openDatePicker = () => {
+    document.getElementById('datePickerRef')?.focus();
   };
   return (
     <div className={`col-12 formule d-flex flex-column justify-content-between shadow-sm p-4 h-100 rounded-4 text-bg-${theme}`}>
@@ -107,14 +108,14 @@ const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {
         ))}
       </ul>
       <p className="mb-3"> 
-        1 Livraison to {dates.length} day{dates.length > 1 ? "s" : ""}
-        <span className="badge text-bg-danger ms-3">{( 1000 * dates.length )} XOF</span>
+        {checkedItems.length} Livraison{checkedItems.length > 1 ? "s" : ""} to {dates.length} day{dates.length > 1 ? "s" : ""}
+        <span className="badge text-bg-danger ms-3">{( 1000 * dates.length * checkedItems.length)} XOF</span>
       </p>
       <button type="button" className="btn btn-primary py-3">
         Total Budget: {
         (calculateTotalBudget()*dates.length*counter) 
         +
-         ( 1000 * dates.length )
+         ( 1000 * dates.length * checkedItems.length )
         } XOF
       </button>
     </div>

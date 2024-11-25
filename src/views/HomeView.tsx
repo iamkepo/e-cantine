@@ -51,7 +51,7 @@ const HomeView: React.FC = () => {
             onClick={() => handleSetting('counter', setting.counter + 1)}
             style={{ cursor: 'pointer' }}
           ></i>
-          persons
+          person{setting.counter > 1 ? "s" : ""}
         </p>
       </div>
       <ul className="nav nav-tabs justify-content-center">
