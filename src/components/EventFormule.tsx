@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Accordion from "./Accordion";
-import { useAppStore } from "../store/appStore";
+import { useThemeStore } from "../stores/themeStore";
 
 interface EventFormuleProps {
   budget: 'normal' | 'vip',
@@ -10,7 +10,7 @@ interface EventFormuleProps {
   type: 'classic' | 'vegetalien'
 }
 const EventFormule: React.FC<EventFormuleProps> = ({budget, counter, type}) => {  
-  const { theme } = useAppStore();
+  const { theme } = useThemeStore();
 
   const [checkedItems, setCheckedItems] = useState<string[]>(['event-2']);
 

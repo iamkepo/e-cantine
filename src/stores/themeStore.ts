@@ -6,9 +6,9 @@ type State = {
   init: () => void;
 };
 
-const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'appStore' });
+const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'themeStore' });
 
-export const useAppStore = create<State>()(
+export const useThemeStore = create<State>()(
   myMiddlewares((set) => ({
     theme: "light",
     init: () => set(() => ({ theme: 'light' })),
@@ -16,7 +16,7 @@ export const useAppStore = create<State>()(
 );
 
 export const toggleTheme = () => {
-  const { theme } = useAppStore.getState();
+  const { theme } = useThemeStore.getState();
   const newTheme = theme === "dark" ? "light" : "dark";
-  useAppStore.setState({ theme: newTheme });
+  useThemeStore.setState({ theme: newTheme });
 };
