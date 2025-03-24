@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Outlet } from "react-router-dom";
 import { toggleTheme, useThemeStore } from '../stores/themeStore';
+import ModalComponent from '../components/ModalComponent';
+import ToastComponent from '../components/ToastComponent';
 
 const EmptyLayout: React.FC = () => {
   const { theme } = useThemeStore();
@@ -14,7 +16,7 @@ const EmptyLayout: React.FC = () => {
 
   return (
     <section className={`container-full vh-100`}>
-      <div className="text-end">
+      <div className="float-end">
         <button
           type="button"
           aria-label={`Toggle theme to ${theme === "dark" ? "light" : "dark"}`}
@@ -26,6 +28,8 @@ const EmptyLayout: React.FC = () => {
       </div>
       <Outlet />
 
+      <ModalComponent />
+      <ToastComponent />
     </section>
   );
 };

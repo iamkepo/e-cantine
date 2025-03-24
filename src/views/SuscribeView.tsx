@@ -6,10 +6,8 @@ import { useSettingStore } from "../stores/settingStore";
 const SuscribeView: React.FC = () => {
   const { budget, counter, type } = useSettingStore();
 
-
   return (
     <div className="col-lg-8 col-12 h-100 mx-auto">
- 
       <div className="row mt-5">
         {/* Section "Event" */}
         <div className="col-lg-6 col-12">
