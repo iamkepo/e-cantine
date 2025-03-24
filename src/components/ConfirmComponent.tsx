@@ -1,6 +1,7 @@
-import { modal } from '@renderer/stores/appStore';
-import { useThemeStore } from '@renderer/stores/themeStore';
+
 import React from 'react';
+import { useThemeStore } from '../stores/themeStore';
+import { modal } from '../stores/appStore';
 
 interface ConfirmComponentProps {
   title?: string;
