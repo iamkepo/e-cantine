@@ -16,18 +16,18 @@ const EmptyLayout: React.FC = () => {
 
   return (
     <section className={`container-full vh-100`}>
-      <div className="float-end">
+      <div className="position-relative">
         <button
           type="button"
           aria-label={`Toggle theme to ${theme === "dark" ? "light" : "dark"}`}
-          className={`btn btn-${theme}`}
+          className={`btn btn-${theme} position-fixed bottom-0 m-2`}
           onClick={toggleTheme}
         >
           <i className={`bi bi-${theme === "dark" ? "sun" : "moon"}`}></i>
         </button>
       </div>
       <Outlet />
-
+      
       <ModalComponent />
       <ToastComponent />
     </section>
