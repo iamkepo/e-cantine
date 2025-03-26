@@ -16,8 +16,7 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   /* margin: auto;
   max-width: 38rem;
   padding: 2rem; */
@@ -113,16 +112,6 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
-.form-control, .form-select {
-  background-color: transparent;
-}
-.form-control:focus, .form-select:focus {
-  background-color: transparent;
+.form-control:focus {
   border-color: var(--bs-primary);
-}
-.dark-theme .form-control, .dark-theme .form-select {
-  color: #fff
-}
-.light-theme .form-control, .dark-theme .form-select {
-  color: #000
 }

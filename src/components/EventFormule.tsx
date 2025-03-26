@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
-import Accordion from "./Accordion";
+import Accordion from "./widgets/Accordion";
 import { useThemeStore } from "../stores/themeStore";
 
 interface EventFormuleProps {
