@@ -1,4 +1,4 @@
-import { caterogies, tags, types } from "./constants";
+import { categories, tags, types } from "./constants";
 import { formatDistanceToNow } from "date-fns";
 
 export const tagRender = (id: number) => {
@@ -6,7 +6,7 @@ export const tagRender = (id: number) => {
   return tag ? tag.label : "Unknown";
 };
 export const categoryRender = (id: number) => {
-  const category = caterogies.find((category) => category.id === id);
+  const category = categories.find((category) => category.id === id);
   return category ? category.label : "Unknown";
 };
 export const typeRender = (id: number) => {

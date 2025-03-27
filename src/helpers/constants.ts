@@ -161,24 +161,24 @@ export const articles = [
   },
 ];
 export const tags = [
-  { id: null, label: "All Tags", description: "Dishes" },
-  { id: 1, label: "Vegetarian", description: "Dishes without meat or fish" },
-  { id: 2, label: "Vegan", description: "Dishes without animal products" },
-  { id: 3, label: "Gluten-Free", description: "Dishes without gluten" },
-  { id: 4, label: "Meat", description: "Dishes with meat" },
+  { id: null, label: "Tous les Tags", description: "Plats" },
+  { id: 1, label: "Végétarien", description: "Plats sans viande ni poisson" },
+  { id: 2, label: "Vegan", description: "Plats sans produits animaux" },
+  { id: 3, label: "Sans Gluten", description: "Plats sans gluten" },
+  { id: 4, label: "Viande", description: "Plats avec viande" },
 ];
 
 export const types = [
-  { id: null, label: "All Types" },
-  { id: 1, label: "Main Course" },
-  { id: 2, label: "Side Dish" },
-  { id: 3, label: "Accompagnement" },
+  { id: null, label: "Tous les Types" },
+  { id: 1, label: "Plat Principal" },
+  { id: 2, label: "Accompagnement" },
+  { id: 3, label: "Boisson" },
 ];
 
-export const caterogies = [
-  { id: null, label: "All Caterogies" },
-  { id: 1, label: "Breakfast" },
-  { id: 2, label: "Lunch" },
-  { id: 3, label: "Snack" },
-  { id: 4, label: "Dinner" },
+export const categories = [
+  { id: null, label: "Toutes les Catégories" },
+  { id: 1, label: "Petit Déjeuner" },
+  { id: 2, label: "Déjeuner" },
+  { id: 3, label: "Goûter" },
+  { id: 4, label: "Dîner" },
 ];
