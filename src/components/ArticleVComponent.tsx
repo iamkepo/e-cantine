@@ -1,8 +1,10 @@
 import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { Article } from '../helpers/types';
+import { Article, Cart } from '../helpers/types';
 import { categoryRender, tagRender, typeRender } from '../helpers/functions';
 import { useFilterStore } from '../stores/filterStore';
+import { addItemCart, findAndItem } from '../stores/cartStore';
+import Counter from './widgets/Counter';
 
 interface ArticleVComponentProps {
   article: Article;
@@ -11,7 +13,7 @@ interface ArticleVComponentProps {
 
 const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }) => {
   const { theme } = useThemeStore();
-    const { selected } = useFilterStore();
+  const { selected } = useFilterStore();
 
   return (
     <div className={`card text-bg-${theme}`}>
@@ -40,13 +42,22 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
             : 
             false
           }
-          </p>
-        <p className="card-text text-truncate">
-          <button type="button" className="btn btn-sm btn-warning float-end">
-            Ajouter
-          </button>
-          <span className="text-danger">{article.price} FCFA</span>
         </p>
+        <div className="card-text d-flex justify-content-between">
+          <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
+          {
+            findAndItem(article.id) ? 
+            <Counter item={findAndItem(article.id) as Cart} />
+            :
+            <button
+              type="button"
+              className="btn btn-sm btn-warning"
+              onClick={() => addItemCart({ ...article, count: 1 })}
+            >
+              Ajouter
+            </button>
+          }
+        </div>
       </div>
     </div>
   );

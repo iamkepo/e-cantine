@@ -9,13 +9,15 @@ import { modal } from "../stores/appStore";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import ArticleVComponent from "../components/ArticleVComponent";
 import { articles } from "../helpers/constants";
+import { useCartStore } from "../stores/cartStore";
 
 const HomeView: React.FC = () => {
   const { selected } = useFilterStore();
+  const { cart } = useCartStore();
 
   useEffect(() => {
     
-  }, [selected]);
+  }, [selected, cart]);
 
 
   const prev = (index: number) => {

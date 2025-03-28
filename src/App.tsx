@@ -9,6 +9,7 @@ import CategoryView from './views/CategoryView'
 import LandingView from './views/LandingView'
 import FilterLayout from './layouts/FilterLayout'
 import NavLayout from './layouts/NavLayout';
+import CartView from './views/CartView'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route index element={<NoMatchView />} />
           <Route path=":lang/" element={<NavLayout />}>
             <Route index element={<LandingView />} />
+            <Route path='cart' element={<CartView />} />
             <Route path='category/' element={<FilterLayout />}>
               <Route index element={<HomeView />} />
               <Route path=':id' element={<CategoryView />} />

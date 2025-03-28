@@ -9,6 +9,7 @@ export interface Article{
   date_updated?: number;
   price: number;
 }
+export type Cart = Partial<Article> & { count: number }
 export interface Option {
   label: string;
   action: ()=> void

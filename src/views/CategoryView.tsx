@@ -7,14 +7,16 @@ import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import { useParams } from "react-router-dom";
 import ArticleVComponent from "../components/ArticleVComponent";
 import { articles } from "../helpers/constants";
+import { useCartStore } from "../stores/cartStore";
 
 const CategoryView: React.FC = () => {
   const { id } = useParams();
   const { selected } = useFilterStore();
+  const { cart } = useCartStore();
 
   useEffect(() => {
     
-  }, [id, selected]);
+  }, [id, selected, cart]);
 
   const prev = (index: number) => {
     if (index >= 0) {

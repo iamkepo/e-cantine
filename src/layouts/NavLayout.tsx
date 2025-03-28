@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { toggleTheme, useThemeStore } from '../stores/themeStore';
-import { modal } from '../stores/appStore';
-import CartComponent from '../components/CartComponent';
 import { changeLang, translateElements, useLangStore } from '../stores/langStore';
 import { capitalize } from '../helpers/functions';
+import { useCartStore } from '../stores/cartStore';
 
 
 const NavLayout: React.FC = () => {
@@ -12,6 +11,7 @@ const NavLayout: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useThemeStore();
   const { lang } = useLangStore();
+  const { cart } = useCartStore();
     
   useEffect(() => {
     if (window.location.href == window.location.origin+"/") {
@@ -23,7 +23,7 @@ const NavLayout: React.FC = () => {
       rootElement.classList = theme + '-theme';
     }
     translateElements()
-  }, [theme, navigate, lang]);
+  }, [theme, navigate, lang, cart]);
 
   const handleChangeLang = (value: string) => {
     changeLang(value);
@@ -34,15 +34,24 @@ const NavLayout: React.FC = () => {
       <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '1000'}}>
         <div className={`card text-bg-secondary shadow-lg mb-5 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
-            <Link className={`btn btn-${theme}`} to='/'>
+            <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : theme}`} to='/'>
               <i className={`bi bi-house fs-6`}></i> Home
             </Link>
-            <Link className={`btn btn-${theme}`} to='category'>
+            <Link className={`btn btn-${window.location.pathname.includes('category') ? 'primary' : theme} border-3 border-primary`} to='category'>
               <i className={`bi bi-list fs-6`}></i> Produits
             </Link>
-            <button type="button" className={`btn btn-${theme}`} onClick={() => modal.open(<CartComponent />, 'xl')}>
-              <i className={`bi bi-cart fs-6`}></i>
-            </button>
+            {
+              cart.length > 0 ?
+              <Link className={`btn btn-${window.location.pathname.includes('cart') ? 'primary' : theme} position-relative`} to='cart'>
+                <i className={`bi bi-cart fs-6`}></i>
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {cart.length}
+                  <span className="visually-hidden">unread messages</span>
+                </span>
+              </Link>
+              :
+              false
+            }
             <div className="btn-group" role="group">
               <button type="button" className={`btn btn-${theme}`} onClick={toggleTheme}>
                 <i className={`bi bi-${theme === "dark" ? "moon" : "sun"} fs-6`}></i>

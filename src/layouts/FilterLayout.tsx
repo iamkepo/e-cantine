@@ -30,7 +30,7 @@ const FilterLayout: React.FC = () => {
               <li key={i} className="nav-item">
                 <Link
                   className={`nav-link text-bg-${((id == undefined && category.id == null) || parseInt(id as string) === category.id) ? "primary active" : theme}`} 
-                  to={"/category/"+(category.id != null ? category.id : '')}
+                  to={(category.id != null ? ""+category.id : '')}
                 >
                   {category.label}
                 </Link>
@@ -79,9 +79,9 @@ const FilterLayout: React.FC = () => {
                 onChange={(e) => priceSelect(parseInt(e.target.value))}
               />
                 
-              <p className="fs-6">
-                <span className="text-start">0 FCFA</span>
-                <span className="text-end">2000 FCFA</span>
+              <p className="fs-6 d-flex justify-content-between">
+                <span className="text-start">0 XOF</span>
+                <span className="text-end">2000 XOF</span>
               </p>
             </div>
           </div>
