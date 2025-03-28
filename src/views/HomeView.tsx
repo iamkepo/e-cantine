@@ -1,24 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import LightBox from "../components/widgets/LightBox";
-import ArticleComponent from "../components/ArticleComponent";
+import ArticleHComponent from "../components/ArticleHComponent";
 
 import { Article } from "../helpers/types";
-import { categoryRender, tagRender } from "../helpers/functions";
 
 import { modal } from "../stores/appStore";
-import { useThemeStore } from "../stores/themeStore";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
+import ArticleVComponent from "../components/ArticleVComponent";
+import { articles } from "../helpers/constants";
 
 const HomeView: React.FC = () => {
-  const { theme } = useThemeStore();
   const { selected } = useFilterStore();
+
+  useEffect(() => {
+    
+  }, [selected]);
+
 
   const prev = (index: number) => {
     if (index >= 0) {
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleComponent article={filteredArticles()[index]} />
+          <ArticleHComponent article={filteredArticles(articles)[index]} />
         </LightBox>,
         "xl"
       );
@@ -26,10 +30,10 @@ const HomeView: React.FC = () => {
   };
 
   const next = (index: number) => {
-    if (index < filteredArticles().length) {
+    if (index < filteredArticles(articles).length) {
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleComponent article={filteredArticles()[index]} />
+          <ArticleHComponent article={filteredArticles(articles)[index]} />
         </LightBox>,
         "xl"
       );
@@ -37,48 +41,22 @@ const HomeView: React.FC = () => {
   };
   return (
 
-    <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {
-        filteredArticles().map((article: Article, i) => (
+        filteredArticles(articles).map((article: Article, i) => (
           <div 
             key={i} 
             className="col"
           >
-            <div className={`card text-bg-${theme}`}>
-              <img 
-                src={article.img} 
-                className="card-img-top" 
-                alt={article.label} 
-                style={{ height: '150px', objectFit: 'cover' }}
-                onClick={() => modal.open(
-                  <LightBox prev={() => prev(i - 1)} next={() => next(i + 1)}>
-                    <ArticleComponent article={article} />
-                  </LightBox>,
-                  "xl"
-                )}
-              />
-              <div className="card-body">
-                <h6 className="badge text-bg-primary float-end">
-                  {categoryRender(article.category)}
-                </h6>
-                <h5 className="card-title text-truncate">
-                  {article.label}
-                </h5>
-                { 
-                  selected.tag == null ? 
-                  <p className="card-text text-truncate">
-                    { 
-                      article.tags.map((tag, j) => (
-                        <span key={j} className="badge text-bg-secondary me-2">
-                          {tagRender(tag)}
-                        </span>
-                      ))
-                    }
-                  </p>
-                  : false
-                }
-              </div>
-            </div>
+            <ArticleVComponent 
+              article={article}
+              action={() => modal.open(
+                <LightBox prev={() => prev(i - 1)} next={() => next(i + 1)}>
+                  <ArticleHComponent article={article} />
+                </LightBox>,
+                "xl"
+              )}
+            />
           </div>
         ))
       }

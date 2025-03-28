@@ -6,7 +6,8 @@ export interface Article{
   tags: number[];
   type: number;
   category: number;
-  date_updated?: number
+  date_updated?: number;
+  price: number;
 }
 export interface Option {
   label: string;

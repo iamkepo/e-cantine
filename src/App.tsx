@@ -4,10 +4,11 @@ import HomeView from './views/HomeView'
 // import PricingView from './views/PricingView'
 // import SuscribeView from './views/SuscribeView'
 // import ConfigLayout from './layouts/ConfigLayout'
-import { NoMatch } from './views/NoMatch'
+import NoMatchView  from './views/NoMatchView'
 import CategoryView from './views/CategoryView'
-import { Landing } from './views/Landing'
+import LandingView from './views/LandingView'
 import FilterLayout from './layouts/FilterLayout'
+import NavLayout from './layouts/NavLayout';
 
 function App() {
 
@@ -15,19 +16,22 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<EmptyLayout />}>
-        <Route index element={<Landing />} />
-          <Route path='category/' element={<FilterLayout />}>
-            <Route index element={<HomeView />} />
-            <Route path=':id' element={<CategoryView />} />
-          </Route>
+          <Route index element={<NoMatchView />} />
+          <Route path=":lang/" element={<NavLayout />}>
+            <Route index element={<LandingView />} />
+            <Route path='category/' element={<FilterLayout />}>
+              <Route index element={<HomeView />} />
+              <Route path=':id' element={<CategoryView />} />
+            </Route>
 
-          {/* <Route path='config/' element={<ConfigLayout />}>
-            <Route index element={<PricingView />} />
-            <Route path='suscribe' element={<SuscribeView />} />
-          </Route> */}
+            {/* <Route path='config/' element={<ConfigLayout />}>
+              <Route index element={<PricingView />} />
+              <Route path='suscribe' element={<SuscribeView />} />
+            </Route> */}
 
-          <Route path='*' element={<NoMatch />} />
-        </Route>      
+            <Route path='*' element={<NoMatchView />} /> 
+          </Route>      
+        </Route>
       </Routes>
     </Router>
   )

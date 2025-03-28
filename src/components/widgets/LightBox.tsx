@@ -11,7 +11,7 @@ const LightBox: React.FC<LightBoxProps> = ({ prev, next, children }) => {
   const { theme } = useThemeStore();
 
   return (
-    <div className={`w-100 text-bg-${theme} d-flex align-items-center justify-content-between`} style={{ minHeight: '400px' }}>
+    <div className={`w-100 text-bg-${theme} d-flex align-items-center justify-content-between`}>
       <i 
         role="button"
         className="bi bi-chevron-left me-3 fs-4 cursor-pointer" 

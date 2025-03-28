@@ -17,3 +17,6 @@ export const formateDate = (timestamp?: number): string => {
   if (!timestamp) return "Unknown update time";
   return `Last updated ${formatDistanceToNow(new Date(timestamp), { addSuffix: true })}`;
 };
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1) 
+}

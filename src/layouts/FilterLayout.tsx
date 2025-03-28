@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, useParams } from "react-router-dom";
 import { categories, tags, types } from '../helpers/constants';
 import { useThemeStore } from '../stores/themeStore';
-import { setSearchQuery, tagSelect, typeSelect, useFilterStore } from '../stores/filterStore';
+import { priceSelect, setSearchQuery, tagSelect, typeSelect, useFilterStore } from '../stores/filterStore';
 import { Dropdown } from '../components/widgets/Dropdown';
 import { Link } from 'react-router-dom';
 
@@ -13,9 +13,18 @@ const FilterLayout: React.FC = () => {
   const { id } = useParams();
 
   return (
-    <div className="col-lg-10 col-12 mx-auto">
-      <div className="row mt-5">
-        <ul className="col col-md-9 nav nav-tabs">
+    <div className="col-12 col-lg-11 p-3 mx-auto">
+      <div className="col-12 clearfix py-3 my-3">
+        <div className="float-end">
+          <Dropdown 
+            options={types.map(type => ({
+              label: type.label,
+              action: () => typeSelect(type.id)
+            }))}
+            chevron
+          />
+        </div>
+        <ul className="nav nav-tabs">
           {
             categories.map((category, i) => (
               <li key={i} className="nav-item">
@@ -29,45 +38,59 @@ const FilterLayout: React.FC = () => {
             ))
           }
         </ul>
-        <div className="col col-md-3">
-          <input 
-            className={`form-control text-bg-${theme}`} 
-            type="search" 
-            placeholder="Search" 
-            aria-label="Search" 
-            onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
-          />
-        </div>
       </div>
-      <div className="my-4">
-        <div className="float-end">
-          <Dropdown 
-            options={types.map(type => ({
-              label: type.label,
-              action: () => typeSelect(type.id)
-            }))}
-            chevron
-          />
-        </div>
-        <p className='clearfix'>
-          <span className="me-3">Filter by Tag:</span> 
-          {
-            tags.map((tag, j) => (
-              <span
-                key={j}
-                className={`badge cursor-pointer me-2 text-bg-${selected.tag === tag.id ? "primary" : "secondary"}`}
-                onClick={() => tagSelect(tag.id)}
-                title={tag.description} // Added tooltip
-              >
-                {tag.label}
-              </span>
-            ))
-          }
-        </p>
-      </div>
+        
+      <div className="row">
+        <div className="col col-lg-3">
+          <div className={`card sticky-lg-top text-bg-${theme} p-3 shadow-sm`}>
+            <div className="filter-group mb-3">
+              <h6 className="mb-3">Search:</h6>
+              <input 
+                className={`form-control text-bg-${theme}`} 
+                type="search" 
+                placeholder="Search" 
+                aria-label="Search" 
+                onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
+              />
+            </div>
+            <div className="filter-group">
+              <h6 className="mb-3">Filter by Tag:</h6>
+              <p>
+                { tags.map((tag, j) => (
+                  <span
+                    key={j}
+                    className={`badge cursor-pointer me-2 mb-2 text-bg-${selected.tag === tag.id ? "primary" : "secondary"}`}
+                    onClick={() => tagSelect(tag.id)}
+                    title={tag.description} // Added tooltip
+                  >
+                    {tag.label}
+                  </span>
+                ))}
+              </p>
+            </div>
 
-      <Outlet />
-      
+            <div className="filter-group">
+              <h6 className="mb-3">Price Range</h6>
+              <input 
+                type="range" 
+                className="form-range" 
+                min="0" 
+                max="2000" 
+                onChange={(e) => priceSelect(parseInt(e.target.value))}
+              />
+                
+              <p className="fs-6">
+                <span className="text-start">0 FCFA</span>
+                <span className="text-end">2000 FCFA</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col col-lg-9">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };

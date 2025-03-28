@@ -7,7 +7,8 @@ export const articles = [
     type: 1,
     category: 2, // Lunch
     description: "A delicious pasta dish with a creamy sauce and fresh herbs.",
-    date_updated: 1677664800000 // Timestamp for "2023-03-01T10:00:00Z"
+    date_updated: 1677664800000, // Timestamp for "2023-03-01T10:00:00Z"
+    price: 1299
   },
   { 
     id: 2,
@@ -17,7 +18,8 @@ export const articles = [
     type: 1,
     category: 2, // Lunch
     description: "A fresh and healthy salad with a variety of colorful vegetables.",
-    date_updated: 1677760200000 // Timestamp for "2023-03-02T12:30:00Z"
+    date_updated: 1677760200000, // Timestamp for "2023-03-02T12:30:00Z"
+    price: 849
   },
   { 
     id: 3,
@@ -27,7 +29,8 @@ export const articles = [
     type: 1,
     category: 2, // Lunch
     description: "A classic cheese pizza with a crispy crust and rich tomato sauce.",
-    date_updated: 1677848700000 // Timestamp for "2023-03-03T15:45:00Z"
+    date_updated: 1677848700000, // Timestamp for "2023-03-03T15:45:00Z"
+    price: 1099
   },
   { 
     id: 4,
@@ -37,7 +40,8 @@ export const articles = [
     type: 1,
     category: 3, // Snack
     description: "A juicy burger with melted cheese and fresh toppings.",
-    date_updated: 1677951600000 // Timestamp for "2023-03-04T18:20:00Z"
+    date_updated: 1677951600000, // Timestamp for "2023-03-04T18:20:00Z"
+    price: 999
   },
   { 
     id: 5,
@@ -47,7 +51,8 @@ export const articles = [
     type: 1,
     category: 2, // Lunch
     description: "A selection of fresh sushi rolls with a variety of fillings.",
-    date_updated: 1678008600000 // Timestamp for "2023-03-05T09:10:00Z"
+    date_updated: 1678008600000, // Timestamp for "2023-03-05T09:10:00Z"
+    price: 1599
   },
   { 
     id: 6,
@@ -57,7 +62,8 @@ export const articles = [
     type: 1,
     category: 1, // Breakfast
     description: "A warm and comforting vegetable soup, perfect for any time of day.",
-    date_updated: 1678100400000 // Timestamp for "2023-03-06T11:00:00Z"
+    date_updated: 1678100400000, // Timestamp for "2023-03-06T11:00:00Z"
+    price: 699
   },
   { 
     id: 7,
@@ -67,7 +73,8 @@ export const articles = [
     type: 1,
     category: 4, // Dinner
     description: "A perfectly cooked steak, seasoned to perfection.",
-    date_updated: 1678192200000 // Timestamp for "2023-03-07T14:30:00Z"
+    date_updated: 1678192200000, // Timestamp for "2023-03-07T14:30:00Z"
+    price: 1999
   },
   { 
     id: 8,
@@ -77,7 +84,8 @@ export const articles = [
     type: 1,
     category: 4, // Dinner
     description: "Delicious tacos filled with seasoned meat and fresh toppings.",
-    date_updated: 1678284600000 // Timestamp for "2023-03-08T16:50:00Z"
+    date_updated: 1678284600000, // Timestamp for "2023-03-08T16:50:00Z"
+    price: 1149
   },
   { 
     id: 9,
@@ -87,7 +95,8 @@ export const articles = [
     type: 2,
     category: 3, // Snack
     description: "Crispy golden fries, perfect as a side or snack.",
-    date_updated: 1678368900000 // Timestamp for "2023-03-09T13:15:00Z"
+    date_updated: 1678368900000, // Timestamp for "2023-03-09T13:15:00Z"
+    price: 399
   },
   { 
     id: 10,
@@ -97,7 +106,8 @@ export const articles = [
     type: 2,
     category: 4, // Dinner
     description: "Warm and buttery garlic bread, a perfect accompaniment.",
-    date_updated: 1678472400000 // Timestamp for "2023-03-10T17:40:00Z"
+    date_updated: 1678472400000, // Timestamp for "2023-03-10T17:40:00Z"
+    price: 499
   },
   { 
     id: 11,
@@ -107,7 +117,8 @@ export const articles = [
     type: 2,
     category: 1, // Breakfast
     description: "A creamy and tangy coleslaw, perfect as a side dish.",
-    date_updated: 1678525500000 // Timestamp for "2023-03-11T08:25:00Z"
+    date_updated: 1678525500000, // Timestamp for "2023-03-11T08:25:00Z"
+    price: 549
   },
   { 
     id: 12,
@@ -117,7 +128,8 @@ export const articles = [
     type: 2,
     category: 4, // Dinner
     description: "Creamy mashed potatoes, a classic comfort food.",
-    date_updated: 1678647600000 // Timestamp for "2023-03-12T19:00:00Z"
+    date_updated: 1678647600000, // Timestamp for "2023-03-12T19:00:00Z"
+    price: 799
   },
   { 
     id: 13,
@@ -127,7 +139,8 @@ export const articles = [
     type: 2,
     category: 4, // Dinner
     description: "Fluffy white rice, a versatile side dish.",
-    date_updated: 1678704300000 // Timestamp for "2023-03-13T10:45:00Z"
+    date_updated: 1678704300000, // Timestamp for "2023-03-13T10:45:00Z"
+    price: 299
   },
   { 
     id: 14,
@@ -137,7 +150,8 @@ export const articles = [
     type: 3,
     category: 1, // Breakfast
     description: "Freshly squeezed orange juice, full of vitamin C.",
-    date_updated: 1678788600000 // Timestamp for "2023-03-14T07:30:00Z"
+    date_updated: 1678788600000, // Timestamp for "2023-03-14T07:30:00Z"
+    price: 349
   },
   { 
     id: 15,
@@ -145,9 +159,10 @@ export const articles = [
     img: "https://images.sks-bottle.com/images/AppleJuiceBottles_2021_UPDATEnewLRG.webp",
     tags: [1, 2, 3, 4],
     type: 3,
-    category: 1, // Breakfast
+    category: 2, // Breakfast
     description: "Sweet and refreshing apple juice, perfect for any meal.",
-    date_updated: 1678863600000 // Timestamp for "2023-03-15T09:20:00Z"
+    date_updated: 1678863600000, // Timestamp for "2023-03-15T09:20:00Z"
+    price: 399
   },
   { 
     id: 16,
@@ -155,9 +170,10 @@ export const articles = [
     img: "https://t3.ftcdn.net/jpg/03/31/57/10/360_F_331571006_Sv6xzovHgADbtCjwMooiY7VgiX6zxjMF.jpg",
     tags: [1, 2, 3, 4],
     type: 3,
-    category: 1, // Breakfast
+    category: 3, // Breakfast
     description: "Rich and flavorful grape juice, a delightful drink.",
-    date_updated: 1678926600000 // Timestamp for "2023-03-16T11:10:00Z"
+    date_updated: 1678926600000, // Timestamp for "2023-03-16T11:10:00Z"
+    price: 449
   },
 ];
 export const tags = [

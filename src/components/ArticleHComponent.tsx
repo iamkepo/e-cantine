@@ -3,11 +3,11 @@ import { useThemeStore } from '../stores/themeStore';
 import { Article } from '../helpers/types';
 import { categoryRender, formateDate, tagRender, typeRender } from '../helpers/functions';
 
-interface ArticleComponentProps {
+interface ArticleHComponentProps {
   article: Article;
 }
 
-const ArticleComponent: React.FC<ArticleComponentProps> = ({ article }) => {
+const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
   const { theme } = useThemeStore();
 
   return (
@@ -23,15 +23,18 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article }) => {
         </div>
         <div className="col-md-6">
           <div className="card-body">
-            <h5 className="card-title">
+            <p className="card-text">
+              <button type="button" className="btn btn-warning float-end">
+                Ajouter
+              </button>
+              <span className="text-danger">{article.price} FCFA</span>
+            </p>
+            <h5 className="card-title mb-3">
               {article.label}
             </h5>
             <p className="card-text">
-              <span className="badge text-bg-warning me-3">
-                {typeRender(article.type)}
-              </span>
               <span className="badge text-bg-primary">
-                {categoryRender(article.category)}
+                {categoryRender(article.category)} - {typeRender(article.type)}
               </span>
             </p>
             <p className="card-text">
@@ -58,4 +61,4 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article }) => {
   );
 };
 
-export default ArticleComponent;
+export default ArticleHComponent;

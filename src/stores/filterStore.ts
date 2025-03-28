@@ -1,17 +1,18 @@
 import { create } from "zustand";
-import { articles } from "../helpers/constants";
+import { Article } from "../helpers/types";
 
 type StateApp = {
   selected: {
     tag: number | null;
     type: number | null;
+    price: number | null;
     query: string
   };
   initApp: () => void;
 };
 
 const initState = {
-  selected: { tag: null, type: null, query: "" },
+  selected: { tag: null, type: null, price: null, query: "" },
 } as StateApp;
 
 export const useFilterStore = create<StateApp>((set) => ({
@@ -21,7 +22,7 @@ export const useFilterStore = create<StateApp>((set) => ({
 
 
 
-export const filteredArticles = (category?: number) => {
+export const filteredArticles = (articles: Article[], category?: number) => {
   const { selected } = useFilterStore.getState();
 
   return articles.filter((article) => {
@@ -29,7 +30,8 @@ export const filteredArticles = (category?: number) => {
     const matchesType = selected.type ? article.type === selected.type : true;
     const matchesCategory = category ? article.category === category : true;
     const matchesSearch = article.label.toLowerCase().includes(selected.query.toLowerCase());
-    return matchesTag && matchesType && matchesCategory && matchesSearch;
+    const matchesPrice = selected.price ? article.price <= selected.price : true;
+    return matchesTag && matchesType && matchesCategory && matchesSearch && matchesPrice;
   });
 };
 
@@ -42,6 +44,12 @@ export const tagSelect = (id: number | null) => {
 export const typeSelect = (id: number | null) => {
   useFilterStore.setState((state) => ({
     selected: { ...state.selected, type: id === state.selected.type ? null : id },
+  }));
+};
+
+export const priceSelect = (value: number | null) => {
+  useFilterStore.setState((state) => ({
+    selected: { ...state.selected, price: value },
   }));
 };
 
