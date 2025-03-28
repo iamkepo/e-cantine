@@ -2,14 +2,14 @@ import { create, StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
 import { translations } from "../core/translations.ts";
 
-interface Lang {
+interface LangApp {
   lang: string;
   initLang: () => void;
 }
 
 const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'langStore' });
 
-export const useLangStore = create<Lang>()(
+export const useLangStore = create<LangApp>()(
   myMiddlewares((set) => ({
     lang: 'fr',
     initLang: () => set(() => ({ lang: 'fr'})),

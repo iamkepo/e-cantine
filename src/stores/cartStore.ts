@@ -1,19 +1,23 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import { Cart } from "../helpers/types";
+import { persist } from "zustand/middleware";
 
-type StateApp = {
+type CartApp = {
   cart: Array<Cart>;
   initApp: () => void;
 };
 
 const initState = {
   cart: [] as Array<Cart>,
-} as StateApp;
+} as CartApp;
+const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'langStore' });
 
-export const useCartStore = create<StateApp>((set) => ({
-  ...initState,
-  initApp: () => set(() => initState),
-}));
+export const useCartStore = create<CartApp>()(
+  myMiddlewares((set) => ({
+    ...initState,
+    initApp: () => set(() => initState),
+  })),
+);
 
 export const findAndItem = (id: number): Cart | undefined => {
   const { cart } = useCartStore.getState();

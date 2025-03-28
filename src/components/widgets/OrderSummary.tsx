@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useThemeStore } from "../../stores/themeStore";
+import { useNavigate } from "react-router-dom";
+import { useLangStore } from "../../stores/langStore";
 
 // Reusable OrderSummary component
 const OrderSummary: React.FC<{
@@ -9,6 +11,8 @@ const OrderSummary: React.FC<{
   onApplyPromo: (code: string) => void;
 }> = ({ subtotal, shipping, tax, onApplyPromo }) => {
   const { theme } = useThemeStore();
+  const { lang } = useLangStore();
+  const navigate = useNavigate();
   const [promoCode, setPromoCode] = useState('');
   const total = subtotal + shipping + tax;
 
@@ -49,7 +53,11 @@ const OrderSummary: React.FC<{
           <strong>Total</strong>
           <strong>{total.toFixed(2)} XOF</strong>
         </div>
-        <button className="btn btn-primary w-100">Proceed to Checkout</button>
+        <button 
+          className="btn btn-primary w-100"
+          onClick={()=> navigate(`/${lang}/config`)}
+        >
+          Proceed to Checkout</button>
       </div>
     </div>
   );

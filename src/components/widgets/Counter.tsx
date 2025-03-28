@@ -12,7 +12,7 @@ const Counter: React.FC<{
   return (
     <div className="input-group">
       <button
-        className={`btn btn-secondary btn-sm`}
+        className={`btn text-bg-secondary btn-sm`}
         type="button"
         onClick={() => decrementItemCount(item.id as number)}
       >
@@ -25,7 +25,7 @@ const Counter: React.FC<{
         readOnly
       />
       <button
-        className={`btn btn-secondary btn-sm`}
+        className={`btn text-bg-secondary btn-sm`}
         type="button"
         onClick={() => incrementItemCount(item.id as number)}
       >

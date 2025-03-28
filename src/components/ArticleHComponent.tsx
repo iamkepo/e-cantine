@@ -16,6 +16,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
   useEffect(() => {
     
   }, [cart]);
+  
   return (
     <div className={`card text-bg-${theme}`}>
       <div className="row g-0">
