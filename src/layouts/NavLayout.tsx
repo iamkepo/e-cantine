@@ -31,7 +31,7 @@ const NavLayout: React.FC = () => {
   };
   return (
     <>
-      <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '1000'}}>
+      <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '10000'}}>
         <div className={`card text-bg-secondary shadow-lg mb-5 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : theme}`} to='/'>

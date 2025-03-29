@@ -40,7 +40,7 @@ export default function LandingView() {
           </div>
 
           <div className="col-lg-6 hero-image">
-            <img src="https://placehold.co/800x600" alt="Platform Dashboard" className="hero-image-main" />
+            <img src="https://www.mutuellebleue.fr/app/uploads/sites/2/2020/07/des-plats-%C3%A9quiliobr%C3%A9s-et-color%C3%A9s.jpg" alt="Platform Dashboard" className="hero-image-main" />
               
             <div className="floating-card card-1">
               <div className="d-flex align-items-center">

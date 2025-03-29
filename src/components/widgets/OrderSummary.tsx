@@ -17,7 +17,7 @@ const OrderSummary: React.FC<{
   const total = subtotal + shipping + tax;
 
   return (
-    <div className={`card text-bg-${theme}`}>
+    <div className={`card text-bg-${theme} sticky-lg-top`}>
       <div className="card-body">
         <h5 className="card-title mb-4">Order Summary</h5>
         <div className="d-flex justify-content-between mb-3">
@@ -55,7 +55,7 @@ const OrderSummary: React.FC<{
         </div>
         <button 
           className="btn btn-primary w-100"
-          onClick={()=> navigate(`/${lang}/config`)}
+          onClick={()=> navigate(`/${lang}/cart/pricing/month`)}
         >
           Proceed to Checkout</button>
       </div>

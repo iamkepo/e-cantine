@@ -4,11 +4,13 @@ import { persist } from "zustand/middleware";
 
 type CartApp = {
   cart: Array<Cart>;
+  subtotal: number;
   initApp: () => void;
 };
 
 const initState = {
   cart: [] as Array<Cart>,
+  subtotal: 0,
 } as CartApp;
 const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'langStore' });
 
@@ -84,3 +86,8 @@ export const incrementItemCount = (id: number) => {
     }),
   }));
 };
+export const setSubtotal = ()=>{
+  useCartStore.setState((state) => ({
+    subtotal: state.cart.reduce((sum, item) => sum + item.count * (item.price || 0), 0)
+  }));
+}

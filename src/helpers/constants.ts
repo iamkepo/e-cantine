@@ -187,7 +187,7 @@ export const tags = [
 export const types = [
   { id: null, label: "Tous les Types" },
   { id: 1, label: "Plat Principal" },
-  { id: 2, label: "Accompagnement" },
+  { id: 2, label: "Supplement" },
   { id: 3, label: "Boisson" },
 ];
 
@@ -199,8 +199,10 @@ export const categories = [
   { id: 4, label: "Dîner" },
 ];
 export const listStep = [
-  { id: 1, label: "Account Information", icon: "check"}, 
+  { id: 1, label: "Account Information", icon: "check", }, 
   { id: 2, label: "Personal Details", icon: "person"}, 
   { id: 3, label: "Payment Details", icon: "credit-card"}, 
   { id: 4, label: "Confirmation", icon: "flag"}
 ];
+
+export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

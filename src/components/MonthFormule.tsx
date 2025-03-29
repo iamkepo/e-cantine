@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Accordion from "./widgets/Accordion";
+import { generateDates } from "../helpers/functions";
+import { days } from "../helpers/constants";
 
 interface MonthFormuleProps {
   budget: "normal" | "vip";
@@ -16,7 +18,6 @@ const MonthFormule: React.FC<MonthFormuleProps> = ({ budget, counter, type }) =>
     { id: "month-2", name: "Goûter", classic: { normal: 200, vip: 500 }, vegetalien: { normal: 700, vip: 1500 } },
     { id: "month-3", name: "Dîner", classic: { normal: 1000, vip: 2000 }, vegetalien: { normal: 1500, vip: 2500 } },
   ];
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   
   const [checkedDays, setCheckedDays] = useState<string[]>(['Mon']);
   const [checkedItems, setCheckedItems] = useState<string[]>(["month-2"]);
@@ -30,31 +31,7 @@ const MonthFormule: React.FC<MonthFormuleProps> = ({ budget, counter, type }) =>
     setCheckedDays(updatedDays);
   };
 
-  // Generate a list of dates based on selected days
-  const generateDates = (selectedDays: string[]) => {
-    const dateList: string[] = [];
-    const currentDate = new Date();
 
-    // Loop through days until 30 dates are added
-    while (selectedDays.length > 0 && dateList.length < 30) {
-      const dayName = days[currentDate.getDay()];
-      if (selectedDays.includes(dayName)) {
-        dateList.push(formatDate(currentDate));
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dateList;
-  };
-
-  // Format a date into DD/MM/YYYY
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "numeric",
-      year: "numeric",
-    });
-  };
 
   // Handle checkbox changes for items
   const handleCheckboxChange = (id: string, isChecked: boolean) => {
