@@ -40,9 +40,7 @@ const CalendarView: React.FC = () => {
             numberOfMonths={2}
             showOtherDays
             multiple
-            // readOnly
-            onFocusedDateChange={(selectedDates) => console.log(selectedDates)}
-            // onChange={(selectedDates) => setDates(selectedDates.map(date => date))}
+            onChange={(selectedDates) => setDates(selectedDates.map(date => date))}
           >
           </Calendar>
         </div>

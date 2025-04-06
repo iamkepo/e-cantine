@@ -1,10 +1,9 @@
 import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { Article, Cart } from '../helpers/types';
+import { Article } from '../helpers/types';
 import { categoryRender, tagRender, typeRender } from '../helpers/functions';
 import { useFilterStore } from '../stores/filterStore';
-import { addItemCart, findAndItem } from '../stores/cartStore';
-import Counter from './widgets/Counter';
+import { addItemCart, findAndItem, removeItemCart } from '../stores/cartStore';
 
 interface ArticleVComponentProps {
   article: Article;
@@ -16,7 +15,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
   const { selected } = useFilterStore();
 
   return (
-    <div className={`card text-bg-${theme}`}>
+    <div className={`card text-bg-${theme} ${findAndItem(article.id as number) != undefined ? 'border border-2 border-warning' : ''}`}>
       <img 
         src={article.img} 
         className="card-img-top" 
@@ -47,7 +46,13 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
           <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
           {
             findAndItem(article.id) ? 
-            <Counter item={findAndItem(article.id) as Cart} />
+            <button
+              type="button"
+              className="btn btn-sm btn-danger"
+              onClick={() => removeItemCart(article.id as number)}
+            >
+              Retirer
+            </button>
             :
             <button
               type="button"
