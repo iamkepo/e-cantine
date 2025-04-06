@@ -16,6 +16,9 @@ const OrderSummary: React.FC<{
   const [promoCode, setPromoCode] = useState('');
   const total = subtotal + shipping + tax;
 
+  const checkout = () => {
+    navigate(`/${lang}/pricing`);
+  }
   return (
     <div className={`card text-bg-${theme} sticky-lg-top`}>
       <div className="card-body">
@@ -55,7 +58,7 @@ const OrderSummary: React.FC<{
         </div>
         <button 
           className="btn btn-primary w-100"
-          onClick={()=> navigate(`/${lang}/cart/pricing/month`)}
+          onClick={checkout}
         >
           Proceed to Checkout</button>
       </div>

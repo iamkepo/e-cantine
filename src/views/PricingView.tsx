@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
 import EventFormule from "../components/EventFormule";
 import MonthFormule from "../components/MonthFormule";
 import { useSettingStore } from "../stores/settingStore";
-import { useParams } from "react-router-dom";
 
 const PricingView: React.FC = () => {
-  const { formule } = useParams();
   const { budget, counter, type } = useSettingStore();
 
-  useEffect(() => {
-  }, [formule]);
-
   return (
-    formule == 'event' ? 
-    <EventFormule budget={budget} counter={counter} type={type} />
-    :
-    <MonthFormule budget={budget} counter={counter} type={type} />
+    <div className="col-lg-8 col-12 h-100 mx-auto">
+      <div className="row mt-5">
+        <div className="col-lg-6 col-12">
+          <EventFormule budget={budget} counter={counter} type={type} />
+        </div>
+        <div className="col-lg-6 col-12">
+          <MonthFormule budget={budget} counter={counter} type={type} />
+        </div>
+      </div>
+    </div>
   );
 };
 

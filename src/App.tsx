@@ -7,11 +7,11 @@ import NavLayout from './layouts/NavLayout'
 
 import LandingView from './views/LandingView'
 import HomeView from './views/HomeView'
-import SuscribeView from './views/SuscribeView'
 import NoMatchView  from './views/NoMatchView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
 import PricingView from './views/PricingView'
+import CalendarView from './views/CalendarView'
 
 function App() {
 
@@ -23,16 +23,16 @@ function App() {
 
           <Route path=":lang/" element={<NavLayout />}>
             <Route index element={<LandingView />} />
+            <Route  path='cart/' element={<CartView />} />
 
             <Route path='category/' element={<FilterLayout />}>
               <Route index element={<HomeView />} />
               <Route path=':id' element={<CategoryView />} />
             </Route>
 
-            <Route path='cart/' element={<ConfigLayout />}>
-              <Route index element={<CartView />} />
-              <Route path='pricing/:formule' element={<PricingView />} />
-              <Route path='suscribe' element={<SuscribeView />} />
+            <Route path='pricing/' element={<ConfigLayout />}>
+              <Route index element={<CalendarView />} />
+              <Route path=':step' element={<PricingView />} />
             </Route>
 
             <Route path='*' element={<NoMatchView />} /> 

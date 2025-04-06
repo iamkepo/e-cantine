@@ -53,7 +53,7 @@ const MonthFormule: React.FC<MonthFormuleProps> = ({ budget, counter, type }) =>
     <div className="bg-primary text-white d-flex flex-column justify-content-between shadow-sm p-4 h-100 rounded-4">
       <div className="mb-3">
         <h2>{title}</h2>
-        <Accordion title={`${generateDates(checkedDays).length} date${generateDates(checkedDays).length > 1 ? "s" : ""}`} content={generateDates(checkedDays)} />
+        <Accordion title={`${generateDates(checkedDays, 30).length} date${generateDates(checkedDays, 30).length > 1 ? "s" : ""}`} content={generateDates(checkedDays, 30)} />
 
         <div className="d-flex justify-content-between">
           {days.map((day, i) => (
@@ -87,14 +87,14 @@ const MonthFormule: React.FC<MonthFormuleProps> = ({ budget, counter, type }) =>
         ))}
       </ul>
       <p className="mb-3"> 
-        {checkedItems.length} Livraison{checkedItems.length > 1 ? "s" : ""} to {generateDates(checkedDays).length} day{generateDates(checkedDays).length > 1 ? "s" : ""} 
-        <span className="badge text-bg-danger ms-3">{( checkedItems.length * 500 * generateDates(checkedDays).length )} XOF</span>
+        {checkedItems.length} Livraison{checkedItems.length > 1 ? "s" : ""} to {generateDates(checkedDays, 30).length} day{generateDates(checkedDays, 30).length > 1 ? "s" : ""} 
+        <span className="badge text-bg-danger ms-3">{( checkedItems.length * 500 * generateDates(checkedDays, 30).length )} XOF</span>
       </p>
       <button type="button" className="btn btn-light py-3">
         Total Budget: {
-        (calculateTotalBudget() * generateDates(checkedDays).length * counter) 
+        (calculateTotalBudget() * generateDates(checkedDays, 30).length * counter) 
         +
-        (checkedItems.length * 500 * generateDates(checkedDays).length)
+        (checkedItems.length * 500 * generateDates(checkedDays, 30).length)
         } XOF
       </button>
     </div>
