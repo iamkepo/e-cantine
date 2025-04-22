@@ -1,7 +1,7 @@
 import React from 'react';
 import { useThemeStore } from '../../stores/themeStore';
 import { decrementItemCount, incrementItemCount } from '../../stores/cartStore';
-import { Cart } from '../../helpers/types';
+import { Cart } from '../../core/types';
 
 
 const Counter: React.FC<{

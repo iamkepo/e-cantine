@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { modal } from "../stores/appStore";
 import ArticleHComponent from "../components/ArticleHComponent";
 import LightBox from "../components/widgets/LightBox";
-import { Article } from "../helpers/types";
+import { Article } from "../core/types";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import { useParams } from "react-router-dom";
 import ArticleVComponent from "../components/ArticleVComponent";
-import { articles } from "../helpers/constants";
+import { articles } from "../core/constants";
 import { useCartStore } from "../stores/cartStore";
 
 const CategoryView: React.FC = () => {
@@ -47,12 +47,6 @@ const CategoryView: React.FC = () => {
           <div 
             key={i} 
             className="col"
-            onClick={() => modal.open(
-              <LightBox prev={() => prev(i - 1)} next={() => next(i + 1)}>
-                <ArticleHComponent article={article} />
-              </LightBox>,
-              "xl"
-            )}
           >
             <ArticleVComponent 
               article={article}

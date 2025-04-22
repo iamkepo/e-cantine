@@ -1,6 +1,6 @@
 import { create, StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
-import { translations } from "../core/translations.ts";
+import { translations } from "../helpers/translations";
 
 interface LangApp {
   lang: string;

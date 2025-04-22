@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Option } from '../../helpers/types';
+import { Option } from '../../core/types';
 import { useThemeStore } from '../../stores/themeStore';
 
 export interface DropdownProps {
@@ -25,7 +25,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ chevron, options }) => {
 	return (
 		<div className="dropdown">
 			<button
-				className={`btn btn-${theme}`}
+				className={`btn btn-secondary`}
 				type="button"
 				onClick={toggleDropdown}
 			>

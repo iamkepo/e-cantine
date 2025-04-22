@@ -1,5 +1,5 @@
 import { typeRender } from '../../helpers/functions';
-import { Cart } from '../../helpers/types';
+import { Cart } from '../../core/types';
 import { modal } from '../../stores/appStore';
 import { removeItemCart } from '../../stores/cartStore';
 import ArticleHComponent from '../ArticleHComponent';

@@ -14,3 +14,5 @@ export interface Option {
   label: string;
   action: ()=> void
 }
+
+export type PlanningEvent = { title: string; date: string; slot: string };

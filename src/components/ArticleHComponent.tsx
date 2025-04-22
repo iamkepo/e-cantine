@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { addItemCart, findAndItem, useCartStore } from '../stores/cartStore';
-import { Article, Cart } from '../helpers/types';
+import { Article, Cart } from '../core/types';
 import { categoryRender, formateDate, tagRender, typeRender } from '../helpers/functions';
 import Counter from './widgets/Counter';
 

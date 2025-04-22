@@ -1,17 +1,17 @@
 import EmptyLayout from './layouts/EmptyLayout'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
-import ConfigLayout from './layouts/ConfigLayout'
 import FilterLayout from './layouts/FilterLayout'
 import NavLayout from './layouts/NavLayout'
 
 import LandingView from './views/LandingView'
 import HomeView from './views/HomeView'
 import NoMatchView  from './views/NoMatchView'
+import CheckoutView from './views/CheckoutView'
+import PlannerView from './views/PlannerView';
+import LoginView from './views/LoginView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
-import PricingView from './views/PricingView'
-import CalendarView from './views/CalendarView'
 
 function App() {
 
@@ -20,20 +20,19 @@ function App() {
       <Routes>
         <Route path="/" element={<EmptyLayout />}>
           <Route index element={<NoMatchView />} />
+          <Route path='login' element={<LoginView />} />
 
           <Route path=":lang/" element={<NavLayout />}>
             <Route index element={<LandingView />} />
-            <Route  path='cart/' element={<CartView />} />
 
             <Route path='category/' element={<FilterLayout />}>
               <Route index element={<HomeView />} />
               <Route path=':id' element={<CategoryView />} />
             </Route>
 
-            <Route path='pricing/' element={<ConfigLayout />}>
-              <Route index element={<CalendarView />} />
-              <Route path=':step' element={<PricingView />} />
-            </Route>
+            <Route path='cart' element={<CartView />} />
+            <Route path='planning' element={<PlannerView />} />
+            <Route path='checkout' element={<CheckoutView />} />
 
             <Route path='*' element={<NoMatchView />} /> 
           </Route>      

@@ -3,12 +3,12 @@ import React, { useEffect } from "react";
 import LightBox from "../components/widgets/LightBox";
 import ArticleHComponent from "../components/ArticleHComponent";
 
-import { Article } from "../helpers/types";
+import { Article } from "../core/types";
 
 import { modal } from "../stores/appStore";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import ArticleVComponent from "../components/ArticleVComponent";
-import { articles } from "../helpers/constants";
+import { articles } from "../core/constants";
 import { useCartStore } from "../stores/cartStore";
 
 const HomeView: React.FC = () => {

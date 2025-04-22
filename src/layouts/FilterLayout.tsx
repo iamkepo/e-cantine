@@ -1,28 +1,40 @@
 import React from 'react';
 import { Outlet, useParams } from "react-router-dom";
-import { categories, tags, types } from '../helpers/constants';
+import { categories, tags, types } from '../core/constants';
 import { useThemeStore } from '../stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, typeSelect, useFilterStore } from '../stores/filterStore';
 import { Dropdown } from '../components/widgets/Dropdown';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../stores/useAuthStore';
 
 
 const FilterLayout: React.FC = () => {  
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
   const { id } = useParams();
+  const { user } = useAuthStore();
 
   return (
     <div className="col-12 col-lg-11 p-3 mx-auto">
       <div className="col-12 clearfix py-3 my-3">
         <div className="float-end">
-          <Dropdown 
-            options={types.map(type => ({
-              label: type.label,
-              action: () => typeSelect(type.id)
-            }))}
-            chevron
-          />
+          { user == null ?
+            <>
+              <Link className={`btn btn-${theme}`} to='/login'>
+                <i className={`bi bi-box-arrow-in-right fs-6`}>
+                </i>
+              </Link> 
+              <Link className={`btn btn-${theme}`} to='/register'>
+                <i className={`bi bi-box-arrow-in-right fs-6`}>
+                </i>
+              </Link>
+            </>
+            :
+            <Link className={`btn btn-${theme}`} to='/logout'>
+              <i className={`bi bi-box-arrow-in-left fs-6`}>
+              </i>
+            </Link>
+          }
         </div>
         <ul className="nav nav-tabs">
           {
@@ -67,6 +79,17 @@ const FilterLayout: React.FC = () => {
                   </span>
                 ))}
               </p>
+            </div>
+
+            <div className="filter-group mb-3">
+              <h6 className="mb-3">Filter by Type:</h6>
+              <Dropdown 
+                options={types.map(type => ({
+                  label: type.label,
+                  action: () => typeSelect(type.id)
+                }))}
+                chevron
+              />
             </div>
 
             <div className="filter-group">

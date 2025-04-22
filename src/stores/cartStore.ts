@@ -1,18 +1,29 @@
 import { create, StateCreator } from "zustand";
-import { Cart } from "../helpers/types";
+import { Cart, PlanningEvent } from '../core/types';
 import { persist } from "zustand/middleware";
+import { categories, days } from "../core/constants";
 
 type CartApp = {
   cart: Array<Cart>;
+  dates: Date[] | undefined;
+  events: PlanningEvent[] | undefined;
+  weeks: number;
+  checkedDays: string[];
+  startDate: Date;
   subtotal: number;
   initApp: () => void;
 };
 
 const initState = {
   cart: [] as Array<Cart>,
+  dates: undefined,
+  events: undefined,
+  weeks: 1,
+  checkedDays: [days[1]],
+  startDate: new Date(),
   subtotal: 0,
 } as CartApp;
-const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'langStore' });
+const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'cartStore' });
 
 export const useCartStore = create<CartApp>()(
   myMiddlewares((set) => ({
@@ -86,8 +97,73 @@ export const incrementItemCount = (id: number) => {
     }),
   }));
 };
+
+export const setItemCount = (count: number) => {
+  useCartStore.setState((state) => ({
+    cart: state.cart.map(item => ({
+      ...item,
+      count
+    }))
+  }));
+};
 export const setSubtotal = ()=>{
   useCartStore.setState((state) => ({
     subtotal: state.cart.reduce((sum, item) => sum + item.count * (item.price || 0), 0)
   }));
+}
+export const setDates = (dates: Date[]) => {
+  useCartStore.setState({
+    dates
+  });
+}
+export const setCheckedDays = (days: string[]) => {
+  useCartStore.setState({
+    checkedDays: days
+  });
+}
+export const setStartDate = (date: Date) => {
+  useCartStore.setState({
+    startDate: date
+  });
+}
+export const setWeeks = (weeks: number) => {
+  useCartStore.setState({
+    weeks
+  });
+}
+export const setEvents = (events: PlanningEvent[]) => {
+  useCartStore.setState({
+    events
+  });
+}
+export const removeEvent = (index: number) => {
+  useCartStore.setState((state) => ({
+    events: state.events?.filter((_, i) => i !== index)
+  }));
+}
+
+
+export function generatePlanning(
+  dates: Date[]
+): PlanningEvent[] {
+  const { cart } = useCartStore.getState();
+  const events: PlanningEvent[] = [];
+
+  for (let d = 0; d < dates.length; d++) {
+    const date = new Date(dates[d]);
+    const dateStr = date.toISOString().split("T")[0];
+    categories.filter(c => c.id != null).forEach(category => {
+      cart.forEach(item => {
+        if (item.category === category.id) {
+          events.push({
+            title: item.label + " (" + category.label + ")",
+            date: dateStr,
+            slot: category.label
+          });
+        }
+      });
+    });
+  }
+
+  return events;
 }

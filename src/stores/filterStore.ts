@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Article } from "../helpers/types";
+import { Article } from "../core/types";
 
 type FilterApp = {
   selected: {
