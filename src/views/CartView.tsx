@@ -22,7 +22,7 @@ const CartView: React.FC = () => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: '/cart/' } });
     } else {
-      navigate('/' + lang + '/planning');
+      navigate('/' + lang + '/cart/planning');
     }
   };
 
@@ -31,17 +31,7 @@ const CartView: React.FC = () => {
   }
 
   return (
-    <div className="col-12 col-lg-11 p-3 mx-auto mt-4">
-      <div className="d-flex mb-4">
-        <button
-          type="button"
-          className="btn btn-primary mb-4 me-3"
-          onClick={() => window.history.back()}
-        >
-          <i className="bi bi-chevron-left"></i>
-        </button>
-        <h3>Shopping Cart</h3>
-      </div>
+    <div className="col-12 col-lg-11 p-3 mx-auto">
       <div className="row">
         <div className="col-lg-8">
           {categories.map((category) =>
@@ -78,7 +68,9 @@ const CartView: React.FC = () => {
                 )}
               </ul>
             </div>
-            <div className="mt-4">
+            <hr />
+            <div className="d-flex justify-content-between">
+              <button type="button" className="btn btn-secondary" onClick={() => window.history.back()}>Retour</button>
               <button
                 className="btn btn-success"
                 onClick={handleValidateCart}

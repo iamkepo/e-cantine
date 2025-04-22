@@ -12,6 +12,7 @@ import PlannerView from './views/PlannerView';
 import LoginView from './views/LoginView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
+import ConfigLayout from './layouts/ConfigLayout'
 
 function App() {
 
@@ -29,10 +30,11 @@ function App() {
               <Route index element={<HomeView />} />
               <Route path=':id' element={<CategoryView />} />
             </Route>
-
-            <Route path='cart' element={<CartView />} />
-            <Route path='planning' element={<PlannerView />} />
-            <Route path='checkout' element={<CheckoutView />} />
+            <Route path='cart/' element={<ConfigLayout />}>
+              <Route index element={<CartView />} />
+              <Route path='planning' element={<PlannerView />} />
+              <Route path='checkout' element={<CheckoutView />} />
+            </Route>
 
             <Route path='*' element={<NoMatchView />} /> 
           </Route>      

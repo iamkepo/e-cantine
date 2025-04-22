@@ -29,6 +29,7 @@ const NavLayout: React.FC = () => {
     changeLang(value);
     window.location.replace(window.location.href.replace(`${params?.lang}`, value))
   };
+  
   return (
     <>
       <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '10000'}}>

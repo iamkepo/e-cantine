@@ -3,7 +3,6 @@ import { Cart } from '../../core/types';
 import { modal } from '../../stores/appStore';
 import { removeItemCart } from '../../stores/cartStore';
 import ArticleHComponent from '../ArticleHComponent';
-import Counter from './Counter';
 
 const CartItem: React.FC<{ item: Cart; }> = ({ item }) => (
   <div className="row mb-3">
@@ -23,7 +22,7 @@ const CartItem: React.FC<{ item: Cart; }> = ({ item }) => (
       <p className="badge text-bg-secondary">{typeRender(item.type as number)}</p>
     </div>
     <div className="col-md-2">
-      <Counter item={item} />
+      {item.count}
     </div>
     <div className="col-md-2">
       <p className="fw-bold">{(item.count * (item.price || 0)).toFixed(2)} XOF</p>

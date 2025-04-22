@@ -46,7 +46,7 @@ const PlannerView = () => {
     if (!isAuthenticated) {
       navigate('/' + lang + '/login', { state: { from: '/planning' } });
     } else {
-      navigate('/' + lang + '/checkout');
+      navigate('/' + lang + '/cart/checkout');
     }
   }
 
@@ -66,17 +66,7 @@ const PlannerView = () => {
   }
 
   return (
-    <div className="col-10 mx-auto mt-4">
-      <div className="d-flex mb-4">
-        <button
-          type="button"
-          className="btn btn-primary mb-4 me-3"
-          onClick={() => window.history.back()}
-        >
-          <i className="bi bi-chevron-left"></i>
-        </button>
-        <h3>Calendrier</h3>
-      </div>
+    <div className="col-10 mx-auto">
       <div className="row">
         <div className="col-lg-8">
           <div className={`card text-bg-${theme} p-3`}>
@@ -92,6 +82,7 @@ const PlannerView = () => {
                   ...event,
                   extendedProps: { index }
                 }))}
+                eventColor="var(--bs-primary)"
                 editable={true}
                 selectable={true}
                 droppable={true}

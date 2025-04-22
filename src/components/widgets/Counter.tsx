@@ -1,33 +1,36 @@
 import React from 'react';
 import { useThemeStore } from '../../stores/themeStore';
-import { decrementItemCount, incrementItemCount } from '../../stores/cartStore';
-import { Cart } from '../../core/types';
 
 
 const Counter: React.FC<{
-  item: Cart;
-}> = ({ item }) => {
+  value: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+}> = ({ value, onIncrement, onDecrement }) => {
   const { theme } = useThemeStore();
 
   return (
-    <div className="input-group">
+    <div className="input-group input-group-sm" style={{ width: '100px' }}>
       <button
         className={`btn text-bg-secondary btn-sm`}
         type="button"
-        onClick={() => decrementItemCount(item.id as number)}
+        onClick={() => onDecrement()}
       >
         <i className="bi bi-dash"></i>
       </button>
       <input
         type="text"
         className={`form-control form-control-sm text-center text-bg-${theme}`}
-        value={item.count}
+        value={value}
+        min={0}
+        max={100}
+        step={1}
         readOnly
       />
       <button
         className={`btn text-bg-secondary btn-sm`}
         type="button"
-        onClick={() => incrementItemCount(item.id as number)}
+        onClick={() => onIncrement()}
       >
         <i className="bi bi-plus"></i>
       </button>

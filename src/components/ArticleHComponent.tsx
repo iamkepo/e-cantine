@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { addItemCart, findAndItem, useCartStore } from '../stores/cartStore';
+import { addItemCart, findAndItem, removeItemCart, useCartStore } from '../stores/cartStore';
 import { Article, Cart } from '../core/types';
 import { categoryRender, formateDate, tagRender, typeRender } from '../helpers/functions';
-import Counter from './widgets/Counter';
 
 interface ArticleHComponentProps {
   article: Article | Cart;
@@ -38,7 +37,13 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
               <div className="col col-md-4">
                 {
                   findAndItem(article.id as number) != undefined ? 
-                  <Counter item={findAndItem(article.id as number) as Cart} />
+                  <button
+                    type="button"
+                    className="btn btn-danger float-end"
+                    onClick={() => removeItemCart(article.id as number)}
+                  >
+                    Retirer
+                  </button>
                   :
                   <button
                     type="button"
