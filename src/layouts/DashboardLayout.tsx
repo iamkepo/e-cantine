@@ -2,10 +2,12 @@ import { Outlet } from "react-router-dom";
 import { useThemeStore } from "../stores/themeStore";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useLangStore } from "../stores/langStore";
 
 const DashboardLayout: React.FC = () => {
   const { theme } = useThemeStore();
-    
+  const { lang } = useLangStore();
+  
   useEffect(() => {
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -58,40 +60,35 @@ const DashboardLayout: React.FC = () => {
     };
   }, []);
 
+  
   return (
     <div className="col-12 p-3">
       <div className="row">
         <nav id="sidebar" className={`col-md-3 col-lg-2 d-md-block text-bg-${theme} sidebar`}>
           <div className="position-sticky pt-3">
             <ul className="nav flex-column">
-              <li className="nav-item">
-                <Link className="nav-link active" to="/dashboard">
-                  <i className="bi bi-house-door me-2"></i>
-                  Dashboard
+              <li className="nav-item mb-3">
+                <Link className="nav-link active" to={'/'+lang+'/client/category'}>
+                  <i className="bi bi-arrow-left me-2"></i>
+                  Retour
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/dashboard/orders">
+              <li className="nav-item mb-3">
+                <Link className="nav-link " to={'/'+lang+'/dashboard/orders'}>
                   <i className="bi bi-file-earmark me-2"></i>
-                  Orders
+                  My orders
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/dashboard/products">
-                  <i className="bi bi-cart me-2"></i>
-                  Products
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/dashboard/customers">
+              <li className="nav-item mb-3">
+                <Link className="nav-link " to={'/'+lang+'/dashboard/plan'}>
                   <i className="bi bi-people me-2"></i>
-                  Customers
+                  My plan
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/dashboard/reports">
+              <li className="nav-item mb-3">
+                <Link className="nav-link " to={'/'+lang+'/dashboard/history'}>
                   <i className="bi bi-graph-up me-2"></i>
-                  Reports
+                  History
                 </Link>
               </li>
             </ul>
@@ -101,7 +98,7 @@ const DashboardLayout: React.FC = () => {
         <div className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 className="h2">Dashboard</h1>
-            <button id="sidebarToggle" className="btn btn-primary d-md-none">
+            <button id="sidebarToggle" className="btn btn-primary">
               <i className="bi bi-list"></i> Toggle Sidebar
             </button>
           </div>
