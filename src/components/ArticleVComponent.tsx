@@ -15,7 +15,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
   const { selected } = useFilterStore();
 
   return (
-    <div className={`card text-bg-${theme} ${findAndItem(article.id as number) != undefined ? 'border border-2 border-warning' : ''}`}>
+    <div className={`card text-bg-${theme} ${findAndItem(article.id as number) != undefined ? 'border border-1 border-warning' : ''}`}>
       <img 
         src={article.img} 
         className="card-img-top" 
