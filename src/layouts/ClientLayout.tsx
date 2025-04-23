@@ -6,7 +6,7 @@ import { capitalize } from '../helpers/functions';
 import { useCartStore } from '../stores/cartStore';
 
 
-const NavLayout: React.FC = () => {
+const ClientLayout: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { theme } = useThemeStore();
@@ -33,12 +33,12 @@ const NavLayout: React.FC = () => {
   return (
     <>
       <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '10000'}}>
-        <div className={`card text-bg-secondary shadow-lg mb-5 p-3`}>
+        <div className={`card text-bg-${theme} shadow-lg mb-3 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : theme}`} to='/'>
               <i className={`bi bi-house fs-6`}></i> Home
             </Link>
-            <Link className={`btn btn-${window.location.pathname.includes('category') ? 'primary' : theme} border-3 border-primary`} to='category'>
+            <Link className={`btn btn-${window.location.pathname.includes('category') ? 'primary' : theme} border-1 border-primary`} to='category'>
               <i className={`bi bi-list fs-6`}></i> Produits
             </Link>
             {
@@ -76,4 +76,4 @@ const NavLayout: React.FC = () => {
   );
 };
 
-export default NavLayout;
+export default ClientLayout;

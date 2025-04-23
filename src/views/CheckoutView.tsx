@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { decrementPerson, incrementPerson, setSubtotal, useCartStore } from "../stores/cartStore";
 import { useThemeStore } from "../stores/themeStore";
 import Counter from "../components/widgets/Counter";
+import { useLangStore } from "../stores/langStore";
+import { Link } from "react-router-dom";
 
 
 const CheckoutView = () => {
   const { theme } = useThemeStore();
   const { cart, subtotal, dates, events, person } = useCartStore();
+  const { lang } = useLangStore();
   const [paid, setPaid] = useState(false);
   const [loading, setLoading] = useState(false);
   const shipping = 500.0 * (dates?.length || 0);
@@ -44,6 +47,10 @@ const CheckoutView = () => {
       <div className="container py-5 text-center">
         <h1>Paiement réussi !</h1>
         <p>Merci pour votre achat. Votre planning est confirmé.</p>
+        <hr />
+        <p>Vous pouvez consulter votre planning dans votre dashboard.</p>
+        <Link className="btn btn-secondary me-3" to={'/'+lang+'/client/category'}>Retour</Link>
+        <Link className="btn btn-primary" to={'/'+lang+'/dashboard'}>Aller au dashboard</Link>
       </div>
     );
   }

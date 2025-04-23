@@ -13,8 +13,8 @@ export default function LandingView() {
             <p className="hero-subtitle">Create stunning websites and applications with our powerful platform. Experience the next generation of web development.</p>
             
             <div className="hero-buttons">
-              <Link to="category" className="btn btn-primary me-3 mb-2">Get Started Free</Link>
-              <Link to="/" className="btn btn-outline mb-2">Watch Demo <i className="fas fa-play ms-2"></i></Link>
+              <Link to="client/category" className="btn btn-primary me-3 mb-2">Get Started Free</Link>
+              <Link to="client/" className="btn btn-outline mb-2">Watch Demo <i className="fas fa-play ms-2"></i></Link>
             </div>
 
             <div className="hero-stats row">

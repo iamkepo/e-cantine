@@ -2,7 +2,10 @@ import EmptyLayout from './layouts/EmptyLayout'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 import FilterLayout from './layouts/FilterLayout'
-import NavLayout from './layouts/NavLayout'
+import ClientLayout from './layouts/ClientLayout'
+import ConfigLayout from './layouts/ConfigLayout'
+import ContainerLayout from './layouts/ContainerLayout'
+import DashboardLayout from './layouts/DashboardLayout'
 
 import LandingView from './views/LandingView'
 import HomeView from './views/HomeView'
@@ -12,7 +15,7 @@ import PlannerView from './views/PlannerView';
 import LoginView from './views/LoginView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
-import ConfigLayout from './layouts/ConfigLayout'
+import DashboardView from './views/DashboardView'
 
 function App() {
 
@@ -21,23 +24,30 @@ function App() {
       <Routes>
         <Route path="/" element={<EmptyLayout />}>
           <Route index element={<NoMatchView />} />
-          <Route path='login' element={<LoginView />} />
 
-          <Route path=":lang/" element={<NavLayout />}>
+          <Route path=":lang/" element={<ContainerLayout />}>
             <Route index element={<LandingView />} />
+            <Route path='login' element={<LoginView />} />
 
-            <Route path='category/' element={<FilterLayout />}>
-              <Route index element={<HomeView />} />
-              <Route path=':id' element={<CategoryView />} />
-            </Route>
-            <Route path='cart/' element={<ConfigLayout />}>
-              <Route index element={<CartView />} />
-              <Route path='planning' element={<PlannerView />} />
-              <Route path='checkout' element={<CheckoutView />} />
+            <Route path="client/" element={<ClientLayout />}>
+              <Route index element={<NoMatchView />} />
+              <Route path='category/' element={<FilterLayout />}>
+                <Route index element={<HomeView />} />
+                <Route path=':id' element={<CategoryView />} />
+              </Route>
+              <Route path='cart/' element={<ConfigLayout />}>
+                <Route index element={<CartView />} />
+                <Route path='planning' element={<PlannerView />} />
+                <Route path='checkout' element={<CheckoutView />} />
+              </Route>
+            </Route>   
+
+            <Route path='dashboard/' element={<DashboardLayout />}>
+              <Route index element={<DashboardView />} />
             </Route>
 
             <Route path='*' element={<NoMatchView />} /> 
-          </Route>      
+          </Route>
         </Route>
       </Routes>
     </Router>

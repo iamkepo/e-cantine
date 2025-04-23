@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventDropArg } from '@fullcalendar/core';
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { days } from "../core/constants";
@@ -44,9 +44,9 @@ const PlannerView = () => {
 
   function handleCheckout(): void {
     if (!isAuthenticated) {
-      navigate('/' + lang + '/login', { state: { from: '/planning' } });
+      navigate('/' + lang + '/login', { state: { from: '/client/planning' } });
     } else {
-      navigate('/' + lang + '/cart/checkout');
+      navigate('/' + lang + '/client/cart/checkout');
     }
   }
 
@@ -143,7 +143,7 @@ const PlannerView = () => {
               <p className="mb-3">{events?.length} plats</p>
               <hr />
               <div className="d-flex justify-content-between">
-                <button type="button" className="btn btn-secondary" onClick={() => window.history.back()}>Retour</button>
+                <Link className="btn btn-secondary" to={'/'+lang+'/client/cart'}>Retour</Link>
                 <button className="btn btn-primary" onClick={handleCheckout}>Valider</button>
               </div>
             </div>

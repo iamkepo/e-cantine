@@ -6,6 +6,7 @@ import { priceSelect, setSearchQuery, tagSelect, typeSelect, useFilterStore } fr
 import { Dropdown } from '../components/widgets/Dropdown';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/useAuthStore';
+import { useLangStore } from '../stores/langStore';
 
 
 const FilterLayout: React.FC = () => {  
@@ -13,25 +14,20 @@ const FilterLayout: React.FC = () => {
   const { selected } = useFilterStore();
   const { id } = useParams();
   const { user } = useAuthStore();
+  const { lang } = useLangStore();
 
   return (
     <div className="col-12 col-lg-11 p-3 mx-auto">
       <div className="col-12 clearfix py-3 my-3">
         <div className="float-end">
           { user == null ?
-            <>
-              <Link className={`btn btn-${theme}`} to='/login'>
-                <i className={`bi bi-box-arrow-in-right fs-6`}>
-                </i>
-              </Link> 
-              <Link className={`btn btn-${theme}`} to='/register'>
-                <i className={`bi bi-box-arrow-in-right fs-6`}>
-                </i>
-              </Link>
-            </>
+            <Link className={`btn btn-${theme}`} to={'/'+lang+'/login'}>
+              <i className={`bi bi-box-arrow-in-right fs-6`}>
+              </i>
+            </Link> 
             :
-            <Link className={`btn btn-${theme}`} to='/logout'>
-              <i className={`bi bi-box-arrow-in-left fs-6`}>
+            <Link className={`btn btn-${theme}`} to={'/'+lang+'/dashboard'}>
+              <i className={`bi bi-person fs-6`}>
               </i>
             </Link>
           }

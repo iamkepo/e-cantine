@@ -4,7 +4,7 @@ import { filterCartByCategory, useCartStore } from '../stores/cartStore';
 import { categories } from '../core/constants';
 import CartItem from '../components/widgets/CartItem';
 import { useAuthStore } from '../stores/useAuthStore';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLangStore } from '../stores/langStore';
 
 const CartView: React.FC = () => {
@@ -22,12 +22,12 @@ const CartView: React.FC = () => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: '/cart/' } });
     } else {
-      navigate('/' + lang + '/cart/planning');
+      navigate('/' + lang + '/client/cart/planning');
     }
   };
 
   function handleCategory(id: number): void {
-    navigate('/' + lang + '/category/' + id)
+    navigate('/' + lang + '/client/category/' + id)
   }
 
   return (
@@ -70,7 +70,7 @@ const CartView: React.FC = () => {
             </div>
             <hr />
             <div className="d-flex justify-content-between">
-              <button type="button" className="btn btn-secondary" onClick={() => window.history.back()}>Retour</button>
+              <Link className="btn btn-secondary" to={'/'+lang+'/client/category'}>Retour</Link>
               <button
                 className="btn btn-success"
                 onClick={handleValidateCart}
