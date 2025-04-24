@@ -5,15 +5,15 @@ const DashboardView: React.FC = () => {
   const {user} = useAuthStore();
 
   return (
-    <div className="container py-5">
+    <div className="col-10 mx-auto py-5">
       <h1>Mon Dashboard</h1>
 
-      <section>
+      <section className="mb-3">
         <h2>Mon abonnement</h2>
         <div>Pas d'abonnement en cours.</div>
       </section>
 
-      <section>
+      <section className="mb-3">
         <h2>Profil</h2>
         {user ? (
           <div>
@@ -25,14 +25,15 @@ const DashboardView: React.FC = () => {
         )}
       </section>
 
-      <section>
+      <section className="mb-3">
         <h2>Planning actuel</h2>
-       
+        <div>Pas de planning actuel.</div>
       </section>
 
       {history && history.length > 0 && (
-        <section>
+        <section className="mb-3">
           <h2>Historique des plannings</h2>
+          <div>Pas d'historique.</div>
         </section>
       )}
     </div>

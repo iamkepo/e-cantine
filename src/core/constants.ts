@@ -200,8 +200,8 @@ export const categories = [
 ];
 export const listStep = [
   { id: 0, label: "Panier", icon: "check", path: 'cart' }, 
-  { id: 1, label: "Plannification", icon: "calendar", path: 'planning' }, 
-  { id: 2, label: "Paiement", icon: "credit-card", path: 'checkout' }, 
+  { id: 1, label: "Plannification", icon: "calendar", path: 'cart/planning' }, 
+  { id: 2, label: "Paiement", icon: "credit-card", path: 'cart/checkout' }, 
 ];
 export const methods = [
   { id: 'mtn', label: 'MTN Mobile Money' },

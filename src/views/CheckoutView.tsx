@@ -43,8 +43,8 @@ const CheckoutView = () => {
   useEffect(() => {
     if (!user?.email) return;
     if (persons?.includes(user?.email)) return;
-    if (persons?.length === 0) {
-      setPerson(user?.email || '');
+    if (!persons) {
+      setPerson([user?.email || '']);
     }
   }, [user?.email, persons]);
 

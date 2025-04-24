@@ -16,6 +16,10 @@ import LoginView from './views/LoginView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
 import DashboardView from './views/DashboardView'
+import RegisterView from './views/RegisterView'
+import OrdersView from './views/OrdersView'
+import PlanView from './views/PlanView'
+import HistoryView from './views/HistoryView'
 
 function App() {
 
@@ -28,6 +32,7 @@ function App() {
           <Route path=":lang/" element={<ContainerLayout />}>
             <Route index element={<LandingView />} />
             <Route path='login' element={<LoginView />} />
+            <Route path='register' element={<RegisterView />} />
 
             <Route path="client/" element={<ClientLayout />}>
               <Route index element={<NoMatchView />} />
@@ -44,6 +49,9 @@ function App() {
 
             <Route path='dashboard/' element={<DashboardLayout />}>
               <Route index element={<DashboardView />} />
+              <Route path='orders' element={<OrdersView />} />
+              <Route path='plan' element={<PlanView />} />
+              <Route path='history' element={<HistoryView />} />
             </Route>
 
             <Route path='*' element={<NoMatchView />} /> 

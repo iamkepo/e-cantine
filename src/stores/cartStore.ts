@@ -133,9 +133,9 @@ export const setWeeks = (weeks: number) => {
     weeks
   });
 }
-export const setPerson = (person: string) => {
+export const setPerson = (person: string[]) => {
   useCartStore.setState({
-    persons : [person]
+    persons : person
   });
 }
 export const incrementPerson = (person: string) => {

@@ -20,7 +20,7 @@ const CartView: React.FC = () => {
 
   const handleValidateCart = () => {
     if (!isAuthenticated) {
-      navigate('/login', { state: { from: '/cart/' } });
+      navigate('/' + lang + '/login');
     } else {
       navigate('/' + lang + '/client/cart/planning');
     }
