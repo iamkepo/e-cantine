@@ -1,41 +1,22 @@
 import React from 'react';
-import { useAuthStore } from '../stores/useAuthStore';
+import { useThemeStore } from '../stores/themeStore';
 
 const DashboardView: React.FC = () => {
-  const {user} = useAuthStore();
+  const { theme } = useThemeStore();
 
   return (
-    <div className="col-10 mx-auto py-5">
-      <h1>Mon Dashboard</h1>
-
-      <section className="mb-3">
-        <h2>Mon abonnement</h2>
-        <div>Pas d'abonnement en cours.</div>
-      </section>
-
-      <section className="mb-3">
-        <h2>Profil</h2>
-        {user ? (
-          <div>
-            <div>Email : {user.email}</div>
-            {/* Ajoute ici d'autres infos ou préférences */}
+    <div className="col-12">
+      <h1>Mes Statistiques</h1>
+      <div className="row">
+        <div className="col-12">
+          <div className={`card text-bg-${theme} mb-3`}>
+            <div className="card-body">
+              <h2 className="card-title">Nombre d'articles</h2>
+              <p className="card-text">0</p>
+            </div>
           </div>
-        ) : (
-          <div>Non connecté.</div>
-        )}
-      </section>
-
-      <section className="mb-3">
-        <h2>Planning actuel</h2>
-        <div>Pas de planning actuel.</div>
-      </section>
-
-      {history && history.length > 0 && (
-        <section className="mb-3">
-          <h2>Historique des plannings</h2>
-          <div>Pas d'historique.</div>
-        </section>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -68,8 +68,8 @@ const DashboardLayout: React.FC = () => {
           </div>
         </nav>
 
-        <div className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div className="col-md-9 ms-sm-auto col-lg-10 px-md-4 position-relative">
+          <div className={`position-absolute top-0 end-0 mb-3 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center`}>
             <div className="btn-group" role="group">
               <button type="button" className={`btn btn-${theme} border-1 border-secondary`} onClick={toggleTheme}>
                 <i className={`bi bi-${theme === "dark" ? "moon" : "sun"} fs-6`}></i>

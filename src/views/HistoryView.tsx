@@ -1,10 +1,16 @@
 import React from "react";
+import { useThemeStore } from "../stores/themeStore";
 
 const HistoryView: React.FC = () => {
+  const { theme } = useThemeStore();
   return (
-    <div className="col-10 mx-auto py-5">
+    <div className="col-12">
       <h2>History</h2>
-      <div>No history yet.</div>
+      <div className={`card text-bg-${theme} mb-3`}>
+        <div className="card-body">
+          <h2 className="card-title">No history yet.</h2>
+        </div>
+      </div>
     </div>
   );
 };
