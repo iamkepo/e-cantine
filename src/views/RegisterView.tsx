@@ -7,29 +7,52 @@ const RegisterView: React.FC = () => {
   const navigate = useNavigate();
   const { lang } = useLangStore();
   const { theme } = useThemeStore();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [error, setError] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [loading, setLoading] = useState(false);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+  const handleError = (name: string, message: string) => {
+    setError(prev => ({
+      ...prev,
+      [name]: message
+    }));
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    if (!name || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields.");
+    handleError('name', '');
+    handleError('email', '');
+    handleError('password', '');
+    handleError('confirmPassword', '');
+    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+      handleError("name", "Please fill in all fields.");
       return;
     }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (form.password !== form.confirmPassword) {
+      handleError("confirmPassword", "Passwords do not match.");
       return;
     }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       // In a real app, registration logic would go here
-      navigate('/' + lang + '/client/login');
+      navigate('/' + lang + '/login');
     }, 1000);
   };
 
@@ -42,48 +65,53 @@ const RegisterView: React.FC = () => {
           <input
             id="name"
             type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={form.name}
+            onChange={handleChange}
+            name="name"
             className="form-control"
             autoComplete="name"
           />
+          {error.name && <div className="text-danger">{error.name}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
           <input
             id="email"
             type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={form.email}
+            onChange={handleChange}
+            name="email"
             className="form-control"
             autoComplete="email"
           />
+          {error.email && <div className="text-danger">{error.email}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
           <input
             id="password"
             type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            value={form.password}
+            onChange={handleChange}
+            name="password"
             className="form-control"
             autoComplete="new-password"
           />
+          {error.password && <div className="text-danger">{error.password}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
           <input
             id="confirmPassword"
             type="password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
+            value={form.confirmPassword}
+            onChange={handleChange}
+            name="confirmPassword"
             className="form-control"
             autoComplete="new-password"
           />
+          {error.confirmPassword && <div className="text-danger">{error.confirmPassword}</div>}
         </div>
-        {error && (
-          <div className="text-danger mb-3">{error}</div>
-        )}
         <button
           type="submit"
           className={`btn btn-primary w-100`}
