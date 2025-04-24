@@ -203,5 +203,11 @@ export const listStep = [
   { id: 1, label: "Plannification", icon: "calendar", path: 'planning' }, 
   { id: 2, label: "Paiement", icon: "credit-card", path: 'checkout' }, 
 ];
-
+export const methods = [
+  { id: 'mtn', label: 'MTN Mobile Money' },
+  { id: 'orange', label: 'Orange Money' },
+  { id: 'flooz', label: 'Moov Flooz' },
+  { id: 'card', label: 'Carte de crédit' },
+  { id: 'cash', label: 'Espèces' }
+];
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

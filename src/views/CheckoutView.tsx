@@ -1,34 +1,37 @@
 import { useEffect, useState } from "react";
-import { decrementPerson, incrementPerson, setSubtotal, useCartStore } from "../stores/cartStore";
+import { decrementPerson, incrementPerson, setPerson, setSubtotal, useCartStore } from "../stores/cartStore";
 import { useThemeStore } from "../stores/themeStore";
-import Counter from "../components/widgets/Counter";
 import { useLangStore } from "../stores/langStore";
 import { Link } from "react-router-dom";
+import { methods } from "../core/constants";
+import { useAuthStore } from "../stores/useAuthStore";
+import { modal } from "../stores/appStore";
+import AddPersonModal from "../components/AddPersonModal";
+import RemovePersonModal from "../components/RemovePersonModal";
+import RecapSection from "../components/RecapSection";
+import PaymentSection from "../components/PaymentSection";
 
+// Constants
+const SHIPPING_RATE = 500.0;
+const TAX = 20.0;
 
 const CheckoutView = () => {
   const { theme } = useThemeStore();
-  const { cart, subtotal, dates, events, person } = useCartStore();
+  const { cart, subtotal, dates, events, persons } = useCartStore();
   const { lang } = useLangStore();
+  const { user } = useAuthStore();
   const [paid, setPaid] = useState(false);
   const [loading, setLoading] = useState(false);
-  const shipping = 500.0 * (dates?.length || 0);
-  const tax = 20.0;
-  const total = subtotal + (shipping*person) + tax;
-  const methods = [
-    { id: 'mtn', label: 'MTN Mobile Money' },
-    { id: 'orange', label: 'Orange Money' },
-    { id: 'flooz', label: 'Moov Flooz' },
-    { id: 'card', label: 'Carte de crédit' },
-    { id: 'cash', label: 'Espèces' }
-  ];
+  const shipping = SHIPPING_RATE * (dates?.length || 0);
+  const tax = TAX;
+  const total = subtotal + shipping + tax;
+
   const [form, setForm] = useState({
     paymentMethod: '',
     promoCode: '',
+    address: '',
+    persons: persons || [],
   });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-  };
   const handlePay = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -37,7 +40,35 @@ const CheckoutView = () => {
       setLoading(false);
     }, 1500);
   };
+  useEffect(() => {
+    if (!user?.email) return;
+    if (persons?.includes(user?.email)) return;
+    if (persons?.length === 0) {
+      setPerson(user?.email || '');
+    }
+  }, [user?.email, persons]);
 
+  const addPerson = (): void => {
+    modal.open(
+      <AddPersonModal 
+        onSubmit={email => { incrementPerson(email); modal.close(); }}
+        onCancel={() => modal.close()}
+      />
+    );
+  };
+  const removePerson = (email: string): void => {
+    modal.open(
+      <RemovePersonModal 
+        email={email}
+        onConfirm={() => { decrementPerson(email); modal.close(); }}
+        onCancel={() => modal.close()}
+      />
+    );
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
+    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  };
   useEffect(() => {
     setSubtotal();
   }, [cart]);
@@ -59,107 +90,32 @@ const CheckoutView = () => {
     <div className="col-10 mx-auto">
       <div className="row">
         <div className="col-lg-8">
-          <div className={`card p-3 text-bg-${theme}`}>
-            <h3 className="mb-3">Récapitulatif</h3>
-            <div className="d-flex justify-content-between mb-3">
-              <span>Nombre de jours</span>
-              <span>{dates?.length}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-3">
-              <span>Nombre d'events</span>
-              <span>{events?.length}</span>
-            </div>
-            <div className="d-flex justify-content-between mb-3">
-              <span>Nombre de personnes</span>
-              <span>{person}</span>
-            </div>
-            <hr />
-            <div className="d-flex justify-content-between mb-3">
-              <span>Subtotal</span>
-              <span>{(subtotal + (person * shipping)).toFixed(2)} XOF</span>
-            </div>
-            <div className="d-flex justify-content-between mb-3">
-              <span>Shipping</span>
-              <span>{(person * shipping).toFixed(2)} XOF</span>
-            </div>
-            <div className="d-flex justify-content-between mb-3">
-              <span>Tax</span>
-              <span>{tax.toFixed(2)} XOF</span>
-            </div>
-            <hr />
-            <div className="d-flex justify-content-between mb-4">
-              <strong>Total</strong>
-              <strong>{total.toFixed(2)} XOF</strong>
-            </div>
-          </div>
+          <RecapSection 
+            cart={cart}
+            persons={persons || []}
+            events={events}
+            user={user}
+            theme={theme}
+            subtotal={subtotal}
+            dates={dates}
+            shipping={shipping}
+            tax={tax}
+            total={total}
+            addPerson={addPerson}
+            removePerson={removePerson}
+          />
         </div>
         <div className="col-lg-4">
-          <div className={`card text-bg-${theme} sticky-lg-top`}>
-            <div className="card-body">
-              <h5 className="card-title">Paiement</h5>
-              <div className="d-flex justify-content-between mb-3">
-                <span>Nombre de personnes</span>
-                <Counter
-                  value={person}
-                  onIncrement={incrementPerson}
-                  onDecrement={decrementPerson}
-                />
-              </div>
-              <h6 className="card-title">Code promo</h6>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter promo code"
-                  value={form.promoCode}
-                  onChange={(e) => setForm(f => ({ ...f, promoCode: e.target.value }))}
-                />
-                <button
-                  className="btn btn-secondary"
-                  type="button"
-                  onClick={() => {
-                    if (form.promoCode === "DISCOUNT10") {
-                      setPaid(true);
-                    }
-                  }}
-                >
-                  Apply
-                </button>
-              </div>
-              <h6 className="card-title">Séléctionnez la méthode de paiement</h6>
-              <div className="list-group mb-3">
-                { methods.map(method => (
-                  <div key={method.id} className={`list-group-item text-bg-${theme}`}>
-                    <label className={`form-check`}>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="paymentMethod"
-                        value={method.id}
-                        checked={form.paymentMethod === method.id}
-                        onChange={handleChange}
-                      />
-                      <span className="form-check-label">
-                        {method.label}
-                      </span>
-                    </label>
-                  </div>  
-                )) }
-              </div>
-              <hr />
-
-              <div className="d-flex justify-content-between">
-                <button type="button" className="btn btn-secondary" onClick={() => window.history.back()}>Retour</button>
-                <button 
-                  className="btn btn-primary" 
-                  disabled={loading}
-                  onClick={handlePay}
-                >
-                  Proceed to Checkout
-                </button>
-              </div>
-            </div>
-          </div>
+          <PaymentSection 
+            persons={persons || []}
+            form={form}
+            handleChange={handleChange}
+            methods={methods}
+            theme={theme}
+            loading={loading}
+            handlePay={handlePay}
+            addPerson={addPerson}
+          />
         </div>
       </div>
     </div>

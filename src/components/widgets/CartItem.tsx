@@ -17,15 +17,13 @@ const CartItem: React.FC<{ item: Cart; }> = ({ item }) => (
         )}
       />
     </div>
-    <div className="col-md-5">
+    <div className="col-md-6">
       <h5 className="card-title">{item.label}</h5>
       <p className="badge text-bg-secondary">{typeRender(item.type as number)}</p>
     </div>
-    <div className="col-md-2">
-      {item.count}
-    </div>
-    <div className="col-md-2">
-      <p className="fw-bold">{(item.count * (item.price || 0)).toFixed(2)} XOF</p>
+
+    <div className="col-md-3">
+      <p className="fw-bold">{(item.price || 0).toFixed(2)} XOF</p>
     </div>
     <div className="col-md-1 text-end">
       <button className="btn btn-sm btn-outline-danger" onClick={()=>removeItemCart(item.id as number)}>

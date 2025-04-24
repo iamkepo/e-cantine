@@ -35,7 +35,7 @@ const ClientLayout: React.FC = () => {
       <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '10000'}}>
         <div className={`card text-bg-${theme} shadow-lg mb-3 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
-            <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : theme}`} to='/'>
+            <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : 'outline-secondary'}`} to='/'>
               <i className={`bi bi-house fs-6`}></i> Home
             </Link>
             <Link className={`btn btn-${window.location.pathname.includes('category') ? 'primary' : theme} border-1 border-primary`} to='category'>
@@ -43,7 +43,7 @@ const ClientLayout: React.FC = () => {
             </Link>
             {
               cart.length > 0 ?
-              <Link className={`btn btn-${window.location.pathname.includes('cart') ? 'primary' : theme} position-relative`} to='cart'>
+              <Link className={`btn btn-${window.location.pathname.includes('cart') ? 'primary' : 'outline-secondary'} position-relative`} to='cart'>
                 <i className={`bi bi-cart fs-6`}></i>
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {cart.length}
@@ -54,13 +54,13 @@ const ClientLayout: React.FC = () => {
               false
             }
             <div className="btn-group" role="group">
-              <button type="button" className={`btn btn-${theme}`} onClick={toggleTheme}>
+              <button type="button" className={`btn btn-${theme} border-1 border-secondary`} onClick={toggleTheme}>
                 <i className={`bi bi-${theme === "dark" ? "moon" : "sun"} fs-6`}></i>
               </button>
 
               <button
                 type="button"
-                className={`btn btn-${theme}`}
+                className={`btn btn-${theme} border-1 border-secondary`}
                 onClick={()=> handleChangeLang(lang == 'r' ? 'en' : 'fr')}
               >
                 {capitalize(params?.lang as string)}

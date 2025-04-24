@@ -1,37 +1,29 @@
 import React, { useState } from "react";
-import { DateObject } from "react-multi-date-picker";
-
+import { useThemeStore } from "../../stores/themeStore";
 interface AccordionProps {
   title: string;
-  content: (string | DateObject | Date)[]; // Maintien du type mixte
+  content: React.ReactNode;
 }
 
 const Accordion: React.FC<AccordionProps> = ({ title, content }) => {
   const [show, setShow] = useState<boolean>(false);
-  // Convertir tous les éléments en chaînes pour garantir un affichage correct
-
+  const { theme } = useThemeStore();
 
   return (
     <div className="accordion mb-3">
       <div className="accordion-item">
         <h2 className="accordion-header">
           <button
-            className="accordion-button"
+            className={`accordion-button ${show ? 'collapsed' : ''} text-bg-${theme}`}
             type="button"
             onClick={()=> setShow(!show)}
           >
             {title}
           </button>
         </h2>
-        <div
-          className={`accordion-collapse collapse ${show ? 'show' : ''}`}
-        >
+        <div className={`accordion-collapse collapse ${show ? 'show' : ''} text-bg-secondary`}>
           <div className="accordion-body">
-            {content.length > 0 ? (
-              <span className="small">{content.join(", ")}</span>
-            ) : (
-              <span className="text-muted">No dates available</span>
-            )}
+            {content}
           </div>
         </div>
       </div>

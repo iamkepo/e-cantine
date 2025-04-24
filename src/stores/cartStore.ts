@@ -11,7 +11,7 @@ type CartApp = {
   checkedDays: string[];
   startDate: Date;
   subtotal: number;
-  person: number;
+  persons: string[] | undefined;
   initApp: () => void;
 };
 
@@ -22,7 +22,7 @@ const initState = {
   weeks: 1,
   checkedDays: [days[1]],
   startDate: new Date(),
-  person: 1,
+  persons: undefined,
   subtotal: 0,
 } as CartApp;
 const myMiddlewares = <T extends object>(f: StateCreator<T>) => persist(f, { name: 'cartStore' });
@@ -133,19 +133,19 @@ export const setWeeks = (weeks: number) => {
     weeks
   });
 }
-export const setPerson = (person: number) => {
+export const setPerson = (person: string) => {
   useCartStore.setState({
-    person
+    persons : [person]
   });
 }
-export const incrementPerson = () => {
+export const incrementPerson = (person: string) => {
   useCartStore.setState((state) => ({
-    person: state.person + 1
+    persons: [...(state.persons || []), person]
   }));
 }
-export const decrementPerson = () => {
+export const decrementPerson = (person: string) => {
   useCartStore.setState((state) => ({
-    person: state.person - 1
+    persons: state.persons?.filter(p => p !== person)
   }));
 }
 
