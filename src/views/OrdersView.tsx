@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useThemeStore } from "../stores/themeStore";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { getEventsByDate } from "../stores/historyStore";
+import { getEventsByDate, useHistoryStore } from "../stores/historyStore";
 import { PlanningEvent } from "../core/types";
 
 const OrdersView: React.FC = () => {
   const { theme } = useThemeStore();
-  const [ date, setDate ] = useState<Date> (new Date());
+  const { history } = useHistoryStore();
+  const [ date, setDate ] = useState<Date> (history?.[0]?.events[0]?.date ? new Date(history?.[0]?.events[0]?.date) : new Date());
+  const [ listDate, setListDate ] = useState<PlanningEvent[] | null> ();
 
   const handleDateClick = (info: DateClickArg) => {
     console.log(info);
@@ -18,6 +20,9 @@ const OrdersView: React.FC = () => {
     console.log(info.view);
     setDate(new Date(info.dateStr));
   };
+  useEffect(() => {
+    setListDate(getEventsByDate(date.toISOString().split('T')[0]));
+  }, [date]);
 
   return (
     <div className={`card text-bg-${theme} mb-3`}>
@@ -29,16 +34,12 @@ const OrdersView: React.FC = () => {
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              events={getEventsByDate(date.toISOString().split('T')[0])?.map((event: PlanningEvent, index: number) => ({
+              events={listDate ? listDate.map((event: PlanningEvent) => ({
                 title: event.title,
                 date: event.date,
-                slot: event.slot,
-                extendedProps: { index }
-              }))}
+                slot: event.slot
+              })) : []}
               eventColor="var(--bs-primary)"
-              editable={true}
-              selectable={true}
-              droppable={true}
               dateClick={handleDateClick}
             />
             </div>
@@ -47,6 +48,14 @@ const OrdersView: React.FC = () => {
             <div className={`card text-bg-${theme} sticky-lg-top`}>
               <div className="card-body">
                 <h5 className="card-title mb-3">Paramètres</h5>
+                <label htmlFor="start-date" className="form-label mb-3">Date de début :</label>
+                <input 
+                  type="date" 
+                  id="start-date" 
+                  className="form-control" 
+                  value={new Date(date).toISOString().split('T')[0]} 
+                  onChange={e => setDate(new Date(e.target.value))} 
+                />
               </div>
             </div>
           </div>
