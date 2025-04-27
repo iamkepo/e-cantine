@@ -27,11 +27,11 @@ const CartView: React.FC = () => {
   };
 
   function handleCategory(id: number): void {
-    navigate('/' + lang + '/client/category/' + id)
+    navigate('/' + lang + '/client/filter/' + id)
   }
   const clear = () => {
     clearCart();
-    navigate('/' + lang + '/client/category');
+    navigate('/' + lang + '/client/filter');
   };
 
   return (
@@ -72,7 +72,7 @@ const CartView: React.FC = () => {
           </ul>
           <hr />
           <div className="d-flex justify-content-between">
-            <Link className="btn btn-secondary" to={'/'+lang+'/client/category'}>Retour</Link>
+            <Link className="btn btn-secondary" to={'/'+lang+'/client/filter'}>Retour</Link>
             <button
               className="btn btn-success"
               onClick={handleValidateCart}

@@ -35,9 +35,9 @@ function App() {
             <Route path='register' element={<RegisterView />} />
 
             <Route path="client/" element={<ClientLayout />}>
-              <Route index element={<NoMatchView />} />
-              <Route path='category/' element={<FilterLayout />}>
-                <Route index element={<HomeView />} />
+              <Route index element={<HomeView />} />
+              <Route path='filter/' element={<FilterLayout />}>
+                <Route index element={<CategoryView />} />
                 <Route path=':id' element={<CategoryView />} />
               </Route>
               <Route path='cart/' element={<ConfigLayout />}>
@@ -45,13 +45,14 @@ function App() {
                 <Route path='planning' element={<PlannerView />} />
                 <Route path='checkout' element={<CheckoutView />} />
               </Route>
+
+              <Route path='orders' element={<OrdersView />} />
+              <Route path='plan' element={<PlanView />} />
+              <Route path='history' element={<HistoryView />} />
             </Route>   
 
             <Route path='dashboard/' element={<DashboardLayout />}>
               <Route index element={<DashboardView />} />
-              <Route path='orders' element={<OrdersView />} />
-              <Route path='plan' element={<PlanView />} />
-              <Route path='history' element={<HistoryView />} />
             </Route>
 
             <Route path='*' element={<NoMatchView />} /> 

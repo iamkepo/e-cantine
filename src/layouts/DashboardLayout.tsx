@@ -34,7 +34,7 @@ const DashboardLayout: React.FC = () => {
       <div className="row">
         <nav id="sidebar" className={`col-md-3 col-lg-2 d-md-block text-bg-${theme} sidebar`}>
           <div className="position-sticky pt-3">
-            <button id="sidebarToggle" className="btn btn-outline-danger" onClick={() => navigate('/'+lang+'/client/category')}>
+            <button id="sidebarToggle" className="btn btn-outline-danger" onClick={() => navigate('/'+lang+'/client/filter')}>
               <i className="bi bi-arrow-left"></i>
             </button>
             <ul className="nav flex-column">
@@ -64,7 +64,7 @@ const DashboardLayout: React.FC = () => {
               </li>
             </ul>
             <div>
-              <button type="button" className="btn btn-danger" onClick={() => {logout(); navigate('/'+lang+'/client/category')}}>
+              <button type="button" className="btn btn-danger" onClick={() => {logout(); navigate('/'+lang+'/client/filter')}}>
                 logout
               </button>
             </div>

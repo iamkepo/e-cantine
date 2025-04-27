@@ -57,7 +57,7 @@ const RegisterView: React.FC = () => {
   };
 
   return (
-    <div className="col-6 col-md-8 col-lg-4 mx-auto">
+    <div className="col-6 col-md-8 col-lg-4 mx-auto mt-5">
       <form onSubmit={handleSubmit} className={`card p-3 text-bg-${theme}`}>
         <h2 className="card-title">Register</h2>
         <div className="mb-3">

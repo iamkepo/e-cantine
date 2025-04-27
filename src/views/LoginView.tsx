@@ -32,7 +32,7 @@ const LoginView: React.FC = () => {
         if (location.state?.from == '/client/cart') {
           navigate('/'+lang+'/client/cart');
         } else {
-          navigate('/'+lang+'/dashboard', { state: { email } });
+          navigate('/'+lang+'/client/orders', { state: { email } });
         }
       } else {
         setError("Auth provider not available.");
@@ -45,7 +45,7 @@ const LoginView: React.FC = () => {
   };
 
   return (
-    <div className="col-6 col-md-8 col-lg-4 mx-auto">
+    <div className="col-6 col-md-8 col-lg-4 mx-auto mt-5">
       <form onSubmit={handleSubmit} className={`card p-3 text-bg-${theme}`}>
         <h2 className="card-title">Login</h2>
         <div className="mb-3">

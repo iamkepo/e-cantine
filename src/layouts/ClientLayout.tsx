@@ -1,44 +1,36 @@
 import React, { useEffect } from 'react';
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import { toggleTheme, useThemeStore } from '../stores/themeStore';
-import { changeLang, translateElements, useLangStore } from '../stores/langStore';
-import { capitalize } from '../helpers/functions';
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useThemeStore } from '../stores/themeStore';
 import { useCartStore } from '../stores/cartStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useLangStore } from '../stores/langStore';
 
 
 const ClientLayout: React.FC = () => {
-  const params = useParams();
+  //router
   const navigate = useNavigate();
-  const { theme } = useThemeStore();
   const { lang } = useLangStore();
+  const { user, logout } = useAuthStore();
+  const { theme } = useThemeStore();
   const { cart } = useCartStore();
     
   useEffect(() => {
-    if (window.location.href == window.location.origin+"/") {
-      navigate("/"+lang)
-    }
+  }, [cart]);
 
-    const rootElement = document.getElementById("root");
-    if (rootElement) {
-      rootElement.classList = theme + '-theme';
-    }
-    translateElements()
-  }, [theme, navigate, lang, cart]);
-
-  const handleChangeLang = (value: string) => {
-    changeLang(value);
-    window.location.replace(window.location.href.replace(`${params?.lang}`, value))
-  };
   
   return (
-    <>
-      <div className="col col-lg-4 fixed-bottom mx-auto" style={{ zIndex: '10000'}}>
+    <div className="col-12 col-md-8 col-lg-10 mx-auto mt-3">
+      <h1 className='fs-1'>
+        <span className="text-primary">E</span>-
+        <span className="text-secondary">Cantine</span>
+      </h1>
+      <div className={`col col-lg-${user ? '7' : '4'} fixed-bottom mx-auto`} style={{ zIndex: '10000'}}>
         <div className={`card text-bg-${theme} shadow-lg mb-3 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : 'outline-secondary'}`} to='/'>
               <i className={`bi bi-house fs-6`}></i> Home
             </Link>
-            <Link className={`btn btn-${window.location.pathname.includes('category') ? 'primary' : theme} border-1 border-primary`} to='category'>
+            <Link className={`btn btn-${window.location.pathname.includes('filter') ? 'primary' : theme} border-1 border-primary`} to='filter'>
               <i className={`bi bi-list fs-6`}></i> Produits
             </Link>
             {
@@ -53,26 +45,38 @@ const ClientLayout: React.FC = () => {
               :
               false
             }
-            <div className="btn-group" role="group">
-              <button type="button" className={`btn btn-${theme} border-1 border-secondary`} onClick={toggleTheme}>
-                <i className={`bi bi-${theme === "dark" ? "moon" : "sun"} fs-6`}></i>
-              </button>
-
-              <button
-                type="button"
-                className={`btn btn-${theme} border-1 border-secondary`}
-                onClick={()=> handleChangeLang(lang == 'r' ? 'en' : 'fr')}
-              >
-                {capitalize(params?.lang as string)}
-              </button>
-            </div>
+            { user ? (
+              <>
+                <div className="btn-group" role="group">
+                  <Link className={`btn btn-${window.location.pathname.includes('orders') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/orders'}>
+                    <i className="bi bi-file-earmark me-2"></i>
+                    My orders
+                  </Link>
+                  <Link className={`btn btn-${window.location.pathname.includes('plan') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/plan'}>
+                    <i className="bi bi-people me-2"></i>
+                    My plan
+                  </Link>
+                  <Link className={`btn btn-${window.location.pathname.includes('history') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/history'}>
+                    <i className="bi bi-graph-up me-2"></i>
+                    History
+                  </Link>
+                </div>
+                <button className={`btn btn-outline-danger`} onClick={() => {logout(); navigate('/'+lang+'/client/filter')}}>
+                  <i className={`bi bi-box-arrow-right fs-6`}></i>
+                </button>
+              </>
+            ) : (
+              <Link className={`btn btn-${window.location.pathname.includes('login') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/login'}>
+                <i className={`bi bi-person fs-6`}></i>
+              </Link>
+            )}
           </div>
         </div>
       </div>
-      
       <Outlet />
-      
-    </>
+      <br /><br /><br /><br />
+      <br /><br /><br /><br />
+    </div>
   );
 };
 

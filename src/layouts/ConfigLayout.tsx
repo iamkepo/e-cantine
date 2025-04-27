@@ -16,7 +16,7 @@ const ConfigLayout: React.FC = () => {
   
   return (
     <>
-      <div className="col-12 p-3">
+      <div className="col-12">
         <div className="steps-horizontal mx-auto">
           {listStep.map((item) => (
             <div  
@@ -32,7 +32,7 @@ const ConfigLayout: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="col-lg-10 col-12 col-md-11 mx-auto">
+        <div className="col-12 mx-auto mt-3">
           <Outlet />
         </div>
       </div>

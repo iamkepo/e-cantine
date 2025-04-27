@@ -76,13 +76,13 @@ const CheckoutView = () => {
   
   if (paid) {
     return (
-      <div className="container py-5 text-center">
+      <div className="py-5 text-center">
         <h1>Paiement réussi !</h1>
         <p>Merci pour votre achat. Votre planning est confirmé.</p>
         <hr />
         <p>Vous pouvez consulter votre planning dans votre dashboard.</p>
-        <Link className="btn btn-secondary me-3" to={'/'+lang+'/client/category'}>Retour</Link>
-        <Link className="btn btn-primary" to={'/'+lang+'/dashboard'}>Aller au dashboard</Link>
+        <Link className="btn btn-secondary me-3" to={'/'+lang+'/client/filter'}>Retour</Link>
+        <Link className="btn btn-primary" to={'/'+lang+'/client/orders'}>Aller au dashboard</Link>
       </div>
     );
   }
