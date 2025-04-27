@@ -185,3 +185,16 @@ export function generatePlanning(
 
   return events;
 }
+export const clearCart  = () => {
+  useCartStore.setState({
+    cart: [],
+    dates: undefined,
+    events: undefined,
+    weeks: 1,
+    checkedDays: [days[1]],
+    startDate: new Date(),
+    subtotal: 0,
+    persons: undefined
+  });
+};
+  

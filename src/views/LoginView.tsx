@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { useAuthStore } from "../stores/useAuthStore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLangStore } from "../stores/langStore";
 import { useThemeStore } from "../stores/themeStore";
 
@@ -9,6 +9,7 @@ const LoginView: React.FC = () => {
   const login = useAuthStore((state: any) => state.login);
   const authError = useAuthStore((state: any) => state.error);
   const navigate = useNavigate();
+  const location = useLocation();
   const { lang } = useLangStore();
   const { theme } = useThemeStore();
   const [email, setEmail] = useState("");
@@ -27,7 +28,12 @@ const LoginView: React.FC = () => {
     try {
       if (login) {
         await login(email, password);
-        navigate('/'+lang+'/dashboard');
+        //navigate to state become
+        if (location.state?.from == '/client/cart') {
+          navigate('/'+lang+'/client/cart');
+        } else {
+          navigate('/'+lang+'/dashboard', { state: { email } });
+        }
       } else {
         setError("Auth provider not available.");
       }

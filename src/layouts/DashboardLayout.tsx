@@ -34,6 +34,9 @@ const DashboardLayout: React.FC = () => {
       <div className="row">
         <nav id="sidebar" className={`col-md-3 col-lg-2 d-md-block text-bg-${theme} sidebar`}>
           <div className="position-sticky pt-3">
+            <button id="sidebarToggle" className="btn btn-outline-primary" onClick={() => navigate('/'+lang+'/client/category')}>
+              <i className="bi bi-arrow-left"></i>
+            </button>
             <ul className="nav flex-column">
               <li className="nav-item mb-3">
                 <Link className="nav-link " to={'/'+lang+'/dashboard'}>
@@ -83,9 +86,6 @@ const DashboardLayout: React.FC = () => {
                 {capitalize(params?.lang as string)}
               </button>
             </div>
-            <button id="sidebarToggle" className="btn btn-outline-primary" onClick={() => navigate('/'+lang+'/client/category')}>
-              <i className="bi bi-arrow-left"></i>
-            </button>
           </div>
           <Outlet />
         </div>

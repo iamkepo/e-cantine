@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { decrementPerson, incrementPerson, setPerson, setSubtotal, useCartStore } from "../stores/cartStore";
+import { clearCart, decrementPerson, incrementPerson, setPerson, setSubtotal, useCartStore } from "../stores/cartStore";
 import { useThemeStore } from "../stores/themeStore";
 import { useLangStore } from "../stores/langStore";
 import { Link } from "react-router-dom";
@@ -37,6 +37,7 @@ const CheckoutView = () => {
     setLoading(true);
     setTimeout(() => {
       setPaid(true);
+      clearCart();
       setLoading(false);
     }, 1500);
   };

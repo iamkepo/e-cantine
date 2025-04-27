@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { filterCartByCategory, useCartStore } from '../stores/cartStore';
+import { clearCart, filterCartByCategory, useCartStore } from '../stores/cartStore';
 import { categories } from '../core/constants';
 import CartItem from '../components/widgets/CartItem';
 import { useAuthStore } from '../stores/useAuthStore';
@@ -20,7 +20,7 @@ const CartView: React.FC = () => {
 
   const handleValidateCart = () => {
     if (!isAuthenticated) {
-      navigate('/' + lang + '/login');
+      navigate('/' + lang + '/login', { state: { from: '/client/cart' } });
     } else {
       navigate('/' + lang + '/client/cart/planning');
     }
@@ -29,6 +29,10 @@ const CartView: React.FC = () => {
   function handleCategory(id: number): void {
     navigate('/' + lang + '/client/category/' + id)
   }
+  const clear = () => {
+    clearCart();
+    navigate('/' + lang + '/client/category');
+  };
 
   return (
     <div className="col-10 mx-auto">
@@ -48,8 +52,9 @@ const CartView: React.FC = () => {
           )}
         </div>
         <div className="col-lg-4">
-          <div className={`card p-3 text-bg-${theme} sticky-lg-top`}>
+          <div className={`card p-3 text-bg-${theme} sticky-lg-top position-relative`}>
             <h5 className="card-title mb-3">Plats manquants</h5>
+            <button className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>
             <ul className='list-group'>
               {categories.filter(category => category.id != null).map((category) =>
                 filterCartByCategory(category.id as number).length == 0 ? (
