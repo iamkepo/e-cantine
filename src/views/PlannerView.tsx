@@ -66,9 +66,8 @@ const PlannerView = () => {
   }
 
   return (
-    <div className="col-10 mx-auto">
-      <div className="row">
-        <div className="col-lg-8">
+    <div className="row">
+      <div className="col-lg-8">
           <div className={`card text-bg-${theme} p-3`}>
             <p className="text-end" onClick={() => setView(view === 'calendar' ? 'list' : 'calendar')}>
               <span className="d-inline-block">{view === 'calendar' ? 'Voir la liste' : 'Voir le calendrier'}</span>
@@ -100,52 +99,51 @@ const PlannerView = () => {
             )}
           </div>
         </div>
-        <div className="col-lg-4">
-          <div className={`card text-bg-${theme} sticky-lg-top`}>
-            <div className="card-body">
-              <h5 className="card-title mb-3">Paramètres</h5>
-              <label htmlFor="start-date" className="form-label mb-3">Date de début :</label>
-              <input 
-                type="date" 
-                id="start-date" 
-                className="form-control" 
-                value={new Date(startDate).toISOString().split('T')[0]} 
-                onChange={e => setStartDate(new Date(e.target.value))} 
-              />
-              
-              <label htmlFor="weeks-select" className="form-label mb-3">Durée de planification :</label>
-              <select
-                id="weeks-select"
-                className="form-select mb-3"
-                value={weeks}
-                onChange={e => setWeeks(Number(e.target.value))}
-              >
-                {[1,2,3,4].map(w => (
-                  <option key={w} value={w}>
-                    {w} semaine{w > 1 ? 's' : ''}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="days-select" className="form-label mb-3">Jours de planification :</label>
-              <div className="d-flex justify-content-between mb-3">
-                {days.map((day, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    className={`btn btn-sm btn-${checkedDays.includes(day) ? "primary" : "secondary"}`}
-                    onClick={() => toggleDay(day)}
-                  >
-                    {day}
-                  </button>
-                ))}
-              </div> 
-              <p className="mb-3">{dates?.length} dates</p> 
-              <p className="mb-3">{events?.length} plats</p>
-              <hr />
-              <div className="d-flex justify-content-between">
-                <Link className="btn btn-secondary" to={'/'+lang+'/client/cart'}>Retour</Link>
-                <button className="btn btn-primary" onClick={handleCheckout}>Valider</button>
-              </div>
+      <div className="col-lg-4">
+        <div className={`card text-bg-${theme} sticky-lg-top`}>
+          <div className="card-body">
+            <h5 className="card-title mb-3">Paramètres</h5>
+            <label htmlFor="start-date" className="form-label mb-3">Date de début :</label>
+            <input 
+              type="date" 
+              id="start-date" 
+              className="form-control" 
+              value={new Date(startDate).toISOString().split('T')[0]} 
+              onChange={e => setStartDate(new Date(e.target.value))} 
+            />
+            
+            <label htmlFor="weeks-select" className="form-label mb-3">Durée de planification :</label>
+            <select
+              id="weeks-select"
+              className="form-select mb-3"
+              value={weeks}
+              onChange={e => setWeeks(Number(e.target.value))}
+            >
+              {[1,2,3,4].map(w => (
+                <option key={w} value={w}>
+                  {w} semaine{w > 1 ? 's' : ''}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="days-select" className="form-label mb-3">Jours de planification :</label>
+            <div className="d-flex justify-content-between mb-3">
+              {days.map((day, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`btn btn-sm btn-${checkedDays.includes(day) ? "primary" : "secondary"}`}
+                  onClick={() => toggleDay(day)}
+                >
+                  {day}
+                </button>
+              ))}
+            </div> 
+            <p className="mb-3">{dates?.length} dates</p> 
+            <p className="mb-3">{events?.length} plats</p>
+            <hr />
+            <div className="d-flex justify-content-between">
+              <Link className="btn btn-secondary" to={'/'+lang+'/client/cart'}>Retour</Link>
+              <button className="btn btn-primary" onClick={handleCheckout}>Valider</button>
             </div>
           </div>
         </div>

@@ -15,26 +15,28 @@ const ConfigLayout: React.FC = () => {
   }, [subtotal, navigate]);
   
   return (
-    <div className="col-12 p-3">
-      <div className="steps-horizontal mx-auto">
-        {listStep.map((item) => (
-          <div
-            key={item.id}
-            className={`step-horizontal ${window.location.pathname.includes(item.path)  ? 'active' : ''}`} // Pass list to updateSteps
-          >
-            <Link className={`step-icon`} to={'/'+lang+'/client/'+item.path}>
-              <i className={`bi bi-${item.icon}`}></i>
-            </Link>
-            <div className={`${window.location.pathname.includes(item.path) ? 'text-primary' : 'step-description'}`}>
-              {item.label}
+    <>
+      <div className="col-12 p-3">
+        <div className="steps-horizontal mx-auto">
+          {listStep.map((item) => (
+            <div  
+              key={item.id}
+              className={`step-horizontal ${window.location.pathname.includes(item.path)  ? 'active' : ''}`} // Pass list to updateSteps
+            >
+              <Link className={`step-icon`} to={'/'+lang+'/client/'+item.path}>
+                <i className={`bi bi-${item.icon}`}></i>
+              </Link>
+              <div className={`${window.location.pathname.includes(item.path) ? 'text-primary' : 'step-description'}`}>
+                {item.label}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        <div className="col-lg-10 col-12 col-md-11 mx-auto">
+          <Outlet />
+        </div>
       </div>
-
-      <Outlet />
-
-    </div>
+    </>
   );
 };
 

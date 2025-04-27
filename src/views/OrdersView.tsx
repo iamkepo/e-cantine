@@ -4,19 +4,15 @@ import { useThemeStore } from "../stores/themeStore";
 const OrdersView: React.FC = () => {
   const { theme } = useThemeStore();
   return (
-    <div className="col-12">
+    <>
       <h2>My Orders</h2>
-      <div className="row">
-        <div className="col-12">
-          <div className={`card text-bg-${theme} mb-3`}>
-            <div className="card-body">
-              <h2 className="card-title">Nombre d'articles</h2>
-              <p className="card-text">0</p>
-            </div>
-          </div>
+      <div className={`card text-bg-${theme} mb-3`}>
+        <div className="card-body">
+          <h2 className="card-title">Nombre d'articles</h2>
+          <p className="card-text">0</p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

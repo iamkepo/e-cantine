@@ -88,36 +88,34 @@ const CheckoutView = () => {
   }
 
   return (
-    <div className="col-10 mx-auto">
       <div className="row">
         <div className="col-lg-8">
-          <RecapSection 
-            cart={cart}
-            persons={persons || []}
-            events={events}
-            user={user}
-            theme={theme}
-            subtotal={subtotal}
-            dates={dates}
-            shipping={shipping}
-            tax={tax}
-            total={total}
-            addPerson={addPerson}
-            removePerson={removePerson}
-          />
-        </div>
-        <div className="col-lg-4">
-          <PaymentSection 
-            persons={persons || []}
-            form={form}
-            handleChange={handleChange}
-            methods={methods}
-            theme={theme}
-            loading={loading}
-            handlePay={handlePay}
-            addPerson={addPerson}
-          />
-        </div>
+        <RecapSection 
+          cart={cart}
+          persons={persons || []}
+          events={events}
+          user={user}
+          theme={theme}
+          subtotal={subtotal}
+          dates={dates}
+          shipping={shipping}
+          tax={tax}
+          total={total}
+          addPerson={addPerson}
+          removePerson={removePerson}
+        />
+      </div>
+      <div className="col-lg-4">
+        <PaymentSection 
+          persons={persons || []}
+          form={form}
+          handleChange={handleChange}
+          methods={methods}
+          theme={theme}
+          loading={loading}
+          handlePay={handlePay}
+          addPerson={addPerson}
+        />
       </div>
     </div>
   );
