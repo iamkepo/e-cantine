@@ -1,4 +1,4 @@
-import { typeRender } from '../../helpers/functions';
+import { tagRender } from '../../helpers/functions';
 import { Cart } from '../../core/types';
 import { modal } from '../../stores/appStore';
 import { removeItemCart } from '../../stores/cartStore';
@@ -19,7 +19,15 @@ const CartItem: React.FC<{ item: Cart; }> = ({ item }) => (
     </div>
     <div className="col-md-6">
       <h5 className="card-title">{item.label}</h5>
-      <p className="badge text-bg-secondary">{typeRender(item.type as number)}</p>
+      <p className="d-flex flex-wrap">
+        { 
+          (item.tags || []).map((tag, j) => (
+            <span key={j} className="badge text-bg-secondary me-2">
+              {tagRender(tag)}
+            </span>
+          ))
+        }
+      </p>
     </div>
 
     <div className="col-md-3">

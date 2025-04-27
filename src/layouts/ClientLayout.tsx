@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useThemeStore } from '../stores/themeStore';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/useAuthStore';
@@ -8,9 +8,8 @@ import { useLangStore } from '../stores/langStore';
 
 const ClientLayout: React.FC = () => {
   //router
-  const navigate = useNavigate();
   const { lang } = useLangStore();
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { theme } = useThemeStore();
   const { cart } = useCartStore();
     
@@ -28,10 +27,10 @@ const ClientLayout: React.FC = () => {
         <div className={`card text-bg-${theme} shadow-lg mb-3 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${window.location.pathname == '/fr' ? 'primary' : 'outline-secondary'}`} to='/'>
-              <i className={`bi bi-house fs-6`}></i> Home
+              <i className={`bi bi-house fs-6`}></i> Accueil
             </Link>
             <Link className={`btn btn-${window.location.pathname.includes('filter') ? 'primary' : theme} border-1 border-primary`} to='filter'>
-              <i className={`bi bi-list fs-6`}></i> Produits
+              <i className={`bi bi-list fs-6`}></i> Plats
             </Link>
             {
               cart.length > 0 ?
@@ -50,24 +49,24 @@ const ClientLayout: React.FC = () => {
                 <div className="btn-group" role="group">
                   <Link className={`btn btn-${window.location.pathname.includes('orders') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/orders'}>
                     <i className="bi bi-file-earmark me-2"></i>
-                    My orders
+                    Commandes
                   </Link>
                   <Link className={`btn btn-${window.location.pathname.includes('plan') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/plan'}>
                     <i className="bi bi-people me-2"></i>
-                    My plan
+                    Plans
                   </Link>
                   <Link className={`btn btn-${window.location.pathname.includes('history') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/history'}>
                     <i className="bi bi-graph-up me-2"></i>
-                    History
+                    Historique
                   </Link>
                 </div>
-                <button className={`btn btn-outline-danger`} onClick={() => {logout(); navigate('/'+lang+'/client/filter')}}>
-                  <i className={`bi bi-box-arrow-right fs-6`}></i>
-                </button>
+                <Link className={`btn btn-${window.location.pathname.includes('profile') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/profile'}>
+                  <i className={`bi bi-person fs-6`}></i>
+                </Link>
               </>
             ) : (
               <Link className={`btn btn-${window.location.pathname.includes('login') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/login'}>
-                <i className={`bi bi-person fs-6`}></i>
+                <i className={`bi bi-box-arrow-in-right fs-6`}></i> Connexion
               </Link>
             )}
           </div>

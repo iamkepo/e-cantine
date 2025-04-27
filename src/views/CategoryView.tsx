@@ -6,7 +6,7 @@ import { Article } from "../core/types";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import { useParams } from "react-router-dom";
 import ArticleVComponent from "../components/ArticleVComponent";
-import { articles } from "../core/constants";
+import { articlesPrincipal } from "../core/constants";
 import { useCartStore } from "../stores/cartStore";
 
 const CategoryView: React.FC = () => {
@@ -15,14 +15,13 @@ const CategoryView: React.FC = () => {
   const { cart } = useCartStore();
 
   useEffect(() => {
-    
   }, [id, selected, cart]);
 
   const prev = (index: number) => {
     if (index >= 0) {
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleHComponent article={filteredArticles(articles, parseInt(id as string))[index]} />
+          <ArticleHComponent article={filteredArticles(articlesPrincipal, parseInt(id as string))[index]} />
         </LightBox>,
         "xl"
       );
@@ -30,10 +29,10 @@ const CategoryView: React.FC = () => {
   };
 
   const next = (index: number) => {
-    if (index < filteredArticles(articles, parseInt(id as string)).length) {
+    if (index < filteredArticles(articlesPrincipal, parseInt(id as string)).length) {
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleHComponent article={filteredArticles(articles, parseInt(id as string))[index]} />
+          <ArticleHComponent article={filteredArticles(articlesPrincipal, parseInt(id as string))[index]} />
         </LightBox>,
         "xl"
       );
@@ -43,7 +42,7 @@ const CategoryView: React.FC = () => {
 
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {
-        filteredArticles(articles, parseInt(id as string)).map((article: Article, i) => (
+        filteredArticles(articlesPrincipal, parseInt(id as string)).map((article: Article, i) => (
           <div 
             key={i} 
             className="col"

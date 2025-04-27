@@ -2,25 +2,23 @@ import { useEffect, useState } from "react";
 import { clearCart, decrementPerson, incrementPerson, setPerson, setSubtotal, useCartStore } from "../stores/cartStore";
 import { useThemeStore } from "../stores/themeStore";
 import { useLangStore } from "../stores/langStore";
-import { Link } from "react-router-dom";
-import { methods } from "../core/constants";
+import { useNavigate } from "react-router-dom";
+import { methods, SHIPPING_RATE, TAX } from "../core/constants";
 import { useAuthStore } from "../stores/useAuthStore";
-import { modal } from "../stores/appStore";
+import { modal, toast } from "../stores/appStore";
 import AddPersonModal from "../components/AddPersonModal";
 import RemovePersonModal from "../components/RemovePersonModal";
 import RecapSection from "../components/RecapSection";
 import PaymentSection from "../components/PaymentSection";
-
-// Constants
-const SHIPPING_RATE = 500.0;
-const TAX = 20.0;
+import { addHistory, useHistoryStore } from "../stores/historyStore";
 
 const CheckoutView = () => {
   const { theme } = useThemeStore();
   const { cart, subtotal, dates, events, persons } = useCartStore();
+  const { history } = useHistoryStore();
   const { lang } = useLangStore();
   const { user } = useAuthStore();
-  const [paid, setPaid] = useState(false);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const shipping = SHIPPING_RATE * (dates?.length || 0);
   const tax = TAX;
@@ -36,9 +34,22 @@ const CheckoutView = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
-      setPaid(true);
+      addHistory({
+        events: events || [],
+        users: persons || [],
+        subtotal,
+        shipping,
+        tax,
+        total,
+        paymentMethod: form.paymentMethod,
+        promoCode: form.promoCode,
+        address: form.address,
+        id: history?.length || 0,
+      });
       clearCart();
       setLoading(false);
+      toast.success('Commande effectuée avec succès');
+      navigate('/'+lang+'/client/orders');
     }, 1500);
   };
   useEffect(() => {
@@ -73,19 +84,6 @@ const CheckoutView = () => {
   useEffect(() => {
     setSubtotal();
   }, [cart]);
-  
-  if (paid) {
-    return (
-      <div className="py-5 text-center">
-        <h1>Paiement réussi !</h1>
-        <p>Merci pour votre achat. Votre planning est confirmé.</p>
-        <hr />
-        <p>Vous pouvez consulter votre planning dans votre dashboard.</p>
-        <Link className="btn btn-secondary me-3" to={'/'+lang+'/client/filter'}>Retour</Link>
-        <Link className="btn btn-primary" to={'/'+lang+'/client/orders'}>Aller au dashboard</Link>
-      </div>
-    );
-  }
 
   return (
       <div className="row">

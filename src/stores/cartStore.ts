@@ -174,6 +174,7 @@ export function generatePlanning(
       cart.forEach(item => {
         if (item.category === category.id) {
           events.push({
+            id: item.id || 0,
             title: item.label + " (" + category.label + ")",
             date: dateStr,
             slot: category.label

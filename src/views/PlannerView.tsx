@@ -68,37 +68,39 @@ const PlannerView = () => {
   return (
     <div className="row">
       <div className="col-lg-8">
-          <div className={`card text-bg-${theme} p-3`}>
-            <p className="text-end" onClick={() => setView(view === 'calendar' ? 'list' : 'calendar')}>
-              <span className="d-inline-block">{view === 'calendar' ? 'Voir la liste' : 'Voir le calendrier'}</span>
-              <i className={`bi bi-${view === 'calendar' ? 'list' : 'grid'} ms-2`}></i>
-            </p>
-            {view === 'calendar' ? (
-              <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                events={events?.map((event, index) => ({
-                  ...event,
-                  extendedProps: { index }
-                }))}
-                eventColor="var(--bs-primary)"
-                editable={true}
-                selectable={true}
-                droppable={true}
-                dateClick={handleDateClick}
-                eventDrop={handleDateDrop}
-              />
-            ) : (
-              events?.map((event, index) => (
-                <div key={index} className="d-flex justify-content-between mb-3">
-                  <span>{formatDate(event.date)}</span>
-                  <span>{event.title}</span>
-                  <i className="bi bi-trash ms-2" onClick={() => removeEvent(index)}></i>
-                </div>
-              ))
-            )}
-          </div>
+        <div className={`card text-bg-${theme} p-3`}>
+          <p className="text-end" onClick={() => setView(view === 'calendar' ? 'list' : 'calendar')}>
+            <span className="d-inline-block">{view === 'calendar' ? 'Voir la liste' : 'Voir le calendrier'}</span>
+            <i className={`bi bi-${view === 'calendar' ? 'list' : 'grid'} ms-2`}></i>
+          </p>
+          {view === 'calendar' ? (
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              events={events?.map((event, index) => ({
+                title: event.title,
+                date: event.date,
+                slot: event.slot,
+                extendedProps: { index }
+              }))}
+              eventColor="var(--bs-primary)"
+              editable={true}
+              selectable={true}
+              droppable={true}
+              dateClick={handleDateClick}
+              eventDrop={handleDateDrop}
+            />
+          ) : (
+            events?.map((event, index) => (
+              <div key={index} className="d-flex justify-content-between mb-3">
+                <span>{formatDate(event.date)}</span>
+                <span>{event.title}</span>
+                <i className="bi bi-trash ms-2" onClick={() => removeEvent(index)}></i>
+              </div>
+            ))
+          )}
         </div>
+      </div>
       <div className="col-lg-4">
         <div className={`card text-bg-${theme} sticky-lg-top`}>
           <div className="card-body">
@@ -111,7 +113,6 @@ const PlannerView = () => {
               value={new Date(startDate).toISOString().split('T')[0]} 
               onChange={e => setStartDate(new Date(e.target.value))} 
             />
-            
             <label htmlFor="weeks-select" className="form-label mb-3">Durée de planification :</label>
             <select
               id="weeks-select"

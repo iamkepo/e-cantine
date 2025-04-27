@@ -35,7 +35,6 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ persons, form, handleCh
           type="text"
           className="form-control"
           placeholder="Enter promo code"
-          value={form.promoCode}
           onChange={e => handleChange(e)}
         />
         <button

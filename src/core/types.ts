@@ -4,7 +4,6 @@ export interface Article{
   description?: string;
   img: string;
   tags: number[];
-  type: number;
   category: number;
   date_updated?: number;
   price: number;
@@ -15,4 +14,16 @@ export interface Option {
   action: ()=> void
 }
 
-export type PlanningEvent = { title: string; date: string; slot: string };
+export interface PlanningEvent { id: number; title: string; date: string; slot: string };
+export type History = {
+  events: PlanningEvent[],
+  users: string[];
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  total: number;
+  paymentMethod: string;
+  promoCode: string;
+  address: string;
+  id: number;
+}

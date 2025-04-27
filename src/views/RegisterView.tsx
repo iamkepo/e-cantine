@@ -61,7 +61,7 @@ const RegisterView: React.FC = () => {
       <form onSubmit={handleSubmit} className={`card p-3 text-bg-${theme}`}>
         <h2 className="card-title">Register</h2>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
+          <label htmlFor="name" className="form-label">Nom</label>
           <input
             id="name"
             type="text"

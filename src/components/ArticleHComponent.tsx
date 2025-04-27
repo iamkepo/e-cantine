@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { addItemCart, findAndItem, removeItemCart, useCartStore } from '../stores/cartStore';
 import { Article, Cart } from '../core/types';
-import { categoryRender, formateDate, tagRender, typeRender } from '../helpers/functions';
+import { categoryRender, formateDate, tagRender } from '../helpers/functions';
 
 interface ArticleHComponentProps {
   article: Article | Cart;
@@ -57,7 +57,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
             </div>
             <p className="card-text">
               <span className="badge text-bg-primary">
-                {categoryRender(article.category as number)} - {typeRender(article.type as number)}
+                {categoryRender(article.category as number)}
               </span>
             </p>
             <p className="card-text">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { Article } from '../core/types';
-import { categoryRender, tagRender, typeRender } from '../helpers/functions';
+import { categoryRender, tagRender } from '../helpers/functions';
 import { useFilterStore } from '../stores/filterStore';
 import { addItemCart, findAndItem, removeItemCart } from '../stores/cartStore';
 
@@ -30,7 +30,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
 
         <p className="card-text text-truncate" onClick={action}>
           <span className="badge text-bg-primary me-2">
-            {categoryRender(article.category)} - {typeRender(article.type)}
+            {categoryRender(article.category)}
           </span>
           { selected.tag == null ? 
             article.tags.map((tag, j) => (

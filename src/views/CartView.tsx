@@ -51,9 +51,9 @@ const CartView: React.FC = () => {
         )}
       </div>
       <div className="col-lg-4">
-        <div className={`card p-3 text-bg-${theme} sticky-lg-top position-relative`}>
+        <div className={`card p-3 text-bg-${theme} sticky-lg-top`}>
           <h5 className="card-title mb-3">Plats manquants</h5>
-          <button className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>
+          {cart.length > 0 && <button className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>}
           <ul className='list-group'>
             {categories.filter(category => category.id != null).map((category) =>
               filterCartByCategory(category.id as number).length == 0 ? (

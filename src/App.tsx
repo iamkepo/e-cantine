@@ -5,7 +5,6 @@ import FilterLayout from './layouts/FilterLayout'
 import ClientLayout from './layouts/ClientLayout'
 import ConfigLayout from './layouts/ConfigLayout'
 import ContainerLayout from './layouts/ContainerLayout'
-import DashboardLayout from './layouts/DashboardLayout'
 
 import LandingView from './views/LandingView'
 import HomeView from './views/HomeView'
@@ -15,11 +14,11 @@ import PlannerView from './views/PlannerView';
 import LoginView from './views/LoginView'
 import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
-import DashboardView from './views/DashboardView'
 import RegisterView from './views/RegisterView'
 import OrdersView from './views/OrdersView'
 import PlanView from './views/PlanView'
 import HistoryView from './views/HistoryView'
+import ProfileView from './views/ProfileView'
 
 function App() {
 
@@ -49,11 +48,8 @@ function App() {
               <Route path='orders' element={<OrdersView />} />
               <Route path='plan' element={<PlanView />} />
               <Route path='history' element={<HistoryView />} />
+              <Route path='profile' element={<ProfileView />} />
             </Route>   
-
-            <Route path='dashboard/' element={<DashboardLayout />}>
-              <Route index element={<DashboardView />} />
-            </Route>
 
             <Route path='*' element={<NoMatchView />} /> 
           </Route>
