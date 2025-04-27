@@ -34,7 +34,7 @@ const DashboardLayout: React.FC = () => {
       <div className="row">
         <nav id="sidebar" className={`col-md-3 col-lg-2 d-md-block text-bg-${theme} sidebar`}>
           <div className="position-sticky pt-3">
-            <button id="sidebarToggle" className="btn btn-outline-primary" onClick={() => navigate('/'+lang+'/client/category')}>
+            <button id="sidebarToggle" className="btn btn-outline-danger" onClick={() => navigate('/'+lang+'/client/category')}>
               <i className="bi bi-arrow-left"></i>
             </button>
             <ul className="nav flex-column">
