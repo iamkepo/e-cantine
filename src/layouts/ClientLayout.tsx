@@ -52,13 +52,13 @@ const ClientLayout: React.FC = () => {
             { user ? (
               <>
                 <div className="btn-group" role="group">
+                  <Link className={`btn btn-${routeMatch('menu') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/menu'}>
+                    <i className="bi bi-people me-2"></i>
+                    <span className='d-none d-md-inline-block'>Menu</span>
+                  </Link>
                   <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/orders'}>
                     <i className="bi bi-file-earmark me-2"></i>
                     <span className='d-none d-md-inline-block'>Commandes</span>
-                  </Link>
-                  <Link className={`btn btn-${routeMatch('plan') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/plan'}>
-                    <i className="bi bi-people me-2"></i>
-                    <span className='d-none d-md-inline-block'>Plans</span>
                   </Link>
                   <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/history'}>
                     <i className="bi bi-graph-up me-2"></i>

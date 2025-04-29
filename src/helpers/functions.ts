@@ -20,7 +20,34 @@ export const formateDate = (timestamp?: number): string => {
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1) 
 }
-
+export const statusRender = (status: string) => {
+  switch (status) {
+    case 'pending':
+      return 'En attente';
+    case 'paid':
+      return 'Payé';
+    case 'delivered':
+      return 'Livré';
+    case 'cancelled':
+      return 'Annulé';
+    default:
+      return 'Inconnu';
+  }
+};
+export const statusColorRender = (status: string) => {
+  switch (status) {
+    case 'pending':
+      return 'warning';
+    case 'paid':
+      return 'success';
+    case 'delivered':
+      return 'primary';
+    case 'cancelled':
+      return 'danger';
+    default:
+      return 'secondary';
+  }
+};
 // Format a date into DD/MM/YYYY
 export const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString("en-GB", {

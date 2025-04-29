@@ -16,7 +16,7 @@ import CategoryView from './views/CategoryView'
 import CartView from './views/CartView'
 import RegisterView from './views/RegisterView'
 import OrdersView from './views/OrdersView'
-import PlanView from './views/PlanView'
+import MenuView from './views/MenuView'
 import HistoryView from './views/HistoryView'
 import ProfileView from './views/ProfileView'
 
@@ -45,8 +45,8 @@ function App() {
                 <Route path='checkout' element={<CheckoutView />} />
               </Route>
 
+              <Route path='menu' element={<MenuView />} />
               <Route path='orders' element={<OrdersView />} />
-              <Route path='plan' element={<PlanView />} />
               <Route path='history' element={<HistoryView />} />
               <Route path='profile' element={<ProfileView />} />
             </Route>   

@@ -41,11 +41,14 @@ const RecapSection: React.FC<RecapSectionProps> = ({ cart, persons, events, user
                 {categoryRender(articlesPrincipal.find(a => a.id === item.id)?.category || 0)} 
               </span>
               <span>
-                {item.count} x {articlesPrincipal.find(a => a.id === item.id)?.price} XOF =
+                {item.count} x 
+                {'( '+(articlesPrincipal.find(a => a.id === item.id)?.price || 0).toFixed(2)+' XOF'}
+                {priceAccomp(articlesSupplement, item as Cart) > 0 ? ('+ '+ (priceAccomp(articlesSupplement, item as Cart) || 0).toFixed(2) + ' XOF') : ''} 
+                {priceBoisson(articlesBoisson, item as Cart) > 0 ? ('+ '+ (priceBoisson(articlesBoisson, item as Cart) || 0).toFixed(2)+ ' XOF )') : ' )'}  =
                 {item ?
                   (((articlesPrincipal.find(a => a.id === item.id)?.price || 0) 
-                  + priceAccomp(articlesSupplement, item as Cart) 
-                  + priceBoisson(articlesBoisson, item as Cart)) * item.count).toFixed(2)
+                  + (priceAccomp(articlesSupplement, item as Cart) || 0) 
+                  + (priceBoisson(articlesBoisson, item as Cart) || 0)) * item.count).toFixed(2)
                 : 0} XOF
               </span>
             </li>

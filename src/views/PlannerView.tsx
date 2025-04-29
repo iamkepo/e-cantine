@@ -4,7 +4,7 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventDropArg } from '@fullcalendar/core';
 
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { articlesPrincipal, days } from "../core/constants";
 import { generateDates } from "../helpers/planner";
@@ -13,6 +13,7 @@ import { useThemeStore } from "../stores/themeStore";
 import { useLangStore } from "../stores/langStore";
 import { useAuthStore } from "../stores/useAuthStore";
 import { generatePlanning, removeEvent, setCheckedDays, setDates, setEvents, setItemCount, setStartDate, setWeeks, useCartStore } from "../stores/cartStore";
+import { modal } from "../stores/appStore";
 
 const PlannerView = () => {
   const { theme } = useThemeStore();
@@ -21,7 +22,6 @@ const PlannerView = () => {
   const navigate = useNavigate();
   const { lang } = useLangStore();
   const { isAuthenticated } = useAuthStore();
-  const [view, setView] = useState<'calendar' | 'list'>('calendar');
 
   const toggleDay = (day: string) => {
     const updatedDays = checkedDays.includes(day)
@@ -50,9 +50,23 @@ const PlannerView = () => {
     }
   }
 
+
   const handleDateClick = (info: DateClickArg) => {
-    console.log(info);
-    info.dayEl.style.backgroundColor = 'var(--bs-primary)';
+    if (events?.filter(event => event.date === info.dateStr)) {
+      modal.open(
+        <div>
+          <h6 className="card-title mb-3">Commandes du {formatDate(info.dateStr.toString())}</h6>
+          <ul className="list-group">
+            { events?.filter(event => event.date === info.dateStr)?.map((event, index) => (
+              <li key={index} className={`list-group-item d-flex justify-content-between text-bg-${theme}`}>
+                <span>{event.title}</span>
+                <i className="bi bi-trash ms-2" onClick={() => {removeEvent(event.id); handleDateClick(info);}}></i>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
   };
 
   const handleDateDrop = (info: EventDropArg) => {
@@ -69,36 +83,22 @@ const PlannerView = () => {
     <div className="row">
       <div className="col-lg-8">
         <div className={`card text-bg-${theme} p-3`}>
-          <p className="text-end" onClick={() => setView(view === 'calendar' ? 'list' : 'calendar')}>
-            <span className="d-inline-block">{view === 'calendar' ? 'Voir la liste' : 'Voir le calendrier'}</span>
-            <i className={`bi bi-${view === 'calendar' ? 'list' : 'grid'} ms-2`}></i>
-          </p>
-          {view === 'calendar' ? (
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              events={events?.map((event, index) => ({
-                title: event.title,
-                date: event.date,
-                slot: event.slot,
-                extendedProps: { index }
-              }))}
-              eventColor="var(--bs-primary)"
-              editable={true}
-              selectable={true}
-              droppable={true}
-              dateClick={handleDateClick}
-              eventDrop={handleDateDrop}
-            />
-          ) : (
-            events?.map((event, index) => (
-              <div key={index} className="d-flex justify-content-between mb-3">
-                <span>{formatDate(event.date)}</span>
-                <span>{event.title}</span>
-                <i className="bi bi-trash ms-2" onClick={() => removeEvent(index)}></i>
-              </div>
-            ))
-          )}
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={events?.map((event, index) => ({
+              title: event.title,
+              date: event.date,
+              slot: event.slot,
+              extendedProps: { index }
+            }))}
+            eventColor="var(--bs-primary)"
+            editable={true}
+            selectable={true}
+            droppable={true}
+            dateClick={handleDateClick}
+            eventDrop={handleDateDrop}
+          />
         </div>
       </div>
       <div className="col-lg-4">

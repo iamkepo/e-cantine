@@ -27,7 +27,7 @@ const FilterLayout: React.FC = () => {
               <li key={i} className="nav-item">
                 <Link
                   className={`nav-link text-bg-${((id == undefined && category.id == null) || parseInt(id as string) === category.id) ? "primary active" : theme}`} 
-                  to={'/'+lang+'/client/' + (category.id != null ? "filter/"+category.id : '')}
+                  to={'/'+lang+'/client/' + (category.id != null ? "filter/"+category.id : 'filter')}
                 >
                   {category.label}
                 </Link>
