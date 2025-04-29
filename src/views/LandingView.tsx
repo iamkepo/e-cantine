@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import { useThemeStore } from "../stores/themeStore";
+import { useLangStore } from "../stores/langStore";
 
 export default function LandingView() {
   const { theme } = useThemeStore();
+  const { lang } = useLangStore();
 
   return (
     <section className={`vh-100 vw-100 text-bg-${theme}`}>
-      <div className="col-10 mx-auto pt-5">
-        <h1 style={{ fontSize: '5rem' }}>
+      <div className="col-10 mx-auto pt-5 px-3">
+        <Link to={'/'+lang} style={{ fontSize: '4rem' }}>
           <span className="text-primary">E</span>-
           <span className="text-secondary">Cantine</span>
-        </h1>
+        </Link>
 
-        <div className="row align-items-center mt-5">
+        <div className="row align-items-center mt-3">
           <div className="col-lg-6 pt-5">
             <h1 className="fs-1 text-primary mb-3">Planifiez vos repas</h1>
             <p className="fs-5 mb-3">Créez des repas sur mesure, des plats sains et des plats savoureux. Planifiez vos repas avec notre plateforme de gestion des repas.</p>

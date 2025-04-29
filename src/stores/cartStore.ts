@@ -1,5 +1,5 @@
 import { create, StateCreator } from "zustand";
-import { Cart, PlanningEvent } from '../core/types';
+import { Article, Cart, PlanningEvent } from '../core/types';
 import { persist } from "zustand/middleware";
 import { categories, days } from "../core/constants";
 
@@ -34,11 +34,22 @@ export const useCartStore = create<CartApp>()(
   })),
 );
 
-export const findAndItem = (id: number): Cart | undefined => {
+export const findItem = (id: number): Cart | undefined => {
   const { cart } = useCartStore.getState();
   const item = cart.find((item) => item.id === id);
   return item;
 };
+export const findAccompanement = (id1: number, id2: number): Cart | undefined => {
+  const { cart } = useCartStore.getState();
+  const item = cart.find((item) => item.id === id1 && item.accompanement.find(a => a.id === id2));
+  return item;
+};
+export const findBoisson = (id1: number, id2: number): Cart | undefined => {
+  const { cart } = useCartStore.getState();
+  const item = cart.find((item) => item.id === id1 && item.boisson.find(a => a.id === id2));
+  return item;
+};
+  
 const findAndUpdateItem = (
   items: Array<Cart>,
   id: number,
@@ -52,20 +63,114 @@ const findAndUpdateItem = (
   }
   return items;
 };
-export const filterCartByCategory = (category: number) => {
-  const { cart } = useCartStore.getState();
-  return cart.filter((item) => item.category === category); // Ensure `category` exists on items
+
+export const addAccompanement = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.accompanement.push({
+        id: id2,
+        count: 1
+      });
+    }),
+  }));
 };
 
-export const addItemCart = (value: Cart) => {
+export const removeAccompanement = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.accompanement = item.accompanement.filter((accomp) => accomp.id !== id2);
+    }),
+  }));
+};
+
+export const addBoisson = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.boisson.push({
+        id: id2,
+        count: 1
+      });
+    }),
+  }));
+};
+
+export const removeBoisson = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.boisson = item.boisson.filter((boisson) => boisson.id !== id2);
+    }),
+  }));
+};
+export const incrementAccompanement = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.accompanement = item.accompanement.map((accomp) => {
+        if (accomp.id === id2) {
+          return {
+            ...accomp,
+            count: accomp.count + 1
+          };
+        }
+        return accomp;
+      });
+    }),
+  }));
+};
+export const decrementAccompanement = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.accompanement = item.accompanement.map((accomp) => {
+        if (accomp.id === id2) {
+          return {
+            ...accomp,
+            count: accomp.count - 1
+          };
+        }
+        return accomp;
+      });
+    }),
+  }));
+};
+export const incrementBoisson = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.boisson = item.boisson.map((boisson) => {
+        if (boisson.id === id2) {
+          return {
+            ...boisson,
+            count: boisson.count + 1
+          };
+        }
+        return boisson;
+      });
+    }),
+  }));
+};
+export const decrementBoisson = (id1: number, id2: number) => {
+  useCartStore.setState((state) => ({
+    cart: findAndUpdateItem(state.cart, id1, (item) => {
+      item.boisson = item.boisson.map((boisson) => {
+        if (boisson.id === id2) {
+          return {
+            ...boisson,
+            count: boisson.count - 1
+          };
+        }
+        return boisson;
+      });
+    }),
+  }));
+};
+
+export const addItemCart = (id: number, count: number = 1) => {
   useCartStore.setState((state) => {
-    const existingItemIndex = state.cart.findIndex((item) => item.id === value.id);
+    const existingItemIndex = state.cart.findIndex((item) => item.id === id);
     if (existingItemIndex !== -1) {
       const updatedItems = [...state.cart];
-      updatedItems[existingItemIndex].count += value.count;
+      updatedItems[existingItemIndex].count += count;
       return { cart: updatedItems };
     }
-    return { cart: [...state.cart, value] };
+    return { cart: [...state.cart, { id, count, accompanement: [], boisson: [] }] };
   });
 };
 
@@ -76,7 +181,7 @@ export const removeItemCart = (id: number) => {
 };
 
 export const decrementItemCount = (id: number) => {
-  const item = findAndItem(id);
+  const item = findItem(id);
   if (item && item.count === 1) {
     removeItemCart(id); // Remove item if count is 1
     return;
@@ -108,10 +213,17 @@ export const setItemCount = (count: number) => {
     }))
   }));
 };
-export const setSubtotal = ()=>{
+export const setSubtotal = (articles: Article[], supplements: Article[], boissons: Article[])=>{
   useCartStore.setState((state) => ({
-    subtotal: state.cart.reduce((sum, item) => sum + item.count * (item.price || 0), 0)
+    subtotal: state.cart.reduce((sum, item) => sum + item.count * (articles.find(a => a.id === item.id)?.price || 0) + priceAccomp(supplements, item) + priceBoisson(boissons, item), 0)
   }));
+}
+
+export const priceAccomp = (articles: Article[], item: Cart) => {
+  return item.accompanement.reduce((sum, accomp) => sum + accomp.count * (articles.find(a => a.id === accomp.id)?.price || 0), 0);
+}
+export const priceBoisson = (articles: Article[], item: Cart) => {
+  return item.boisson.reduce((sum, boisson) => sum + boisson.count * (articles.find(a => a.id === boisson.id)?.price || 0), 0);
 }
 export const setDates = (dates: Date[]) => {
   useCartStore.setState({
@@ -162,30 +274,34 @@ export const removeEvent = (index: number) => {
 
 
 export function generatePlanning(
-  dates: Date[]
+  dates: Date[],
+  articles: Article[]
 ): PlanningEvent[] {
   const { cart } = useCartStore.getState();
   const events: PlanningEvent[] = [];
 
-  for (let d = 0; d < dates.length; d++) {
-    const date = new Date(dates[d]);
-    const dateStr = date.toISOString().split("T")[0];
-    categories.filter(c => c.id != null).forEach(category => {
-      cart.forEach(item => {
-        if (item.category === category.id) {
-          events.push({
-            id: item.id || 0,
-            title: item.label + " (" + category.label + ")",
-            date: dateStr,
-            slot: category.label
-          });
-        }
+  // Pour chaque catégorie
+  categories.filter(c => c.id != null).forEach(category => {
+    // Récupère tous les plats de cette catégorie
+    const categoryItems = cart.filter(item => articles.find(a => a.id === item.id)?.category === category.id);
+    if (categoryItems.length === 0) return;
+
+    // Pour chaque date, attribue un plat en bouclant sur la liste des plats (round-robin)
+    dates.forEach((date, dateIdx) => {
+      const item = categoryItems[dateIdx % categoryItems.length];
+      const dateStr = new Date(date).toISOString().split("T")[0];
+      events.push({
+        id: item.id || 0,
+        title: articles.find(a => a.id === item.id)?.label + " (" + category.label + ")",
+        date: dateStr,
+        slot: category.hour
       });
     });
-  }
+  });
 
-  return events;
+  return events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
+
 export const clearCart  = () => {
   useCartStore.setState({
     cart: [],

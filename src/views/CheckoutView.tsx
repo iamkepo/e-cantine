@@ -3,7 +3,7 @@ import { clearCart, decrementPerson, incrementPerson, setPerson, setSubtotal, us
 import { useThemeStore } from "../stores/themeStore";
 import { useLangStore } from "../stores/langStore";
 import { useNavigate } from "react-router-dom";
-import { methods, SHIPPING_RATE, TAX } from "../core/constants";
+import { articlesPrincipal, articlesSupplement, articlesBoisson, methods, SHIPPING_RATE, TAX } from "../core/constants";
 import { useAuthStore } from "../stores/useAuthStore";
 import { modal, toast } from "../stores/appStore";
 import AddPersonModal from "../components/AddPersonModal";
@@ -11,6 +11,7 @@ import RemovePersonModal from "../components/RemovePersonModal";
 import RecapSection from "../components/RecapSection";
 import PaymentSection from "../components/PaymentSection";
 import { addHistory, useHistoryStore } from "../stores/historyStore";
+import LoaderComponent from "../components/LoaderComponent";
 
 const CheckoutView = () => {
   const { theme } = useThemeStore();
@@ -20,9 +21,6 @@ const CheckoutView = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const shipping = SHIPPING_RATE * (dates?.length || 0);
-  const tax = TAX;
-  const total = subtotal + shipping + tax;
 
   const [form, setForm] = useState({
     paymentMethod: '',
@@ -33,32 +31,36 @@ const CheckoutView = () => {
   const handlePay = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    modal.open(<LoaderComponent counter={1500} callback={() => setLoading(false)} />);
     setTimeout(() => {
       addHistory({
         events: events || [],
         users: persons || [],
         subtotal,
-        shipping,
-        tax,
-        total,
+        shipping: SHIPPING_RATE * (dates?.length || 0),
+        tax: TAX,
+        total: subtotal + (SHIPPING_RATE * (dates?.length || 0)) + TAX,
         paymentMethod: form.paymentMethod,
         promoCode: form.promoCode,
         address: form.address,
         id: history?.length || 0,
       });
       clearCart();
-      setLoading(false);
+      modal.close();
       toast.success('Commande effectuée avec succès');
       navigate('/'+lang+'/client/orders');
     }, 1500);
   };
   useEffect(() => {
     if (!user?.email) return;
-    if (persons?.includes(user?.email)) return;
-    if (!persons) {
+    if (!persons?.length || !persons?.includes(user?.email)) {
       setPerson([user?.email || '']);
     }
   }, [user?.email, persons]);
+
+  useEffect(() => {
+    setSubtotal(articlesPrincipal, articlesSupplement, articlesBoisson);
+  }, [cart]);
 
   const addPerson = (): void => {
     modal.open(
@@ -81,9 +83,6 @@ const CheckoutView = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
-  useEffect(() => {
-    setSubtotal();
-  }, [cart]);
 
   return (
       <div className="row">
@@ -96,9 +95,8 @@ const CheckoutView = () => {
           theme={theme}
           subtotal={subtotal}
           dates={dates}
-          shipping={shipping}
-          tax={tax}
-          total={total}
+          shipping={SHIPPING_RATE * (dates?.length || 0)}
+          tax={TAX}
           addPerson={addPerson}
           removePerson={removePerson}
         />

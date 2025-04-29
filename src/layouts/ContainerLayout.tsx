@@ -45,13 +45,11 @@ const ContainerLayout: React.FC = () => {
           {capitalize(params?.lang as string)}
         </button>
       </div>
-      <div className="row h-100">
-        <div className="col-12">
-          <Outlet />
-        </div>
-        <ModalComponent />
-        <ToastComponent />
+      <div className="col-12 h-100">
+        <Outlet />
       </div>
+      <ModalComponent />
+      <ToastComponent />
     </section>
   );
 };

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { clearCart, filterCartByCategory, useCartStore } from '../stores/cartStore';
-import { categories } from '../core/constants';
+import { clearCart, priceAccomp, priceBoisson, useCartStore } from '../stores/cartStore';
+import { articlesBoisson, articlesPrincipal, articlesSupplement, categories } from '../core/constants';
 import CartItem from '../components/widgets/CartItem';
 import { useAuthStore } from '../stores/useAuthStore';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLangStore } from '../stores/langStore';
+import { Article } from '../core/types';
 
 const CartView: React.FC = () => {
   const navigate = useNavigate();
@@ -33,7 +34,9 @@ const CartView: React.FC = () => {
     clearCart();
     navigate('/' + lang + '/client/filter');
   };
-
+  const filterCartByCategory = (category: number) => {
+    return cart.filter((item) => articlesPrincipal.find(a => a.id === item.id)?.category === category); // Ensure `category` exists on items
+  };
   return (
     <div className="row">
       <div className="col-lg-8">
@@ -43,7 +46,7 @@ const CartView: React.FC = () => {
               <div className="card-body">
                 <h5 className="card-title mb-3">{category.label}</h5>
                 {filterCartByCategory(category.id as number).map((item) => (
-                  <CartItem key={item.id} item={item} />
+                  <CartItem key={item.id} item={articlesPrincipal.find(a => a.id === item.id) as Article} />
                 ))}
               </div>
             </div>
@@ -71,13 +74,23 @@ const CartView: React.FC = () => {
             )}
           </ul>
           <hr />
+          <p className="fw-bold">
+            Total :
+            { cart.length > 0 ?
+              cart.reduce((sum, item) => {
+                return sum + ((articlesPrincipal.find(a => a.id === item.id)?.price || 0) 
+                + priceAccomp(articlesSupplement, item) 
+                + priceBoisson(articlesBoisson, item))
+              }, 0).toFixed(2)
+            : 0} XOF
+          </p>
           <div className="d-flex justify-content-between">
             <Link className="btn btn-secondary" to={'/'+lang+'/client/filter'}>Retour</Link>
             <button
               className="btn btn-success"
               onClick={handleValidateCart}
             >
-              Valider mon panier
+              Suivant
             </button>
           </div>
         </div>

@@ -21,19 +21,21 @@ const ClientLayout: React.FC = () => {
   };
   
   return (
-    <div className="col-12 col-md-8 col-lg-10 mx-auto mt-3">
-      <h1 className='fs-1'>
+    <div className="col-12 col-md-8 col-lg-10 mx-auto mt-3 px-3">
+      <Link className='fs-1' to={'/'+lang}>
         <span className="text-primary">E</span>-
         <span className="text-secondary">Cantine</span>
-      </h1>
-      <div className={`col col-lg-${user ? '7' : '4'} fixed-bottom mx-auto`} style={{ zIndex: '10000'}}>
-        <div className={`card text-bg-${theme} shadow-lg mb-3 p-3`}>
+      </Link>
+      <div className={`col col-lg-${user ? '8' : '4'} fixed-bottom mx-auto`}>
+        <div className={`card text-bg-${theme} shadow-lg mb-md-3 mb-0 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${window.location.pathname == '/' ? 'primary' : 'outline-secondary'}`} to='/'>
-              <i className={`bi bi-house fs-6`}></i> Accueil
+              <i className={`bi bi-house fs-6`}></i> 
+              <span className='d-none d-md-inline-block'>Accueil</span>
             </Link>
             <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} to='filter'>
-              <i className={`bi bi-list fs-6`}></i> Plats
+              <i className={`bi bi-list fs-6`}></i> 
+              <span className='d-none d-md-inline-block'>Plats</span>
             </Link>
             {
               cart.length > 0 ?
@@ -52,15 +54,15 @@ const ClientLayout: React.FC = () => {
                 <div className="btn-group" role="group">
                   <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/orders'}>
                     <i className="bi bi-file-earmark me-2"></i>
-                    Commandes
+                    <span className='d-none d-md-inline-block'>Commandes</span>
                   </Link>
                   <Link className={`btn btn-${routeMatch('plan') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/plan'}>
                     <i className="bi bi-people me-2"></i>
-                    Plans
+                    <span className='d-none d-md-inline-block'>Plans</span>
                   </Link>
                   <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/history'}>
                     <i className="bi bi-graph-up me-2"></i>
-                    Historique
+                    <span className='d-none d-md-inline-block'>Historique</span>
                   </Link>
                 </div>
                 <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/client/profile'}>
@@ -69,13 +71,16 @@ const ClientLayout: React.FC = () => {
               </>
             ) : (
               <Link className={`btn btn-${routeMatch('login') ? 'primary' : 'outline-secondary'}`} to={'/'+lang+'/login'}>
-                <i className={`bi bi-box-arrow-in-right fs-6`}></i> Connexion
+                <i className={`bi bi-box-arrow-in-right fs-6`}></i> 
+                <span className='d-none d-md-inline-block'>Connexion</span>
               </Link>
             )}
           </div>
         </div>
       </div>
+
       <Outlet />
+      
       <br /><br /><br /><br />
       <br /><br /><br /><br />
     </div>

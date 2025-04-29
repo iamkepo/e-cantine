@@ -33,11 +33,11 @@ const ModalComponent: React.FC = () => {
 
     // Return a no-op cleanup function if modalElement is not found
     return () => {};
-  }, [app.modal.show]);
+  }, [app.modal.show,]);
   if (!app.modal.show) return false;
   return (
     <div className="modal fade" id="myModal" tabIndex={-1} aria-labelledby="myModalLabel" aria-hidden="true">
-      <div className={`modal-dialog modal-${app.modal.size || 'md'} modal-dialog-centered`}>
+      <div className={`modal-dialog modal-${app.modal.size || 'md'} modal-dialog-centered modal-dialog-scrollable`}>
         <div className="modal-content">
           <div className={`modal-body text-bg-${app.modal.size == 'fullscreen' ? 'secondary' : theme}`}>
             <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -4,11 +4,18 @@ export interface Article{
   description?: string;
   img: string;
   tags: number[];
-  category: number;
+  category?: number;
   date_updated?: number;
   price: number;
 }
-export type Cart = Partial<Article> & { count: number }
+export interface CItem {
+  id: number;
+  count: number;
+}
+export type Cart = CItem & { 
+  accompanement: CItem[];
+  boisson: CItem[];
+}
 export interface Option {
   label: string;
   action: ()=> void

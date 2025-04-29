@@ -3,35 +3,37 @@ import { useThemeStore } from '../stores/themeStore';
 import { Article } from '../core/types';
 import { categoryRender, tagRender } from '../helpers/functions';
 import { useFilterStore } from '../stores/filterStore';
-import { addItemCart, findAndItem, removeItemCart } from '../stores/cartStore';
 
 interface ArticleVComponentProps {
   article: Article;
-  action: ()=> void
+  action?: (id: number) => void;
+  choose: boolean;
+  addItem: (id: number) => void;
+  removeItem: (id: number) => void;
 }
 
-const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }) => {
+const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, choose, addItem, removeItem }) => {
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
 
   return (
-    <div className={`card text-bg-${theme} ${findAndItem(article.id as number) != undefined ? 'border border-1 border-warning' : ''}`}>
+    <div className={`card text-bg-${theme} ${choose ? 'border border-1 border-warning' : ''}`}>
       <img 
         src={article.img} 
         className="card-img-top" 
         alt={article.label} 
         style={{ height: '150px', objectFit: 'cover' }}
-        onClick={action}
+        onClick={() => action ? action(article.id) : false}
       />
       <div className="card-body">
-        <h5 className="card-title text-truncate" onClick={action}>
+        <h5 className="card-title text-truncate" onClick={() => action ? action(article.id) : false}>
           {article.label}
         </h5>
 
-        <p className="card-text text-truncate" onClick={action}>
-          <span className="badge text-bg-primary me-2">
+        <p className="card-text text-truncate" onClick={() => action ? action(article.id) : false}>
+          {article?.category && <span className="badge text-bg-primary me-2">
             {categoryRender(article.category)}
-          </span>
+          </span>}
           { selected.tag == null ? 
             article.tags.map((tag, j) => (
               <span key={j} className="badge text-bg-secondary me-2">
@@ -45,11 +47,11 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
         <div className="card-text d-flex justify-content-between">
           <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
           {
-            findAndItem(article.id) ? 
+            choose ? 
             <button
               type="button"
               className="btn btn-sm btn-danger"
-              onClick={() => removeItemCart(article.id as number)}
+              onClick={() => removeItem(article.id)}
             >
               Retirer
             </button>
@@ -57,7 +59,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action }
             <button
               type="button"
               className="btn btn-sm btn-warning"
-              onClick={() => addItemCart({ ...article, count: 1 })}
+              onClick={() => addItem(article.id)}
             >
               Ajouter
             </button>

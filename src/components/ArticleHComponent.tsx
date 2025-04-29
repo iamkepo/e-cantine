@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { addItemCart, findAndItem, removeItemCart, useCartStore } from '../stores/cartStore';
-import { Article, Cart } from '../core/types';
+import { useCartStore } from '../stores/cartStore';
+import { Article } from '../core/types';
 import { categoryRender, formateDate, tagRender } from '../helpers/functions';
 
 interface ArticleHComponentProps {
-  article: Article | Cart;
+  article: Article;
+  addItem: (id: number) => void;
+  removeItem: (id: number) => void;
+  choose: boolean;
 }
 
-const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
+const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem, removeItem, choose }) => {
   const { theme } = useThemeStore();
   const { cart } = useCartStore();
 
@@ -36,11 +39,11 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
               <h5 className="col col-md-8 text-danger text-nowrap">{article.price} XOF</h5>
               <div className="col col-md-4">
                 {
-                  findAndItem(article.id as number) != undefined ? 
+                  choose ? 
                   <button
                     type="button"
                     className="btn btn-danger float-end"
-                    onClick={() => removeItemCart(article.id as number)}
+                    onClick={() => removeItem(article.id as number)}
                   >
                     Retirer
                   </button>
@@ -48,7 +51,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article }) => {
                   <button
                     type="button"
                     className="btn btn-warning float-end"
-                    onClick={() => addItemCart({ ...article, count: 1 })}
+                    onClick={() => addItem(article.id)}
                   >
                     Ajouter
                   </button>

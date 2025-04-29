@@ -6,7 +6,7 @@ import { EventDropArg } from '@fullcalendar/core';
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { days } from "../core/constants";
+import { articlesPrincipal, days } from "../core/constants";
 import { generateDates } from "../helpers/planner";
 import { formatDate } from "../helpers/functions";
 import { useThemeStore } from "../stores/themeStore";
@@ -38,7 +38,7 @@ const PlannerView = () => {
 
   useEffect(() => {
     if(dates && dates.length > 0){
-      setEvents(generatePlanning(dates));
+      setEvents(generatePlanning(dates, articlesPrincipal));
     }
   }, [dates]);
 
@@ -105,15 +105,15 @@ const PlannerView = () => {
         <div className={`card text-bg-${theme} sticky-lg-top`}>
           <div className="card-body">
             <h5 className="card-title mb-3">Paramètres</h5>
-            <label htmlFor="start-date" className="form-label mb-3">Date de début :</label>
+            <label htmlFor="start-date" className="form-label">Date de début :</label>
             <input 
               type="date" 
               id="start-date" 
-              className="form-control" 
+              className="form-control mb-3" 
               value={new Date(startDate).toISOString().split('T')[0]} 
               onChange={e => setStartDate(new Date(e.target.value))} 
             />
-            <label htmlFor="weeks-select" className="form-label mb-3">Durée de planification :</label>
+            <label htmlFor="weeks-select" className="form-label">Nombre de semaines :</label>
             <select
               id="weeks-select"
               className="form-select mb-3"
@@ -126,7 +126,7 @@ const PlannerView = () => {
                 </option>
               ))}
             </select>
-            <label htmlFor="days-select" className="form-label mb-3">Jours de planification :</label>
+            <label htmlFor="days-select" className="form-label">Jours de planification :</label>
             <div className="d-flex justify-content-between mb-3">
               {days.map((day, i) => (
                 <button
@@ -139,12 +139,14 @@ const PlannerView = () => {
                 </button>
               ))}
             </div> 
-            <p className="mb-3">{dates?.length} dates</p> 
-            <p className="mb-3">{events?.length} plats</p>
+            <p className="mb-3 fs-5 fw-normal">Livraison de 
+              <span className="fw-bold text-primary ms-2">{(events?.length || 0) * weeks}</span> plats en 
+              <span className="fw-bold text-primary ms-2">{dates?.length}</span> jours
+            </p>
             <hr />
             <div className="d-flex justify-content-between">
               <Link className="btn btn-secondary" to={'/'+lang+'/client/cart'}>Retour</Link>
-              <button className="btn btn-primary" onClick={handleCheckout}>Valider</button>
+              <button className="btn btn-primary" onClick={handleCheckout}>Suivant</button>
             </div>
           </div>
         </div>

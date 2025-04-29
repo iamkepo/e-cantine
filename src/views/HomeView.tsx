@@ -8,7 +8,7 @@ import { articlesPrincipal } from "../core/constants";
 import { modal } from "../stores/appStore";
 import { filteredArticles, useFilterStore } from "../stores/filterStore";
 import ArticleVComponent from "../components/ArticleVComponent";
-import { useCartStore } from "../stores/cartStore";
+import { addItemCart, findItem, removeItemCart, useCartStore } from "../stores/cartStore";
 import { categories } from "../core/constants";
 import { Link } from "react-router-dom";
 import { useThemeStore } from "../stores/themeStore";
@@ -27,9 +27,15 @@ const HomeView: React.FC = () => {
 
   const prev = (index: number) => {
     if (index >= 0) {
+      const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleHComponent article={filteredArticles(articlesPrincipal)[index]} />
+          <ArticleHComponent 
+            article={article} 
+            choose={findItem(article.id as number) != undefined} 
+            addItem={(id) => addItemCart(id)} 
+            removeItem={(id) => removeItemCart(id)} 
+          />
         </LightBox>,
         "xl"
       );
@@ -38,9 +44,15 @@ const HomeView: React.FC = () => {
 
   const next = (index: number) => {
     if (index < filteredArticles(articlesPrincipal).length) {
+      const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
-          <ArticleHComponent article={filteredArticles(articlesPrincipal)[index]} />
+          <ArticleHComponent 
+            article={article} 
+            choose={findItem(article.id as number) != undefined} 
+            addItem={(id) => addItemCart(id)} 
+            removeItem={(id) => removeItemCart(id)} 
+          />
         </LightBox>,
         "xl"
       );
@@ -78,10 +90,18 @@ const HomeView: React.FC = () => {
                 article={article}
                 action={() => modal.open(
                   <LightBox prev={() => prev(i - 1)} next={() => next(i + 1)}>
-                    <ArticleHComponent article={article} />
+                    <ArticleHComponent 
+                      article={article} 
+                      choose={findItem(article.id as number) != undefined} 
+                      addItem={(id) => addItemCart(id)} 
+                      removeItem={(id) => removeItemCart(id)} 
+                    />
                   </LightBox>,
                   "xl"
                 )}
+                choose={findItem(article.id as number) != undefined}
+                addItem={(id) => addItemCart(id)}
+                removeItem={(id) => removeItemCart(id)}
               />
             </div>
           ))

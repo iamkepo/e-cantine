@@ -60,7 +60,7 @@ export const articlesPrincipal = [
     date_updated: 1678100400000, // Timestamp for "2023-03-06T11:00:00Z"
     price: 699
   },
-  { 
+  {
     id: 7,
     label: "Steaks marinés à la sauce soja et aux herbes",
     img: "https://www.kikkoman.fr/fileadmin/_processed_/c/5/csm_1111-recipe-page-Herby-Soy-Marinated-Steaks_desktop_c51d610179.webp",
@@ -80,6 +80,94 @@ export const articlesPrincipal = [
     date_updated: 1678284600000, // Timestamp for "2023-03-08T16:50:00Z"
     price: 1149
   },
+  // Petit-déjeuner (Breakfast) - 2e plat
+  {
+    id: 9,
+    label: "Omelette aux fines herbes",
+    img: "https://fr.frije.com/content/recipes/139103/800-1.jpg",
+    tags: [1],
+    category: 1, // Breakfast
+    description: "Omelette moelleuse aux œufs frais et fines herbes.",
+    date_updated: 1678371000000, // 2023-03-09T11:30:00Z
+    price: 799
+  },
+  // Petit-déjeuner (Breakfast) - 3e plat
+  {
+    id: 13,
+    label: "Granola maison et yaourt",
+    img: "https://cache.marieclaire.fr/data/photo/w1000_ci/4z/granola-maison-yaourt-et-bananes.jpg",
+    tags: [1],
+    category: 1, // Breakfast
+    description: "Granola croustillant servi avec du yaourt nature et des fruits frais.",
+    date_updated: 1678700000000, // 2023-03-13T08:00:00Z
+    price: 599
+  },
+  // Déjeuner (Lunch) - 2e plat
+  {
+    id: 10,
+    label: "Poulet rôti et légumes du soleil",
+    img: "https://lille.compagnonsdessaisons.com/wp-content/uploads/2023/10/poulet-plat-pommes-terre-orange.jpg",
+    tags: [2],
+    category: 2, // Lunch
+    description: "Poulet fermier rôti accompagné de légumes grillés.",
+    date_updated: 1678457400000, // 2023-03-10T13:30:00Z
+    price: 1499
+  },
+  // Déjeuner (Lunch) - 3e plat
+  {
+    id: 14,
+    label: "Salade César au poulet",
+    img: "https://www.recettesetcabas.com/data/recettes/179-1-fiche@67EA55AD-salade-caesar-au-poulet-croustillant-pommes-de-terre-sautees.webp",
+    tags: [2],
+    category: 2, // Lunch
+    description: "Salade fraîche avec poulet rôti, croûtons et parmesan.",
+    date_updated: 1678786400000, // 2023-03-14T12:00:00Z
+    price: 1299
+  },
+  // Goûter (Snack) - 2e plat
+  {
+    id: 11,
+    label: "Muffin aux myrtilles",
+    img: "https://img.cuisineaz.com/1200x675/2023/12/15/i196925-muffins-a-la-myrtille.jpg",
+    tags: [3],
+    category: 3, // Snack
+    description: "Muffin moelleux garni de myrtilles fraîches.",
+    date_updated: 1678543800000, // 2023-03-11T16:00:00Z
+    price: 499
+  },
+  // Goûter (Snack) - 3e plat
+  {
+    id: 15,
+    label: "Cookies aux pépites de chocolat",
+    img: "https://fr.rc-cdn.community.thermomix.com/recipeimage/dkf9c40p-9850e-860759-cfcd2-v49usz4k/44ca7131-0492-4ed2-a053-31332710649c/main/cookies-aux-pepites-de-chocolat.jpg",
+    tags: [3],
+    category: 3, // Snack
+    description: "Cookies moelleux aux pépites de chocolat noir.",
+    date_updated: 1678872800000, // 2023-03-15T16:00:00Z
+    price: 399
+  },
+  // Dîner (Dinner) - 2e plat
+  {
+    id: 12,
+    label: "Saumon grillé et quinoa",
+    img: "https://images.ricardocuisine.com/services/recipes/4x3/g-ricardo-hiver2-202031139-cmyk-mc.jpg",
+    tags: [4],
+    category: 4, // Dinner
+    description: "Filet de saumon grillé servi avec du quinoa et des légumes verts.",
+    date_updated: 1678630200000, // 2023-03-12T19:00:00Z
+    price: 1799
+  },
+  // Dîner (Dinner) - 3e plat
+  {
+    id: 16,
+    label: "Curry de légumes et riz basmati",
+    img: "https://kissmychef.com/wp-content/uploads/2023/03/curry.png",
+    tags: [4],
+    category: 4, // Dinner
+    description: "Curry doux de légumes accompagné de riz basmati parfumé.",
+    date_updated: 1678959200000, // 2023-03-16T19:30:00Z
+    price: 1399
+  },
 ];
 export const articlesSupplement = [
   { 
@@ -87,7 +175,6 @@ export const articlesSupplement = [
     label: "Fries",
     img: "https://cdn.britannica.com/34/206334-050-7637EB66/French-fries.jpg",
     tags: [4],
-    category: 3, // Snack
     description: "Crispy golden fries, perfect as a side or snack.",
     date_updated: 1678368900000, // Timestamp for "2023-03-09T13:15:00Z"
     price: 399
@@ -97,7 +184,6 @@ export const articlesSupplement = [
     label: "Garlic Bread",
     img: "https://www.spicebangla.com/wp-content/uploads/2020/12/Garlic-Bread.webp",
     tags: [1],
-    category: 4, // Dinner
     description: "Warm and buttery garlic bread, a perfect accompaniment.",
     date_updated: 1678472400000, // Timestamp for "2023-03-10T17:40:00Z"
     price: 499
@@ -107,7 +193,6 @@ export const articlesSupplement = [
     label: "Coleslaw",
     img: "https://www.allrecipes.com/thmb/pkvntUo7EjqVoI30UknFWy4jwL8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ALR-222218-nanas-southern-coleslaw-VAT-4x3-d44d1396eb3e47e5b5a9db5a33213c92.jpg",
     tags: [1, 2],
-    category: 1, // Breakfast
     description: "A creamy and tangy coleslaw, perfect as a side dish.",
     date_updated: 1678525500000, // Timestamp for "2023-03-11T08:25:00Z"
     price: 549
@@ -117,7 +202,6 @@ export const articlesSupplement = [
     label: "Mashed Potatoes",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7cEEe-7FUem_O54y7dAQzx1zBTgoepmohZQ&s",
     tags: [1],
-    category: 4, // Dinner
     description: "Creamy mashed potatoes, a classic comfort food.",
     date_updated: 1678647600000, // Timestamp for "2023-03-12T19:00:00Z"
     price: 799
@@ -127,7 +211,6 @@ export const articlesSupplement = [
     label: "Rice",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Ekd569S5P5FvhDaXui2LiA96YF07CWvtoQ&s",
     tags: [1, 3],
-    category: 4, // Dinner
     description: "Fluffy white rice, a versatile side dish.",
     date_updated: 1678704300000, // Timestamp for "2023-03-13T10:45:00Z"
     price: 299
@@ -139,7 +222,6 @@ export const articlesBoisson = [
     label: "Orange Juice",
     img: "https://thumbs.dreamstime.com/b/transparent-orange-juice-plastic-bottle-transparent-orange-juice-plastic-bottle-334739106.jpg",
     tags: [1, 2, 3, 4],
-    category: 1, // Breakfast
     description: "Freshly squeezed orange juice, full of vitamin C.",
     date_updated: 1678788600000, // Timestamp for "2023-03-14T07:30:00Z"
     price: 349
@@ -149,7 +231,6 @@ export const articlesBoisson = [
     label: "Apple Juice",
     img: "https://images.sks-bottle.com/images/AppleJuiceBottles_2021_UPDATEnewLRG.webp",
     tags: [1, 2, 3, 4],
-    category: 2, // Breakfast
     description: "Sweet and refreshing apple juice, perfect for any meal.",
     date_updated: 1678863600000, // Timestamp for "2023-03-15T09:20:00Z"
     price: 399
@@ -159,7 +240,6 @@ export const articlesBoisson = [
     label: "Grape Juice",
     img: "https://t3.ftcdn.net/jpg/03/31/57/10/360_F_331571006_Sv6xzovHgADbtCjwMooiY7VgiX6zxjMF.jpg",
     tags: [1, 2, 3, 4],
-    category: 3, // Breakfast
     description: "Rich and flavorful grape juice, a delightful drink.",
     date_updated: 1678926600000, // Timestamp for "2023-03-16T11:10:00Z"
     price: 449
@@ -198,7 +278,6 @@ export const methods = [
   { id: 'orange', label: 'Orange Money' },
   { id: 'flooz', label: 'Moov Flooz' },
   { id: 'card', label: 'Carte de crédit' },
-  { id: 'cash', label: 'Espèces' }
 ];
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

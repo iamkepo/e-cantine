@@ -1,7 +1,9 @@
 import React from "react";
 import Accordion from './widgets/Accordion';
-import { categoryRender, formatDate } from "../helpers/functions";
+import { categoryRender } from "../helpers/functions";
 import { Cart, PlanningEvent } from "../core/types";
+import { articlesBoisson, articlesPrincipal, articlesSupplement } from "../core/constants";
+import { priceAccomp, priceBoisson } from "../stores/cartStore";
 
 type RecapSectionProps = {
   cart: Cart[];
@@ -13,34 +15,39 @@ type RecapSectionProps = {
   dates: Date[] | undefined;
   shipping: number;
   tax: number;
-  total: number;
   addPerson: () => void;
   removePerson: (email: string) => void;
 };
 
-const RecapSection: React.FC<RecapSectionProps> = ({ cart, persons, events, user, theme, subtotal, dates, shipping, tax, total, addPerson, removePerson }) => (
+const RecapSection: React.FC<RecapSectionProps> = ({ cart, persons, events, user, theme, subtotal, dates, shipping, tax, addPerson, removePerson }) => (
   <div className={`card p-3 text-bg-${theme}`}>
     <h3 className="mb-3">Récapitulatif</h3>
-    <Accordion
-      title={"Nombre de jours" + ` (${dates?.length || 0})`}
-      content={
-        <p>{dates?.map(d => formatDate(d.toString())).join(', ')}</p>
-      }
-    />
-    <Accordion
-      title={"Nombre de livrasons" + ` (${events?.length || 0})`}
-      content={
-        <p>{events?.map(e => e.title).join(', ')}</p>
-      }
-    />
+
+    <div className="d-flex justify-content-between mb-3">
+      <span>Nombre de jours</span>
+      <span>{dates?.length || 0}</span>
+    </div>
+    <div className="d-flex justify-content-between mb-3">
+      <span>Nombre de livrasons</span>
+      <span>{events?.length || 0}</span>
+    </div>
     <Accordion 
       title={"Plats sélectionnés" + ` (${cart.length || 0})`}
       content={
         <ul className="list-group mb-3">
           {cart.map((item, idx) => (
             <li key={idx} className={`list-group-item d-flex justify-content-between align-items-center text-bg-${theme}`}>
-              <span className="text-truncate text-wrap">{categoryRender(item.category || 0)} : {item.label}</span>
-              <span>{item.count} x {item.price} XOF = {item.count * (item.price || 0)} XOF</span>
+              <span className="text-truncate text-wrap">
+                {categoryRender(articlesPrincipal.find(a => a.id === item.id)?.category || 0)} 
+              </span>
+              <span>
+                {item.count} x {articlesPrincipal.find(a => a.id === item.id)?.price} XOF =
+                {item ?
+                  (((articlesPrincipal.find(a => a.id === item.id)?.price || 0) 
+                  + priceAccomp(articlesSupplement, item as Cart) 
+                  + priceBoisson(articlesBoisson, item as Cart)) * item.count).toFixed(2)
+                : 0} XOF
+              </span>
             </li>
           ))}
         </ul>
@@ -71,21 +78,21 @@ const RecapSection: React.FC<RecapSectionProps> = ({ cart, persons, events, user
     />
     <hr />
     <div className="d-flex justify-content-between mb-3">
-      <span>Subtotal</span>
-      <span>{(subtotal + (persons?.length || 0) * shipping).toFixed(2)} XOF</span>
+      <span>Tax</span>
+      <span>{tax.toFixed(2)} XOF</span>
     </div>
     <div className="d-flex justify-content-between mb-3">
       <span>Shipping</span>
       <span>{shipping.toFixed(2)} XOF</span>
     </div>
     <div className="d-flex justify-content-between mb-3">
-      <span>Tax</span>
-      <span>{tax.toFixed(2)} XOF</span>
+      <span>Subtotal</span>
+      <span>{subtotal.toFixed(2)} XOF</span>
     </div>
     <hr />
     <div className="d-flex justify-content-between mb-4">
       <strong>Total</strong>
-      <strong>{total.toFixed(2)} XOF</strong>
+      <strong>{(subtotal + shipping + tax).toFixed(2)} XOF</strong>
     </div>
   </div>
 );
