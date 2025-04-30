@@ -24,6 +24,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ persons, form, handleCh
           placeholder="Enter address"
           value={form.address}
           onChange={e => handleChange(e)}
+          required
         />
       </div>
 

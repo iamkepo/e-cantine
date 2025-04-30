@@ -85,7 +85,7 @@ export const getHistoryBySlot = (slot: string) => {
 
 export const createCommand = (command: Command): number => {
   const { commands } = useHistoryStore.getState();
-  const newCommand = {...command, id: commands?.length || 0 + 1};
+  const newCommand = {...command, id: commands?.length || 0};
   useHistoryStore.setState({
     commands: [...(commands || []), newCommand]
   });
@@ -98,7 +98,7 @@ export const createHistory = (commandId: number, events: PlanningEvent[]) => {
     ...event,
     plat_id: event.id,
     command_id: commandId,
-    id: history?.length || 0 + 1,
+    id: history?.length || 0,
     status: 'pending'
   }));
   useHistoryStore.setState({
