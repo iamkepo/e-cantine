@@ -1,5 +1,6 @@
+"use client";
 import React, { useState } from "react";
-import { useThemeStore } from "../../stores/themeStore";
+import { useThemeStore } from "@/stores/themeStore";
 interface AccordionProps {
   title: string;
   content: React.ReactNode;

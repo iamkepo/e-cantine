@@ -1,12 +1,14 @@
-import { Article } from '../../core/types';
-import { modal } from '../../stores/appStore';
-import { addAccompanement, addBoisson, addItemCart, findAccompanement, findBoisson, findItem, priceAccomp, priceBoisson, removeAccompanement, removeBoisson, removeItemCart } from '../../stores/cartStore';
-import ArticleHComponent from '../ArticleHComponent';
-import { articlesBoisson, articlesSupplement } from '../../core/constants';
+/* eslint-disable @next/next/no-img-element */
+"use client";
+import { Article } from '@/core/types';
+import { modal } from '@/stores/appStore';
+import { addAccompanement, addBoisson, addItemCart, findAccompanement, findBoisson, findItem, priceAccomp, priceBoisson, removeAccompanement, removeBoisson, removeItemCart } from '@/stores/cartStore';
+import ArticleHComponent from '@/components/ArticleHComponent';
+import { articlesBoisson, articlesSupplement } from '@/core/constants';
 import { useEffect, useState } from 'react';
-import { Cart } from '../../core/types';
-import ItemList from './ItemList';
-import AddModalButton from './AddModalButton';
+import { Cart } from '@/core/types';
+import ItemList from '@/components/widgets/ItemList';
+import AddModalButton from '@/components/widgets/AddModalButton';
 
 // --- Main CartItem ---
 const CartItem: React.FC<{ item: Article }> = ({ item }) => {

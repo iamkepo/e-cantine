@@ -1,6 +1,7 @@
+"use client";
 import { useState } from 'react';
-import { Option } from '../../core/types';
-import { useThemeStore } from '../../stores/themeStore';
+import { Option } from '@/core/types';
+import { useThemeStore } from '@/stores/themeStore';
 
 export interface DropdownProps {
 	chevron?: boolean;

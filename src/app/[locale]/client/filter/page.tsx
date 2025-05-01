@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { findItem, useCartStore } from "@/stores/cartStore";
 import { filteredArticles, useFilterStore } from "@/stores/filterStore";
 import { useEffect } from "react";
@@ -14,16 +13,15 @@ import ArticleVComponent from "@/components/ArticleVComponent";
 
 
 const Page: React.FC = () => {
-  const { id } = useParams();
   const { selected } = useFilterStore();
   const { cart } = useCartStore();
 
   useEffect(() => {
-  }, [id, selected, cart]);
+  }, [selected, cart]);
 
   const prev = (index: number) => {
     if (index >= 0) {
-      const article = filteredArticles(articlesPrincipal, parseInt(id as string))[index];
+      const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
           <ArticleHComponent 
@@ -39,8 +37,8 @@ const Page: React.FC = () => {
   };
 
   const next = (index: number) => {
-    if (index < filteredArticles(articlesPrincipal, parseInt(id as string)).length) {
-      const article = filteredArticles(articlesPrincipal, parseInt(id as string))[index];
+    if (index < filteredArticles(articlesPrincipal).length) {
+      const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
         <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
           <ArticleHComponent 
@@ -58,7 +56,7 @@ const Page: React.FC = () => {
 
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {
-        filteredArticles(articlesPrincipal, parseInt(id as string)).map((article: Article, i) => (
+        filteredArticles(articlesPrincipal).map((article: Article, i) => (
           <div 
             key={i} 
             className="col"

@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
 import React from 'react';
-import { Article, CItem } from '../../core/types';
-import ArticleHComponent from '../ArticleHComponent';
-import { modal } from '../../stores/appStore';
-import { useThemeStore } from '../../stores/themeStore';
+import { Article, CItem } from '@/core/types';
+import ArticleHComponent from '@/components/ArticleHComponent';
+import { modal } from '@/stores/appStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 type ItemListProps = {
   items: CItem[];

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React, { useEffect, useRef } from 'react';
-import { Toast } from 'bootstrap';
 import { useAppStore } from '../stores/appStore';
 
 const ToastComponent: React.FC = () => {
@@ -7,18 +8,26 @@ const ToastComponent: React.FC = () => {
   const toastRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (toastRef.current) {
-      const toastInstance = new Toast(toastRef.current);
-      if (app.toast.show) {
-        toastInstance.show();
-      } else {
-        toastInstance.hide();
-      }
-    }
+    let toastInstance: any = null;
 
-    const toastElList = document.querySelectorAll('.toast');
-    toastElList.forEach(toastEl => new Toast(toastEl));
-    
+    // Dynamically import Bootstrap Toast only on the client
+    import('bootstrap').then(({ Toast }) => {
+      if (toastRef.current) {
+        toastInstance = new Toast(toastRef.current);
+        if (app.toast.show) {
+          toastInstance.show();
+        } else {
+          toastInstance.hide();
+        }
+      }
+
+      // Optionally, initialize all toasts
+      const toastElList = document.querySelectorAll('.toast');
+      toastElList.forEach(toastEl => new Toast(toastEl));
+    });
+
+    // No cleanup needed for now
+    return () => {};
   }, [app.toast.show]);
 
   return (

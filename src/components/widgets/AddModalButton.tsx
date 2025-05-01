@@ -1,7 +1,8 @@
+"use client";
 import React from 'react';
-import { Article, CItem } from '../../core/types';
-import ArticleVComponent from '../ArticleVComponent';
-import { modal } from '../../stores/appStore';
+import { Article, CItem } from '@/core/types';
+import ArticleVComponent from '@/components/ArticleVComponent';
+import { modal } from '@/stores/appStore';
 
 type AddModalButtonProps = {
   label: string;

@@ -1,7 +1,5 @@
 "use client";
-
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useThemeStore } from '@/stores/themeStore';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useLangStore } from '@/stores/langStore';
@@ -10,7 +8,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const ClientLayout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
   const route = usePathname();
   const { lang } = useLangStore();
   const { user } = useAuthStore();
@@ -18,14 +15,14 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   const { cart } = useCartStore();
     
   useEffect(() => {
-  }, [cart.length, router]);
+  }, [cart.length, route]);
 
   const routeMatch = (path: string): boolean => {
     return route.includes(path);
   };
   
   return (
-    <div className="col-12 col-md-8 col-lg-10 mx-auto mt-3 px-3">
+    <div className="col-12 col-md-8 col-lg-10 mx-auto px-3">
       <Link className='fs-1' href={'/'+lang}>
         <span className="text-primary">E</span>-
         <span className="text-secondary">Cantine</span>
@@ -35,11 +32,11 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
           <div className={`d-flex align-items-center justify-content-around`}>
             <Link className={`btn btn-${route == '/' ? 'primary' : 'outline-secondary'}`} href={'/'+lang}>
               <i className={`bi bi-house fs-6`}></i> 
-              <span className='d-none d-md-inline-block'>Accueil</span>
+              <span className='d-none d-md-inline-block ms-2'>Accueil</span>
             </Link>
             <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang+'/client/filter'}>
               <i className={`bi bi-list fs-6`}></i> 
-              <span className='d-none d-md-inline-block'>Plats</span>
+              <span className='d-none d-md-inline-block ms-2'>Plats</span>
             </Link>
             {
               cart.length > 0 ?
@@ -57,16 +54,16 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
               <>
                 <div className="btn-group" role="group">
                   <Link className={`btn btn-${routeMatch('menu') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/menu'}>
-                    <i className="bi bi-people me-2"></i>
-                    <span className='d-none d-md-inline-block'>Menu</span>
+                    <i className="bi bi-people"></i>
+                    <span className='d-none d-md-inline-block ms-2'>Menu</span>
                   </Link>
                   <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/orders'}>
-                    <i className="bi bi-file-earmark me-2"></i>
-                    <span className='d-none d-md-inline-block'>Commandes</span>
+                    <i className="bi bi-file-earmark"></i>
+                    <span className='d-none d-md-inline-block ms-2'>Commandes</span>
                   </Link>
                   <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/history'}>
-                    <i className="bi bi-graph-up me-2"></i>
-                    <span className='d-none d-md-inline-block'>Historique</span>
+                    <i className="bi bi-graph-up"></i>
+                    <span className='d-none d-md-inline-block ms-2'>Historique</span>
                   </Link>
                 </div>
                 <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/profile'}>
@@ -76,14 +73,16 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
             ) : (
               <Link className={`btn btn-${routeMatch('login') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/login'}>
                 <i className={`bi bi-box-arrow-in-right fs-6`}></i> 
-                <span className='d-none d-md-inline-block'>Connexion</span>
+                <span className='d-none d-md-inline-block ms-2'>Connexion</span>
               </Link>
             )}
           </div>
         </div>
       </div>
 
-      {children}
+      <div className="col-12 h-100 mt-3">
+        {children}
+      </div>
 
       <br /><br /><br /><br />
       <br /><br /><br /><br />

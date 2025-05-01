@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-
 import { toggleTheme, useThemeStore } from "@/stores/themeStore";
 import { changeLang, translateElements, useLangStore } from "@/stores/langStore";
 import { capitalize } from "@/helpers/functions";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function RootLayout({
   children,
@@ -13,20 +12,15 @@ export default function RootLayout({
 }>) {
   const { theme } = useThemeStore();
   const { lang } = useLangStore();
-  const router = useRouter();
   const params = useParams();
 
   useEffect(() => {
-    if (window.location.href == window.location.origin+"/") {
-      router.push(window.location.origin+"/"+lang)
-    }
-
     const rootElement = document.getElementById("root");
     if (rootElement) {
       rootElement.classList = theme + '-theme';
     }
     translateElements()
-  }, [theme, lang, router]);
+  }, [theme, lang]);
 
 const handleChangeLang = (value: string) => {
   changeLang(value);

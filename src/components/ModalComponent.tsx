@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React, { useEffect } from 'react';
-import { Modal as BootstrapModal } from 'bootstrap';
 import { modal, useAppStore } from '../stores/appStore';
 import { useThemeStore } from '../stores/themeStore';
 
@@ -8,33 +9,36 @@ const ModalComponent: React.FC = () => {
   const { theme } = useThemeStore();
 
   useEffect(() => {
-    const modalElement = document.getElementById('myModal');
-    let bootstrapModal: BootstrapModal | null = null;
+    let bootstrapModal: any = null;
+    let modalElement: HTMLElement | null = null;
 
-    if (modalElement) {
-      bootstrapModal = new BootstrapModal(modalElement);
-      
-      // Show or hide modal based on 'show' prop
-      if (app.modal.show) {
-        bootstrapModal.show();
-      } else {
-        bootstrapModal.hide();
+    // Dynamically import Bootstrap JS only on the client
+    import('bootstrap').then(({ Modal }) => {
+      modalElement = document.getElementById('myModal');
+      if (modalElement) {
+        bootstrapModal = new Modal(modalElement);
+
+        if (app.modal.show) {
+          bootstrapModal.show();
+        } else {
+          bootstrapModal.hide();
+        }
+
+        const handleModalClose = () => modal.close && modal.close();
+        modalElement.addEventListener('hidden.bs.modal', handleModalClose);
+
+        // Cleanup
+        return () => {
+          modalElement?.removeEventListener('hidden.bs.modal', handleModalClose);
+          bootstrapModal?.dispose();
+        };
       }
+    });
 
-      const handleModalClose = () => modal.close && modal.close();
-      modalElement.addEventListener('hidden.bs.modal', handleModalClose);
-
-      // Cleanup event listener and modal instance on unmount
-      return () => {
-        modalElement.removeEventListener('hidden.bs.modal', handleModalClose);
-        bootstrapModal?.dispose();
-      };
-    }
-
-    // Return a no-op cleanup function if modalElement is not found
+    // Return a no-op cleanup if not on client or modal not found
     return () => {};
-  }, [app.modal.show,]);
-  if (!app.modal.show) return false;
+  }, [app.modal.show]);
+  if (!app.modal.show) return null;
   return (
     <div className="modal fade" id="myModal" tabIndex={-1} aria-labelledby="myModalLabel" aria-hidden="true">
       <div className={`modal-dialog modal-${app.modal.size || 'md'} modal-dialog-centered modal-dialog-scrollable`}>

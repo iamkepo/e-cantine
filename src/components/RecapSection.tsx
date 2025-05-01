@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Accordion from './widgets/Accordion';
 import { categoryRender } from "../helpers/functions";

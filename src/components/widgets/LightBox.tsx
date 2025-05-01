@@ -1,10 +1,11 @@
+"use client";
 import React from 'react';
-import { useThemeStore } from '../../stores/themeStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 interface LightBoxProps {
   prev?: () => void;
   next?: () => void;
-  children?: React.ReactNode; // Fixed typo from "chidren" to "children"
+  children?: React.ReactNode;
 }
 
 const LightBox: React.FC<LightBoxProps> = ({ prev, next, children }) => {

@@ -1,3 +1,4 @@
+"use client";
 import { articlesPrincipal, days } from "@/core/constants";
 import { generatePlanning, removeEvent, setCheckedDays, setDates, setEvents, setItemCount, setStartDate, setWeeks } from "@/stores/cartStore";
 import dayGridPlugin from "@fullcalendar/daygrid";

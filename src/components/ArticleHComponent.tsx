@@ -8,8 +8,8 @@ import { categoryRender, formatDate, tagRender } from '../helpers/functions';
 
 interface ArticleHComponentProps {
   article: Article;
-  addItem: (id: number) => void;
-  removeItem: (id: number) => void;
+  addItem?: (id: number) => void;
+  removeItem?: (id: number) => void;
   choose: boolean;
 }
 
@@ -41,7 +41,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
               <h5 className="col col-md-8 text-danger text-nowrap">{article.price} XOF</h5>
               <div className="col col-md-4">
                 {
-                  choose ? 
+                  (choose && removeItem) ? 
                   <button
                     type="button"
                     className="btn btn-danger float-end"
@@ -50,6 +50,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
                     Retirer
                   </button>
                   :
+                  (addItem && !choose) ?
                   <button
                     type="button"
                     className="btn btn-warning float-end"
@@ -57,6 +58,8 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
                   >
                     Ajouter
                   </button>
+                  :
+                  false
                 }
               </div>  
             </div>

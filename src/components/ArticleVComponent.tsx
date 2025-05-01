@@ -10,8 +10,8 @@ interface ArticleVComponentProps {
   article: Article;
   action?: (id: number) => void;
   choose: boolean;
-  addItem: (id: number) => void;
-  removeItem: (id: number) => void;
+  addItem?: (id: number) => void;
+  removeItem?: (id: number) => void;
 }
 
 const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, choose, addItem, removeItem }) => {
@@ -49,7 +49,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
         <div className="card-text d-flex justify-content-between">
           <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
           {
-            choose ? 
+            (choose && removeItem) ? 
             <button
               type="button"
               className="btn btn-sm btn-danger"
@@ -57,7 +57,8 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
             >
               Retirer
             </button>
-            :
+            : 
+            (addItem && !choose) ?
             <button
               type="button"
               className="btn btn-sm btn-warning"
@@ -65,6 +66,8 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
             >
               Ajouter
             </button>
+            :
+            false
           }
         </div>
       </div>

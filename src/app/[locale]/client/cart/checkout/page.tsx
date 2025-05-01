@@ -1,3 +1,4 @@
+"use client";
 import AddPersonModal from "@/components/AddPersonModal";
 import LoaderComponent from "@/components/LoaderComponent";
 import PaymentSection from "@/components/PaymentSection";

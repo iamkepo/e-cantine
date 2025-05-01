@@ -1,5 +1,4 @@
 "use client";
-
 import { useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useEffect } from "react";

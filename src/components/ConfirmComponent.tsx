@@ -1,4 +1,4 @@
-
+"use client";
 import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { modal } from '../stores/appStore';
