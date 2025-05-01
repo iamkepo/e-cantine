@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { clearCart, priceAccomp, priceBoisson, useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
@@ -10,7 +11,7 @@ import CartItem from "@/components/widgets/CartItem";
 import Link from "next/link";
 import { Article } from "@/core/types";
 
-const CartPage: React.FC = () => {
+const Page: React.FC = () => {
   const router = useRouter();
   const { theme } = useThemeStore();
   const { isAuthenticated } = useAuthStore();
@@ -102,4 +103,4 @@ const CartPage: React.FC = () => {
   );
 };
 
-export default CartPage;
+export default Page;

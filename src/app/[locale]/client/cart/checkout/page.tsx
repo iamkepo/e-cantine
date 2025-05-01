@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import AddPersonModal from "@/components/AddPersonModal";
 import LoaderComponent from "@/components/LoaderComponent";
 import PaymentSection from "@/components/PaymentSection";
@@ -15,7 +16,7 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from "next/navigation";
 
-const Page = () => {
+const Page:React.FC = () => {
   const { theme } = useThemeStore();
   const { cart, subtotal, dates, events, persons, checkedDays, startDate } = useCartStore();
   const { lang } = useLangStore();

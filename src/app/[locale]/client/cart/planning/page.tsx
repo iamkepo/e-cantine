@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { articlesPrincipal, days } from "@/core/constants";
 import { generatePlanning, removeEvent, setCheckedDays, setDates, setEvents, setItemCount, setStartDate, setWeeks } from "@/stores/cartStore";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -16,7 +17,7 @@ import { modal } from "@/stores/appStore";
 import { formatDate } from "@/helpers/functions";
 import { EventDropArg } from "@fullcalendar/core/index.js";
 
-const PlannerView = () => {
+const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const { weeks, checkedDays, startDate } = useCartStore();
   const { dates, events } = useCartStore();
@@ -156,4 +157,4 @@ const PlannerView = () => {
   );
 };
 
-export default PlannerView;
+export default Page;

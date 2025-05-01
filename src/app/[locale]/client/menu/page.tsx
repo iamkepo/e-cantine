@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import React from "react";
 import ArticleHComponent from "@/components/ArticleHComponent";
 import { articlesPrincipal } from "@/core/constants";
 import { getHistoryByDate } from "@/stores/historyStore";
@@ -9,7 +10,7 @@ import { useState } from "react";
 import { formatDate } from "@/helpers/functions";
 import { Article } from "@/core/types";
 
-const MenuView: React.FC = () => {
+const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const [ date, setDate ] = useState<Date>(new Date());
   
@@ -77,4 +78,4 @@ const MenuView: React.FC = () => {
   );
 };
 
-export default MenuView;
+export default Page;

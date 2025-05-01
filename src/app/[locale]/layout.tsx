@@ -5,7 +5,7 @@ import { changeLang, translateElements, useLangStore } from "@/stores/langStore"
 import { capitalize } from "@/helpers/functions";
 import { useParams } from "next/navigation";
 
-export default function RootLayout({
+export default function LocaleLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

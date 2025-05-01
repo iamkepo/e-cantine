@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { findItem, useCartStore } from "@/stores/cartStore";
 import { filteredArticles, useFilterStore } from "@/stores/filterStore";
 import { useEffect } from "react";
