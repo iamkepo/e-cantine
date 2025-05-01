@@ -1,16 +1,14 @@
 "use client";
 import React from "react";
+import { addPerson } from "@/stores/cartStore";
+import { modal } from "@/stores/appStore";
 
-type AddPersonModalProps = {
-  onSubmit: (email: string) => void;
-  onCancel: () => void;
-};
-
-const AddPersonModal: React.FC<AddPersonModalProps> = ({ onSubmit, onCancel }) => (
+const AddPersonModal: React.FC = () => (
   <form onSubmit={e => {
     e.preventDefault();
     const email = (e.target as HTMLFormElement).email.value;
-    onSubmit(email);
+    addPerson(email);
+    modal.close();
   }}>
     <h5 className="mb-3 text-center">Ajouter une personne</h5>
     <div className="mb-3">
@@ -18,7 +16,7 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onSubmit, onCancel }) =
       <input type="email" className="form-control" name="email" placeholder="Ajouter une personne" required />
     </div>
     <div className="d-flex justify-content-center gap-2">
-      <button type="button" className="btn btn-outline-secondary" onClick={onCancel}>Annuler</button>
+      <button type="button" className="btn btn-outline-secondary" onClick={() => modal.close()}>Annuler</button>
       <button type="submit" className="btn btn-primary">Ajouter</button>
     </div>
   </form>

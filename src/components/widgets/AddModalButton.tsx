@@ -8,13 +8,12 @@ type AddModalButtonProps = {
   label: string;
   items: CItem[];
   articles: Article[];
-  itemId: number;
-  findFn: (itemId: number, subId: number) => unknown;
-  addFn: (itemId: number, subId: number) => void;
-  removeFn: (itemId: number, subId: number) => void;
+  findFn: (subId: number) => unknown;
+  addFn: (subId: number) => void;
+  removeFn: (subId: number) => void;
 };
 
-const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles, itemId, findFn, addFn, removeFn }) => {
+const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles, findFn, addFn, removeFn }) => {
   const action = () => {
     modal.open(
       <div className="row row-cols-4 g-3">
@@ -22,9 +21,9 @@ const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles,
           <div key={j} className="col">
             <ArticleVComponent
               article={article}
-              choose={findFn(itemId, article.id) != undefined}
-              addItem={() => {addFn(itemId, article.id); action();}}
-              removeItem={() => {removeFn(itemId, article.id); action();}}
+              choose={findFn(article.id) != undefined}
+              addItem={() => {addFn(article.id); action();}}
+              removeItem={() => {removeFn(article.id); action();}}
             />
           </div>
         ))}
@@ -36,7 +35,7 @@ const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles,
   return (
     <button
       type="button"
-      className="btn btn-sm btn-outline-primary me-2 mb-2"
+      className={`btn btn-sm btn-outline-primary ${items?.length > 0 ? "ms-2" : "me-2 mb-2"}`}
       onClick={() => action()}
     >
       <i className="bi bi-plus"></i>

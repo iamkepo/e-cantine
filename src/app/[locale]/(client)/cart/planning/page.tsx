@@ -48,7 +48,7 @@ const Page: React.FC = () => {
     if (!isAuthenticated) {
       router.push('/' + lang + '/login');
     } else {
-      router.push('/' + lang + '/client/cart/checkout');
+      router.push('/' + lang + '/cart/checkout');
     }
   }
 
@@ -142,12 +142,12 @@ const Page: React.FC = () => {
               ))}
             </div> 
             <p className="mb-3 fs-5 fw-normal">Livraison de 
-              <span className="fw-bold text-primary ms-2">{(events?.length || 0) * weeks}</span> plats en 
+              <span className="fw-bold text-primary ms-2">{(events?.length || 0)}</span> plats en 
               <span className="fw-bold text-primary ms-2">{dates?.length}</span> jours
             </p>
             <hr />
             <div className="d-flex justify-content-between">
-              <Link className="btn btn-secondary" href={'/'+lang+'/client/cart'}>Retour</Link>
+              <Link className="btn btn-secondary" href={'/'+lang+'/cart'}>Retour</Link>
               <button className="btn btn-primary" onClick={handleCheckout}>Suivant</button>
             </div>
           </div>

@@ -3,8 +3,6 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap-icons/font/bootstrap-icons.css';  // Bootstrap Icons CSS
 import "./globals.css";
-import ModalComponent from "@/components/ModalComponent";
-import ToastComponent from "@/components/ToastComponent";
 import { useEffect } from "react";
 import { useLangStore } from "@/stores/langStore";
 import { usePathname } from "next/navigation";
@@ -24,11 +22,9 @@ export default function RootLayout({
       }
     }, [lang, router, route]);
   return (
-    <html>
+    <html lang={lang}>
       <body id="root">
         {children}
-        <ModalComponent />
-        <ToastComponent />
       </body>
     </html>
   );

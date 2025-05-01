@@ -41,6 +41,7 @@ export interface Command {
   createdAt: Date;
   updatedAt: Date;
   status: CommandStatus;
+  cart: Cart[];
 }
 export type History = {
   id: number; 

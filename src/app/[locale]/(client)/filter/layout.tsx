@@ -6,28 +6,39 @@ import { useParams } from 'next/navigation';
 import { useLangStore } from '@/stores/langStore';
 import Link from 'next/link';
 import { categories, tags } from '@/core/constants';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
-  const { id } = useParams();
+  const params = useParams();
   const { lang } = useLangStore();
+  const route = usePathname();
+
+  useEffect(() => {
+  }, [selected, route]);
+  
 
   return (
     <div className="row">
       <div className="col-12 clearfix mb-3 mb-md-0">
         <div className="float-end">
-          <Link className={`btn btn-${theme}`} href={'/'+lang+'/client'}>
-            Filtres<i className={`bi bi-chevron-up fs-6`}></i>
-          </Link>
+          <input 
+            className={`form-control text-bg-${theme}`} 
+            type="search" 
+            placeholder="Search" 
+            aria-label="Search" 
+            onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
+          />
         </div>
         <ul className="nav nav-tabs mb-3">
           {
             categories.map((category, i) => (
               <li key={i} className="nav-item">
                 <Link
-                  className={`nav-link text-bg-${((id == undefined && category.id == null) || parseInt(id as string) === category.id) ? "primary active" : theme}`} 
-                  href={'/'+lang+'/client/' + (category.id != null ? "filter/"+category.id : 'filter')}
+                  className={`nav-link text-bg-${((params.id == undefined && category.id == null) || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
+                  href={'/'+lang+'/'+ (category.id != null ? "filter/"+category.id : 'filter')}
                 >
                   {category.label}
                 </Link>
@@ -38,16 +49,6 @@ const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       </div>
       <div className="col-12 col-md-4 col-lg-3 mb-3 mb-md-0">
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>
-          <div className="filter-group mb-3">
-            <h6 className="mb-3">Search:</h6>
-            <input 
-              className={`form-control text-bg-${theme}`} 
-              type="search" 
-              placeholder="Search" 
-              aria-label="Search" 
-              onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
-            />
-          </div>
           <div className="filter-group">
             <h6 className="mb-3">Filter by Tag:</h6>
             <p>

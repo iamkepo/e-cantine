@@ -3,16 +3,16 @@ import React, { useEffect } from "react";
 import { toggleTheme, useThemeStore } from "@/stores/themeStore";
 import { changeLang, translateElements, useLangStore } from "@/stores/langStore";
 import { capitalize } from "@/helpers/functions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
+import ModalComponent from "@/components/ModalComponent";
+import ToastComponent from "@/components/ToastComponent";
 
-export default function LocaleLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function LocaleLayout({children}: {children: React.ReactNode}) {
   const { theme } = useThemeStore();
   const { lang } = useLangStore();
   const params = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const rootElement = document.getElementById("root");
@@ -24,7 +24,7 @@ export default function LocaleLayout({
 
 const handleChangeLang = (value: string) => {
   changeLang(value);
-  window.location.replace(window.location.href.replace(`${params?.locale}`, value))
+  router.replace(pathname.replace(`${params?.locale}`, value))
 };
 
   return (
@@ -45,6 +45,8 @@ const handleChangeLang = (value: string) => {
       <div className="col-12 h-100">
         {children}
       </div>
+        <ModalComponent />
+        <ToastComponent />
     </section>
   );
 }

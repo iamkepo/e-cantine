@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useThemeStore } from "@/stores/themeStore";
@@ -10,7 +11,8 @@ import { modal } from "@/stores/appStore";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { History } from "@/core/types";
+import { Article, History } from "@/core/types";
+import ArticleHComponent from "@/components/ArticleHComponent";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -21,21 +23,50 @@ const Page: React.FC = () => {
   const handleDateClick = (info: DateClickArg) => {
     if (getHistoryByDate(info.dateStr)) {
       modal.open(
-        <div className="text-center">
-          <h5 className="mb-3">Commandes du {formatDate(info.dateStr.toString())}</h5>
-          <ul className="list-group">
-            { getHistoryByDate(info.dateStr)?.map((event, index) => (
-              <li key={index} className={`list-group-item d-flex justify-content-between text-bg-${theme}`}>
-                <span>{event.slot} {articlesPrincipal.find(a => a.id === event.plat_id)?.label}</span>
-                <span className={`badge text-bg-${statusColorRender(event.status)}`}>
-                  {statusRender(event.status)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <div className={`card text-bg-${theme}`}>
+          <div className="card-body">
+            <h6 className="card-title">Liste des plats</h6>
+            {getHistoryByDate(info.dateStr) ? (
+              <ul className="list-group">
+                { getHistoryByDate(info.dateStr)?.map((event, idx) => (
+                  <li key={idx} className={`list-group-item text-bg-${theme}`}>
+                    <div className="row">
+                      <div className="col-2">
+                        <img
+                          src={articlesPrincipal.find(a => a.id === event.plat_id)?.img}
+                          alt={articlesPrincipal.find(a => a.id === event.plat_id)?.label}
+                          className="img-fluid rounded"
+                          onClick={() => action(event.plat_id)}
+                        />
+                      </div>
+                      <div className="col-10 d-flex justify-content-between align-items-center">
+                        <span className="fw-bold text-truncate">{articlesPrincipal.find(a => a.id === event.plat_id)?.label}</span>
+                        <button type="button" className="btn btn-sm btn-outline-primary">
+                          <i className="bi bi-arrow-clockwise"></i> Modifier
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="card-text">Aucun plat trouvé pour cette date.</p>
+            )}
+          </div>
+        </div>, 'xl'
       );
     }
+  };
+
+
+  const action = (subId: number) => {
+    modal.open(
+      <ArticleHComponent
+        article={articlesPrincipal.find(a => a.id === subId) as Article}
+        choose={true}
+      />,
+      "xl"
+    );
   };
   const deleteCommand = (commandId: number) => {
     modal.open(

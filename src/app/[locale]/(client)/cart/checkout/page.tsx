@@ -7,7 +7,7 @@ import RecapSection from "@/components/RecapSection";
 import RemovePersonModal from "@/components/RemovePersonModal";
 import { articlesBoisson, articlesPrincipal, articlesSupplement, methods, SHIPPING_RATE, TAX } from "@/core/constants";
 import { modal, toast } from "@/stores/appStore";
-import { clearCart, decrementPerson, incrementPerson, setPerson, setSubtotal } from "@/stores/cartStore";
+import { clearCart, setPerson, setSubtotal } from "@/stores/cartStore";
 import { createCommand, createHistory } from "@/stores/historyStore";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -45,6 +45,7 @@ const Page:React.FC = () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       status: 'paid',
+      cart: cart,
     });
     createHistory(commandId, events || []);
     modal.open(<LoaderComponent counter={1500} callback={() => {
@@ -52,7 +53,7 @@ const Page:React.FC = () => {
       setLoading(false)
       clearCart();
       modal.close();
-      router.push('/'+lang+'/client/orders');
+      router.push('/'+lang+'/orders');
     }} />);
   };
 
@@ -66,24 +67,6 @@ const Page:React.FC = () => {
   useEffect(() => {
     setSubtotal(articlesPrincipal, articlesSupplement, articlesBoisson);
   }, [cart]);
-
-  const addPerson = (): void => {
-    modal.open(
-      <AddPersonModal 
-        onSubmit={email => { incrementPerson(email); modal.close(); }}
-        onCancel={() => modal.close()}
-      />
-    );
-  };
-  const removePerson = (email: string): void => {
-    modal.open(
-      <RemovePersonModal 
-        email={email}
-        onConfirm={() => { decrementPerson(email); modal.close(); }}
-        onCancel={() => modal.close()}
-      />
-    );
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -102,8 +85,8 @@ const Page:React.FC = () => {
           dates={dates}
           shipping={SHIPPING_RATE * (dates?.length || 0)}
           tax={TAX}
-          addPerson={addPerson}
-          removePerson={removePerson}
+          addPerson={() => modal.open(<AddPersonModal />)}
+          removePerson={(email: string) => modal.open(<RemovePersonModal email={email}/>)}
         />
       </div>
       <div className="col-lg-4">
@@ -115,7 +98,7 @@ const Page:React.FC = () => {
           theme={theme}
           loading={loading}
           handlePay={handlePay}
-          addPerson={addPerson}
+          addPerson={() => modal.open(<AddPersonModal />)}
         />
       </div>
     </div>

@@ -250,12 +250,12 @@ export const setPerson = (person: string[]) => {
     persons : person
   });
 }
-export const incrementPerson = (person: string) => {
+export const addPerson = (person: string) => {
   useCartStore.setState((state) => ({
     persons: [...(state.persons || []), person]
   }));
 }
-export const decrementPerson = (person: string) => {
+export const removePerson = (person: string) => {
   useCartStore.setState((state) => ({
     persons: state.persons?.filter(p => p !== person)
   }));

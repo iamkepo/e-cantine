@@ -26,16 +26,16 @@ const Page: React.FC = () => {
     if (!isAuthenticated) {
       router.push('/' + lang + '/login');
     } else {
-      router.push('/' + lang + '/client/cart/planning');
+      router.push('/' + lang + '/cart/planning');
     }
   };
 
   function handleCategory(id: number): void {
-    router.push('/' + lang + '/client/filter/' + id)
+    router.push('/' + lang + '/filter/' + id)
   }
   const clear = () => {
     clearCart();
-    router.push('/' + lang + '/client/filter');
+    router.push('/' + lang + '/filter');
   };
   const filterCartByCategory = (category: number) => {
     return cart.filter((item) => articlesPrincipal.find(a => a.id === item.id)?.category === category); // Ensure `category` exists on items
@@ -88,7 +88,7 @@ const Page: React.FC = () => {
             : 0} XOF
           </p>
           <div className="d-flex justify-content-between">
-            <Link className="btn btn-secondary" href={'/'+lang+'/client/filter'}>Retour</Link>
+            <Link className="btn btn-secondary" href={'/'+lang+'/filter'}>Retour</Link>
             <button
               type="button"
               className="btn btn-success"

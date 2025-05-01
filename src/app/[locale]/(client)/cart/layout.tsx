@@ -3,16 +3,17 @@ import { useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { listStep } from "@/core/constants";
 
 const CartLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { subtotal } = useCartStore();
   const { lang } = useLangStore();
   const router = useRouter();
+  const route = usePathname();
 
   useEffect(() => {
-  }, [subtotal, router]);
+  }, [subtotal, router, route]);
   
   return (
     <>
@@ -21,12 +22,12 @@ const CartLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {listStep.map((item) => (
             <div  
               key={item.id}
-              className={`step-horizontal ${window.location.pathname.includes(item.path)  ? 'active' : ''}`} // Pass list to updateSteps
+              className={`step-horizontal ${route.includes(item.path)  ? 'active' : ''}`} // Pass list to updateSteps
             >
-              <Link className={`step-icon`} href={'/'+lang+'/client/'+item.path}>
+              <Link className={`step-icon`} href={'/'+lang+'/'+item.path}>
                 <i className={`bi bi-${item.icon}`}></i>
               </Link>
-              <div className={`${window.location.pathname.includes(item.path) ? 'text-primary' : 'step-description'}`}>
+              <div className={`${route.includes(item.path) ? 'text-primary' : 'step-description'}`}>
                 {item.label}
               </div>
             </div>

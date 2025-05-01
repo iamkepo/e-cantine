@@ -19,14 +19,17 @@ export default function Page() {
         <div className="row align-items-center mt-3">
           <div className="col-lg-6 pt-5">
             <h1 className="fs-1 text-primary mb-3">Planifiez vos repas</h1>
-            <p className="fs-5 mb-3">Créez des repas sur mesure, des plats sains et des plats savoureux. Planifiez vos repas avec notre plateforme de gestion des repas.</p>
+            <p className="fs-5 mb-3 text-secondary">Créez des repas sur mesure, des plats sains et des plats savoureux. Planifiez vos repas avec notre plateforme de gestion des repas.</p>
             
-            <div className="hero-buttons">
-              <Link href={'/'+lang+'/client'} className="btn btn-primary me-3 mb-2">Commencer</Link>
-              <Link href={'/'+lang+'/client/filter'} className="btn btn-outline-primary mb-2">Voir les produits</Link>
+            <div className="my-5">
+              <Link href={'/'+lang+'/filter'} className="btn btn-lg px-5 py-3 btn-primary text-uppercase">
+                Commencer
+              </Link>
             </div>
 
-            <div className="hero-stats row">
+            <hr />
+      
+            <div className="row">
               <div className="col-4">
                 <div className="stat-item">
                   <div className="stat-number">10K+</div>

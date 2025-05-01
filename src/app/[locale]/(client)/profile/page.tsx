@@ -20,7 +20,7 @@ const Page: React.FC = () => {
         <p className="card-text">
           Preferences: 
         </p>
-        <button className={`btn btn-danger`} onClick={() => {logout(); router.push('/'+lang+'/client')}}>
+        <button className={`btn btn-danger`} onClick={() => {logout(); router.push('/'+lang)}}>
           <i className={`bi bi-box-arrow-right fs-6`}></i> Déconnexion
         </button>
       </div>

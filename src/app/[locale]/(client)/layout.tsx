@@ -34,13 +34,13 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
               <i className={`bi bi-house fs-6`}></i> 
               <span className='d-none d-md-inline-block ms-2'>Accueil</span>
             </Link>
-            <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang+'/client/filter'}>
+            <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang+'/filter'}>
               <i className={`bi bi-list fs-6`}></i> 
-              <span className='d-none d-md-inline-block ms-2'>Plats</span>
+              <span className='d-none d-md-inline-block ms-2'>Menu</span>
             </Link>
             {
               cart.length > 0 ?
-              <Link className={`btn btn-${routeMatch('cart') ? 'primary' : 'outline-secondary'} position-relative`} href={'/'+lang+'/client/cart'}>
+              <Link className={`btn btn-${routeMatch('cart') ? 'primary' : 'outline-secondary'} position-relative`} href={'/'+lang+'/cart'}>
                 <i className={`bi bi-cart fs-6`}></i>
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {cart.length}
@@ -53,22 +53,25 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
             { user ? (
               <>
                 <div className="btn-group" role="group">
-                  <Link className={`btn btn-${routeMatch('menu') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/menu'}>
-                    <i className="bi bi-people"></i>
-                    <span className='d-none d-md-inline-block ms-2'>Menu</span>
-                  </Link>
-                  <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/orders'}>
+                  <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/orders'}>
                     <i className="bi bi-file-earmark"></i>
                     <span className='d-none d-md-inline-block ms-2'>Commandes</span>
                   </Link>
-                  <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/history'}>
+                  <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/history'}>
                     <i className="bi bi-graph-up"></i>
                     <span className='d-none d-md-inline-block ms-2'>Historique</span>
                   </Link>
                 </div>
-                <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/client/profile'}>
-                  <i className={`bi bi-person fs-6`}></i>
-                </Link>
+                <div className="btn-group" role="group">
+                  <Link className={`btn btn-${routeMatch('friends') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/friends'}>
+                    <i className="bi bi-people"></i>
+                    <span className='d-none d-md-inline-block ms-2'>Amis</span>
+                  </Link>
+                  <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/profile'}>
+                    <i className={`bi bi-person fs-6`}></i>
+                    <span className='d-none d-md-inline-block ms-2'>Profil</span>
+                  </Link>
+                </div>
               </>
             ) : (
               <Link className={`btn btn-${routeMatch('login') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/login'}>

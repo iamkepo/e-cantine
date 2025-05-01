@@ -33,7 +33,7 @@ const Page: React.FC = () => {
         if (router?.back) {
           router.back();
         } else {
-          router.push('/'+lang+'/client/orders');
+          router.push('/'+lang+'/orders');
         }
       } else {
         setError("Auth provider not available.");
