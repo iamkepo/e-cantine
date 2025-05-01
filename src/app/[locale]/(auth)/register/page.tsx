@@ -60,9 +60,9 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="col-11 col-md-8 col-lg-6 mx-auto mt-5">
+    <div className="col-11 col-md-6 col-lg-4">
       <form onSubmit={handleSubmit} className={`card p-3 text-bg-${theme}`}>
-        <h2 className="card-title">Register</h2>
+        <h2 className="card-title text-center">Register</h2>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Nom</label>
           <input

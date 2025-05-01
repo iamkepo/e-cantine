@@ -5,7 +5,6 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const Page: React.FC = () => {
   const login = useAuthStore((state: any) => state.login);
@@ -28,13 +27,9 @@ const Page: React.FC = () => {
     setLoading(true);
     try {
       if (login) {
-        await login(email, password, "client");
+        await login(email, password, "admin");
         //navigate to state become
-        if (router?.back) {
-          router.back();
-        } else {
-          router.push('/'+lang+'/orders');
-        }
+        router.push('/'+lang+'/dashboard');
       } else {
         setError("Auth provider not available.");
       }
@@ -81,12 +76,6 @@ const Page: React.FC = () => {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
-        <p className="mt-3">
-          Don&apos;t have an account? 
-          <Link href={'/'+lang+'/register'} className="text-decoration-underline text-primary">
-            Register
-          </Link>
-        </p>
       </form>
     </div>
   );

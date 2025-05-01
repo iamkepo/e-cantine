@@ -212,66 +212,11 @@ a:hover {
   text-decoration: none;
 }
 
-#sidebar {
-  min-height: 100vh;
-  transition: all 0.3s;
-}
-
-.sidebar-hidden {
-  margin-left: -100%;
-}
-
-@media (max-width: 767.98px) {
-  #sidebar {
-      position: fixed;
-      z-index: 1000;
-      width: 80%;
-      max-width: 250px;
-  }
-}
 
 .nav-link {
   transition: all 0.2s;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-}
-
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero-subtitle {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
-.hero-buttons .btn {
-  padding: 0.8rem 2rem;
-  font-weight: 500;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-.btn-primary {
-  border: none;
-}
-
-.btn-outline {
-  border: 2px solid var(--bs-primary);
-  color: var(--bs-primary);
-  background: transparent;
-}
 
 .hero-stats {
   margin-top: 3rem;
