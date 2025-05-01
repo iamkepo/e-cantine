@@ -17,8 +17,6 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (isAuthenticated) {
       if (user?.role !== 'admin') {
         router.push('/'+lang+'/orders');
-      } else {
-        router.push('/'+lang+'/dashboard');
       }
     } else {
       router.push('/'+lang+'/login');

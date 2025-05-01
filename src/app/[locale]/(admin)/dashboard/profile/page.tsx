@@ -4,6 +4,7 @@ import { useThemeStore } from "@/stores/themeStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useLangStore } from "@/stores/langStore";
+import Link from "next/link";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -16,7 +17,12 @@ const Page: React.FC = () => {
       <h3 className="mb-3">Profile</h3>
       <div className={`card text-bg-${theme}`}>
         <div className="card-body">
-          <h5 className="card-title">Profile</h5>
+          <h5 className="card-title d-flex justify-content-between">Informations
+            <Link href={'/'+lang+'/profile'} className={`btn btn-primary`}>
+              <i className={`bi bi-box-arrow-right fs-6`}></i> Client Profile
+            </Link>
+          </h5>
+          <hr />
           <p className="card-text"> Role: {user?.role}</p>
           <p className="card-text"> Email: {user?.email}</p>
 
