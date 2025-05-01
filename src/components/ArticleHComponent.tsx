@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
 import React, { useEffect } from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { useCartStore } from '../stores/cartStore';
 import { Article } from '../core/types';
-import { categoryRender, formateDate, tagRender } from '../helpers/functions';
+import { categoryRender, formatDate, tagRender } from '../helpers/functions';
 
 interface ArticleHComponentProps {
   article: Article;
@@ -77,7 +79,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
             </p>
             <p className="card-text">
               <small className="text-muted">
-                {formateDate(article.date_updated)}
+                {formatDate(article.date_updated?.toString() || '')}
               </small>
             </p>
           </div>

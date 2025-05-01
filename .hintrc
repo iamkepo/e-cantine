@@ -3,12 +3,7 @@
     "development"
   ],
   "hints": {
-    "axe/aria": [
-      "default",
-      {
-        "aria-command-name": "off"
-      }
-    ],
+    "typescript-config/consistent-casing": "off",
     "no-inline-styles": "off",
     "axe/name-role-value": [
       "default",
@@ -16,22 +11,16 @@
         "button-name": "off"
       }
     ],
-    "button-type": "off",
-    "typescript-config/is-valid": "off",
-    "typescript-config/consistent-casing": "off",
-    "typescript-config/strict": "off",
+    "axe/aria": [
+      "default",
+      {
+        "aria-command-name": "off"
+      }
+    ],
     "axe/forms": [
       "default",
       {
         "label": "off"
-      }
-    ],
-    "detect-css-reflows/composite": "off",
-    "detect-css-reflows/paint": "off",
-    "axe/keyboard": [
-      "default",
-      {
-        "nested-interactive": "off"
       }
     ]
   }

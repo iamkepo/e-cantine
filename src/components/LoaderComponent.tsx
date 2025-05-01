@@ -9,14 +9,13 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ counter, callback }) 
   const [time, setTime] = useState(0);
 
   useEffect(() => {
-    callback()
     if (counter) {
       const interval = setInterval(() => {
         setTime((prevTime) => prevTime < 100 ? (prevTime + 1) : 100);
       }, counter / 100); // Adjust the division for appropriate speed
 
       // Clear the interval on component unmount
-      return () => clearInterval(interval);
+      return () => {clearInterval(interval); callback()};
     }
   }, [callback, counter]);
 
