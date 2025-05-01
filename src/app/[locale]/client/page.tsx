@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect } from "react";
 import { filteredArticles, useFilterStore } from "@/stores/filterStore";
 import { useCartStore } from "@/stores/cartStore";
@@ -22,20 +21,19 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
 
   useEffect(() => {
-    
   }, [selected, cart]);
 
 
-  const prev = (index: number) => {
+  const prevLightBox = (index: number) => {
     if (index >= 0) {
       const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
-        <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
+        <LightBox prev={() => prevLightBox(index - 1)} next={() => nextLightBox(index + 1)}>
           <ArticleHComponent 
             article={article} 
             choose={findItem(article.id as number) != undefined} 
-            addItem={(id) => addItemCart(id)} 
-            removeItem={(id) => removeItemCart(id)} 
+            addItem={(id) => {addItemCart(id); openLightBox(article, index);}} 
+            removeItem={(id) => {removeItemCart(id); openLightBox(article, index);}} 
           />
         </LightBox>,
         "xl"
@@ -43,21 +41,35 @@ const Page: React.FC = () => {
     }
   };
 
-  const next = (index: number) => {
+  const nextLightBox = (index: number) => {
     if (index < filteredArticles(articlesPrincipal).length) {
       const article = filteredArticles(articlesPrincipal)[index];
       modal.open(
-        <LightBox prev={() => prev(index - 1)} next={() => next(index + 1)}>
+        <LightBox prev={() => prevLightBox(index - 1)} next={() => nextLightBox(index + 1)}>
           <ArticleHComponent 
             article={article} 
             choose={findItem(article.id as number) != undefined} 
-            addItem={(id) => addItemCart(id)} 
-            removeItem={(id) => removeItemCart(id)} 
+            addItem={(id) => {addItemCart(id); openLightBox(article, index);}} 
+            removeItem={(id) => {removeItemCart(id); openLightBox(article, index);}} 
           />
         </LightBox>,
         "xl"
       );
     }
+  };
+
+  const openLightBox = (article: Article, i: number) => {
+    modal.open(
+      <LightBox prev={() => prevLightBox(i - 1)} next={() => nextLightBox(i + 1)}>
+        <ArticleHComponent 
+          article={article} 
+          choose={findItem(article.id as number) != undefined} 
+          addItem={(id) => {addItemCart(id); openLightBox(article, i);}} 
+          removeItem={(id) => {removeItemCart(id); openLightBox(article, i);}} 
+        />
+      </LightBox>,
+      "xl"
+    );
   };
   return (
     <div className="col-12 clearfix">
@@ -89,17 +101,7 @@ const Page: React.FC = () => {
             >
               <ArticleVComponent 
                 article={article}
-                action={() => modal.open(
-                  <LightBox prev={() => prev(i - 1)} next={() => next(i + 1)}>
-                    <ArticleHComponent 
-                      article={article} 
-                      choose={findItem(article.id as number) != undefined} 
-                      addItem={(id) => addItemCart(id)} 
-                      removeItem={(id) => removeItemCart(id)} 
-                    />
-                  </LightBox>,
-                  "xl"
-                )}
+                action={() => openLightBox(article, i)}
                 choose={findItem(article.id as number) != undefined}
                 addItem={(id) => addItemCart(id)}
                 removeItem={(id) => removeItemCart(id)}

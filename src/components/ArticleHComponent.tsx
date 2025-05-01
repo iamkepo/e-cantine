@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
-import { useCartStore } from '../stores/cartStore';
 import { Article } from '../core/types';
 import { categoryRender, formatDate, tagRender } from '../helpers/functions';
 
@@ -15,11 +14,6 @@ interface ArticleHComponentProps {
 
 const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem, removeItem, choose }) => {
   const { theme } = useThemeStore();
-  const { cart } = useCartStore();
-
-  useEffect(() => {
-    
-  }, [cart]);
   
   return (
     <div className={`card text-bg-${theme}`}>
