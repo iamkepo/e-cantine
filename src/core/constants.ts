@@ -257,7 +257,7 @@ export const tags = [
 export const types = [
   { id: null, label: "Tous les Types" },
   { id: 1, label: "Plat Principal" },
-  { id: 2, label: "Supplement" },
+  { id: 2, label: "Accompagnement" },
   { id: 3, label: "Boisson" },
 ];
 

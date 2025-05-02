@@ -12,17 +12,21 @@ const Page: React.FC = () => {
 
   return (
     <div className="col-12">
-      <h5 className="card-title d-flex justify-content-between">Informations
+      <div className="d-flex justify-content-between">
+        <h4 className="card-title text-break">Informations</h4>
         <Link href={'/'+lang+'/profile'} className={`btn btn-primary`}>
-          <i className={`bi bi-box-arrow-right fs-6`}></i> Client Profile
+          <i className={`bi bi-box-arrow-right fs-6`}></i> 
+          <span className="d-none d-md-inline-block ms-2 fw-bold">Client Profile</span>
         </Link>
-      </h5>
+      </div>
       <hr />
       <p className="card-text"> Role: {user?.role}</p>
       <p className="card-text"> Email: {user?.email}</p>
-
+      <p className="card-text"> Permissions: {user?.permissions?.join(', ')}</p>
+      <hr />
       <button type="button" className={`btn btn-danger`} onClick={() => {logout(); router.push('/'+lang)}}>
-        <i className={`bi bi-box-arrow-right fs-6`}></i> Déconnexion
+        <i className={`bi bi-box-arrow-right fs-6`}></i>   
+        <span className="d-none d-md-inline-block ms-2 fw-bold">Déconnexion</span>
       </button>
     </div>
   );

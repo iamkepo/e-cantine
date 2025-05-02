@@ -8,25 +8,27 @@ const Page: React.FC = () => {
 
   return (
     <div className="col-12">
-      <h4 className="card-title d-flex justify-content-between">Liste des commandes
+      <div className="d-flex justify-content-between">
+        <h4 className="card-title text-break">Liste des commandes</h4>
         <button 
           type="button" 
           className="btn btn-primary" 
           onClick={() => modal.open(<div>creer une commande</div>)}
         >
-          <i className="bi bi-plus"></i> Creer une commande
+          <i className="bi bi-plus"></i> 
+          <span className="d-none d-md-inline-block ms-2 fw-bold">Creer une commande</span>
         </button>
-      </h4>
+      </div>
       <hr />
       <div className="table-responsive">
-        <table className={`table table-striped table-${theme}`}>
+        <table className={`table table-sm table-striped table-${theme}`}>
           <thead className="table-primary">
             <tr>
               <th scope="col">#</th>
               <th scope="col">Date</th>
               <th scope="col">Plats</th>
               <th scope="col text-center">Statut</th>
-              <th scope="col text-end">Actions</th>
+              <th scope="col text-end"></th>
             </tr>
           </thead>
           <tbody className={`table-${theme}`}>
@@ -36,12 +38,8 @@ const Page: React.FC = () => {
               <td>Mark</td>
               <td className="text-center">Mark</td>
               <td className="text-end">
-                <button type="button" className="btn btn-sm btn-outline-primary">
-                  <i className="bi bi-pencil"></i>
-                </button>
-                <button type="button" className="btn btn-sm btn-outline-danger">
-                  <i className="bi bi-trash"></i>
-                </button>
+                <i className="bi bi-pencil text-primary me-2"></i>
+                <i className="bi bi-trash text-danger"></i>
               </td>
             </tr>
           </tbody>

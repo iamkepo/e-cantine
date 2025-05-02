@@ -58,8 +58,14 @@ const Page: React.FC = () => {
       </div>
       <div className="col-lg-4">
         <div className={`card p-3 text-bg-${theme} sticky-lg-top`}>
-          <h5 className="card-title mb-3">Plats manquants</h5>
-          {cart.length > 0 && <button type="button" className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>}
+          <div className="d-flex justify-content-between mb-3">
+            <h5 className="card-title text-break">Plats manquants</h5>
+            {cart.length > 0 && 
+            <button type="button" className="btn btn-sm btn-outline-danger" onClick={clear}>
+              <i className="bi bi-trash"></i>
+              <span className="d-none d-md-inline-block ms-2 fw-bold">Vider le panier</span>
+            </button>}
+          </div>
           <ul className='list-group'>
             {categories.filter(category => category.id != null).map((category) =>
               filterCartByCategory(category.id as number).length == 0 ? (

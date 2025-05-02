@@ -9,14 +9,14 @@ const Page: React.FC = () => {
   return (
     <div className="col-12">
       <div className="d-flex justify-content-between">
-        <h4 className="card-title text-break">Liste des clients</h4>
+        <h4 className="card-title text-break">Liste des admins</h4>
         <button 
           type="button" 
           className="btn btn-primary" 
-          onClick={() => modal.open(<div>creer un client</div>)}
+          onClick={() => modal.open(<div>creer un admin</div>)}
         >
           <i className="bi bi-plus"></i> 
-          <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un client</span>
+          <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un admin</span>
         </button>
       </div>
       <hr />

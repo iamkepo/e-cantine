@@ -15,20 +15,23 @@ const Page: React.FC = () => {
   return (
     <div className={`card text-bg-${theme} mb-3`}>
       <div className="card-body">
-        <h4 className="card-title d-flex justify-content-between">Profile
+        <div className="d-flex justify-content-between">
+          <h4 className="card-title text-break">Profile</h4>
           {user?.role === "admin" && (
             <Link href={'/'+lang+'/dashboard/profile'} className={`btn btn-primary`}>
-              <i className={`bi bi-box-arrow-right fs-6`}></i> Admin Profile
+              <i className={`bi bi-box-arrow-right fs-6`}></i> 
+              <span className="d-none d-md-inline-block ms-2 fw-bold">Admin Profile</span>
             </Link>
           )}
-        </h4>
+        </div>
         <hr />
         <p className="card-text">Email: {user?.email}</p>
         <p className="card-text">Role: {user?.role}</p>
-        <p className="card-text">Preferences: {user?.preferences}</p>
+        <p className="card-text">Preferences: {user?.preferences?.join(', ')}</p>
         <hr />
         <button type="button" className={`btn btn-danger`} onClick={() => {logout(); router.push('/'+lang)}}>
-          <i className={`bi bi-box-arrow-right fs-6`}></i> Déconnexion
+          <i className={`bi bi-box-arrow-right fs-6`}></i> 
+          <span className="d-none d-md-inline-block ms-2 fw-bold">Déconnexion</span>
         </button>
       </div>
     </div>

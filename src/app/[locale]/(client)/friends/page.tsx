@@ -19,15 +19,17 @@ const Page: React.FC = () => {
   return (
     <div className={`card text-bg-${theme} mb-3`}>
       <div className="card-body">
-        <h4 className="card-title d-flex justify-content-between">Mes amis
+        <div className="d-flex justify-content-between">
+          <h4 className="card-title text-break">Mes amis</h4>
           <button 
             type="button" 
             className="btn btn-primary" 
             onClick={() => modal.open(<AddPersonModal />)}
           >
-            Ajouter un ami
+            <i className="bi bi-plus"></i>
+            <span className="d-none d-md-inline-block ms-2 fw-bold">Ajouter un ami</span>
           </button>
-        </h4>
+        </div>
         <hr />
         <h5 className="card-title">Liste amis</h5>
         {persons?.filter((person) => person !== user?.email).length ? (

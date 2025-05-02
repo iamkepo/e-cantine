@@ -5,8 +5,9 @@ const AUTH_KEY = 'mvp_authenticated';
 
 interface User {
   email: string;
-  role: string;
+  role: 'client' | 'admin' | 'broker';
   preferences?: string[];
+  permissions?: string[];
   // Add more fields as needed
 }
 
@@ -14,7 +15,7 @@ interface AuthState {
   isAuthenticated: boolean;
   error: string | null;
   user: User | null;
-  login: (email: string, password: string, role: string) => Promise<void>;
+  login: (email: string, password: string, role: 'client' | 'admin' | 'broker') => Promise<void>;
   logout: () => void;
 }
 
@@ -24,7 +25,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       error: null,
       user: null,
-      login: async (email: string, password: string, role: string) => {
+      login: async (email: string, password: string, role: 'client' | 'admin' | 'broker') => {
         if (email && password && role) {
           set({ isAuthenticated: true, error: null, user: { email, role } });
         } else {
