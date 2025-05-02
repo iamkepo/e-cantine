@@ -16,7 +16,7 @@ type AddModalButtonProps = {
 const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles, findFn, addFn, removeFn }) => {
   const action = () => {
     modal.open(
-      <div className="row row-cols-4 g-3">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
         {(articles || []).map((article, j) => (
           <div key={j} className="col">
             <ArticleVComponent
@@ -27,6 +27,7 @@ const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles,
             />
           </div>
         ))}
+        
       </div>,
       "xl"
     );

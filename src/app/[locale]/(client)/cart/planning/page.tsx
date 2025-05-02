@@ -83,7 +83,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="row">
-      <div className="col-lg-8">
+      <div className="col-lg-8 mb-3 mb-lg-0">
         <div className={`card text-bg-${theme} p-3`}>
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
@@ -129,7 +129,7 @@ const Page: React.FC = () => {
               ))}
             </select>
             <label htmlFor="days-select" className="form-label">Jours de planification :</label>
-            <div className="d-flex justify-content-between mb-3">
+            <div className="d-flex flex-wrap mb-3">
               {days.map((day, i) => (
                 <button
                   key={i}
@@ -148,7 +148,7 @@ const Page: React.FC = () => {
             <hr />
             <div className="d-flex justify-content-between">
               <Link className="btn btn-secondary" href={'/'+lang+'/cart'}>Retour</Link>
-              <button className="btn btn-primary" onClick={handleCheckout}>Suivant</button>
+              <button type="button" className="btn btn-primary" onClick={handleCheckout}>Suivant</button>
             </div>
           </div>
         </div>

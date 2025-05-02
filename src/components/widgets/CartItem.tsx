@@ -19,7 +19,7 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
 
   return (
     <div className="row mb-3">
-      <div className="col-md-2">
+      <div className="col-md-2 mb-3 mb-md-0">
         <img
           src={item.img}
           alt={item.label}
@@ -74,7 +74,7 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
             + priceBoisson(articlesBoisson, cartItem as Cart)).toFixed(2)
           : 0} XOF
         </p>
-        <button className="btn btn-sm btn-outline-danger" onClick={() => removeItemCart(item.id as number)}>
+        <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeItemCart(item.id as number)}>
           <i className="bi bi-trash"></i>
         </button>
       </div>

@@ -30,11 +30,12 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="col-12 h-100">
       <div className="row h-100">
-        <nav className={`col-md-2 h-100`}>
-          <div className={`card text-bg-${theme} sticky-lg-top h-100 p-3`}>
+        <nav className="col-2 h-100">
+          <div className={`card text-bg-${theme} sticky-lg-top h-100 py-3 px-lg-3 px-0 text-lg-start text-center`}>
             <Link className='fs-2' href={'/'+lang}>
-              <span className="text-primary">E</span>-
-              <span className="text-secondary">Cantine</span>
+              <span className="text-primary">E</span>
+              <span className="text-secondary d-none d-md-inline">-</span>
+              <span className="text-secondary d-none d-md-inline">Cantine</span>
             </Link>
             <ul className="nav flex-column mt-3">
               <li className="nav-item mb-3">
@@ -77,7 +78,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
         </nav>
 
-        <div className="col-md-10 pe-4 mt-5">
+        <div className="col mt-5">
           {children}
           <br /><br /><br /><br />
           <br /><br /><br /><br />

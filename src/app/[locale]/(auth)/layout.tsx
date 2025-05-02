@@ -14,7 +14,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated) {
       if (user?.role === 'admin') {
-        router.push('/'+lang+'/admin/dashboard');
+        router.push('/'+lang+'/dashboard');
       } else {
         router.push('/'+lang+'/orders');
       }

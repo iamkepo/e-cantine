@@ -9,7 +9,7 @@ export default function Page() {
   const { lang } = useLangStore();
 
   return (
-    <section className={`vh-100 vw-100 text-bg-${theme}`}>
+    <section className={`min-vh-100 vw-100 text-bg-${theme}`}>
       <div className="col-10 mx-auto pt-5 px-3">
         <Link href={'/'+lang} style={{ fontSize: '4rem' }}>
           <span className="text-primary">E</span>-

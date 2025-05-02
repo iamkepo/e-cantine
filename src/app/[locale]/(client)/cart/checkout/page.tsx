@@ -74,7 +74,7 @@ const Page:React.FC = () => {
 
   return (
       <div className="row">
-        <div className="col-lg-8">
+        <div className="col-lg-8 mb-3 mb-lg-0">
         <RecapSection 
           cart={cart}
           persons={persons || []}

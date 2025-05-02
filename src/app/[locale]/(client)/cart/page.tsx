@@ -42,7 +42,7 @@ const Page: React.FC = () => {
   };
   return (
     <div className="row">
-      <div className="col-lg-8">
+      <div className="col-lg-8 mb-3 mb-lg-0">
         {categories.map((category) =>
           filterCartByCategory(category.id as number).length > 0 ? (
             <div key={category.id} className={`card mb-3 text-bg-${theme}`}>
@@ -59,14 +59,14 @@ const Page: React.FC = () => {
       <div className="col-lg-4">
         <div className={`card p-3 text-bg-${theme} sticky-lg-top`}>
           <h5 className="card-title mb-3">Plats manquants</h5>
-          {cart.length > 0 && <button className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>}
+          {cart.length > 0 && <button type="button" className="position-absolute top-0 end-0 btn btn-sm btn-outline-danger m-3" onClick={clear}>Vider le panier</button>}
           <ul className='list-group'>
             {categories.filter(category => category.id != null).map((category) =>
               filterCartByCategory(category.id as number).length == 0 ? (
                 <li key={category.id} className={`list-group-item bg-${theme}`}>
                   <span className="text-danger">{category.label}</span>
-                  <button className="btn btn-sm btn-outline-success ms-2" onClick={() => handleCategory(category.id as number)}>Ajouter</button>
-                  <button className="btn btn-sm btn-outline-secondary ms-2">Ignorer</button>
+                  <button type="button" className="btn btn-sm btn-outline-success ms-2" onClick={() => handleCategory(category.id as number)}>Ajouter</button>
+                  <button type="button" className="btn btn-sm btn-outline-secondary ms-2">Ignorer</button>
                 </li>
               ) : (
                 <li key={category.id} className={`list-group-item text-bg-${theme}`}>

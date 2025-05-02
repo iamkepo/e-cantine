@@ -23,15 +23,6 @@ const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   return (
     <div className="row">
       <div className="col-12 clearfix mb-3 mb-md-0">
-        <div className="float-end">
-          <input 
-            className={`form-control text-bg-${theme}`} 
-            type="search" 
-            placeholder="Search" 
-            aria-label="Search" 
-            onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
-          />
-        </div>
         <ul className="nav nav-tabs mb-3">
           {
             categories.map((category, i) => (
@@ -46,6 +37,15 @@ const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             ))
           }
         </ul>
+        <div className="float-end-md">
+          <input 
+            className={`form-control text-bg-${theme}`} 
+            type="search" 
+            placeholder="Search" 
+            aria-label="Search" 
+            onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
+          />
+        </div>
       </div>
       <div className="col-12 col-md-4 col-lg-3 mb-3 mb-md-0">
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>

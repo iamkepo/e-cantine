@@ -51,6 +51,7 @@ const ModalComponent: React.FC = () => {
         <div className="modal-content">
           <div className={`modal-body text-bg-${app.modal.size == 'fullscreen' ? 'secondary' : theme}`}>
             <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" className="btn btn-sm btn-outline-danger mb-3 d-block d-md-none" onClick={() => modal.close()}>Fermer</button>
             {app.modal.body}
           </div>
         </div>
