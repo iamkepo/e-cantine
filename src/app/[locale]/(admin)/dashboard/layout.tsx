@@ -9,7 +9,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const pathname = usePathname();
   return (
     <div className="col-12 h-100 px-3">
-      <h3 className="mb-3 text-break">{capitalize(pathname.split('/').pop() || '')}</h3>
+      <h3 className="my-4 text-break">{capitalize(pathname.split('/').pop() || '')}</h3>
       <div className={`card text-bg-${theme} mb-3`}>
         <div className="card-body">
           {children}

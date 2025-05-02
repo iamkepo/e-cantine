@@ -96,7 +96,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
         </nav>
 
-        <div className="col mt-5 h-100 ps-0">
+        <div className="col h-100 ps-0">
           {children}
           <br /><br /><br /><br />
           <br /><br /><br /><br />
