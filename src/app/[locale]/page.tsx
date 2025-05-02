@@ -10,16 +10,16 @@ export default function Page() {
 
   return (
     <section className={`min-vh-100 vw-100 text-bg-${theme}`}>
-      <div className="col-10 mx-auto pt-5 px-3">
+      <div className="col-11 col-lg-10 mx-auto py-5 px-2 px-lg-3">
         <h1 className="fs-1 text-primary mb-3">
-          <Link href={'/'+lang} style={{ fontSize: '3.5rem' }}>
+          <Link href={'/'+lang} style={{ fontSize: '4rem' }}>
             <span className="text-primary">E</span>-
             <span className="text-secondary">Cantine</span>
           </Link>
         </h1>
 
         <div className="row align-items-center mt-3">
-          <div className="col-lg-6 pt-5">
+          <div className="col-lg-6 mt-5">
             <h2 className="fs-1 text-primary mb-3">Planifiez vos repas</h2>
             <p className="fs-5 mb-3 text-secondary">Créez des repas sur mesure, des plats sains et des plats savoureux. Planifiez vos repas avec notre plateforme de gestion des repas.</p>
             
