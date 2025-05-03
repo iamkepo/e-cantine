@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <section className={`min-vh-100 vw-100 text-bg-${theme}`}>
       <div className="col-11 col-lg-10 mx-auto py-5 px-2 px-lg-3">
-        <h1 className="fs-1 text-primary mb-3">
+        <h1 className="fs-1 text-primary mb-3 my-md-4">
           <Link href={'/'+lang} style={{ fontSize: '4rem' }}>
             <span className="text-primary">E</span>-
             <span className="text-secondary">Cantine</span>
