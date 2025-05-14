@@ -1,6 +1,6 @@
 datasource db {
-  provider = "mongodb"
-  url      = env("MONGODB_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -9,14 +9,14 @@ generator client {
 }
 
 model user {
-  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  id    Int   @id @default(autoincrement())
   password String
   name  String 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model admin {
-  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   email String  @unique
   permissions String[] @default([]) @map("permissions")
@@ -24,7 +24,7 @@ model admin {
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model client {
-  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   phone String @unique
   email String?  @unique
@@ -33,14 +33,14 @@ model client {
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model address {
-  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   address String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model article {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   name      String
   price     Float
   description String
@@ -49,46 +49,46 @@ model article {
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model articleTag {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   tagId String @map("tag_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model articleType {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   typeId String @map("type_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model articleCategory {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   categoryId String @map("category_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model tag {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model type {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model category {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model command {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   weeks Int
   checkedDays String[]
   startDate DateTime
@@ -99,20 +99,20 @@ model command {
   status String @default("pending") @map("status")
 }
 model menu {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   commandId String @map("command_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model menuArticle {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   menuId String @map("menu_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model planningEvent {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   menuArticleId String @map("menu_article_id")
   count Int
   date String
@@ -122,7 +122,7 @@ model planningEvent {
   updatedAt DateTime @default(now()) @map("updated_at")
 }
 model commandTransaction {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int   @id @default(autoincrement())
   commandId String @map("command_id")
   subtotal Float
   shipping Float

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prisma": "npx prisma migrate dev --name init",
+    "build": "next build && npx prisma migrate dev --name init",
     "start": "next start",
-    "lint": "next lint",
-    "prisma": "npx prisma generate && npx prisma db push"
+    "lint": "next lint"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.17",
