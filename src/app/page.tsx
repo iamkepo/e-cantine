@@ -1,11 +1,15 @@
 "use client";
+
 import React from "react";
 import { useThemeStore } from "@/stores/themeStore";
 import { useEffect } from "react";
 import Link from "next/link";
 import { useLangStore } from "@/stores/langStore";
+import LoaderComponent from "@/components/LoaderComponent";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const { theme } = useThemeStore();
   const { lang } = useLangStore();
   
@@ -18,6 +22,12 @@ export default function Page() {
         <span className="text-primary">E</span>-
         <span className="text-secondary">Cantine</span>
       </Link>
+      <div className="mt-3">
+        <LoaderComponent 
+          counter={1000} 
+          callback={() => router.push('/'+lang)} 
+        />
+      </div>
     </div>
   );
 }

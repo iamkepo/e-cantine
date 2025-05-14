@@ -3,15 +3,13 @@ import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import { HttpRequestContentType, HttpRequestType } from '../enums';
 import authLocal from "./authLocal";
 
-const env = { public: { apiUrl: '' } };
-
 export const client = axios.create();
 class Request {   
   public config: any;
 
   constructor() {
     this.config = {
-      baseURL: env.public.apiUrl,
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: {
         'content-type': HttpRequestContentType.APPLICATION_JSON,
       },
@@ -42,11 +40,11 @@ class Request {
     const originalRequest = error.config;
     if (error.response?.status === 401 ) {    
        
-      if (error.config.baseURL == env.public.apiUrl+'/auth/signin') { 
+      if (error.config.baseURL == process.env.NEXT_PUBLIC_API_URL+'/auth/signin') { 
         return Promise.reject(error);
       }
       
-      if (originalRequest?._retry !== true && error.config.baseURL != env.public.apiUrl+'/auth/refresh') {
+      if (originalRequest?._retry !== true && error.config.baseURL != process.env.NEXT_PUBLIC_API_URL+'/auth/refresh') {
 
         originalRequest._retry = true;
         const refreshToken = await authLocal.getRefreshToken();
@@ -56,7 +54,7 @@ class Request {
           return Promise.reject(error);
         }
 
-        await axios.post(env.public.apiUrl+'/auth/refresh', {refreshToken: refreshToken})
+        await axios.post(process.env.NEXT_PUBLIC_API_URL+'/auth/refresh', {refreshToken: refreshToken})
         .then(async (response: { data: { accessToken: string; refreshToken: string; }; }) => {
           client.defaults.headers.common['authorization'] = `Bearer ${response.data.accessToken}`;
           originalRequest.headers['authorization'] = `Bearer ${response.data.accessToken}`;

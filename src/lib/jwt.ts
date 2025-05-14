@@ -1,20 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use server";
-
 import jwt from "jsonwebtoken";
 
-if (!process.env.JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined");
+if (!process.env.ACCESS_TOKEN_SECRET) {
+  throw new Error("ACCESS_TOKEN_SECRET is not defined");
 }
 
-export const generateToken = (user: any) => {
-  const token = jwt.sign({ user }, process.env.JWT_SECRET as string, {
-    expiresIn: "1h",
-  });
-  return token;
-};
+if (!process.env.REFRESH_TOKEN_SECRET) {
+  throw new Error("REFRESH_TOKEN_SECRET is not defined");
+}
 
-export const decodeToken = (token: string) => {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-  return decoded;
-};
+export function generateAccessToken(user: string | object) {
+  return jwt.sign(user,( process.env.ACCESS_TOKEN_SECRET as string), { expiresIn: '15m' }); // Lower expiration for access token
+}
+
+export function generateRefreshToken(user: string | object) {
+  return jwt.sign(user, (process.env.REFRESH_TOKEN_SECRET as string), { expiresIn: '1d' }); // Expiration set to 1 day for refresh token
+}

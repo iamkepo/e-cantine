@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use server";
 
 import { prisma } from "@/lib/prisma";
@@ -5,14 +7,14 @@ import { prisma } from "@/lib/prisma";
 /**
  * @swagger
  * tags:
- *   name: Auth
- *   description: API for managing authentication
+ *   name: Users
+ *   description: API for managing users
  *
  * @swagger
- * /api/v1/auth/register:
+ * /api/v1/users/create:
  *   post:
  *     summary: Créer un nouvel utilisateur
- *     tags: [Auth]
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -37,11 +39,6 @@ import { prisma } from "@/lib/prisma";
 export const POST = async (req: Request) => {
   const body = await req.json();
   try {
-    const existingClient = await prisma.client.findUnique({ where: { email: body.email } }); 
-
-    if (existingClient) {
-      return new Response(JSON.stringify({ error: 'User with this email already exists' }), { status: 409 });
-    }
     delete body.confirmPassword;
     const credentialsUser = { 
       ...body,
@@ -50,11 +47,10 @@ export const POST = async (req: Request) => {
     };
 
     const newUser = await prisma.user.create({ data: credentialsUser });
-    const newClient = await prisma.client.create({ data: { ...credentialsUser, userId: newUser.id } });
 
-    return new Response(JSON.stringify({user: newUser, client: newClient}), { status: 201 });
+    return new Response(JSON.stringify({user: newUser}), { status: 201 });
 
-  } catch (error) {
+  } catch (error: any) {
     return new Response(JSON.stringify({ error: `Registration failed: ${error}` }), { status: 400 });
   }
 };

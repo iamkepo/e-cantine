@@ -256,14 +256,16 @@ export const tags = [
 
 export const types = [
   { id: null, label: "Tous les Types" },
-  { id: 1, label: "Plat Principal" },
-  { id: 2, label: "Accompagnement" },
-  { id: 3, label: "Boisson" },
+  { id: 1, label: "Plat Principal" }, // dish
+  { id: 2, label: "Accompagnement" }, // side
+  { id: 3, label: "Boisson" }, // drink
+  { id: 4, label: "Supplément" }, // supplement
+  { id: 5, label: "Dessert" }, // dessert
 ];
 
 export const categories = [
   { id: null, label: "Toutes les Catégories" },
-  { id: 1, label: "Petit Déjeuner", hour: "08:00" },
+  { id: 1, label: "Petit Déjeuner", hour: "08:00" }, // breakfast
   { id: 2, label: "Déjeuner", hour: "12:00" },
   { id: 3, label: "Goûter", hour: "16:00" },
   { id: 4, label: "Dîner", hour: "19:00" },

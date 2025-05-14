@@ -1,0 +1,136 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output = "./prisma/generated"
+}
+
+model user {
+  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  password String
+  name  String 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model admin {
+  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @map("user_id")
+  email String  @unique
+  permissions String[] @default([]) @map("permissions")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model client {
+  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @map("user_id")
+  phone String @unique
+  email String?  @unique
+  preferences String[] @default([]) @map("preferences")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model address {
+  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @map("user_id")
+  address String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model article {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  price     Float
+  description String
+  image String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model articleTag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  articleId String @map("article_id")
+  tagId String @map("tag_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model articleType {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  articleId String @map("article_id")
+  typeId String @map("type_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model articleCategory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  articleId String @map("article_id")
+  categoryId String @map("category_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model tag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model type {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model command {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  weeks Int
+  checkedDays String[]
+  startDate DateTime
+  userId String @map("user_id")
+  address String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  status String @default("pending") @map("status")
+}
+model menu {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  commandId String @map("command_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model menuArticle {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  articleId String @map("article_id")
+  menuId String @map("menu_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model planningEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  menuArticleId String @map("menu_article_id")
+  count Int
+  date String
+  slot String
+  status String @default("pending") @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+model commandTransaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  commandId String @map("command_id")
+  subtotal Float
+  shipping Float
+  tax Float
+  total Float
+  type String @default("payment") @map("type")
+  promoCode String?
+  status String @default("pending") @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+}

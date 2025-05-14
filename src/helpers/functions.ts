@@ -52,3 +52,12 @@ export const formatDate = (date: string) => {
     year: "numeric",
   });
 };
+export function generateRandomString(minLength: number, maxLength: number) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}

@@ -2,22 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
+import { api } from "@/services";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC = () => {
   const router = useRouter();
   const { lang } = useLangStore();
   const { theme } = useThemeStore();
-
+  const [error, setError] = useState('');
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-  const [error, setError] = useState({
     name: '',
     email: '',
     password: '',
@@ -31,38 +26,27 @@ const Page: React.FC = () => {
       [e.target.name]: e.target.value
     }));
   };
-  const handleError = (name: string, message: string) => {
-    setError(prev => ({
-      ...prev,
-      [name]: message
-    }));
-  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    handleError('name', '');
-    handleError('email', '');
-    handleError('password', '');
-    handleError('confirmPassword', '');
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
-      handleError("name", "Please fill in all fields.");
-      return;
-    }
-    if (form.password !== form.confirmPassword) {
-      handleError("confirmPassword", "Passwords do not match.");
-      return;
-    }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      // In a real app, registration logic would go here
-      router.push('/' + lang + '/login');
-    }, 1000);
+    api.register(form)
+      .then((response) => {
+        console.log(response);
+        router.push('/' + lang + '/login');
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.toString());
+      }).finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <div className="col-11 col-md-6 col-lg-4">
       <form onSubmit={handleSubmit} className={`card p-3 text-bg-${theme}`}>
         <h2 className="card-title text-center">Register</h2>
+        <p className="text-danger">{error}</p>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Nom</label>
           <input
@@ -74,7 +58,6 @@ const Page: React.FC = () => {
             className="form-control"
             autoComplete="name"
           />
-          {error.name && <div className="text-danger">{error.name}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
@@ -87,7 +70,6 @@ const Page: React.FC = () => {
             className="form-control"
             autoComplete="email"
           />
-          {error.email && <div className="text-danger">{error.email}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
@@ -100,7 +82,6 @@ const Page: React.FC = () => {
             className="form-control"
             autoComplete="new-password"
           />
-          {error.password && <div className="text-danger">{error.password}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
@@ -113,7 +94,6 @@ const Page: React.FC = () => {
             className="form-control"
             autoComplete="new-password"
           />
-          {error.confirmPassword && <div className="text-danger">{error.confirmPassword}</div>}
         </div>
         <button
           type="submit"
