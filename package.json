@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:dev": "npx prisma migrate reset --force && npx prisma migrate dev --skip-generate && npx prisma generate && next build",
-    "build:prod": "npx prisma generate && npx prisma migrate deploy && next build",
+    "build:dev": "npx prisma migrate reset --force && npx prisma migrate dev --skip-generate && npx prisma generate --no-engine && next build",
+    "build:prod": "npx prisma generate --no-engine && npx prisma migrate deploy && next build",
     "build": "if [ \"$NODE_ENV\" = \"production\" ]; then yarn build:prod; else yarn build:dev; fi",
     "start": "next start",
     "lint": "next lint"

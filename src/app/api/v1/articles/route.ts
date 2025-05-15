@@ -39,12 +39,12 @@ export const GET = async (req: Request) => {
   const typeId = searchParams.get('typeId') || '0';
 
   try {
-    const types = await prisma.articleType.findMany({
+    const types = await prisma.articleTypes.findMany({
       where: {
         typeId,
       },
     });
-    const articles = await prisma.article.findMany({
+    const articles = await prisma.articles.findMany({
       where: {
         id: {
           in: types.map((type: any) => type.articleId),

@@ -42,7 +42,7 @@ export const POST = async (req: Request) => {
       updatedAt: new Date(),
     };
 
-    const newArticle = await prisma.article.create({ data: credentialsArticle });
+    const newArticle = await prisma.articles.create({ data: credentialsArticle });
 
     return new Response(JSON.stringify({article: newArticle}), { status: 201 });
 

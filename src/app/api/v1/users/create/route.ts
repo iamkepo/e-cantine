@@ -46,7 +46,7 @@ export const POST = async (req: Request) => {
       updatedAt: new Date(),
     };
 
-    const newUser = await prisma.user.create({ data: credentialsUser });
+    const newUser = await prisma.users.create({ data: credentialsUser });
 
     return new Response(JSON.stringify({user: newUser}), { status: 201 });
 

@@ -36,7 +36,7 @@ export const GET = async (req: Request) => {
   const take = parseInt(searchParams.get('take') || '10', 10);
 
   try {
-    const users = await prisma.user.findMany({
+    const users = await prisma.users.findMany({
       skip,
       take,
     });

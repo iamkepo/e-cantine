@@ -20,7 +20,7 @@ import { prisma } from "@/lib/prisma";
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               phone:
  *                 type: string
  *               password:
  *                 type: string
@@ -30,17 +30,17 @@ import { prisma } from "@/lib/prisma";
  *       201:
  *         description: Utilisateur créé avec succès
  *       409:
- *         description: Utilisateur avec ce email existe déjà
+ *         description: Utilisateur avec ce phone existe déjà
  *       400:
  *         description: Erreur lors de la création de l'utilisateur
  */
 export const POST = async (req: Request) => {
   const body = await req.json();
   try {
-    const existingClient = await prisma.client.findUnique({ where: { email: body.email } }); 
+    const existingClient = await prisma.clients.findUnique({ where: { phone: body.phone } }); 
 
     if (existingClient) {
-      return new Response(JSON.stringify({ error: 'User with this email already exists' }), { status: 409 });
+      return new Response(JSON.stringify({ error: 'User with this phone already exists' }), { status: 409 });
     }
     delete body.confirmPassword;
     const credentialsUser = { 
@@ -49,8 +49,8 @@ export const POST = async (req: Request) => {
       updatedAt: new Date(),
     };
 
-    const newUser = await prisma.user.create({ data: credentialsUser });
-    const newClient = await prisma.client.create({ data: { ...credentialsUser, userId: newUser.id } });
+    const newUser = await prisma.users.create({ data: credentialsUser });
+    const newClient = await prisma.clients.create({ data: { ...credentialsUser, userId: newUser.id } });
 
     return new Response(JSON.stringify({user: newUser, client: newClient}), { status: 201 });
 

@@ -23,7 +23,7 @@ import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               phone:
  *                 type: string
  *               password:
  *                 type: string
@@ -37,8 +37,9 @@ import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
  */
 
 export const POST = async (req: Request) => {
+  const body = await req.json();
   try {
-    const existingClient = await prisma.client.findUnique({ where: { email: (await req.json()).email } });  
+    const existingClient = await prisma.clients.findUnique({ where: { phone: body.phone } });  
 
     if (!existingClient) {
       return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
