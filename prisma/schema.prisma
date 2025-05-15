@@ -8,14 +8,14 @@ generator client {
   output = "./prisma/generated"
 }
 
-model user {
+model users {
   id    Int   @id @default(autoincrement())
   password String
   name  String 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model admin {
+model admins {
   id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   email String  @unique
@@ -23,7 +23,7 @@ model admin {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model client {
+model clients {
   id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   phone String @unique
@@ -31,14 +31,14 @@ model client {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model address {
+model addressClients {
   id    Int     @id @default(autoincrement())
   userId String @map("user_id")
   address String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model article {
+model articles {
   id        Int   @id @default(autoincrement())
   name      String
   price     Float
@@ -47,46 +47,46 @@ model article {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model articleTag {
+model articleTags {
   id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   tagId String @map("tag_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model articleType {
+model articleTypes {
   id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   typeId String @map("type_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model articleCategory {
+model articleCategories {
   id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   categoryId String @map("category_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model tag {
+model tags {
   id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model type {
+model types {
   id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model category {
+model categories {
   id        Int   @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model command {
+model commands {
   id        Int   @id @default(autoincrement())
   weeks Int
   checkedDays String[]
@@ -97,20 +97,20 @@ model command {
   updatedAt DateTime @default(now()) @map("updated_at")
   status String @default("pending") @map("status")
 }
-model menu {
+model menus {
   id        Int   @id @default(autoincrement())
   commandId String @map("command_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model menuArticle {
+model menuArticles {
   id        Int   @id @default(autoincrement())
   articleId String @map("article_id")
   menuId String @map("menu_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model planningEvent {
+model planningEvents {
   id        Int   @id @default(autoincrement())
   menuArticleId String @map("menu_article_id")
   count Int
@@ -120,7 +120,7 @@ model planningEvent {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 }
-model commandTransaction {
+model commandTransactions {
   id        Int   @id @default(autoincrement())
   commandId String @map("command_id")
   subtotal Float

@@ -9,6 +9,21 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "overrides": {
+    "swagger-ui-react": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
+    "react-copy-to-clipboard": {
+      "react": "^19.0.0"
+    },
+    "react-debounce-input": {
+      "react": "^19.0.0"
+    },
+    "react-inspector": {
+      "react": "^19.0.0"
+    }
+  },
   "dependencies": {
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
