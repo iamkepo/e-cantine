@@ -9,9 +9,9 @@ import authController from "@/controllers/authController";
  *   description: API for managing authentication
  *
  * @swagger
- * /api/v1/auth/refresh:
+ * /api/v1/auth/login/admin:
  *   post:
- *     summary: Obtenir un nouveau token d'accès
+ *     summary: Se connecter
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -20,16 +20,18 @@ import authController from "@/controllers/authController";
  *           schema:
  *             type: object
  *             properties:
- *               refreshToken:
+ *               email:
+ *                 type: string
+ *               password:
  *                 type: string
  *     responses:
  *       200:
- *         description: Token d'accès et token de rafraîchissement
- *       401:
- *         description: Token invalide
+ *         description: Utilisateur connecté avec succès
+ *       404:
+ *         description: Utilisateur non trouvé
  *       500:
  *         description: Erreur interne du serveur
  */
 export const POST = async (req: Request) => {
-  authController.refresh(req);
+  authController.loginAdmin(req);
 };

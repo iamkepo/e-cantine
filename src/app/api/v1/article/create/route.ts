@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import articlesController from "@/controllers/articlesController";
 
 /**
  * @swagger
@@ -34,19 +32,5 @@ import { prisma } from "@/lib/prisma";
  */
 
 export const POST = async (req: Request) => {
-  const body = await req.json();
-  try {
-    const credentialsArticle = { 
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const newArticle = await prisma.articles.create({ data: credentialsArticle });
-
-    return new Response(JSON.stringify({article: newArticle}), { status: 201 });
-
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: `Article creation failed: ${error}` }), { status: 400 });
-  }
+  articlesController.createArticle(req);
 };

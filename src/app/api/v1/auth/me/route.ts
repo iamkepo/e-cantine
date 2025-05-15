@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { NextRequest } from "next/server";
+import authController from "@/controllers/authController";
 
 /**
  * @swagger
@@ -22,10 +21,5 @@ import { NextRequest } from "next/server";
  *         description: Erreur interne du serveur
  */
 export const GET = async (req: NextRequest) => {
-  try {
-    const user = req.headers.get("user");
-    return new Response(user as string);
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
-  }
+  authController.me(req);
 };

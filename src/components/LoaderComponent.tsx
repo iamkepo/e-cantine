@@ -22,8 +22,8 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ counter, callback }) 
 
   return (
     <div className='p-3 text-center'>
-      <h3 className='mb-3'>Chargement...</h3>
-      <p className='fs-6 fw-medium'>Veuillez patienter...</p>
+      {/* <h3 className='mb-3'>Chargement...</h3>
+      <p className='fs-6 fw-medium'>Veuillez patienter...</p> */}
       <svg width="100" height="100" viewBox="0 0 100 100" className="circular-progress">
         <circle className="bg"></circle>
         <circle className="fg"></circle>

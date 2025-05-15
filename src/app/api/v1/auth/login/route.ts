@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
+import authController from "@/controllers/authController";
 
 /**
  * @swagger
@@ -37,19 +34,5 @@ import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
  */
 
 export const POST = async (req: Request) => {
-  const body = await req.json();
-  try {
-    const existingClient = await prisma.clients.findUnique({ where: { phone: body.phone } });  
-
-    if (!existingClient) {
-      return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
-    }
-    
-    const accessToken = generateAccessToken(existingClient);
-    const refreshToken = generateRefreshToken(existingClient);
-
-    return new Response(JSON.stringify({ accessToken, refreshToken }), { status: 200 });
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: 'Login failed: Internal Server Error' }), { status: 500 });
-  }
+  authController.login(req);
 };

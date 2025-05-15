@@ -22,10 +22,10 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
     translateElements()
   }, [theme, lang]);
 
-const handleChangeLang = (value: string) => {
-  changeLang(value);
-  router.replace(pathname.replace(`${params?.locale}`, value))
-};
+  const handleChangeLang = (value: string) => {
+    changeLang(value);
+    router.replace(pathname.replace(`${params?.locale}`, value))
+  };
 
   return (
     <section className="container-fluid vh-100 p-0">

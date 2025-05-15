@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import usersController from "@/controllers/usersController";
 /**
  * @swagger
  * tags:
@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
  *   description: API for managing users
  *
  * @swagger 
- * /api/v1/users:
+ * /api/v1/user/list:
  *   get:
  *     summary: Récupérer la liste des utilisateurs
  *     tags: [Users]
@@ -31,19 +31,5 @@ import { prisma } from "@/lib/prisma";
  */
 
 export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const skip = parseInt(searchParams.get('skip') || '0', 10);
-  const take = parseInt(searchParams.get('take') || '10', 10);
-
-  try {
-    const users = await prisma.users.findMany({
-      skip,
-      take,
-    });
-
-    return new Response(JSON.stringify(users), { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return new Response('Internal Server Error', { status: 500 });
-  }
+  usersController.getUsers(req);
 };

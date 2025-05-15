@@ -1,6 +1,6 @@
 "use server";
 
-import swaggerSpec from '@/lib/swagger';
+import swaggerSpec from '@/libs/swagger';
 
 export const GET = async () => {
   return new Response(JSON.stringify(swaggerSpec), {

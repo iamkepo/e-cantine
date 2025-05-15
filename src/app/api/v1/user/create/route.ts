@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import usersController from "@/controllers/usersController";
 
 /**
  * @swagger
@@ -37,20 +35,5 @@ import { prisma } from "@/lib/prisma";
  *         description: Erreur lors de la création de l'utilisateur
  */
 export const POST = async (req: Request) => {
-  const body = await req.json();
-  try {
-    delete body.confirmPassword;
-    const credentialsUser = { 
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const newUser = await prisma.users.create({ data: credentialsUser });
-
-    return new Response(JSON.stringify({user: newUser}), { status: 201 });
-
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: `Registration failed: ${error}` }), { status: 400 });
-  }
+  usersController.createUser(req);
 };

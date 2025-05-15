@@ -33,6 +33,7 @@
     "@popperjs/core": "^2.11.8",
     "@prisma/client": "^6.7.0",
     "axios": "^1.7.9",
+    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "jsonwebtoken": "^9.0.2",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bcrypt": "^5.0.2",
     "@types/bootstrap": "^5.2.10",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",

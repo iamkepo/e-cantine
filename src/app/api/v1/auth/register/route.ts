@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import authController from "@/controllers/authController";
 
 /**
  * @swagger
@@ -35,26 +35,5 @@ import { prisma } from "@/lib/prisma";
  *         description: Erreur lors de la création de l'utilisateur
  */
 export const POST = async (req: Request) => {
-  const body = await req.json();
-  try {
-    const existingClient = await prisma.clients.findUnique({ where: { phone: body.phone } }); 
-
-    if (existingClient) {
-      return new Response(JSON.stringify({ error: 'User with this phone already exists' }), { status: 409 });
-    }
-    delete body.confirmPassword;
-    const credentialsUser = { 
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const newUser = await prisma.users.create({ data: credentialsUser });
-    const newClient = await prisma.clients.create({ data: { ...credentialsUser, userId: newUser.id } });
-
-    return new Response(JSON.stringify({user: newUser, client: newClient}), { status: 201 });
-
-  } catch (error) {
-    return new Response(JSON.stringify({ error: `Registration failed: ${error}` }), { status: 400 });
-  }
+  authController.register(req);
 };
