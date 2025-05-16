@@ -15,7 +15,7 @@ const swaggerDefinition = {
   servers: [
     {
       url: process.env.NEXT_PUBLIC_API_URL,
-      description: 'Local API Server',
+      description: process.env.NODE_ENV == 'development' ? 'Local API Server' : 'Online API Server',
     },
   ],
   components: {
