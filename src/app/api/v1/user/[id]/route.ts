@@ -29,7 +29,7 @@ import usersController from "@/controllers/usersController";
  *         description: Erreur interne du serveur
  */
 export async function GET(req: Request) {
-  usersController.getUser(req);
+  return usersController.getUser(req);
 }
 
 /**
@@ -59,7 +59,7 @@ export async function GET(req: Request) {
  *         description: Erreur interne du serveur
  */
 export async function PATCH(req: Request) {
-  usersController.patchUser(req);
+  return usersController.patchUser(req);
 }
 
 /**
@@ -89,7 +89,7 @@ export async function PATCH(req: Request) {
  *         description: Erreur interne du serveur
  */
 export async function PUT(req: Request) {
-  usersController.updateUser(req);
+  return usersController.updateUser(req);
 }
 
 /**
@@ -119,5 +119,5 @@ export async function PUT(req: Request) {
  *         description: Erreur interne du serveur
  */
 export async function DELETE(req: Request) {
-  usersController.deleteUser(req);
+  return usersController.deleteUser(req);
 }

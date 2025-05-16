@@ -30,7 +30,7 @@ import articlesController from "@/controllers/articlesController";
  */
 
 export const GET = async (req: Request) => {
-  articlesController.getArticle(req);
+  return articlesController.getArticle(req);
 };
 
 /**
@@ -60,7 +60,7 @@ export const GET = async (req: Request) => {
  *         description: Erreur interne du serveur
  */
 export const PATCH = async (req: Request) => {
-  articlesController.patchArticle(req);
+  return articlesController.patchArticle(req);
 };
 
 /**
@@ -90,7 +90,7 @@ export const PATCH = async (req: Request) => {
  *         description: Erreur interne du serveur
  */
 export const PUT = async (req: Request) => {
-  articlesController.updateArticle(req);
+  return articlesController.updateArticle(req);
 };
 
 /**
@@ -120,5 +120,5 @@ export const PUT = async (req: Request) => {
  *         description: Erreur interne du serveur
  */
 export const DELETE = async (req: Request) => {
-  articlesController.deleteArticle(req);
+  return articlesController.deleteArticle(req);
 };

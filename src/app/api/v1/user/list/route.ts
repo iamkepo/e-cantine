@@ -31,5 +31,5 @@ import usersController from "@/controllers/usersController";
  */
 
 export const GET = async (req: Request) => {
-  usersController.getUsers(req);
+  return usersController.getUsers(req);
 };

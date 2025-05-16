@@ -35,5 +35,5 @@ import usersController from "@/controllers/usersController";
  *         description: Erreur lors de la création de l'utilisateur
  */
 export const POST = async (req: Request) => {
-  usersController.createUser(req);
+  return usersController.createUser(req);
 };

@@ -32,5 +32,5 @@ import articlesController from "@/controllers/articlesController";
  */
 
 export const POST = async (req: Request) => {
-  articlesController.createArticle(req);
+  return articlesController.createArticle(req);
 };

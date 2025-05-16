@@ -21,5 +21,5 @@ import authController from "@/controllers/authController";
  *         description: Erreur interne du serveur
  */
 export const GET = async (req: NextRequest) => {
-  authController.me(req);
+  return authController.me(req);
 };

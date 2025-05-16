@@ -34,5 +34,5 @@ import authController from "@/controllers/authController";
  */
 
 export const POST = async (req: Request) => {
-  authController.login(req);
+  return authController.login(req);
 };

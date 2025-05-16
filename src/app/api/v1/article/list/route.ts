@@ -32,5 +32,5 @@ import articlesController from "@/controllers/articlesController";
  */
 
 export const GET = async (req: Request) => {
-  articlesController.getArticles(req);
+  return articlesController.getArticles(req);
 };

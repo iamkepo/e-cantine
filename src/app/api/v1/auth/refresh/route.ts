@@ -31,5 +31,5 @@ import authController from "@/controllers/authController";
  *         description: Erreur interne du serveur
  */
 export const POST = async (req: Request) => {
-  authController.refresh(req);
+  return authController.refresh(req);
 };

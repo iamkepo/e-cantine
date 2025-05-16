@@ -35,5 +35,5 @@ import authController from "@/controllers/authController";
  *         description: Erreur lors de la création de l'utilisateur
  */
 export const POST = async (req: Request) => {
-  authController.register(req);
+  return authController.register(req);
 };
