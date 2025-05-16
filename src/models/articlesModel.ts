@@ -27,7 +27,7 @@ class ArticlesModel {
     }
   }
 
-  getArticles = async (params: { typeId: string, skip: number, take: number }) => {
+  getArticles = async (params: { typeId: number, skip: number, take: number }) => {
     try {
       const { typeId, skip, take } = params;
       const typesList = await this.articleTypes.findMany({
@@ -54,7 +54,7 @@ class ArticlesModel {
     }
   }
 
-  getArticle = async (id: string) => {
+  getArticle = async (id: number) => {
     try {
       const article = await this.articles.findUnique({ where: { id } });
       if (!article) {
@@ -73,7 +73,7 @@ class ArticlesModel {
     }
   }
 
-  patchArticle = async (id: string, patch: {attr: string, val: any}) => {
+  patchArticle = async (id: number, patch: {attr: string, val: any}) => {
     try {
       this.checkEditableAttribute(patch.attr);
       const article = await this.articles.update({ where: { id }, data: { [patch.attr]: patch.val } });
@@ -87,7 +87,7 @@ class ArticlesModel {
     }
   }
 
-  updateArticle = async (id: string, credentials: any) => {
+  updateArticle = async (id: number, credentials: any) => {
     try {
       const article = await this.articles.update({ where: { id }, data: credentials });
       if (!article) {
@@ -100,7 +100,7 @@ class ArticlesModel {
     }
   }
 
-  deleteArticle = async (id: string) => {
+  deleteArticle = async (id: number) => {
     try {
       const article = await this.articles.delete({ where: { id } });
       return article;

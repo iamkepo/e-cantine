@@ -62,7 +62,7 @@ class ClientsModel {
     }
   }
 
-  updateClient = async (id: string, credentials: any) => {
+  updateClient = async (id: number, credentials: any) => {
     try {
       const client = await this.clients.update({ where: { id }, data: credentials });
       if (!client) {
@@ -75,7 +75,7 @@ class ClientsModel {
     }
   }
 
-  deleteClient = async (id: string) => {
+  deleteClient = async (id: number) => {
     try {
       const client = await this.clients.delete({ where: { id } });
       return client;

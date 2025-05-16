@@ -9,7 +9,7 @@ import usersController from "@/controllers/usersController";
  *   description: API for managing users
  *
  * @swagger
- * /api/v1/users/create:
+ * /api/v1/user/create:
  *   post:
  *     summary: Créer un nouvel utilisateur
  *     tags: [Users]

@@ -18,7 +18,7 @@ const articlesController = {
     const { searchParams } = new URL(req.url);
     const skip = parseInt(searchParams.get('skip') || '0', 10);
     const take = parseInt(searchParams.get('take') || '10', 10);
-    const typeId = searchParams.get('typeId') || '0';
+    const typeId = parseInt(searchParams.get('typeId') || '0', 10);
   
     try {
       const articles = await articlesModel.getArticles({ typeId, skip, take });
@@ -31,7 +31,7 @@ const articlesController = {
 
   getArticle: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     try {
       const article = await articlesModel.getArticle(id);
       return new Response(JSON.stringify({article: article}), { status: 200 });
@@ -43,7 +43,7 @@ const articlesController = {
 
   patchArticle: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     const {attr, val} = await req.json();
     try {
       const article = await articlesModel.patchArticle(id, {attr, val});
@@ -56,7 +56,7 @@ const articlesController = {
 
   updateArticle: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     const body = await req.json();
     try {
       const article = await articlesModel.updateArticle(id, body);
@@ -69,7 +69,7 @@ const articlesController = {
 
   deleteArticle: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     try {
       const article = await articlesModel.deleteArticle(id);
       return new Response(JSON.stringify({article: article}), { status: 200 });

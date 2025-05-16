@@ -46,7 +46,7 @@ class UsersModel {
     }
   }
 
-  getUser = async (id: string) => {
+  getUser = async (id: number) => {
     try {
       const user = await this.users.findUnique({ where: { id } });
       if (!user) {
@@ -65,7 +65,7 @@ class UsersModel {
     }
   }
 
-  patchUser = async (id: string, patch: {attr: string, val: any}) => {
+  patchUser = async (id: number, patch: {attr: string, val: any}) => {
     try {
       this.checkEditableAttribute(patch.attr);
       const user = await this.users.update({ where: { id }, data: { [patch.attr]: patch.val } });
@@ -79,7 +79,7 @@ class UsersModel {
     }
   }
 
-  updateUser = async (id: string, credentials: any) => {
+  updateUser = async (id: number, credentials: any) => {
     try {
       const user = await this.users.update({ where: { id }, data: credentials });
       if (!user) {
@@ -92,7 +92,7 @@ class UsersModel {
     }
   }
 
-  deleteUser = async (id: string) => {
+  deleteUser = async (id: number) => {
     try {
       const user = await this.users.delete({ where: { id } });
       return user;

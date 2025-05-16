@@ -43,7 +43,7 @@ class AdminsModel {
     }
   }
 
-  getAdmin = async (id: string) => {
+  getAdmin = async (id: number) => {
     try {
       const admin = await this.admins.findUnique({ where: { id } });
       if (!admin) {
@@ -56,7 +56,7 @@ class AdminsModel {
     }
   }
 
-  updateAdmin = async (id: string, credentials: any) => {
+  updateAdmin = async (id: number, credentials: any) => {
     try {
       const admin = await this.admins.update({ where: { id }, data: credentials });
       return admin;
@@ -66,7 +66,7 @@ class AdminsModel {
     }
   }
 
-  deleteAdmin = async (id: string) => {
+  deleteAdmin = async (id: number) => {
     try {
       const admin = await this.admins.delete({ where: { id } });
       return admin;

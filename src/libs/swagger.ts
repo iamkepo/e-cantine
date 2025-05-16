@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -10,12 +11,6 @@ const swaggerDefinition = {
   security: [
     {
       bearerAuth: [],
-    },
-  ],
-  servers: [
-    {
-      url: process.env.NEXT_PUBLIC_API_URL,
-      description: process.env.NODE_ENV,
     },
   ],
   components: {
@@ -31,7 +26,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/app/api/v1/**/*.ts'],
+  apis: [path.resolve(process.cwd(), 'src/app/api/v1/**/*.ts')],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

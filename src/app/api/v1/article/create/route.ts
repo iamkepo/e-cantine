@@ -9,7 +9,7 @@ import articlesController from "@/controllers/articlesController";
  *   description: API for managing articles
  *
  * @swagger 
- * /api/v1/articles/create:
+ * /api/v1/article/create:
  *   post:
  *     summary: Créer un article
  *     tags: [Articles]
