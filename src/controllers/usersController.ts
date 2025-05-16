@@ -41,7 +41,7 @@ const usersController = {
 
   getUser: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     try {
       const user = await usersModel.getUser(id);
       return new Response(JSON.stringify({user: user}), { status: 200 });
@@ -53,7 +53,7 @@ const usersController = {
 
   patchUser: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     const {attr, val} = await req.json();
     try {
       const user = await usersModel.patchUser(id, {attr, val});
@@ -66,7 +66,7 @@ const usersController = {
 
   updateUser: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     const body = await req.json();
     try {
       const user = await usersModel.updateUser(id, body);
@@ -79,7 +79,7 @@ const usersController = {
 
   deleteUser: async (req: Request) => {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id') || '0';
+    const id = parseInt(searchParams.get('id') || '0', 10);
     try {
       const user = await usersModel.deleteUser(id);
       return new Response(JSON.stringify({user: user}), { status: 200 });
