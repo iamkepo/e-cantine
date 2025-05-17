@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-
 const name = "test";
 const password = "test";
 

@@ -51,3 +51,4 @@ export type History = {
   command_id: number;
   status: HistoryStatus;
 }[]
+

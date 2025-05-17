@@ -22,8 +22,16 @@ import articlesController from "@/controllers/articlesController";
  *             properties:
  *               name:
  *                 type: string
- *               type:
+ *               price:
+ *                 type: number
+ *               description:
  *                 type: string
+ *               image:
+ *                 type: string
+ *               categoryId:
+ *                 type: number
+ *               typeId:
+ *                 type: number
  *     responses:
  *       201:
  *         description: Article créé avec succès

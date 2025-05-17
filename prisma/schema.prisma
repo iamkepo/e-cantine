@@ -11,8 +11,10 @@ model users {
   id        Int      @id @default(autoincrement())
   password  String
   name      String
+  status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
+
   admins    admins[]
   clients   clients[]
 }
@@ -21,6 +23,7 @@ model admins {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   permissions String[] @default([]) @map("permissions")
+  status      String   @default("pending") @map("status")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
 
@@ -32,6 +35,7 @@ model clients {
   id             Int              @id @default(autoincrement())
   phone          String           @unique
   preferences    String[]         @default([]) @map("preferences")
+  status         String           @default("pending") @map("status")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @default(now()) @map("updated_at")
 
@@ -45,11 +49,32 @@ model clients {
 model addressClients {
   id        Int      @id @default(autoincrement())
   address   String
+  status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
   clientId  Int      @map("client_id")
   client    clients  @relation(fields: [clientId], references: [id])
+}
+
+model types {
+  id        Int      @id @default(autoincrement())
+  name      String
+  status    String   @default("pending") @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  articles articles[]
+}
+
+model categories {
+  id        Int      @id @default(autoincrement())
+  name      String
+  status    String   @default("pending") @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  articles articles[]
 }
 
 model articles {
@@ -58,73 +83,39 @@ model articles {
   price        Float
   description  String
   image        String
+  status       String         @default("pending") @map("status")
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @default(now()) @map("updated_at")
 
+  typeId       Int            @map("type_id")
+  categoryId   Int            @map("category_id")
+  type         types          @relation(fields: [typeId], references: [id])
+  category     categories     @relation(fields: [categoryId], references: [id])
+
   menuArticles menuArticles[]
   articleTags  articleTags[]
-  articleTypes articleTypes[]
-  articleCategories articleCategories[]
-}
-
-model articleTags {
-  id        Int      @id @default(autoincrement())
-  articleId Int      @map("article_id")
-  tagId     Int      @map("tag_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
-
-  article   articles @relation(fields: [articleId], references: [id])
-  tag       tags     @relation(fields: [tagId], references: [id])
-}
-
-model articleTypes {
-  id        Int      @id @default(autoincrement())
-  articleId Int      @map("article_id")
-  typeId    Int      @map("type_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
-
-  article   articles @relation(fields: [articleId], references: [id])
-  type      types    @relation(fields: [typeId], references: [id])
-}
-
-model articleCategories {
-  id         Int      @id @default(autoincrement())
-  articleId  Int      @map("article_id")
-  categoryId Int      @map("category_id")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @default(now()) @map("updated_at")
-
-  article    articles @relation(fields: [articleId], references: [id])
-  category   categories @relation(fields: [categoryId], references: [id])
 }
 
 model tags {
   id        Int      @id @default(autoincrement())
   name      String
+  status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
   articleTags articleTags[]
 }
 
-model types {
+model articleTags {
   id        Int      @id @default(autoincrement())
-  name      String
+  status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
-  articleTypes articleTypes[]
-}
-
-model categories {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
-
-  articleCategories articleCategories[]
+  articleId Int      @map("article_id")
+  tagId     Int      @map("tag_id")
+  article   articles @relation(fields: [articleId], references: [id])
+  tag       tags     @relation(fields: [tagId], references: [id])
 }
 
 model commands {
@@ -146,6 +137,7 @@ model commands {
 
 model menus {
   id           Int            @id @default(autoincrement())
+  status       String         @default("pending") @map("status")
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @default(now()) @map("updated_at")
 
@@ -157,6 +149,7 @@ model menus {
 
 model menuArticles {
   id             Int              @id @default(autoincrement())
+  status         String           @default("pending") @map("status")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @default(now()) @map("updated_at")
 

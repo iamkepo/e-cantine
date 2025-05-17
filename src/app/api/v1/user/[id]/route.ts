@@ -1,6 +1,7 @@
 "use server";
 
 import usersController from "@/controllers/usersController";
+import { ContextParams } from "@/core/interfaces";
 
 /**
  * @swagger
@@ -28,8 +29,8 @@ import usersController from "@/controllers/usersController";
  *       500:
  *         description: Erreur interne du serveur
  */
-export async function GET(req: Request) {
-  return usersController.getUser(req);
+export async function GET(req: Request, context: ContextParams) {
+  return usersController.getUser(req, context.params);
 }
 
 /**
@@ -58,8 +59,8 @@ export async function GET(req: Request) {
  *       500:
  *         description: Erreur interne du serveur
  */
-export async function PATCH(req: Request) {
-  return usersController.patchUser(req);
+export async function PATCH(req: Request, context: ContextParams) {
+  return usersController.patchUser(req, context.params);
 }
 
 /**
@@ -88,8 +89,8 @@ export async function PATCH(req: Request) {
  *       500:
  *         description: Erreur interne du serveur
  */
-export async function PUT(req: Request) {
-  return usersController.updateUser(req);
+export async function PUT(req: Request, context: ContextParams) {
+  return usersController.updateUser(req, context.params);
 }
 
 /**
@@ -118,6 +119,6 @@ export async function PUT(req: Request) {
  *       500:
  *         description: Erreur interne du serveur
  */
-export async function DELETE(req: Request) {
-  return usersController.deleteUser(req);
+export async function DELETE(req: Request, context: ContextParams) {
+  return usersController.deleteUser(req, context.params);
 }

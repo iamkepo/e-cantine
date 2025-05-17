@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-
 import { articlesPrincipal } from "../../src/core/constants";
-
+import { PrismaClient } from "@prisma/client";
 
 const rawTags = [
   { id: 1, name: "Végétarien" },
@@ -25,30 +23,52 @@ const rawTypes = [
 ];
 
 const seedArticles = async (prisma: PrismaClient) => {
+  const now = new Date();
 
-  for (const tag of rawTags) {
-    await prisma.tags.upsert({
-      where: { id: tag.id },
-      update: {},
-      create: tag,
-    });
-  }
+  await Promise.all(
+    rawTags.map((tag) =>
+      prisma.tags.upsert({
+        where: { id: tag.id },
+        update: {},
+        create: {
+          id: tag.id,
+          name: tag.name,
+          createdAt: now,
+          updatedAt: now,
+        },
+      })
+    )
+  );
 
-  for (const cat of rawCategories) {
-    await prisma.categories.upsert({
-      where: { id: cat.id },
-      update: {},
-      create: cat,
-    });
-  }
+  await Promise.all(
+    rawCategories.map((cat) =>
+      prisma.categories.upsert({
+        where: { id: cat.id },
+        update: {},
+        create: {
+          id: cat.id,
+          name: cat.name,
+          createdAt: now,
+          updatedAt: now,
+        },
+      })
+    )
+  );
 
-  for (const type of rawTypes) {
-    await prisma.types.upsert({
-      where: { id: type.id },
-      update: {},
-      create: type,
-    });
-  }
+  await Promise.all(
+    rawTypes.map((type) =>
+      prisma.types.upsert({
+        where: { id: type.id },
+        update: {},
+        create: {
+          id: type.id,
+          name: type.name,
+          createdAt: now,
+          updatedAt: now,
+        },
+      })
+    )
+  );
 
   for (const article of articlesPrincipal) {
     const createdArticle = await prisma.articles.create({
@@ -57,36 +77,37 @@ const seedArticles = async (prisma: PrismaClient) => {
         image: article.img,
         description: article.description,
         price: article.price,
-      },
-    });
-
-    for (const tagId of article.tags) {
-      await prisma.articleTags.create({
-        data: {
-          articleId: createdArticle.id,
-          tagId,
+        type: {
+          connect: {
+            id: 1,
+          },
         },
-      });
-    }
-
-    await prisma.articleTypes.create({
-      data: {
-        articleId: createdArticle.id,
-        typeId: 1,
+        category: {
+          connect: {
+            id: article.category,
+          },
+        },
+        createdAt: now,
+        updatedAt: now,
       },
     });
 
-    await prisma.articleCategories.create({
-      data: {
-        articleId: createdArticle.id,
-        categoryId: article.category,
-      },
-    });
+    // Liens tags
+    await Promise.all(
+      article.tags.map((tagId) =>
+        prisma.articleTags.create({
+          data: {
+            articleId: createdArticle.id,
+            tagId,
+            createdAt: now,
+            updatedAt: now,
+          },
+        })
+      )
+    );
   }
 
-  console.log("Created articles");
-
-  return;
+  console.log("✅ Articles principaux créés.");
 };
 
 export default seedArticles;

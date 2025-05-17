@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-
 const email = "test@example.com";
 const permissions = ["ALL"];
 

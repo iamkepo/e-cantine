@@ -1,0 +1,79 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Params } from "@/core/interfaces";
+import TagsModel from "@/models/tagsModel";
+
+const tagsModel = new TagsModel();
+const tagsController = {
+  createTag: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const tag = await tagsModel.createTag(body);
+      return new Response(JSON.stringify({tag: tag}), { status: 201 });
+    } catch (error: any) {
+      return new Response(JSON.stringify({ error: `Tag creation failed: ${error}` }), { status: 400 });
+    }
+  },
+
+  getTags: async (req: Request) => {  
+    const { searchParams } = new URL(req.url);
+    const skip = parseInt(searchParams.get('skip') || '0', 10);
+    const take = parseInt(searchParams.get('take') || '10', 10);
+  
+    try {
+      const tags = await tagsModel.getTags({ skip, take });
+      return new Response(JSON.stringify({tags: tags}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  getTag: async (req: Request, params: Promise<Params>) => {
+    const id = parseInt((await params).id || '0', 10);
+    try {
+      const tag = await tagsModel.getTag(id);
+      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  patchTag: async (req: Request, params: Promise<Params>) => {
+    const id = parseInt((await params).id || '0', 10);
+    const {attr, val} = await req.json();
+    try {
+      const tag = await tagsModel.patchTag(id, {attr, val});
+      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  updateTag: async (req: Request, params: Promise<Params>) => {
+    const id = parseInt((await params).id || '0', 10);
+    const body = await req.json();
+    try {
+      const tag = await tagsModel.updateTag(id, body);
+      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  deleteTag: async (req: Request, params: Promise<Params>) => {
+    const id = parseInt((await params).id || '0', 10);
+    try {
+      const tag = await tagsModel.deleteTag(id);
+      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+}
+
+export default tagsController;

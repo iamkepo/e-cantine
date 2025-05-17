@@ -3,10 +3,10 @@ import { prisma } from "@/libs/prisma";
 
 class ArticlesModel {
   articles: any;
-  articleTypes: any;
+  types: any;
   constructor() {
     this.articles = prisma.articles;
-    this.articleTypes = prisma.articleTypes;
+    this.types = prisma.types;
   }
 
   createArticle = async (credentials: any) => {
@@ -17,9 +17,6 @@ class ArticlesModel {
         updatedAt: new Date(),
       };
       const article = await this.articles.create({ data: credentialsArticle });
-      if (!article) {
-        throw new Error('Article not created');
-      }
       return article;
     } catch (error) {
       console.error(error);
@@ -27,26 +24,29 @@ class ArticlesModel {
     }
   }
 
-  getArticles = async (params: { typeId: number, skip: number, take: number }) => {
+  getArticles = async (params: { skip: number, take: number, typeId: number, categoryId: number, search: string }) => {
     try {
-      const { typeId, skip, take } = params;
-      const typesList = await this.articleTypes.findMany({
-        where: {
-          typeId,
-        },
-      });
+      const { skip, take, typeId, categoryId, search } = params;
+      const where: any = {
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+        ]
+      };
+  
+      if (typeId > 0) {
+        where.typeId = typeId;
+      }
+  
+      if (categoryId > 0) {
+        where.categoryId = categoryId;
+      }
+  
       const articlesList = await this.articles.findMany({
-        where: {
-          id: {
-            in: typesList.map((type: any) => type.articleId),
-          },
-        },
+        where,
         skip,
         take,
       });
-      if (!articlesList) {
-        throw new Error('Articles not found');
-      }
       return articlesList;
     } catch (error) {
       console.error(error);
@@ -57,9 +57,6 @@ class ArticlesModel {
   getArticle = async (id: number) => {
     try {
       const article = await this.articles.findUnique({ where: { id } });
-      if (!article) {
-        throw new Error('Article not found');
-      }
       return article;
     } catch (error) {
       console.error(error);
@@ -77,9 +74,6 @@ class ArticlesModel {
     try {
       this.checkEditableAttribute(patch.attr);
       const article = await this.articles.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      if (!article) {
-        throw new Error('Article not found');
-      }
       return article;
     } catch (error) {
       console.error(error);
@@ -90,9 +84,6 @@ class ArticlesModel {
   updateArticle = async (id: number, credentials: any) => {
     try {
       const article = await this.articles.update({ where: { id }, data: credentials });
-      if (!article) {
-        throw new Error('Article not found');
-      }
       return article;
     } catch (error) {
       console.error(error);

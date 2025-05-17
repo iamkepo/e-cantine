@@ -1,6 +1,8 @@
 "use server";
 
 import articlesController from "@/controllers/articlesController";
+import { ContextParams } from "@/core/interfaces";
+import { NextRequest } from "next/server";
 
 /**
  * @swagger
@@ -29,9 +31,9 @@ import articlesController from "@/controllers/articlesController";
  *         description: Erreur interne du serveur
  */
 
-export const GET = async (req: Request) => {
-  return articlesController.getArticle(req);
-};
+export async function GET(req: NextRequest, context: ContextParams) {
+  return articlesController.getArticle(req, context.params);
+}
 
 /**
  * @swagger
@@ -59,8 +61,8 @@ export const GET = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const PATCH = async (req: Request) => {
-  return articlesController.patchArticle(req);
+export const PATCH = async (req: NextRequest, context: ContextParams) => {
+  return articlesController.patchArticle(req, context.params);
 };
 
 /**
@@ -89,8 +91,8 @@ export const PATCH = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const PUT = async (req: Request) => {
-  return articlesController.updateArticle(req);
+export const PUT = async (req: NextRequest, context: ContextParams) => {
+  return articlesController.updateArticle(req, context.params);
 };
 
 /**
@@ -119,6 +121,6 @@ export const PUT = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const DELETE = async (req: Request) => {
-  return articlesController.deleteArticle(req);
+export const DELETE = async (req: NextRequest, context: ContextParams) => {
+  return articlesController.deleteArticle(req, context.params);
 };
