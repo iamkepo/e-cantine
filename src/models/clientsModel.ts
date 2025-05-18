@@ -62,6 +62,20 @@ class ClientsModel {
     }
   }
 
+  checkAttributeClient = (att: string) => {
+    return ['phone', 'status'].includes(att);
+  }
+
+  patchClient = async (id: number, patch: {attr: string, val: any}) => {
+    try {
+      const client = await this.clients.update({ where: { id }, data: { [patch.attr]: patch.val } });
+      return client;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   updateClient = async (id: number, credentials: any) => {
     try {
       const client = await this.clients.update({ where: { id }, data: credentials });

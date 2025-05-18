@@ -11,6 +11,9 @@ const authController = {
     const body = await req.json();
     try {
       const { accessToken, refreshToken } = await authModel.login(body);
+      if (!accessToken || !refreshToken) {
+        return new Response(JSON.stringify({ error: 'Login failed: Invalid credentials' }), { status: 400 });
+      }
       
       return new Response(JSON.stringify({data: { accessToken, refreshToken }}), { status: 200 });
     } catch (error: any) {
@@ -31,6 +34,9 @@ const authController = {
     const body = await req.json();
     try {
       const { newUser, newClient } = await authModel.register(body);
+      if (!newUser || !newClient) {
+        return new Response(JSON.stringify({ error: 'User or client not created' }), { status: 400 });
+      }
   
       return new Response(JSON.stringify({data: {user: newUser, client: newClient}}), { status: 201 });
     } catch (error) {

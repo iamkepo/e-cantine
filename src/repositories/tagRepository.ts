@@ -1,74 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ITag } from "@/core/interfaces";
 import tagsService from "@/services/tagsService";
 import * as yup from 'yup';
+import Repository from "@/repositories/repository";
 
-class TagRepository {
+class TagRepository extends Repository<ITag> {
 
-  constructor() {
+  constructor(setTags?: (tags: ITag[]) => void) {
+    super(setTags);
   }
 
   async fetchTags() {
-    try {
-      const data = await tagsService.fetchTags();
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchTags :", error);
-      throw error;
-    }
+    return this.fetchAll(tagsService.fetchTags as () => Promise<ITag[]>);
   }
 
   async fetchTag(id: number) {
-    try {
-      const data = await tagsService.fetchTag(id);
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchTag :", error);
-      throw error;
-    }
+    return this.fetchOne(tagsService.fetchTag as (id: number) => Promise<ITag>, id);
   }
 
   async createTag(payload: ITag) {
-    try {
-      await tagsService.createTag(payload);
-      const tags = await this.fetchTags();
-      return tags;
-    } catch (error) {
-      console.error("Erreur createType :", error);
-      throw error;
-    }
+    return this.create(tagsService.createTag as (payload: ITag) => Promise<ITag>, payload);
   }
 
   async changeStatusTag(id: number, status: string) {
-    try {
-      await tagsService.patchTag(id, {status});
-      const tags = await this.fetchTags();
-      return tags;
-    } catch (error) {
-      console.error("Erreur changeStatusTag :", error);
-      throw error;
-    }
+    return this.patch(tagsService.patchTag as (id: number, payload: {attr: string, val: any}) => Promise<ITag>, id, { attr: 'status', val: status });
   }
 
   async updateTag(id: number, payload: ITag) {
-    try {
-      await tagsService.updateTag(id, payload);
-      const tags = await this.fetchTags();
-      return tags;
-    } catch (error) {
-      console.error("Erreur updateTag :", error);
-      throw error;
-    }
+    return this.update(tagsService.updateTag as (id: number, payload: ITag) => Promise<ITag>, id, payload);
   }
 
   async deleteTag(id: number) {
-    try {
-      await tagsService.deleteTag(id);
-      const tags = await this.fetchTags();
-      return tags;
-    } catch (error) {
-      console.error("Erreur deleteTag :", error);
-      throw error;
-    }
+    return this.delete(tagsService.deleteTag as (id: number) => Promise<ITag>, id);
   }
 
   formCreateTag() {
@@ -83,16 +46,14 @@ class TagRepository {
     ]
   }
 
-  formDeleteTag() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment supprimer le tag ?", colSize: "col-12 text-center" },
-    ]
+  confirmDeleteTag = {
+    title: "Supprimer le tag", 
+    description: "Voulez-vous vraiment supprimer le tag ?",
   }
 
-  formChangeStatusTag() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment changer le statut du tag ?", colSize: "col-12 text-center" },
-    ]
+  confirmChangeStatusTag = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status du tag ?",
   }
 
   tagSchema = yup.object({

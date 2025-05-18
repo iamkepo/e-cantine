@@ -14,7 +14,7 @@ import { renderFileField } from './fieldRenderers/renderFileField';
 import { renderDateTimeField } from './fieldRenderers/renderDateTimeField';
 
 export interface IField {
-  type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime';
+  type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime' | 'hidden';
   id: string;
   label?: string;
   placeholder?: string;  
@@ -52,6 +52,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
       case 'tel':
       case 'search':
       case 'number':
+      case 'hidden':
         return (
           <div key={index} className={`${field.colSize} mb-3`}>
             {renderInputField(field, control, errors)}
@@ -111,7 +112,6 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
             {renderRadioField(field, control, errors)}
           </div>
         );
-        
       default:
         return null;
     }

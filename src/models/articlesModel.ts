@@ -64,15 +64,12 @@ class ArticlesModel {
     }
   }
 
-  checkEditableAttribute = (att: string) => {
-    if(!['name', 'price', 'description', 'image', 'articleTypeId', 'status'].includes(att)) {
-      throw new Error('Invalid patch attribute');
-    }
+  checkAttributeArticle = (att: string) => {
+    return ['name', 'price', 'description', 'image', 'typeId', 'categoryId', 'status'].includes(att);
   }
 
   patchArticle = async (id: number, patch: {attr: string, val: any}) => {
     try {
-      this.checkEditableAttribute(patch.attr);
       const article = await this.articles.update({ where: { id }, data: { [patch.attr]: patch.val } });
       return article;
     } catch (error) {

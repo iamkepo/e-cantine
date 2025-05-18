@@ -191,7 +191,7 @@ const rawArticles = [
     label: "Fries",
     img: "https://cdn.britannica.com/34/206334-050-7637EB66/French-fries.jpg",
     tags: [4],
-    categoryId: 5,
+    category: 5,
     type: 2,
     description: "Crispy golden fries, perfect as a side or snack.",
     date_updated: 1678368900000, // Timestamp for "2023-03-09T13:15:00Z"
@@ -202,7 +202,7 @@ const rawArticles = [
     label: "Garlic Bread",
     img: "https://www.spicebangla.com/wp-content/uploads/2020/12/Garlic-Bread.webp",
     tags: [1],
-    categoryId: 5,
+    category: 5,
     type: 2,
     description: "Warm and buttery garlic bread, a perfect accompaniment.",
     date_updated: 1678472400000, // Timestamp for "2023-03-10T17:40:00Z"
@@ -213,7 +213,7 @@ const rawArticles = [
     label: "Coleslaw",
     img: "https://www.allrecipes.com/thmb/pkvntUo7EjqVoI30UknFWy4jwL8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ALR-222218-nanas-southern-coleslaw-VAT-4x3-d44d1396eb3e47e5b5a9db5a33213c92.jpg",
     tags: [1, 2],
-    categoryId: 5,
+    category: 5,
     type: 2,
     description: "A creamy and tangy coleslaw, perfect as a side dish.",
     date_updated: 1678525500000, // Timestamp for "2023-03-11T08:25:00Z"
@@ -224,7 +224,7 @@ const rawArticles = [
     label: "Mashed Potatoes",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7cEEe-7FUem_O54y7dAQzx1zBTgoepmohZQ&s",
     tags: [1],
-    categoryId: 5,
+    category: 5,
     type: 2,
     description: "Creamy mashed potatoes, a classic comfort food.",
     date_updated: 1678647600000, // Timestamp for "2023-03-12T19:00:00Z"
@@ -235,7 +235,7 @@ const rawArticles = [
     label: "Rice",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Ekd569S5P5FvhDaXui2LiA96YF07CWvtoQ&s",
     tags: [1, 3],
-    categoryId: 5,
+    category: 5,
     type: 2,
     description: "Fluffy white rice, a versatile side dish.",
     date_updated: 1678704300000, // Timestamp for "2023-03-13T10:45:00Z"
@@ -246,7 +246,7 @@ const rawArticles = [
     label: "Orange Juice",
     img: "https://thumbs.dreamstime.com/b/transparent-orange-juice-plastic-bottle-transparent-orange-juice-plastic-bottle-334739106.jpg",
     tags: [1, 2, 3, 4],
-    categoryId: 5,
+    category: 5,
     type: 3,
     description: "Freshly squeezed orange juice, full of vitamin C.",
     date_updated: 1678788600000, // Timestamp for "2023-03-14T07:30:00Z"
@@ -257,7 +257,7 @@ const rawArticles = [
     label: "Apple Juice",
     img: "https://images.sks-bottle.com/images/AppleJuiceBottles_2021_UPDATEnewLRG.webp",
     tags: [1, 2, 3, 4],
-    categoryId: 5,
+    category: 5,
     type: 3,
     description: "Sweet and refreshing apple juice, perfect for any meal.",
     date_updated: 1678863600000, // Timestamp for "2023-03-15T09:20:00Z"
@@ -268,7 +268,7 @@ const rawArticles = [
     label: "Grape Juice",
     img: "https://t3.ftcdn.net/jpg/03/31/57/10/360_F_331571006_Sv6xzovHgADbtCjwMooiY7VgiX6zxjMF.jpg",
     tags: [1, 2, 3, 4],
-    categoryId: 5,
+    category: 5,
     type: 3,
     description: "Rich and flavorful grape juice, a delightful drink.",
     date_updated: 1678926600000, // Timestamp for "2023-03-16T11:10:00Z"
@@ -277,33 +277,35 @@ const rawArticles = [
 ];
 const now = new Date();
 const articlesSeed = async (prisma: PrismaClient) => {
-  for (const article of rawArticles) {
-    const createdArticle = await prisma.articles.create({
-      data: {
-        name: article.label || "",
-        image: article.img || "",
-        description: article.description || "",
-        price: article.price || 0,
-        createdAt: now,
-        updatedAt: now,
-        type: {
-          connect: {
-            id: article.type,
+  await Promise.all(
+    rawArticles.map(async (article) => {
+      const createdArticle = await prisma.articles.create({
+        data: {
+          name: article.label || "",
+          image: article.img || "",
+          description: article.description || "",
+          price: article.price || 0,
+          createdAt: now,
+          updatedAt: now,
+          type: {
+            connect: {
+              id: article.type,
+            },
+          },
+          category: {
+            connect: {
+              id: article.category,
+            },
           },
         },
-        category: {
-          connect: {
-            id: article.category,
-          },
-        },
-      },
-    });
+      });
 
-    // Crée les relations dans articleTags
-    await articlesTagsSeed(prisma, createdArticle, article.tags);
+      // Crée les relations dans articleTags
+      await articlesTagsSeed(prisma, createdArticle, article.tags);
 
-    console.log(`✅ Article [ID: ${createdArticle.id}] créé avec succès.`);
-  }
+      console.log(`✅ Article [ID: ${createdArticle.id}] créé avec succès.`);
+    })
+  );
 
   console.log("✅ Articles principaux créés.");
 }

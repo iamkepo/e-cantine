@@ -56,6 +56,20 @@ class AdminsModel {
     }
   }
 
+  checkAttributeAdmin = (att: string) => {
+    return ['userId', 'status'].includes(att);
+  }
+
+  patchAdmin = async (id: number, patch: {attr: string, val: any}) => {
+    try {
+      const admin = await this.admins.update({ where: { id }, data: { [patch.attr]: patch.val } });
+      return admin;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   updateAdmin = async (id: number, credentials: any) => {
     try {
       const admin = await this.admins.update({ where: { id }, data: credentials });

@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import typesSeed from './typesSeed';
 import categoriesSeed from './categoriesSeed';
 import articles from './articlesSeed';
+import tagsSeed from './tagsSeed';
 
 const prisma = new PrismaClient();
 
@@ -13,6 +14,8 @@ async function main() {
   await typesSeed(prisma);
   // Crée les Categories
   await categoriesSeed(prisma);
+  // Crée les Tags
+  await tagsSeed(prisma);
   // Crée les Articles
   await articles(prisma);
 

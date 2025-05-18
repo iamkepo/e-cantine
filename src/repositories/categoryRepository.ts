@@ -1,74 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ICategory } from "@/core/interfaces";
 import categoriesService from "@/services/categoriesService";
 import * as yup from 'yup';
+import Repository from "@/repositories/repository";
 
-class CategoryRepository {
+class CategoryRepository extends Repository<ICategory> {
 
-  constructor() {
+  constructor(setCategories?: (categories: ICategory[]) => void) {
+    super(setCategories);
   }
 
   async fetchCategories() {
-    try {
-      const data = await categoriesService.fetchCategories();
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchCategories :", error);
-      throw error;
-    }
+    return this.fetchAll(categoriesService.fetchCategories as () => Promise<ICategory[]>);
   }
 
   async fetchCategory(id: number) {
-    try {
-      const data = await categoriesService.fetchCategory(id);
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchCategory :", error);
-      throw error;
-    }
+    return this.fetchOne(categoriesService.fetchCategory as (id: number) => Promise<ICategory>, id);
   }
 
   async createCategory(payload: ICategory) {
-    try {
-      await categoriesService.createCategory(payload);
-      const categories = await this.fetchCategories();
-      return categories;
-    } catch (error) {
-      console.error("Erreur createCategory :", error);
-      throw error;
-    }
+    return this.create(categoriesService.createCategory as (payload: ICategory) => Promise<ICategory>, payload);
   }
 
   async changeStatusCategory(id: number, status: string) {
-    try {
-      await categoriesService.patchCategory(id, {status});
-      const categories = await this.fetchCategories();
-      return categories;
-    } catch (error) {
-      console.error("Erreur changeStatusCategory :", error);
-      throw error;
-    }
+    return this.patch(categoriesService.patchCategory as (id: number, payload: {attr: string, val: any}) => Promise<ICategory>, id, { attr: 'status', val: status });
   }
 
   async updateCategory(id: number, payload: ICategory) {
-    try {
-      await categoriesService.updateCategory(id, payload);
-      const categories = await this.fetchCategories();
-      return categories;
-    } catch (error) {
-      console.error("Erreur updateCategory :", error);
-      throw error;
-    }
+    return this.update(categoriesService.updateCategory as (id: number, payload: ICategory) => Promise<ICategory>, id, payload);
   }
 
   async deleteCategory(id: number) {
-    try {
-      await categoriesService.deleteCategory(id);
-      const categories = await this.fetchCategories();
-      return categories;
-    } catch (error) {
-      console.error("Erreur deleteCategory :", error);
-      throw error;
-    }
+    return this.delete(categoriesService.deleteCategory as (id: number) => Promise<ICategory>, id);
   }
 
   formCreateCategory() {
@@ -83,16 +46,14 @@ class CategoryRepository {
     ]
   }
 
-  formDeleteCategory() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment supprimer la categorie ?", colSize: "col-12 text-center" },
-    ]
+  confirmDeleteCategory = {
+    title: "Supprimer la categorie", 
+    description: "Voulez-vous vraiment supprimer la categorie ?",
   }
 
-  formChangeStatusCategory() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment changer le statut de la categorie ?", colSize: "col-12 text-center" },
-    ]
+  confirmChangeStatusCategory = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status de la categorie ?",
   }
 
   categorySchema = yup.object({

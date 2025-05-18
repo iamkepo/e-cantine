@@ -22,7 +22,6 @@ model users {
 model admins {
   id          Int      @id @default(autoincrement())
   email       String   @unique
-  permissions String[] @default([]) @map("permissions")
   status      String   @default("pending") @map("status")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
@@ -34,7 +33,6 @@ model admins {
 model clients {
   id             Int              @id @default(autoincrement())
   phone          String           @unique
-  preferences    String[]         @default([]) @map("preferences")
   status         String           @default("pending") @map("status")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @default(now()) @map("updated_at")
@@ -121,7 +119,7 @@ model articleTags {
 model commands {
   id                  Int                   @id @default(autoincrement())
   weeks               Int
-  checkedDays         String[]
+  checkedDays         String
   startDate           DateTime
   address             String
   status              String                @default("pending") @map("status")
@@ -181,7 +179,7 @@ model commandTransactions {
   tax       Float
   total     Float
   type      String   @default("payment") @map("type")
-  promoCode String?
+  promoCode String
   status    String   @default("pending") @map("status")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")

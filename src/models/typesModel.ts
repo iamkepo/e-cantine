@@ -55,19 +55,13 @@ class TypesModel {
     }
   }
 
-  checkEditableAttribute = (att: string) => {
-    if(!['name', 'price', 'description', 'image', 'articleTypeId', 'status'].includes(att)) {
-      throw new Error('Invalid patch attribute');
-    }
+  checkAttributeType = (att: string) => {
+    return ['name', 'status'].includes(att);
   }
 
   patchType = async (id: number, patch: {attr: string, val: any}) => {
     try {
-      this.checkEditableAttribute(patch.attr);
       const type = await this.types.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      if (!type) {
-        throw new Error('Type not found');
-      }
       return type;
     } catch (error) {
       console.error(error);
@@ -78,9 +72,6 @@ class TypesModel {
   updateType = async (id: number, credentials: any) => {
     try {
       const type = await this.types.update({ where: { id }, data: credentials });
-      if (!type) {
-        throw new Error('Type not found');
-      }
       return type;
     } catch (error) {
       console.error(error);

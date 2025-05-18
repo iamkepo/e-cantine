@@ -47,15 +47,12 @@ class CategoriesModel {
     }
   }
 
-  checkEditableAttribute = (att: string) => {
-    if(!['name'].includes(att)) {
-      throw new Error('Invalid patch attribute');
-    }
+  checkAttributeCategory = (att: string) => {
+    return ['name', 'status'].includes(att);
   }
 
   patchCategory = async (id: number, patch: {attr: string, val: any}) => {
     try {
-      this.checkEditableAttribute(patch.attr);
       const category = await this.categories.update({ where: { id }, data: { [patch.attr]: patch.val } });
       return category;
     } catch (error) {

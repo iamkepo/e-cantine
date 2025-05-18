@@ -44,7 +44,13 @@ const tagsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!tagsModel.checkAttributeTag(attr as string)) {
+        return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
+      }
       const tag = await tagsModel.patchTag(id, {attr, val});
+      if (!tag) {
+        return new Response(JSON.stringify({ error: 'Tag not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);
@@ -57,6 +63,9 @@ const tagsController = {
     const body = await req.json();
     try {
       const tag = await tagsModel.updateTag(id, body);
+      if (!tag) {
+        return new Response(JSON.stringify({ error: 'Tag update failed' }), { status: 400 });
+      }
       return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);

@@ -55,15 +55,12 @@ class TagsModel {
     }
   }
 
-  checkEditableAttribute = (att: string) => {
-    if(!['name'].includes(att)) {
-      throw new Error('Invalid patch attribute');
-    }
+  checkAttributeTag = (att: string) => {
+    return ['name', 'status'].includes(att);
   }
 
   patchTag = async (id: number, patch: {attr: string, val: any}) => {
     try {
-      this.checkEditableAttribute(patch.attr);
       const tag = await this.tags.update({ where: { id }, data: { [patch.attr]: patch.val } });
       if (!tag) {
         throw new Error('Tag not found');

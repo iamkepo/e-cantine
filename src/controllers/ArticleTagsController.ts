@@ -53,6 +53,9 @@ const articleTagsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!articleTagsModel.checkAttributeArticleTag(attr as string)) {
+        return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
+      }
       const articleTag = await articleTagsModel.patchArticleTag(id, {attr, val});
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not found' }), { status: 404 });

@@ -1,74 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IType } from "@/core/interfaces";
 import typesService from "@/services/typesService";
 import * as yup from 'yup';
+import Repository from "@/repositories/repository";
 
-class TypeRepository {
+class TypeRepository extends Repository<IType> {
 
-  constructor() {
+  constructor(setTypes?: (types: IType[]) => void) {
+    super(setTypes);
   }
 
   async fetchTypes() {
-    try {
-      const data = await typesService.fetchTypes();
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchTypes :", error);
-      throw error;
-    }
+    return this.fetchAll(typesService.fetchTypes as () => Promise<IType[]>);
   }
 
   async fetchType(id: number) {
-    try {
-      const data = await typesService.fetchType(id);
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchType :", error);
-      throw error;
-    }
+    return this.fetchOne(typesService.fetchType as (id: number) => Promise<IType>, id);
   }
 
   async createType(payload: IType) {
-    try {
-      await typesService.createType(payload);
-      const types = await this.fetchTypes();
-      return types;
-    } catch (error) {
-      console.error("Erreur createType :", error);
-      throw error;
-    }
+    return this.create(typesService.createType as (payload: IType) => Promise<IType>, payload);
   }
 
   async changeStatusType(id: number, status: string) {
-    try {
-      await typesService.patchType(id, {status});
-      const types = await this.fetchTypes();
-      return types;
-    } catch (error) {
-      console.error("Erreur changeStatusType :", error);
-      throw error;
-    }
+    return this.patch(typesService.patchType as (id: number, payload: {attr: string, val: any}) => Promise<IType>, id, { attr: 'status', val: status });
   }
 
   async updateType(id: number, payload: IType) {
-    try {
-      await typesService.updateType(id, payload);
-      const types = await this.fetchTypes();
-      return types;
-    } catch (error) {
-      console.error("Erreur updateType :", error);
-      throw error;
-    }
+    return this.update(typesService.updateType as (id: number, payload: IType) => Promise<IType>, id, payload);
   }
 
   async deleteType(id: number) {
-    try {
-      await typesService.deleteType(id);
-      const types = await this.fetchTypes();
-      return types;
-    } catch (error) {
-      console.error("Erreur deleteType :", error);
-      throw error;
-    }
+    return this.delete(typesService.deleteType as (id: number) => Promise<IType>, id);
   }
 
   formCreateType() {
@@ -83,16 +46,14 @@ class TypeRepository {
     ]
   }
 
-  formDeleteType() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment supprimer le type ?", colSize: "col-12 text-center" },
-    ]
+  confirmDeleteType = {
+    title: "Supprimer le type", 
+    description: "Voulez-vous vraiment supprimer le type ?",
   }
 
-  formChangeStatusType() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment changer le statut du type ?", colSize: "col-12 text-center" },
-    ]
+  confirmChangeStatusType = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status de ce type ?",
   }
 
   typeSchema = yup.object({

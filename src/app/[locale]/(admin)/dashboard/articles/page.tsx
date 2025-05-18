@@ -11,20 +11,17 @@ import { statusOptionsActivation } from "@/enums";
 import ArticleRepository from "@/repositories/articleRepository";
 import { IField } from "@/components/FormComponent";
 import SubmitComponent from "@/components/SubmitComponent";
+import ConfirmComponent from "@/components/ConfirmComponent";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const [articles, setArticles] = useState<IArticle[]>([]);
 
   const statusOptions = Object.values(statusOptionsActivation);
-  const articleRepository = useMemo(() => new ArticleRepository(), []);
+  const articleRepository = useMemo(() => new ArticleRepository(setArticles), []);
 
   useEffect(() => {
-    const fetchArticles = async () => {
-      const data = await articleRepository.fetchArticles();
-      setArticles(data as IArticle[]);
-    };
-    fetchArticles();
+    articleRepository.fetchArticles();
   }, [articleRepository]);
 
  
@@ -42,10 +39,11 @@ const Page: React.FC = () => {
               fields={articleRepository.formCreateArticle() as unknown as IField[]}
               schema={articleRepository.articleSchema}
               btn="Creer"
-              onSubmit={async (data: IArticle) => {
-                setArticles((await articleRepository.createArticle(data)) as IArticle[]);
-                modal.close();
-              }}
+              onSubmit={ (data: IArticle) => articleRepository.createArticle(data)
+                .then(() => articleRepository.fetchArticles())
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              }
             />
           )}
         >
@@ -59,16 +57,18 @@ const Page: React.FC = () => {
           <thead className="table-primary">
             <tr>
               <th scope="col" className="col-md-1">Image</th>
-              <th scope="col" className="col-md-4">Nom</th>
-              <th scope="col" className="col-md-2">Prix</th>
-              <th scope="col" className="col-md-3 text-center">Status</th>
+              <th scope="col" className="col-md-3">Nom</th>
+              <th scope="col" className="col-md-1">Prix</th>
+              <th scope="col" className="col-md-1">Type</th>
+              <th scope="col" className="col-md-1">Categorie</th>
+              <th scope="col" className="col-md-2 text-center">Status</th>
               <th scope="col" className="col-md-2 text-end"></th>
             </tr>
           </thead>
           <tbody className={`table-${theme}`}>
             {
               articles.map((article: IArticle) => (
-                <tr key={article.id}>
+                <tr key={article.id} className="align-middle">
                   <td scope="row" className="col-md-1">
                     <img 
                       src={article.image} 
@@ -76,29 +76,31 @@ const Page: React.FC = () => {
                       className="img-fluid rounded" 
                     />
                   </td>
-                  <td scope="row" className="col-md-4 text-break">{article.name}</td>
-                  <td scope="row" className="col-md-2">{article.price}</td>
-                  <td scope="row" className="col-md-3 text-center">
-                    <span className={`badge text-bg-${statusColorRender(article.status)}`}>
-                      {statusRender(article.status)}
-                    </span>
-                    <Dropdown
-                      options={statusOptions.map((status) => ({
-                        label: statusRender(status),
-                        action: () => modal.open(
-                          <SubmitComponent 
-                            title="Changer le status"
-                            fields={articleRepository.formChangeStatusArticle() as unknown as IField[]}
-                            schema={articleRepository.articleSchema}
-                            btn="Changer"
-                            onSubmit={async () => {
-                              setArticles((await articleRepository.changeStatusArticle(article.id as number, status)) as IArticle[]);
-                              modal.close();
-                            }}
-                          />
-                        ),
-                      }))}
-                    />
+                  <td scope="row" className="col-md-3 text-break">{article.name}</td>
+                  <td scope="row" className="col-md-1">{article.price}</td>
+                  <td scope="row" className="col-md-1">{article.typeId}</td>
+                  <td scope="row" className="col-md-1">{article.categoryId}</td>
+                  <td scope="row" className="col-md-2 text-center">
+                    <button type="button" className={`btn btn-${statusColorRender(article.status)} btn-sm`}>
+                      <span className="me-2">{statusRender(article.status)}</span>
+                      <Dropdown
+                        chevron
+                        options={statusOptions.map((status) => ({
+                          label: statusRender(status),
+                          action: () => modal.open(
+                            <ConfirmComponent 
+                              title={articleRepository.confirmChangeStatusArticle.title}
+                              description={articleRepository.confirmChangeStatusArticle.description}
+                              onConfirm={ () => articleRepository.changeStatusArticle(article.id as number, status)
+                                .then(() => articleRepository.fetchArticles())
+                                .catch((error) => console.error(error))
+                                .finally(() => modal.close())
+                              }
+                            />
+                          ),
+                        }))}
+                      />
+                    </button>
                   </td>
                   <td scope="row" className="col-md-2 text-end">
                     <i 
@@ -109,25 +111,25 @@ const Page: React.FC = () => {
                           fields={articleRepository.formUpdateArticle(article) as unknown as IField[]}
                           schema={articleRepository.articleSchema}
                           btn="Modifier"
-                          onSubmit={async (data: IArticle) => {
-                            setArticles((await articleRepository.updateArticle(article.id as number, data)) as IArticle[]);
-                            modal.close();
-                          }}
+                          onSubmit={ (data: IArticle) => articleRepository.updateArticle(article.id as number, data)
+                            .then(() => articleRepository.fetchArticles())
+                            .catch((error) => console.error(error))
+                            .finally(() => modal.close())
+                          }
                         />
                       )}
                     ></i>
                     <i 
                       className="bi bi-trash text-danger"
                       onClick={() => modal.open(
-                        <SubmitComponent 
-                          title="Supprimer l'article"
-                          fields={articleRepository.formDeleteArticle() as unknown as IField[]}
-                          schema={articleRepository.articleSchema}
-                          btn="Supprimer"
-                          onSubmit={async () => {
-                            setArticles((await articleRepository.deleteArticle(article.id as number)) as IArticle[]);
-                            modal.close();
-                          }}
+                        <ConfirmComponent 
+                          title={articleRepository.confirmDeleteArticle.title}
+                          description={articleRepository.confirmDeleteArticle.description}
+                          onConfirm={ () => articleRepository.deleteArticle(article.id as number)
+                            .then(() => articleRepository.fetchArticles())
+                            .catch((error) => console.error(error))
+                            .finally(() => modal.close())
+                          }
                         />
                       )}
                     ></i>

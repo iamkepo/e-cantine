@@ -15,9 +15,9 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({ title, description,
     <div className="text-center">
       <h3>{title}</h3>
       <p>{description}</p>
-      <div className="d-flex align-items-center justify-content-evenly">
-        <button className={`btn btn-${theme}`} onClick={modal.close}>Annuler</button>
-        <button className="btn btn-danger" onClick={onConfirm}>Confirmer</button>
+      <div className="d-flex align-items-center justify-content-between">
+        <button type="button" className={`btn btn-${theme}`} onClick={modal.close}>Annuler</button>
+        <button type="button" className="btn btn-danger" onClick={onConfirm}>Confirmer</button>
       </div>
     </div>
   );

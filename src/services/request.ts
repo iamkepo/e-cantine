@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import { HttpRequestContentType, HttpRequestType } from '../enums';
-import authLocal from "./authLocal";
+import authLocal from "../helpers/authLocal";
 
 export const client = axios.create();
 class Request {   

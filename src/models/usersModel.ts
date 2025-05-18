@@ -59,15 +59,12 @@ class UsersModel {
     }
   }
 
-  checkEditableAttribute = (att: string) => {
-    if(!['name', 'password'].includes(att)) {
-      throw new Error('Invalid patch attribute');
-    }
+  checkAttributeUser = (att: string) => {
+    return ['name', 'password', 'status'].includes(att);
   }
 
   patchUser = async (id: number, patch: {attr: string, val: any}) => {
     try {
-      this.checkEditableAttribute(patch.attr);
       const user = await this.users.update({ where: { id }, data: { [patch.attr]: patch.val } });
       if (!user) {
         throw new Error('User not found');

@@ -10,20 +10,17 @@ import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
 import { Dropdown } from "@/components/widgets/Dropdown";
 import CategoryRepository from "@/repositories/categoryRepository";
+import ConfirmComponent from "@/components/ConfirmComponent";
 
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const categoryRepository = useMemo(() => new CategoryRepository(), []);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
   const statusOptions = Object.values(statusOptionsActivation);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await categoryRepository.fetchCategories();
-      setCategories(data as ICategory[]);
-    };
-    fetchCategories();
+    categoryRepository.fetchCategories();
   }, [categoryRepository]);
 
 
@@ -40,10 +37,11 @@ const Page: React.FC = () => {
               fields={categoryRepository.formCreateCategory() as  unknown as IField[]}
               schema={categoryRepository.categorySchema}
               btn="Creer"
-              onSubmit={async (data: ICategory) => {
-                setCategories((await categoryRepository.createCategory(data)) as ICategory[]);
-                modal.close();
-              }}
+              onSubmit={ (data: ICategory) => categoryRepository.createCategory(data)
+                .then(() => categoryRepository.fetchCategories())
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              }
             />
           )}
         >
@@ -65,30 +63,32 @@ const Page: React.FC = () => {
           <tbody className={`table-${theme}`}>
             {
               categories.map((category: ICategory) => (
-                <tr key={category.id}>
+                <tr key={category.id} className="align-middle">
                   <th scope="row">{category.id}</th>
                   <td>{category.name}</td>
                   <td className="text-center">
-                    <span className={`badge text-bg-${statusColorRender(category.status)}`}>{statusRender(category.status)}</span>
-                    <Dropdown
-                      options={statusOptions.map((status) => (
-                        {
-                          label: statusRender(status),
-                          action: () => modal.open(
-                            <SubmitComponent
-                              title="Changer le status"
-                              fields={categoryRepository.formChangeStatusCategory() as unknown as IField[]}
-                              schema={categoryRepository.categorySchema}
-                              btn="Changer"
-                              onSubmit={async () => {
-                                setCategories((await categoryRepository.changeStatusCategory(category.id as number, status)) as ICategory[]);
-                                modal.close();
-                              }}
-                            />
-                          )
-                        }
-                      ))}
-                    />
+                    <button type="button" className={`btn btn-${statusColorRender(category.status)} btn-sm`}>
+                      <span className="me-2">{statusRender(category.status)}</span>
+                      <Dropdown
+                        chevron
+                        options={statusOptions.map((status) => (
+                          {
+                            label: statusRender(status),
+                            action: () => modal.open(
+                              <ConfirmComponent
+                                title={categoryRepository.confirmChangeStatusCategory.title}
+                                description={categoryRepository.confirmChangeStatusCategory.description}
+                                onConfirm={ () => categoryRepository.changeStatusCategory(category.id as number, status)
+                                  .then(() => categoryRepository.fetchCategories())
+                                  .catch((error) => console.error(error))
+                                  .finally(() => modal.close())
+                                }
+                              />
+                            )
+                          }
+                        ))}
+                      />
+                    </button>
                   </td>
                   <td className="text-end">
                     <i 
@@ -99,25 +99,25 @@ const Page: React.FC = () => {
                           fields={categoryRepository.formUpdateCategory(category) as unknown as IField[]}
                           schema={categoryRepository.categorySchema}
                           btn="Modifier"
-                          onSubmit={async (data: ICategory) => {
-                            setCategories((await categoryRepository.updateCategory(category.id as number, data)) as ICategory[]);
-                            modal.close();
-                          }}
+                          onSubmit={ (data: ICategory) => categoryRepository.updateCategory(category.id as number, data)
+                            .then(() => categoryRepository.fetchCategories())
+                            .catch((error) => console.error(error))
+                            .finally(() => modal.close())
+                          }
                         />
                       )}
                     ></i>
                     <i 
                       className="bi bi-trash text-danger"
                       onClick={() => modal.open(
-                        <SubmitComponent
-                          title="Supprimer la categorie"
-                          fields={categoryRepository.formDeleteCategory() as unknown as IField[]}
-                          schema={categoryRepository.categorySchema}
-                          btn="Supprimer"
-                          onSubmit={async () => {
-                            setCategories((await categoryRepository.deleteCategory(category.id as number)) as ICategory[]);
-                            modal.close();
-                          }}
+                        <ConfirmComponent
+                          title={categoryRepository.confirmDeleteCategory.title}
+                          description={categoryRepository.confirmDeleteCategory.description}
+                          onConfirm={ () => categoryRepository.deleteCategory(category.id as number)
+                            .then(() => categoryRepository.fetchCategories())
+                            .catch((error) => console.error(error))
+                            .finally(() => modal.close())
+                          }
                         />
                       )}
                     ></i>

@@ -38,6 +38,10 @@ export const statusColorRender = (status: string) => {
   switch (status) {
     case 'pending':
       return 'warning';
+    case 'active':
+      return 'success';
+    case 'inactive':
+      return 'danger';
     case 'paid':
       return 'success';
     case 'delivered':

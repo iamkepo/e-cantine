@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IArticle, IArticleTag, ITag } from "@/core/interfaces";
 import articleTagsService from "@/services/articleTagsService";
 import ArticleRepository from "./articleRepository";
 import TagRepository from "./tagRepository";
 import * as yup from 'yup';
+import Repository from "@/repositories/repository";
 
-class ArticleTagRepository {
+class ArticleTagRepository extends Repository<IArticleTag> {
   articles: IArticle[] = [];
   tags: ITag[] = [];
 
-  constructor() {     
+  constructor(setArticleTags?: (articleTags: IArticleTag[]) => void) {     
+    super(setArticleTags);
     this.init();
   }
 
@@ -18,67 +21,27 @@ class ArticleTagRepository {
   }
 
   async fetchArticleTags() {
-    try {
-      const data = await articleTagsService.fetchArticleTags();
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchArticleTags :", error);
-      throw error;
-    }
+    return this.fetchAll(articleTagsService.fetchArticleTags as () => Promise<IArticleTag[]>);
   }
 
   async fetchArticleTag(id: number) {
-    try {
-      const data = await articleTagsService.fetchArticleTag(id);
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchArticleTag :", error);
-      throw error;
-    }
+    return this.fetchOne(articleTagsService.fetchArticleTag as (id: number) => Promise<IArticleTag>, id);
   }
 
   async createArticleTag(payload: IArticleTag) {
-    try {
-      await articleTagsService.createArticleTag(payload);
-      const articleTags = await this.fetchArticleTags();
-      return articleTags;
-    } catch (error) {
-      console.error("Erreur createArticleTag :", error);
-      throw error;
-    }
+    return this.create(articleTagsService.createArticleTag as (payload: IArticleTag) => Promise<IArticleTag>, payload);
   }
 
   async changeStatusArticleTag(id: number, status: string) {
-    try {
-      await articleTagsService.patchArticleTag(id, {status});
-      const articleTags = await this.fetchArticleTags();
-      return articleTags;
-    } catch (error) {
-      console.error("Erreur changeStatusArticleTag :", error);
-      throw error;
-    }
+    return this.patch(articleTagsService.patchArticleTag as (id: number, payload: {attr: string, val: any}) => Promise<IArticleTag>, id, { attr: 'status', val: status });
   }
 
   async updateArticleTag(id: number, payload: IArticleTag) {
-    try {
-      await articleTagsService.updateArticleTag(id, payload);
-      const articleTags = await this.fetchArticleTags();
-      return articleTags;
-    } catch (error) {
-      console.error("Erreur updateTag :", error);
-      throw error;
-    }
+    return this.update(articleTagsService.updateArticleTag as (id: number, payload: IArticleTag) => Promise<IArticleTag>, id, payload);
   }
 
   async deleteArticleTag(id: number) {
-    try {
-      await articleTagsService.deleteArticleTag(id);
-      const articleTags = await this.fetchArticleTags();
-      return articleTags;
-    } catch (error) {
-      console.error("Erreur deleteArticleTag :", error);
-      throw error;
-    }
+    return this.delete(articleTagsService.deleteArticleTag as (id: number) => Promise<IArticleTag>, id);
   }
 
   formCreateArticleTag() {
@@ -95,16 +58,14 @@ class ArticleTagRepository {
     ]
   }
 
-  formDeleteArticleTag() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment supprimer le tag ?", colSize: "col-12 text-center" },
-    ]
+  confirmDeleteArticleTag = {
+    title: "Supprimer le tag", 
+    description: "Voulez-vous vraiment supprimer le tag ?",
   }
 
-  formChangeStatusArticleTag() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment changer le statut du tag ?", colSize: "col-12 text-center" },
-    ]
+  confirmChangeStatusArticleTag = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status du tag ?",
   }
 
   articleTagSchema = yup.object({

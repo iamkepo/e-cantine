@@ -28,14 +28,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ chevron, options }) => {
 		<div className="dropdown d-inline-block">
 			{
 				chevron ? 
-				<button
-					className={`btn btn-secondary`}
-					type="button"
-					onClick={toggleDropdown}
-				>
-					<span className='me-3'>{selected?.label}</span>
-					<i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`}></i>
-				</button>
+				<i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`} onClick={toggleDropdown}></i>
 				:
 				<i className="bi bi-three-dots-vertical" onClick={toggleDropdown}></i>
 			}

@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IArticle, ICategory, IType } from "@/core/interfaces";
 import articlesService from "@/services/articlesService";
 import CategoryRepository from "./categoryRepository";
 import TypeRepository from "./typeRepository";
 import * as yup from 'yup';
+import Repository from "@/repositories/repository";
 
-class ArticleRepository {
+class ArticleRepository extends Repository<IArticle> {
   categories: ICategory[] = [];
   types: IType[] = [];
-
-  constructor() {
+  
+  constructor(setArticles?: (articles: IArticle[]) => void) {
+    super(setArticles);
     this.init();
   }
 
@@ -18,68 +21,27 @@ class ArticleRepository {
   }
 
   async fetchArticles() {
-    try {
-      const data = await articlesService.fetchArticles();
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchArticles :", error);
-      throw error;
-    }
+    return this.fetchAll(articlesService.fetchArticles as () => Promise<IArticle[]>);
   }
 
   async fetchArticle(id: number) {
-    try {
-      const data = await articlesService.fetchArticle(id);
-      return data;
-    } catch (error) {
-      console.error("Erreur fetchArticle :", error);
-      throw error;
-    }
+    return this.fetchOne(articlesService.fetchArticle as (id: number) => Promise<IArticle>, id);
   }
 
   async createArticle(payload: IArticle) {
-    try {
-      await articlesService.createArticle(payload);
-      const articles = await this.fetchArticles();
-      return articles;
-    } catch (error) {
-      console.error("Erreur createArticle :", error);
-      throw error;
-    }
+    return this.create(articlesService.createArticle as (payload: IArticle) => Promise<IArticle>, payload);
   }
 
   async changeStatusArticle(id: number, status: string) {
-    console.log(status);
-    try {
-      await articlesService.patchArticle(id, {status});
-      const articles = await this.fetchArticles();
-      return articles;
-    } catch (error) {
-      console.error("Erreur changeStatusArticle :", error);
-      throw error;
-    }
+    return this.patch(articlesService.patchArticle as (id: number, payload: {attr: string, val: any}) => Promise<IArticle>, id, { attr: 'status', val: status });
   }
 
   async updateArticle(id: number, payload: IArticle) {
-    try {
-      await articlesService.updateArticle(id, payload);
-      const articles = await this.fetchArticles();
-      return articles;
-    } catch (error) {
-      console.error("Erreur updateArticle :", error);
-      throw error;
-    }
+    return this.update(articlesService.updateArticle as (id: number, payload: IArticle) => Promise<IArticle>, id, payload);
   }
 
   async deleteArticle(id: number) {
-    try {
-      await articlesService.deleteArticle(id);
-      const articles = await this.fetchArticles();
-      return articles;
-    } catch (error) {
-      console.error("Erreur deleteArticle :", error);
-      throw error;
-    }
+    return this.delete(articlesService.deleteArticle as (id: number) => Promise<IArticle>, id);
   }
 
   formCreateArticle() {
@@ -104,16 +66,14 @@ class ArticleRepository {
     ]
   }
 
-  formDeleteArticle() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment supprimer l'article ?", colSize: "col-12 text-center" },
-    ]
+  confirmDeleteArticle = {
+    title: "Supprimer l'article", 
+    description: "Voulez-vous vraiment supprimer l'article ?",
   }
 
-  formChangeStatusArticle() {
-    return [
-      { id: "section", type: "section", label: "Voulez-vous vraiment changer le statut de l'article ?", colSize: "col-12 text-center" },
-    ]
+  confirmChangeStatusArticle = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status de l'article ?",
   }
 
   articleSchema = yup.object({

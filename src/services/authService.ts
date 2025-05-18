@@ -1,6 +1,6 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/helpers/request";
+import Request from "@/services/request";
 
 const base = '/api/v1/';
 const authService = {

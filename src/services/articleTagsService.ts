@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/helpers/request";
+import Request from "@/services/request";
 
 const articleTagsService = {
   createArticleTag(credentials: object) {
@@ -46,11 +47,14 @@ const articleTagsService = {
     });
   },
 
-  patchArticleTag(id: number, credentials: object) {
+  patchArticleTag(id: number, patch: any) {
     return new Promise((resolve, reject) => {
       new Request()
         .append(`/article-tag/${id}`)
-        .setData(credentials)
+        .setData({
+          attr: patch.attr,
+          val: patch.val
+        })
         .method(HttpRequestType.PATCH)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);

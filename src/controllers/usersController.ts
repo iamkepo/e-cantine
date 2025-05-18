@@ -55,7 +55,13 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!usersModel.checkAttributeUser(attr as string)) {
+        return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
+      }
       const user = await usersModel.patchUser(id, {attr, val});
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
@@ -68,6 +74,9 @@ const usersController = {
     const body = await req.json();
     try {
       const user = await usersModel.updateUser(id, body);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
@@ -79,6 +88,9 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const user = await usersModel.deleteUser(id);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);

@@ -51,6 +51,9 @@ const categoriesController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!categoriesModel.checkAttributeCategory(attr as string)) {
+        return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
+      }
       const category = await categoriesModel.patchCategory(id, {attr, val});
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
