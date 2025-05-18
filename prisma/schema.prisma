@@ -88,7 +88,7 @@ model articles {
   updatedAt    DateTime       @default(now()) @map("updated_at")
 
   typeId       Int            @map("type_id")
-  categoryId   Int            @map("category_id")
+  categoryId   Int            @default(0) @map("category_id")
   type         types          @relation(fields: [typeId], references: [id])
   category     categories     @relation(fields: [categoryId], references: [id])
 

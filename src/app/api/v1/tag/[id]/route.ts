@@ -1,6 +1,8 @@
 "use server";
 
 import tagsController from "@/controllers/tagsController";
+import { ContextParams } from "@/core/interfaces";
+import { NextRequest } from "next/server";
 
 /**
  * @swagger
@@ -29,8 +31,8 @@ import tagsController from "@/controllers/tagsController";
  *         description: Erreur interne du serveur
  */
 
-export const GET = async (req: Request) => {
-  return tagsController.getTag(req);
+export const GET = async (req: NextRequest, context: ContextParams) => {
+  return tagsController.getTag(req, context.params);
 };
 
 /**
@@ -59,8 +61,8 @@ export const GET = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const PATCH = async (req: Request) => {
-  return tagsController.patchTag(req);
+export const PATCH = async (req: NextRequest, context: ContextParams) => {
+  return tagsController.patchTag(req, context.params);
 };
 
 /**
@@ -89,8 +91,8 @@ export const PATCH = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const PUT = async (req: Request) => {
-  return tagsController.updateTag(req);
+export const PUT = async (req: NextRequest, context: ContextParams) => {
+  return tagsController.updateTag(req, context.params);
 };
 
 /**
@@ -119,6 +121,6 @@ export const PUT = async (req: Request) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-export const DELETE = async (req: Request) => {
-  return tagsController.deleteTag(req);
+export const DELETE = async (req: NextRequest, context: ContextParams) => {
+  return tagsController.deleteTag(req, context.params);
 };

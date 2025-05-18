@@ -1,16 +1,19 @@
 import { PrismaClient } from '@prisma/client';
-// import users from './users';
-// import admins from './admins';
-import articles from './articles';
+import typesSeed from './typesSeed';
+import categoriesSeed from './categoriesSeed';
+import articles from './articlesSeed';
 
 const prisma = new PrismaClient();
 
 async function main() {
   const start = new Date();
-  console.log("Seeding database...");
-  // const user = await users(prisma);
-  // const admin = await admins(prisma, user.id);
-
+  console.log("Seeding database..."); 
+  
+  // Crée les Types
+  await typesSeed(prisma);
+  // Crée les Categories
+  await categoriesSeed(prisma);
+  // Crée les Articles
   await articles(prisma);
 
   const end = new Date();
