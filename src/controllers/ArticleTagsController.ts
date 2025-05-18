@@ -12,7 +12,7 @@ const articleTagsController = {
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not created' }), { status: 400 });
       }
-      return new Response(JSON.stringify({articleTag: articleTag}), { status: 201 });
+      return new Response(JSON.stringify({data: articleTag}), { status: 201 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `ArticleTag creation failed: ${error}` }), { status: 400 });
     }
@@ -28,7 +28,7 @@ const articleTagsController = {
       if (!articleTags) {
         return new Response(JSON.stringify({ error: 'ArticleTags not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({articleTags: articleTags}), { status: 200 });
+      return new Response(JSON.stringify({data: articleTags}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -42,7 +42,7 @@ const articleTagsController = {
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({articleTag: articleTag}), { status: 200 });
+      return new Response(JSON.stringify({data: articleTag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -57,7 +57,7 @@ const articleTagsController = {
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({articleTag: articleTag}), { status: 200 });
+      return new Response(JSON.stringify({data: articleTag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -72,7 +72,7 @@ const articleTagsController = {
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({articleTag: articleTag}), { status: 200 });
+      return new Response(JSON.stringify({data: articleTag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -86,7 +86,7 @@ const articleTagsController = {
       if (!articleTag) {
         return new Response(JSON.stringify({ error: 'ArticleTag not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({articleTag: articleTag}), { status: 200 });
+      return new Response(JSON.stringify({data: articleTag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

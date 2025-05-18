@@ -12,9 +12,6 @@ import { renderCheckboxField } from './fieldRenderers/renderCheckboxField';
 import { renderRadioField } from './fieldRenderers/renderRadioField';
 import { renderFileField } from './fieldRenderers/renderFileField';
 import { renderDateTimeField } from './fieldRenderers/renderDateTimeField';
-import { renderButtonField } from './fieldRenderers/renderButtonField';
-import { renderSubmitField } from './fieldRenderers/renderSubmitField';
-import { renderResetField } from './fieldRenderers/renderResetField';
 
 export interface IField {
   type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime';
@@ -46,22 +43,44 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
     switch (field.type) {
       case 'section':
         return (
-          field.label ? <div key={index} className={`${field.colSize} mb-3`}><h5>{field.label}</h5></div> : false
+          <div key={index} className={`${field.colSize} mb-2`}>
+            {field.label ? <h5>{field.label}</h5> : null}
+          </div>
         );
       case 'text':
       case 'email':
       case 'tel':
       case 'search':
       case 'number':
-        return renderInputField(field, index, control, errors);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderInputField(field, control, errors)}
+          </div>
+        );
       case 'password':
-        return renderPasswordField(field, index, control, errors);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderPasswordField(field, control, errors)}
+          </div>
+        );
       case 'textarea':
-        return renderTextareaField(field, index, control, errors, theme);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderTextareaField(field, control, errors, theme)}
+          </div>
+        );
       case 'select':
-        return renderSelectField(field, index, control, errors);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderSelectField(field, control, errors)}
+          </div>
+        );
       case 'searchSelect':
-        return renderSearchSelectField(field, index, control, errors);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderSearchSelectField(field, control, errors)}
+          </div>
+        );
       case 'date':
       case 'datetime':
       case 'datetime-local':
@@ -69,35 +88,45 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
       case 'week':
       case 'time':
       case 'range':
-        return renderDateTimeField(field, index, control, errors, theme);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderDateTimeField(field, control, errors, theme)}
+          </div>
+        );
       case 'file':
-        return renderFileField(field, index, control, errors, theme);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderFileField(field, control, errors, theme)}
+          </div>
+        );
       case 'checkbox':
-        return renderCheckboxField(field, index, control, errors);
+        return (
+          <div key={index} className={`${field.colSize} mb-3 form-check`}>
+            {renderCheckboxField(field, control, errors)}
+          </div>
+        );
       case 'radio':
-        return renderRadioField(field, index, control, errors);
-      case 'button':
-        return renderButtonField(field, index);
-      case 'submit':
-        return renderSubmitField(field, index);
-      case 'reset':
-        return renderResetField(field, index);
+        return (
+          <div key={index} className={`${field.colSize} mb-3`}>
+            {renderRadioField(field, control, errors)}
+          </div>
+        );
+        
       default:
         return null;
     }
   };
 
   return (
-    <div className="row row-cols-4 g-3 mb-0">
+    <div className="row row-cols-4 g-2 mb-0">
       {fields.map((fieldGroup, index) => {
         if (Array.isArray(fieldGroup)) {
           return (
             <div key={index} className={`col`}>
-              <div className={`card text-bg-${theme} p-3`}>
+              <div className={`card text-bg-${theme} p-2`}>
                 {fieldGroup.map((field, i) => renderField(field, i)
                 )}
               </div>
-              
             </div>
           );
         }

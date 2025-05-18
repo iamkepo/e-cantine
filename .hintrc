@@ -11,12 +11,7 @@
         "button-name": "off"
       }
     ],
-    "axe/aria": [
-      "default",
-      {
-        "aria-command-name": "off"
-      }
-    ],
+    "axe/aria": "off",
     "axe/forms": [
       "default",
       {

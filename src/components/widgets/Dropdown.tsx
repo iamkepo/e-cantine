@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { Option } from '@/core/types';
+
 import { useThemeStore } from '@/stores/themeStore';
 
 export interface DropdownProps {
@@ -24,32 +25,30 @@ export const Dropdown: React.FC<DropdownProps> = ({ chevron, options }) => {
 	};
 
 	return (
-		<div className="dropdown">
-			<button
-				className={`btn btn-secondary`}
-				type="button"
-				onClick={toggleDropdown}
-			>
-				{
-					chevron ? 
-					<>
-						<span className='me-3'>{selected?.label}</span>
-						<i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`}></i>
-					</>
-					:
-					<i className="bi bi-three-dots-vertical"></i>
-				}
-			</button>
-			<ul className={`dropdown-menu dropdown-menu-end text-bg-${theme} ${isOpen ? 'show mt-4' : ''}`}>
+		<div className="dropdown d-inline-block">
+			{
+				chevron ? 
+				<button
+					className={`btn btn-secondary`}
+					type="button"
+					onClick={toggleDropdown}
+				>
+					<span className='me-3'>{selected?.label}</span>
+					<i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`}></i>
+				</button>
+				:
+				<i className="bi bi-three-dots-vertical" onClick={toggleDropdown}></i>
+			}
+			<ul className={`dropdown-menu dropdown-menu-${theme} ${isOpen ? 'show' : ''}`}>
 				{options.filter(el => (el.label != selected.label)).map((option: Option, index: number) => (
 					<li key={index}>
-						<button
-							className="dropdown-item text-secondary"
-							type="button"
+						<a
+							href='#'
+							className="dropdown-item"
 							onClick={() => handleOptionClick(option)}
 						>
 							{option.label}
-						</button>
+						</a>
 					</li>
 				))}
 			</ul>

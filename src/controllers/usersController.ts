@@ -33,7 +33,7 @@ const usersController = {
     try {
       const users = await usersModel.getUsers({ skip, take });
   
-      return new Response(JSON.stringify(users), { status: 200 });
+      return new Response(JSON.stringify({data: users}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -44,7 +44,7 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const user = await usersModel.getUser(id);
-      return new Response(JSON.stringify({user: user}), { status: 200 });
+      return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -56,7 +56,7 @@ const usersController = {
     const {attr, val} = await req.json();
     try {
       const user = await usersModel.patchUser(id, {attr, val});
-      return new Response(JSON.stringify({user: user}), { status: 200 });
+      return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -68,7 +68,7 @@ const usersController = {
     const body = await req.json();
     try {
       const user = await usersModel.updateUser(id, body);
-      return new Response(JSON.stringify({user: user}), { status: 200 });
+      return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -79,7 +79,7 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const user = await usersModel.deleteUser(id);
-      return new Response(JSON.stringify({user: user}), { status: 200 });
+      return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

@@ -9,7 +9,7 @@ const tagsController = {
     const body = await req.json();
     try {
       const tag = await tagsModel.createTag(body);
-      return new Response(JSON.stringify({tag: tag}), { status: 201 });
+      return new Response(JSON.stringify({data: tag}), { status: 201 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Tag creation failed: ${error}` }), { status: 400 });
     }
@@ -22,7 +22,7 @@ const tagsController = {
   
     try {
       const tags = await tagsModel.getTags({ skip, take });
-      return new Response(JSON.stringify({tags: tags}), { status: 200 });
+      return new Response(JSON.stringify({data: tags}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -33,7 +33,7 @@ const tagsController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const tag = await tagsModel.getTag(id);
-      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+      return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -45,7 +45,7 @@ const tagsController = {
     const {attr, val} = await req.json();
     try {
       const tag = await tagsModel.patchTag(id, {attr, val});
-      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+      return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -57,7 +57,7 @@ const tagsController = {
     const body = await req.json();
     try {
       const tag = await tagsModel.updateTag(id, body);
-      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+      return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -68,7 +68,7 @@ const tagsController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const tag = await tagsModel.deleteTag(id);
-      return new Response(JSON.stringify({tag: tag}), { status: 200 });
+      return new Response(JSON.stringify({data: tag}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

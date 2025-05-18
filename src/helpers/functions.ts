@@ -20,6 +20,10 @@ export const statusRender = (status: string) => {
   switch (status) {
     case 'pending':
       return 'En attente';
+    case 'active':
+      return 'Active';
+    case 'inactive':
+      return 'Inactive';
     case 'paid':
       return 'Payé';
     case 'delivered':
@@ -27,7 +31,7 @@ export const statusRender = (status: string) => {
     case 'cancelled':
       return 'Annulé';
     default:
-      return 'Inconnu';
+      return status;
   }
 };
 export const statusColorRender = (status: string) => {

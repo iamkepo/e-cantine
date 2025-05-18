@@ -13,7 +13,7 @@ const categoriesController = {
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not created' }), { status: 400 });
       }
-      return new Response(JSON.stringify({category: category}), { status: 201 });
+      return new Response(JSON.stringify({data: category}), { status: 201 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Category creation failed: ${error}` }), { status: 400 });
     }
@@ -26,7 +26,7 @@ const categoriesController = {
   
     try {
       const categories = await categoriesModel.getCategories({ skip, take });
-      return new Response(JSON.stringify({categories: categories}), { status: 200 });
+      return new Response(JSON.stringify({data: categories}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -40,7 +40,7 @@ const categoriesController = {
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({category: category}), { status: 200 });
+      return new Response(JSON.stringify({data: category}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -55,7 +55,7 @@ const categoriesController = {
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({category: category}), { status: 200 });
+      return new Response(JSON.stringify({data: category}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -70,7 +70,7 @@ const categoriesController = {
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({category: category}), { status: 200 });
+      return new Response(JSON.stringify({data: category}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -84,7 +84,7 @@ const categoriesController = {
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({category: category}), { status: 200 });
+      return new Response(JSON.stringify({data: category}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

@@ -3,17 +3,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IField } from '../FormComponent';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { useThemeStore } from '@/stores/themeStore';
+import { useThemeStore } from '../../stores/themeStore';
 
 export const renderSearchSelectField = (
   field: IField,
-  index: React.Key | null | undefined,
   control: unknown,
   errors: FieldErrors<FieldValues>
 ) => (
   <SearchSelectFieldInternal
     field={field}
-    index={index}
     control={control}
     errors={errors}
   />
@@ -21,13 +19,12 @@ export const renderSearchSelectField = (
 
 const SearchSelectFieldInternal: React.FC<{
   field: IField,
-  index: React.Key | null | undefined,
   control: unknown,
   errors: FieldErrors<FieldValues>
-}> = ({ field, index, control, errors }) => {
+}> = ({ field, control, errors }) => {
   const { theme } = useThemeStore();
   return (
-    <div key={index} className={`${field.colSize} mb-3`}>
+    <>
       {field.label ? <label htmlFor={field.id} className='form-label'>{field.label}</label> : false}
       <Controller
         name={field.id}
@@ -121,6 +118,6 @@ const SearchSelectFieldInternal: React.FC<{
         }}
       />
       {errors[field.id]?.message ? <p className="text-danger">{String(errors[field.id]?.message)}</p> : false}
-    </div>
+    </>
   );
 };

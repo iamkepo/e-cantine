@@ -12,7 +12,7 @@ const authController = {
     try {
       const { accessToken, refreshToken } = await authModel.login(body);
       
-      return new Response(JSON.stringify({ accessToken, refreshToken }), { status: 200 });
+      return new Response(JSON.stringify({data: { accessToken, refreshToken }}), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: 'Login failed: ' + error }), { status: 500 });
     }
@@ -22,7 +22,7 @@ const authController = {
     try {
       const { accessToken, refreshToken } = await authModel.loginAdmin(body);
       
-      return new Response(JSON.stringify({ accessToken, refreshToken }), { status: 200 });
+      return new Response(JSON.stringify({data: { accessToken, refreshToken }}), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: 'Login failed: ' + error }), { status: 500 });
     }
@@ -32,7 +32,7 @@ const authController = {
     try {
       const { newUser, newClient } = await authModel.register(body);
   
-      return new Response(JSON.stringify({user: newUser, client: newClient}), { status: 201 });
+      return new Response(JSON.stringify({data: {user: newUser, client: newClient}}), { status: 201 });
     } catch (error) {
       return new Response(JSON.stringify({ error: `Registration failed: ${error}` }), { status: 400 });
     }
@@ -46,7 +46,7 @@ const authController = {
           return new Response(JSON.stringify({ error: 'Refresh token failed: Invalid token' }), { status: 401 });
         }
         const accessToken = generateAccessToken(data);
-        return new Response(JSON.stringify({ accessToken }));
+        return new Response(JSON.stringify({data: { accessToken }}), { status: 200 });
       });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: 'Refresh token failed: Internal Server Error' }), { status: 500 });
@@ -55,7 +55,7 @@ const authController = {
   me: (req: Request) => {
     try {
       const user = req.headers.get("user");
-      return new Response(user as string);
+      return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
     }

@@ -10,7 +10,10 @@ const typesController = {
     const body = await req.json();
     try {
       const type = await typesModel.createType(body);
-      return new Response(JSON.stringify({type: type}), { status: 201 });
+      if (!type) {
+        return new Response(JSON.stringify({ error: 'Type creation failed' }), { status: 400 });
+      }
+      return new Response(JSON.stringify({data: type}), { status: 201 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Type creation failed: ${error}` }), { status: 400 });
     }
@@ -23,7 +26,7 @@ const typesController = {
   
     try {
       const types = await typesModel.getTypes({ skip, take });
-      return new Response(JSON.stringify({types: types}), { status: 200 });
+      return new Response(JSON.stringify({data: types}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -34,7 +37,7 @@ const typesController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const type = await typesModel.getType(id);
-      return new Response(JSON.stringify({type: type}), { status: 200 });
+      return new Response(JSON.stringify({data: type}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -46,7 +49,7 @@ const typesController = {
     const {attr, val} = await req.json();
     try {
       const type = await typesModel.patchType(id, {attr, val});
-      return new Response(JSON.stringify({type: type}), { status: 200 });
+      return new Response(JSON.stringify({data: type}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -58,7 +61,7 @@ const typesController = {
     const body = await req.json();
     try {
       const type = await typesModel.updateType(id, body);
-      return new Response(JSON.stringify({type: type}), { status: 200 });
+      return new Response(JSON.stringify({data: type}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });
@@ -69,7 +72,7 @@ const typesController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const type = await typesModel.deleteType(id);
-      return new Response(JSON.stringify({type: type}), { status: 200 });
+      return new Response(JSON.stringify({data: type}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

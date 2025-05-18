@@ -45,21 +45,21 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Link>
               </li>
               <li className="nav-item mb-3 ps-md-2 ps-0">
-                <Link className={`btn btn-outline-${routeMatch('/dashboard/plats') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/plats'}>
+                <Link className={`btn btn-outline-${routeMatch('/dashboard/articles') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/articles'}>
                   <i className="bi bi-list"></i>
-                  <small className="d-none d-md-inline-block ms-2 fw-bold text-break">Plats</small>
+                  <small className="d-none d-md-inline-block ms-2 fw-bold text-break">Articles</small>
                 </Link>
               </li>
               <li className="nav-item mb-3 ps-md-2 ps-0">
-                <Link className={`btn btn-outline-${routeMatch('/dashboard/accompagnements') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/accompagnements'}>
-                  <i className="bi bi-cake"></i>
-                  <small className="d-none d-md-inline ms-2 fw-bold text-break">Accompagnements</small>
+                <Link className={`btn btn-outline-${routeMatch('/dashboard/types') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/types'}>
+                  <i className="bi bi-list"></i>
+                  <small className="d-none d-md-inline ms-2 fw-bold text-break">Types</small>
                 </Link>
               </li>
               <li className="nav-item mb-3 ps-md-2 ps-0">
-                <Link className={`btn btn-outline-${routeMatch('/dashboard/boissons') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/boissons'}>
-                  <i className="bi bi-cup-straw"></i>
-                  <small className="d-none d-md-inline-block ms-2 fw-bold text-break">Boissons</small>
+                <Link className={`btn btn-outline-${routeMatch('/dashboard/categories') ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard/categories'}>
+                  <i className="bi bi-list"></i>
+                  <small className="d-none d-md-inline-block ms-2 fw-bold text-break">Categories</small>
                 </Link>
               </li>
               <li className="nav-item mb-3 ps-md-2 ps-0">

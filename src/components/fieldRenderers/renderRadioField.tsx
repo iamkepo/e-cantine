@@ -3,8 +3,8 @@ import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
 import { IField } from '../FormComponent';
 
-export const renderRadioField = (field: IField, index: React.Key | null | undefined, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>) => (
-  <div key={index} className={`${field.colSize} mb-3`}>
+export const renderRadioField = (field: IField, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>) => (
+  <>
     {field.label ? <label className='form-label'>{field.label}</label> : false}
     <div>
       {field.options?.map((option, idx) => (
@@ -30,5 +30,5 @@ export const renderRadioField = (field: IField, index: React.Key | null | undefi
       ))}
     </div>
     {errors[field.id]?.message ? <p className="text-danger">{String(errors[field.id]?.message)}</p> : false}
-  </div>
+  </>
 );

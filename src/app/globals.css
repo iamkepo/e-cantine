@@ -116,22 +116,17 @@ body {
   cursor: pointer;
 }
 .form-control, .form-select {
-  background: transparent;
-}
-.dark-theme .form-control, .dark-theme .form-select {
-  color: var(--theme-color);
-}
-.light-theme .form-control, .light-theme .form-select {
-  color: var(--theme-bg);
-}
-.dark-theme .form-control::placeholder, .dark-theme .form-select::placeholder {
-  color: var(--theme-color);
-}
-.light-theme .form-control::placeholder, .light-theme .form-select::placeholder {
-  color: var(--theme-bg);
+  background-color: transparent;
 }
 .form-control:focus, .form-select:focus {
+  background-color: transparent;
   border-color: var(--bs-primary);
+}
+.dark-theme .form-control, .dark-theme .form-select {
+  color: #fff
+}
+.light-theme .form-control, .dark-theme .form-select {
+  color: #000
 }
 .h-100 {
   height: 100%;

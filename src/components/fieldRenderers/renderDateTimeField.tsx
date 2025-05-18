@@ -3,8 +3,8 @@ import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
 import { IField } from '../FormComponent';
 
-export const renderDateTimeField = (field: IField, index: React.Key | null | undefined, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>, theme: string) => (
-  <div key={index} className={`${field.colSize} mb-3`}>
+export const renderDateTimeField = (field: IField, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>, theme: string) => (
+  <>
     {field.label ? <label htmlFor={field.id} className='form-label'>{field.label}</label> : false}
     <Controller
       name={field.id}
@@ -26,5 +26,5 @@ export const renderDateTimeField = (field: IField, index: React.Key | null | und
       )}
     />
     {errors[field.id]?.message ? <p className="text-danger">{String(errors[field.id]?.message)}</p> : false}
-  </div>
+  </>
 );

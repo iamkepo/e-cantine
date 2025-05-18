@@ -13,7 +13,7 @@ const articlesController = {
       if (!article) {
         return new Response(JSON.stringify({ error: 'Article not created' }), { status: 400 });
       }
-      return new Response(JSON.stringify({article: article}), { status: 201 });
+      return new Response(JSON.stringify({data: article}), { status: 201 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Article creation failed: ${error}` }), { status: 400 });
     }
@@ -28,7 +28,7 @@ const articlesController = {
     const categoryId = parseInt(searchParams.get('categoryId') || '0', 10); // id de la catégorie
     try {
       const articles = await articlesModel.getArticles({ typeId, categoryId, skip, take, search });
-      return new Response(JSON.stringify({articles: articles}), { status: 200 });
+      return new Response(JSON.stringify({data: articles}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
@@ -42,7 +42,7 @@ const articlesController = {
       if (!article) {
         return new Response(JSON.stringify({ error: 'Article not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({article: article}), { status: 200 });
+      return new Response(JSON.stringify({data: article}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
@@ -57,7 +57,7 @@ const articlesController = {
       if (!article) {
         return new Response(JSON.stringify({ error: 'Article not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({article: article}), { status: 200 });
+      return new Response(JSON.stringify({data: article}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
@@ -72,7 +72,7 @@ const articlesController = {
       if (!article) {
         return new Response(JSON.stringify({ error: 'Article not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({article: article}), { status: 200 });
+      return new Response(JSON.stringify({data: article}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
@@ -86,7 +86,7 @@ const articlesController = {
       if (!article) {
         return Response.json({ error: 'Article not found' }, { status: 404 });
       }
-      return Response.json({article: article}, { status: 200 });
+      return Response.json({data: article}, { status: 200 });
     } catch (error) {
       console.error(error);
       return Response.json({ error: 'Internal Server Error' }, { status: 500 });

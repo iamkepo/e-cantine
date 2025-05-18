@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { api } from "@/services";
 import { useRouter } from "next/navigation";
+import authService from '@/services/authService';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const Page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    api.register(form)
+    authService.register(form)
       .then((response) => {
         console.log(response);
         router.push('/' + lang + '/login');
