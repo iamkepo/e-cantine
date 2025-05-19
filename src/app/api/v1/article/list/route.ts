@@ -15,11 +15,6 @@ import articlesController from "@/controllers/articlesController";
  *     tags: [Articles]
  *     parameters:
  *       - in: query
- *         name: skip
- *         schema:
- *           type: integer
- *         description: Nombre d'éléments à ignorer
- *       - in: query
  *         name: take
  *         schema:
  *           type: integer
@@ -39,6 +34,16 @@ import articlesController from "@/controllers/articlesController";
  *         schema:
  *           type: string
  *         description: Recherche
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Statut
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page
  *     responses:
  *       200:
  *         description: Liste des articles
@@ -47,4 +52,30 @@ import articlesController from "@/controllers/articlesController";
  */
 export const GET = async (req: Request) => {
   return articlesController.getArticles(req);
+};
+
+/**
+ * @swagger
+ * /api/v1/article/list:
+ *   delete:
+ *     summary: Supprimer plusieurs articles
+ *     tags: [Articles]
+ *     parameters:
+ *       - in: query
+ *         name: ids
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: integer
+ *         description: IDs des articles à supprimer
+ *     responses:
+ *       200:
+ *         description: Articles supprimés avec succès
+ *       404:
+ *         description: Articles non trouvés
+ *       500:
+ *         description: Erreur interne du serveur
+ */
+export const DELETE = async (req: Request) => {
+  return articlesController.deleteArticles(req);
 };

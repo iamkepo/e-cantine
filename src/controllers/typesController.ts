@@ -21,11 +21,13 @@ const typesController = {
 
   getTypes: async (req: Request) => {  
     const { searchParams } = new URL(req.url);
-    const skip = parseInt(searchParams.get('skip') || '0', 10);
     const take = parseInt(searchParams.get('take') || '10', 10);
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
   
     try {
-      const types = await typesModel.getTypes({ skip, take });
+      const types = await typesModel.getTypes({ take, search, status, page });
       return new Response(JSON.stringify({data: types}), { status: 200 });
     } catch (error) {
       console.error(error);
@@ -85,6 +87,20 @@ const typesController = {
         return new Response(JSON.stringify({ error: 'Type delete failed' }), { status: 400 });
       }
       return new Response(JSON.stringify({data: type}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  deleteTypes: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const types = await typesModel.deleteManyTypes(body);
+      if (!types) {
+        return new Response(JSON.stringify({ error: 'Types not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify({data: types}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

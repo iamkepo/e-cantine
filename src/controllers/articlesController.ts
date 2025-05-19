@@ -21,13 +21,15 @@ const articlesController = {
 
   getArticles: async (req: Request) => {  
     const { searchParams } = new URL(req.url);
-    const skip = parseInt(searchParams.get('skip') || '0', 10); // nombre d'articles à ignorer
     const take = parseInt(searchParams.get('take') || '10', 10); // nombre d'articles à récupérer
     const search = searchParams.get('search') || '';
     const typeId = parseInt(searchParams.get('typeId') || '0', 10); // id du type
     const categoryId = parseInt(searchParams.get('categoryId') || '0', 10); // id de la catégorie
+    const status = searchParams.get('status') || ''; // statut de l'article
+    const page = parseInt(searchParams.get('page') || '1', 10); // page
+
     try {
-      const articles = await articlesModel.getArticles({ typeId, categoryId, skip, take, search });
+      const articles = await articlesModel.getArticles({ typeId, categoryId, take, search, status, page });
       return new Response(JSON.stringify({data: articles}), { status: 200 });
     } catch (error) {
       console.error(error);
@@ -90,6 +92,20 @@ const articlesController = {
         return Response.json({ error: 'Article not found' }, { status: 404 });
       }
       return Response.json({data: article}, { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return Response.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+  },
+
+  deleteArticles: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const articles = await articlesModel.deleteManyArticles(body);
+      if (!articles) {
+        return Response.json({ error: 'Articles not found' }, { status: 404 });
+      }
+      return Response.json({data: articles}, { status: 200 });
     } catch (error) {
       console.error(error);
       return Response.json({ error: 'Internal Server Error' }, { status: 500 });

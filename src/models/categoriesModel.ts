@@ -1,50 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
+import Model from "./model";
 
-class CategoriesModel {
-  categories: any;
+class CategoriesModel extends Model {
   constructor() {
-    this.categories = prisma.categories;
+    super(prisma.categories);
   }
 
   createCategory = async (credentials: any) => {
-    try {
-      const credentialsCategory = { 
-        ...credentials,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const category = await this.categories.create({ data: credentialsCategory });
-      return category;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const category = await this.create(credentials);
+    return category;
   }
 
-  getCategories = async (params: { skip: number, take: number }) => {
-    try {
-      const { skip, take } = params;
-
-      const categoriesList = await this.categories.findMany({
-        skip,
-        take,
-      });
-      return categoriesList;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+  getCategories = async (params: { take: number, search: string, status: string, page: number }) => {
+    const categoriesList = await this.getAll(params);
+    return categoriesList;
   }
 
   getCategory = async (id: number) => {
-    try {
-      const category = await this.categories.findUnique({ where: { id } });
-      return category;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const category = await this.getOne('id', id);
+    return category;
   }
 
   checkAttributeCategory = (att: string) => {
@@ -52,33 +27,23 @@ class CategoriesModel {
   }
 
   patchCategory = async (id: number, patch: {attr: string, val: any}) => {
-    try {
-      const category = await this.categories.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      return category;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const category = await this.patch(id, patch);
+    return category;
   }
 
   updateCategory = async (id: number, credentials: any) => {
-    try {
-      const category = await this.categories.update({ where: { id }, data: credentials });
-      return category;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const category = await this.update(id, credentials);
+    return category;
   }
 
   deleteCategory = async (id: number) => {
-    try {
-      const category = await this.categories.delete({ where: { id } });
-      return category;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const category = await this.delete(id);
+    return category;
+  }
+
+  deleteManyCategories = async (ids: number[]) => {
+    const categories = await this.deleteMany(ids);
+    return categories;
   }
 }
 

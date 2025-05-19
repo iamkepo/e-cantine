@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ICategory } from "@/core/interfaces";
+import { ICategory, Meta, ParamsQuery } from "@/core/interfaces";
 import categoriesService from "@/services/categoriesService";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
+import { statusOptionsActivation } from "@/enums";
+import { statusRender } from "@/helpers/functions";
 
 class CategoryRepository extends Repository<ICategory> {
 
-  constructor(setCategories?: (categories: ICategory[]) => void) {
-    super(setCategories);
+  constructor(setCategories?: ({data, meta}: {data: ICategory[], meta: Meta}) => void) {
+    super(setCategories as unknown as ({data, meta}: {data: ICategory[], meta: Meta}) => void);
   }
 
-  async fetchCategories() {
-    return this.fetchAll(categoriesService.fetchCategories as () => Promise<ICategory[]>);
+  async fetchCategories(params: ParamsQuery) {
+    return this.fetchAll(() => categoriesService.fetchCategories(params) as Promise<{data: ICategory[], meta: Meta}>);
   }
 
   async fetchCategory(id: number) {
@@ -46,6 +48,13 @@ class CategoryRepository extends Repository<ICategory> {
     ]
   }
 
+  formFilterCategory() {
+    return [
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+    ]
+  }
+
   confirmDeleteCategory = {
     title: "Supprimer la categorie", 
     description: "Voulez-vous vraiment supprimer la categorie ?",
@@ -59,6 +68,11 @@ class CategoryRepository extends Repository<ICategory> {
   categorySchema = yup.object({
     id: yup.number().optional(),
     name: yup.string().required('Nom de la categorie est requis'),
+  })
+
+  categoryFilterSchema = yup.object({
+    search: yup.string().optional(),
+    status: yup.string().optional(),
   })
 }
 

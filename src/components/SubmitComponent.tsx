@@ -30,7 +30,6 @@ const SubmitComponent: React.FC<SubmitComponentProps> = ({
 
   // Form submission handler
   const submit = (data: any) => {
-    console.log('Form Data:', data);
     onSubmit(data);
   };
 

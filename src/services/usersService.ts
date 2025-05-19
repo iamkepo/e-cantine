@@ -3,11 +3,11 @@ import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
 
-const articlesService = {
-  createArticle(credentials: object) {
+const usersService = {
+  createUser(credentials: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/article/create')
+        .append('/user/create')
         .setData(credentials)
         .method(HttpRequestType.POST)
         .then(async (response: AxiosResponse) => {
@@ -19,31 +19,25 @@ const articlesService = {
     });
   },
 
-  fetchArticles({ 
+  fetchUsers({ 
     take = 10, 
     search = "", 
     status = "", 
-    categoryId = 0, 
-    typeId = 0,
-    page = 1,
+    page = 1 
   }: { 
     take?: number, 
     search?: string, 
     status?: string, 
-    categoryId?: number, 
-    typeId?: number,
-    page?: number,
+    page?: number 
   }) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/article/list')
+        .append('/user/list')
         .params({
           take,
           search,
           status,
-          categoryId,
-          typeId,
-          page,
+          page
         })
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
@@ -55,10 +49,10 @@ const articlesService = {
     });
   },
 
-  fetchArticle(id: number) {
+  fetchUser(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article/${id}`)
+        .append(`/user/${id}`)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -69,10 +63,10 @@ const articlesService = {
     });
   },
 
-  patchArticle(id: number, patch: any) {
+  patchUser(id: number, patch: {attr: string, val: any}) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article/${id}`)
+        .append(`/user/${id}`)
         .setData({
           attr: patch.attr,
           val: patch.val
@@ -87,10 +81,10 @@ const articlesService = {
     });
   },
 
-  updateArticle(id: number, credentials: object) {
+  updateUser(id: number, credentials: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article/${id}`)
+        .append(`/user/${id}`)
         .setData(credentials)
         .method(HttpRequestType.PUT)
         .then(async (response: AxiosResponse) => {
@@ -102,10 +96,10 @@ const articlesService = {
     });
   },
 
-  deleteArticle(id: number) {
+  deleteUser(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article/${id}`)
+        .append(`/user/${id}`)
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -117,4 +111,4 @@ const articlesService = {
   }
 };
 
-export default articlesService;
+export default usersService;

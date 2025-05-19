@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IType } from "@/core/interfaces";
+import { IType, Meta, ParamsQuery } from "@/core/interfaces";
 import typesService from "@/services/typesService";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
+import { statusOptionsActivation } from "@/enums";
+import { statusRender } from "@/helpers/functions";
 
 class TypeRepository extends Repository<IType> {
 
-  constructor(setTypes?: (types: IType[]) => void) {
-    super(setTypes);
+  constructor(setTypes?: ({data, meta}: {data: IType[], meta: Meta}) => void) {
+    super(setTypes as unknown as ({data, meta}: {data: IType[], meta: Meta}) => void);
   }
 
-  async fetchTypes() {
-    return this.fetchAll(typesService.fetchTypes as () => Promise<IType[]>);
+  async fetchTypes(params: ParamsQuery) {
+    return this.fetchAll(() => typesService.fetchTypes(params) as Promise<{data: IType[], meta: Meta}>);
   }
 
   async fetchType(id: number) {
@@ -46,6 +48,13 @@ class TypeRepository extends Repository<IType> {
     ]
   }
 
+  formFilterType() {
+    return [
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+    ]
+  }
+
   confirmDeleteType = {
     title: "Supprimer le type", 
     description: "Voulez-vous vraiment supprimer le type ?",
@@ -59,6 +68,11 @@ class TypeRepository extends Repository<IType> {
   typeSchema = yup.object({
     id: yup.number().optional(),
     name: yup.string().required('Nom du type est requis'),
+  })
+
+  typeFilterSchema = yup.object({
+    search: yup.string().optional(),
+    status: yup.string().optional(),
   })
 }
 

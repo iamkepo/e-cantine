@@ -21,11 +21,13 @@ const categoriesController = {
 
   getCategories: async (req: Request) => {  
     const { searchParams } = new URL(req.url);
-    const skip = parseInt(searchParams.get('skip') || '0', 10);
     const take = parseInt(searchParams.get('take') || '10', 10);
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
   
     try {
-      const categories = await categoriesModel.getCategories({ skip, take });
+      const categories = await categoriesModel.getCategories({ take, search, status, page });
       return new Response(JSON.stringify({data: categories}), { status: 200 });
     } catch (error) {
       console.error(error);
@@ -88,6 +90,20 @@ const categoriesController = {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
       }
       return new Response(JSON.stringify({data: category}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  deleteCategories: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const categories = await categoriesModel.deleteManyCategories(body);
+      if (!categories) {
+        return new Response(JSON.stringify({ error: 'Categories not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify({data: categories}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma } from "@/libs/prisma";
 import { generateAccessToken, generateRefreshToken } from "@/libs/jwt";
 import UsersModel from "./usersModel";
 import ClientsModel from "./clientsModel";
 import AdminsModel from "./adminsModel";
 
-class AuthModel {
-  users: any;
-  clients: any;
-  usersModel: UsersModel;
+class AuthModel extends UsersModel {
   clientsModel: ClientsModel;
   adminsModel: AdminsModel;
 
   constructor() {
-    this.users = prisma.users;
-    this.clients = prisma.clients;
-    this.usersModel = new UsersModel();
+    super();
     this.clientsModel = new ClientsModel();
     this.adminsModel = new AdminsModel();
   }
@@ -24,9 +18,9 @@ class AuthModel {
     const { phone, password } = credentials;
     try {
       const client = await this.clientsModel.getClient(phone);
-      const user = await this.usersModel.getUser(client.userId);
+      const user = await this.getUser(client.userId);
 
-      await this.usersModel.checkPassword(password, user);
+      await this.checkPassword(password, user);
       
       const accessToken = generateAccessToken(client);
       const refreshToken = generateRefreshToken(client);
@@ -42,9 +36,9 @@ class AuthModel {
     const { email, password } = credentials;
     try {
       const admin = await this.adminsModel.getAdmin(email);
-      const user = await this.usersModel.getUser(admin.userId);
+      const user = await this.getUser(admin.userId);
 
-      await this.usersModel.checkPassword(password, user);
+      await this.checkPassword(password, user);
 
       const accessToken = generateAccessToken(admin);
       const refreshToken = generateRefreshToken(admin);
@@ -60,7 +54,7 @@ class AuthModel {
     try {
       await this.clientsModel.checkClient(credentials.phone);
 
-      const newUser = await this.usersModel.createUser(credentials);
+      const newUser = await this.create(credentials);
       const newClient = await this.clientsModel.createClient(newUser);
      
       return { newUser, newClient };

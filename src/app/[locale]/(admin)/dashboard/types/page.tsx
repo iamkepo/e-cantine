@@ -3,7 +3,7 @@
 import { useThemeStore } from "@/stores/themeStore";
 import { modal } from "@/stores/appStore";
 import { useEffect, useState } from "react";
-import { IType } from "@/core/interfaces";
+import { IType, Meta } from "@/core/interfaces";
 import { statusColorRender, statusRender } from "@/helpers/functions";
 import { useMemo } from "react";
 import TypeRepository from "@/repositories/typeRepository";
@@ -12,46 +12,84 @@ import { IField } from "@/components/FormComponent";
 import { Dropdown } from "@/components/widgets/Dropdown";
 import { statusOptionsActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";
+import PaginationComponent from "@/components/PaginationComponent";
+import FilterComponent from "@/components/FilterComponent";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const [types, setTypes] = useState<IType[]>([]);
+  const [types, setTypes] = useState<{data: IType[], meta: Meta}>({
+    data: [],
+    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
+  });
+  const [params, setParams] = useState({
+    skip: 0,
+    take: 10,
+    search: "",
+    status: "",
+    page: 1,
+  });
   const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
   const statusOptions = Object.values(statusOptionsActivation);
 
   useEffect(() => {
-    typeRepository.fetchTypes();
-  }, [typeRepository]);
+    typeRepository.fetchTypes(params);
+  }, [typeRepository, params]);
 
 
 
   return (
     <div className="col-12">
-      <div className="d-flex justify-content-between">
-        <h4 className="card-title text-break">Liste des types</h4>
-        <button 
-          type="button" 
-          className="btn btn-primary" 
-          onClick={() => modal.open(
-            <SubmitComponent
-              title="Creer un type"
-              fields={typeRepository.formCreateType() as unknown as IField[]}
-              schema={typeRepository.typeSchema}
-              btn="Creer"
-              onSubmit={(data: IType) => typeRepository.createType(data)
-                .then(() => typeRepository.fetchTypes())
-                .catch((e) => console.log(e))
-                .finally(() => modal.close())
-              }
-            />
-          )}
-        >
-          <i className="bi bi-plus"></i> 
-          <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un type</span>
-        </button>
+
+      <div className="row">
+        <div className="col-12 col-md-3">
+          <h4 className="card-title text-break">Liste des types</h4>
+        </div>
+        <div className="col-12 col-md-9">
+          <div className="row">
+            <div className="col-12 col-md-8">
+              <FilterComponent 
+                fields={typeRepository.formFilterType() as unknown as IField[]}
+                schema={typeRepository.typeFilterSchema}
+                onSubmit={(data: {search: string, status: string}) => {
+                  setParams({
+                    ...params,
+                    search: data.search,
+                    status: data.status,
+                  });
+                }}
+              />
+            </div>
+            <div className="col-12 col-md-4 text-end">
+              <button 
+                type="button" 
+                className="btn btn-primary" 
+                onClick={() => modal.open(
+                  <SubmitComponent
+                    title="Creer un type"
+                    fields={typeRepository.formCreateType() as unknown as IField[]}
+                    schema={typeRepository.typeSchema}
+                    btn="Creer"
+                    onSubmit={(data: IType) => typeRepository.createType(data)
+                      .then(() => typeRepository.fetchTypes(params))
+                      .catch((e) => console.log(e))
+                      .finally(() => modal.close())
+                    }
+                  />
+                )}
+              >
+                <i className="bi bi-plus"></i> 
+                <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un type</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
+
       <hr />
+
       <div className="table-responsive">
+
         <table className={`table table-sm table-striped table-${theme}`}>
           <thead className="table-primary">
             <tr>
@@ -63,7 +101,7 @@ const Page: React.FC = () => {
           </thead>
           <tbody className={`table-${theme}`}>
             {
-              types.map((type: IType) => (
+              types.data.map((type: IType) => (
                 <tr key={type.id} className="align-middle">
                   <th scope="row">{type.id}</th>
                   <td>{type.name}</td>
@@ -79,7 +117,7 @@ const Page: React.FC = () => {
                               title={typeRepository.confirmChangeStatusType.title}
                               description={typeRepository.confirmChangeStatusType.description}
                               onConfirm={() => typeRepository.changeStatusType(type.id as number, status)
-                                .then(() => typeRepository.fetchTypes())
+                                .then(() => typeRepository.fetchTypes(params))
                                 .catch((e) => console.log(e))
                                 .finally(() => modal.close())
                               }
@@ -99,7 +137,7 @@ const Page: React.FC = () => {
                           schema={typeRepository.typeSchema}
                           btn="Modifier"
                           onSubmit={(data: IType) => typeRepository.updateType(type.id as number, data)
-                            .then(() => typeRepository.fetchTypes())
+                            .then(() => typeRepository.fetchTypes(params))
                             .catch((e) => console.log(e))
                             .finally(() => modal.close())
                           }
@@ -113,7 +151,7 @@ const Page: React.FC = () => {
                           title={typeRepository.confirmDeleteType.title}
                           description={typeRepository.confirmDeleteType.description}
                           onConfirm={() => typeRepository.deleteType(type.id as number)
-                            .then(() => typeRepository.fetchTypes())
+                            .then(() => typeRepository.fetchTypes(params))
                             .catch((e) => console.log(e))
                             .finally(() => modal.close())
                           }
@@ -126,6 +164,12 @@ const Page: React.FC = () => {
             }
           </tbody>
         </table>
+
+        <PaginationComponent 
+          page={params.page}
+          total={types.meta.pageCount}
+          onChange={(page) => setParams({ ...params, page })}
+        />
       </div>
     </div>
   );

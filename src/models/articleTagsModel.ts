@@ -1,83 +1,57 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
+import Model from "./model";
 
-class ArticleTagsModel {
-  tagsArticle: any;
+class ArticleTagsModel extends Model {
   constructor() {
-    this.tagsArticle = prisma.articleTags;
+    super(prisma.articleTags);
   }
 
   createArticleTag = async (credentials: any) => {
-    try {
-      const credentialsArticleTag = { 
-        ...credentials,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const articleTag = await this.tagsArticle.create({ data: credentialsArticleTag });
-      return articleTag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const articleTag = await this.create(credentials);
+    return articleTag;
   }
 
-  getArticleTags = async (params: { skip: number, take: number }) => {
-    try {
-      const { skip, take } = params;
-      const articleTagsList = await this.tagsArticle.findMany({
-        skip,
-        take,
-      });
+  getArticleTags = async (params: { take: number, articleId: number, tagId: number, status: string, page: number }) => {
+    const { articleId, tagId } = params;
+    const where: any = {};
+      if (articleId > 0) {
+        where.articleId = articleId;
+      }
+      if (tagId > 0) {
+        where.tagId = tagId;
+      }
+      const articleTagsList = await this.getAll({ ...params, search: '' }, where);
       return articleTagsList;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
   }
 
   getArticleTag = async (id: number) => {
-    try {
-      const articleTag = await this.tagsArticle.findUnique({ where: { id } });
-      return articleTag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const articleTag = await this.getOne('id', id);
+    return articleTag;
   }
 
   checkAttributeArticleTag = (att: string) => {
-    return ['articleId', 'tagId', 'status'].includes(att);
+    return this.checkAttribute(['articleId', 'tagId', 'status'], att);
   }
 
   patchArticleTag = async (id: number, patch: {attr: string, val: any}) => {
-    try {
-      const articleTag = await this.tagsArticle.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      return articleTag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const articleTag = await this.patch(id, patch);
+    return articleTag;
   }
 
   updateArticleTag = async (id: number, credentials: any) => {
-    try {
-      const articleTag = await this.tagsArticle.update({ where: { id }, data: credentials });
-      return articleTag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const articleTag = await this.update(id, credentials);
+    return articleTag;
   }
 
   deleteArticleTag = async (id: number) => {
-    try {
-      const articleTag = await this.tagsArticle.delete({ where: { id } });
-      return articleTag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const articleTag = await this.delete(id);
+    return articleTag;
+  }
+
+  deleteManyArticleTags = async (ids: number[]) => {
+    const articleTags = await this.deleteMany(ids);
+    return articleTags;
   }
 }
 

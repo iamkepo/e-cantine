@@ -1,93 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
+import Model from "./model";
 
-class AdminsModel {
-  admins: any;
+class AdminsModel extends Model {
   constructor() {
-    this.admins = prisma.admins;
+    super(prisma.admins);
   }
 
   createAdmin = async (newUser: any) => {
-    try {
-      await this.checkAdmin(newUser.email);
-      const adminCredentials = { 
-        userId: newUser.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const admin = await this.admins.create({ data: adminCredentials });
-      return admin;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.create({userId: newUser.id});
+    return admin;
   }
+
   checkAdmin = async (email: string) => {
-    try {
-      const admin = await this.admins.findUnique({ where: { email } });
-      if (admin) {
-        throw new Error('Admin already exists');
-      }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.getOne('email', email);
+    return admin;
   }
-  getAdmins = async () => {
-    try {
-      const adminsList = await this.admins.findMany();
-      return adminsList;
-    } catch (error) {
-      console.error(error);
-      throw error;
+
+  getAdmins = async (params: { take: number, search: string, userId: number, status: string, page: number }) => {
+    const { search, userId } = params;
+    const where: any = {
+      OR: [
+        { email: { contains: search, mode: 'insensitive' } },
+      ]
+    };
+    if (userId > 0) {
+      where.userId = userId;
     }
+    const adminsList = await this.getAll(params, where);
+    return adminsList;
   }
 
   getAdmin = async (id: number) => {
-    try {
-      const admin = await this.admins.findUnique({ where: { id } });
-      if (!admin) {
-        throw new Error('Admin not found');
-      }
-      return admin;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.getOne('id', id);
+    return admin;
   }
 
   checkAttributeAdmin = (att: string) => {
-    return ['userId', 'status'].includes(att);
+    return this.checkAttribute(['userId', 'status'], att);
   }
 
   patchAdmin = async (id: number, patch: {attr: string, val: any}) => {
-    try {
-      const admin = await this.admins.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      return admin;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.patch(id, patch);
+    return admin;
   }
 
   updateAdmin = async (id: number, credentials: any) => {
-    try {
-      const admin = await this.admins.update({ where: { id }, data: credentials });
-      return admin;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.update(id, credentials);
+    return admin;
   }
 
   deleteAdmin = async (id: number) => {
-    try {
-      const admin = await this.admins.delete({ where: { id } });
-      return admin;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const admin = await this.delete(id);
+    return admin;
+  }
+
+  deleteManyAdmins = async (ids: number[]) => {
+    const admins = await this.deleteMany(ids);
+    return admins;
   }
 }
 

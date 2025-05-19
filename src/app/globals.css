@@ -115,17 +115,17 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
-.form-control, .form-select {
+.form-control, input[type="search"].form-control, .form-select {
   background-color: transparent;
 }
-.form-control:focus, .form-select:focus {
+.form-control:focus, input[type="search"].form-control:focus, .form-select:focus {
   background-color: transparent;
   border-color: var(--bs-primary);
 }
-.dark-theme .form-control, .dark-theme .form-select {
+.dark-theme .form-control, .dark-theme input[type="search"].form-control, .dark-theme .form-select {
   color: #fff
 }
-.light-theme .form-control, .dark-theme .form-select {
+.light-theme .form-control, .light-theme input[type="search"].form-control, .light-theme .form-select {
   color: #000
 }
 .h-100 {

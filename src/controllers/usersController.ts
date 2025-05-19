@@ -3,6 +3,7 @@
 import { prisma } from "@/libs/prisma";
 import UsersModel from "@/models/usersModel";
 import { Params } from "@/core/interfaces";
+import { NextRequest } from "next/server";
 
 const usersModel = new UsersModel();
 const usersController = {
@@ -27,11 +28,13 @@ const usersController = {
 
   getUsers: async (req: Request) => {  
     const { searchParams } = new URL(req.url);
-    const skip = parseInt(searchParams.get('skip') || '0', 10);
     const take = parseInt(searchParams.get('take') || '10', 10);
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
   
     try {
-      const users = await usersModel.getUsers({ skip, take });
+      const users = await usersModel.getUsers({ take, search, status, page });
   
       return new Response(JSON.stringify({data: users}), { status: 200 });
     } catch (error: any) {
@@ -40,7 +43,7 @@ const usersController = {
     }
   },
 
-  getUser: async (req: Request, params: Promise<Params>) => {
+  getUser: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     try {
       const user = await usersModel.getUser(id);
@@ -51,7 +54,7 @@ const usersController = {
     }
   },
 
-  patchUser: async (req: Request, params: Promise<Params>) => {
+  patchUser: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
@@ -69,7 +72,7 @@ const usersController = {
     }
   },
 
-  updateUser: async (req: Request, params: Promise<Params>) => {
+  updateUser: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
@@ -84,7 +87,7 @@ const usersController = {
     }
   },
 
-  deleteUser: async (req: Request, params: Promise<Params>) => {
+  deleteUser: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     try {
       const user = await usersModel.deleteUser(id);
@@ -92,6 +95,20 @@ const usersController = {
         return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
       }
       return new Response(JSON.stringify({data: user}), { status: 200 });
+    } catch (error: any) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  deleteUsers: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const users = await usersModel.deleteManyUsers(body);
+      if (!users) {
+        return new Response(JSON.stringify({ error: 'Users not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify({data: users}), { status: 200 });
     } catch (error: any) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

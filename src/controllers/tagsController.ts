@@ -2,6 +2,7 @@
 
 import { Params } from "@/core/interfaces";
 import TagsModel from "@/models/tagsModel";
+import { NextRequest } from "next/server";
 
 const tagsModel = new TagsModel();
 const tagsController = {
@@ -17,11 +18,13 @@ const tagsController = {
 
   getTags: async (req: Request) => {  
     const { searchParams } = new URL(req.url);
-    const skip = parseInt(searchParams.get('skip') || '0', 10);
     const take = parseInt(searchParams.get('take') || '10', 10);
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
   
     try {
-      const tags = await tagsModel.getTags({ skip, take });
+      const tags = await tagsModel.getTags({ take, search, status, page });
       return new Response(JSON.stringify({data: tags}), { status: 200 });
     } catch (error) {
       console.error(error);
@@ -29,7 +32,7 @@ const tagsController = {
     }
   },
 
-  getTag: async (req: Request, params: Promise<Params>) => {
+  getTag: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     try {
       const tag = await tagsModel.getTag(id);
@@ -40,7 +43,7 @@ const tagsController = {
     }
   },
 
-  patchTag: async (req: Request, params: Promise<Params>) => {
+  patchTag: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
@@ -58,7 +61,7 @@ const tagsController = {
     }
   },
 
-  updateTag: async (req: Request, params: Promise<Params>) => {
+  updateTag: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
@@ -73,11 +76,25 @@ const tagsController = {
     }
   },
 
-  deleteTag: async (req: Request, params: Promise<Params>) => {
+  deleteTag: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     try {
       const tag = await tagsModel.deleteTag(id);
       return new Response(JSON.stringify({data: tag}), { status: 200 });
+    } catch (error) {
+      console.error(error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+
+  deleteTags: async (req: Request) => {
+    const body = await req.json();
+    try {
+      const tags = await tagsModel.deleteManyTags(body);
+      if (!tags) {
+        return new Response(JSON.stringify({ error: 'Tags not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify({data: tags}), { status: 200 });
     } catch (error) {
       console.error(error);
       return new Response('Internal Server Error', { status: 500 });

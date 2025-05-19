@@ -1,27 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IArticle, IArticleTag, ITag } from "@/core/interfaces";
+import { IArticle, IArticleTag, ITag, Meta, ParamsQuery } from "@/core/interfaces";
 import articleTagsService from "@/services/articleTagsService";
 import ArticleRepository from "./articleRepository";
 import TagRepository from "./tagRepository";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
+import { statusOptionsActivation } from "@/enums";
+import { statusRender } from "@/helpers/functions";
 
 class ArticleTagRepository extends Repository<IArticleTag> {
-  articles: IArticle[] = [];
-  tags: ITag[] = [];
+  articles: {data: IArticle[], meta: Meta} = {
+    data: [],
+    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
+  };
+  tags: {data: ITag[], meta: Meta} = {
+    data: [],
+    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
+  };
 
-  constructor(setArticleTags?: (articleTags: IArticleTag[]) => void) {     
-    super(setArticleTags);
+  constructor(setArticleTags?: ({data, meta}: {data: IArticleTag[], meta: Meta}) => void) {     
+    super(setArticleTags as unknown as ({data, meta}: {data: IArticleTag[], meta: Meta}) => void);
     this.init();
   }
 
   async init() {
-    this.articles = (await new ArticleRepository().fetchArticles()) as IArticle[];
-    this.tags = (await new TagRepository().fetchTags()) as ITag[];
+    await new ArticleRepository().fetchArticles({})
+    .then((res) => this.articles = res as {data: IArticle[], meta: Meta});
+    await new TagRepository().fetchTags({})
+    .then((res) => this.tags = res as {data: ITag[], meta: Meta});
   }
 
-  async fetchArticleTags() {
-    return this.fetchAll(articleTagsService.fetchArticleTags as () => Promise<IArticleTag[]>);
+  async fetchArticleTags(params: ParamsQuery) {
+    return this.fetchAll(() => articleTagsService.fetchArticleTags(params) as Promise<{data: IArticleTag[], meta: Meta}>);
   }
 
   async fetchArticleTag(id: number) {
@@ -46,15 +56,24 @@ class ArticleTagRepository extends Repository<IArticleTag> {
 
   formCreateArticleTag() {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.map((article: IArticle) => ({ label: article.name, value: article.id })) },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
     ]
   }
 
   formUpdateArticleTag(articleTag: IArticleTag) {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.map((article: IArticle) => ({ label: article.name, value: article.id })), value: articleTag.articleId },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: articleTag.tagId },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })), value: articleTag.articleId },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: articleTag.tagId },
+    ]
+  }
+
+  formFilterArticleTag() {
+    return [
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
+      { id: "tagId", type: "select", placeholder: "Tag", colSize: "col-12 col-md-2", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "select", placeholder: "Article", colSize: "col-12 col-md-2", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
 
@@ -72,6 +91,13 @@ class ArticleTagRepository extends Repository<IArticleTag> {
     id: yup.number().optional(),
     articleId: yup.number().required('Article est requis'),
     tagId: yup.number().required('Tag est requis'),
+  })
+
+  articleTagFilterSchema = yup.object({
+    search: yup.string().optional(),
+    tagId: yup.string().optional(),
+    articleId: yup.string().optional(),
+    status: yup.string().optional(),
   })
 }
 

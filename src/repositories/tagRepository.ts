@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ITag } from "@/core/interfaces";
+import { ITag, Meta, ParamsQuery } from "@/core/interfaces";
 import tagsService from "@/services/tagsService";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
+import { statusOptionsActivation } from "@/enums";
+import { statusRender } from "@/helpers/functions";
 
 class TagRepository extends Repository<ITag> {
 
-  constructor(setTags?: (tags: ITag[]) => void) {
-    super(setTags);
+  constructor(setTags?: ({data, meta}: {data: ITag[], meta: Meta}) => void) {
+    super(setTags as unknown as ({data, meta}: {data: ITag[], meta: Meta}) => void);
   }
 
-  async fetchTags() {
-    return this.fetchAll(tagsService.fetchTags as () => Promise<ITag[]>);
+  async fetchTags(params: ParamsQuery) {
+    return this.fetchAll(() => tagsService.fetchTags(params) as Promise<{data: ITag[], meta: Meta}>);
   }
 
   async fetchTag(id: number) {
@@ -46,6 +48,13 @@ class TagRepository extends Repository<ITag> {
     ]
   }
 
+  formFilterTag() {
+    return [
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+    ]
+  }
+
   confirmDeleteTag = {
     title: "Supprimer le tag", 
     description: "Voulez-vous vraiment supprimer le tag ?",
@@ -59,6 +68,11 @@ class TagRepository extends Repository<ITag> {
   tagSchema = yup.object({
     id: yup.number().optional(),
     name: yup.string().required('Nom du tag est requis'),
+  })
+
+  tagFilterSchema = yup.object({
+    search: yup.string().optional(),
+    status: yup.string().optional(),
   })
 }
 

@@ -1,98 +1,49 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
+import Model from "./model";
 
-class TagsModel {
-  tags: any;
+class TagsModel extends Model {
   constructor() {
-    this.tags = prisma.tags;
+    super(prisma.tags);
   }
 
   createTag = async (credentials: any) => {
-    try {
-      const credentialsTag = { 
-        ...credentials,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const tag = await this.tags.create({ data: credentialsTag });
-      if (!tag) {
-        throw new Error('Tag not created');
-      }
-      return tag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const tag = await this.create(credentials);
+    return tag;
   }
 
-  getTags = async (params: { skip: number, take: number }) => {
-    try {
-      const { skip, take } = params;
-      const tagsList = await this.tags.findMany({
-        skip,
-        take,
-      });
-      if (!tagsList) {
-        throw new Error('Tags not found');
-      }
-      return tagsList;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+  getTags = async (params: { take: number, search: string, status: string, page: number }) => {
+    const tagsList = await this.getAll(params);
+    return tagsList;
   }
 
   getTag = async (id: number) => {
-    try {
-      const tag = await this.tags.findUnique({ where: { id } });
-      if (!tag) {
-        throw new Error('Tag not found');
-      }
-      return tag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const tag = await this.getOne('id', id);
+    return tag;
   }
 
   checkAttributeTag = (att: string) => {
-    return ['name', 'status'].includes(att);
+    return this.checkAttribute(['name', 'status'], att);
   }
 
   patchTag = async (id: number, patch: {attr: string, val: any}) => {
-    try {
-      const tag = await this.tags.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      if (!tag) {
-        throw new Error('Tag not found');
-      }
-      return tag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const tag = await this.patch(id, patch);
+    return tag;
   }
 
   updateTag = async (id: number, credentials: any) => {
-    try {
-      const tag = await this.tags.update({ where: { id }, data: credentials });
-      if (!tag) {
-        throw new Error('Tag not found');
-      }
-      return tag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const tag = await this.update(id, credentials);
+    return tag;
   }
 
   deleteTag = async (id: number) => {
-    try {
-      const tag = await this.tags.delete({ where: { id } });
-      return tag;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const tag = await this.delete(id);
+    return tag;
+  }
+
+  deleteManyTags = async (ids: number[]) => {
+    const tags = await this.deleteMany(ids);
+    return tags;
   }
 }
 

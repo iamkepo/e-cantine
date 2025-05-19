@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-class Repository<T> {
-  setArticles?: (articles: T[]) => void;
+import { Meta } from "@/core/interfaces";
 
-  constructor(setArticles?: (articles: T[]) => void) {
-    if (setArticles) {
-      this.setArticles = setArticles;
+class Repository<T> {
+  setList?: ({data, meta}: {data: T[], meta: Meta}) => void;
+
+  constructor(setList?: ({data, meta}: {data: T[], meta: Meta}) => void) {
+    if (setList) {
+      this.setList = setList;
     }
   }
 
 
-  async fetchAll(callfront: () => Promise<T[]>): Promise<void | T[]> {
+  async fetchAll(callfront: () => Promise<{data: T[], meta: Meta}>): Promise<void | {data: T[], meta: Meta}> {
     try {
       const data = await callfront();
-      if (this.setArticles) {
-        this.setArticles(data);
+      if (this.setList) {
+        this.setList(data);
       } else {
         return data;
       }

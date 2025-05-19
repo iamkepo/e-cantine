@@ -2,6 +2,7 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
+import { ParamsQuery } from "@/core/interfaces";
 
 const articleTagsService = {
   createArticleTag(credentials: object) {
@@ -19,10 +20,23 @@ const articleTagsService = {
     });
   },
 
-  fetchArticleTags() {
+  fetchArticleTags({ 
+    take = 10,
+    status = "",
+    articleId = 0,
+    tagId = 0,
+    page = 1 
+  }: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
         .append('/article-tag/list')
+        .params({
+          take,
+          status,
+          articleId,
+          tagId,
+          page
+        })
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);

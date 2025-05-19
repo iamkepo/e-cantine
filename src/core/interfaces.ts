@@ -1,16 +1,35 @@
 export interface Params { 
   id?: string;
-  skip?: number;
-  take?: number;
-  search?: string;
-  typeId?: string;
-  categoryId?: string;
  };
 export interface ContextParams { params: Promise<Params> };
 
-
+export interface ParamsQuery { 
+  take?: number;
+  search?: string;
+  typeId?: number;
+  categoryId?: number;
+  tagId?: number;
+  page?: number;
+  status?: string;
+  articleId?: number;
+ };
 export interface ResponseData<T> {
   data: T;
+}
+export interface Meta {
+  total: number;
+  page: number;
+  pageCount: number;
+  limit: number;
+}
+
+export interface IUser {
+  id?: number;
+  name: string;
+  password: string;
+  status: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IType {

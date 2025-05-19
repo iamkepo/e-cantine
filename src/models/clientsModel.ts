@@ -1,102 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
+import Model from "./model";
 
-class ClientsModel {
-  clients: any;
+class ClientsModel extends Model {
   constructor() {
-    this.clients = prisma.clients;
+    super(prisma.clients);
   }
 
   createClient = async (newUser: any) => {
-    try {
-      await this.checkClient(newUser.phone);
-      const credentialsClient = { 
-        userId: newUser.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      const newClient = await this.clients.create({ data: credentialsClient });
-      if (!newClient) {
-        throw new Error('Client not created');
-      }
-      return newClient;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const newClient = await this.create({userId: newUser.id});
+    return newClient;
   }
+
   checkClient = async (phone: string) => {
-    try {
-      const client = await this.clients.findUnique({ where: { phone } });
-      if (client) {
-        throw new Error('Client already exists');
-      }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const client = await this.getOne('phone', phone);
+    return client;
   }
-  getClients = async () => {
-    try {
-      const clientsList = await this.clients.findMany();
-      if (!clientsList) {
-        throw new Error('Clients not found');
-      }
-      return clientsList;
-    } catch (error) {
-      console.error(error);
-      throw error;
+
+  getClients = async (params: { take: number, search: string, userId: number, status: string, page: number }) => {
+    const { search, userId } = params;
+    const where: any = {
+      OR: [
+        { phone: { contains: search, mode: 'insensitive' } },
+      ]
+    };
+    if (userId > 0) {
+      where.userId = userId;
     }
+    const clientsList = await this.getAll(params, where);
+    return clientsList;
   }
 
   getClient = async (phone: string) => {
-    try {
-      const client = await this.clients.findUnique({ where: { phone } });
-      if (!client) {
-        throw new Error('Client not found');
-      }
-      return client;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const client = await this.getOne('phone', phone);
+    return client;
   }
 
   checkAttributeClient = (att: string) => {
-    return ['phone', 'status'].includes(att);
+    return this.checkAttribute(['userId', 'status'], att);
   }
 
   patchClient = async (id: number, patch: {attr: string, val: any}) => {
-    try {
-      const client = await this.clients.update({ where: { id }, data: { [patch.attr]: patch.val } });
-      return client;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const client = await this.patch(id, patch);
+    return client;
   }
 
   updateClient = async (id: number, credentials: any) => {
-    try {
-      const client = await this.clients.update({ where: { id }, data: credentials });
-      if (!client) {
-        throw new Error('Client not found');
-      }
-      return client;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const client = await this.update(id, credentials);
+    return client;
   }
 
   deleteClient = async (id: number) => {
-    try {
-      const client = await this.clients.delete({ where: { id } });
-      return client;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const client = await this.delete(id);
+    return client;
+  }
+
+  deleteManyClients = async (ids: number[]) => {
+    const clients = await this.deleteMany(ids);
+    return clients;
   }
 }
 

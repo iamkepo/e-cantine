@@ -19,10 +19,26 @@ const typesService = {
     });
   },
 
-  fetchTypes() {
+  fetchTypes({ 
+    take = 10, 
+    search = "", 
+    status = "", 
+    page = 1 
+  }: { 
+    take?: number, 
+    search?: string, 
+    status?: string, 
+    page?: number 
+  }) {
     return new Promise((resolve, reject) => {
       new Request()
         .append('/type/list')
+        .params({
+          take,
+          search,
+          status,
+          page
+        })
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
