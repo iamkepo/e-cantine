@@ -99,9 +99,9 @@ const articlesController = {
   },
 
   deleteArticles: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const articles = await articlesModel.deleteManyArticles(body);
+      const articles = await articlesModel.deleteManyArticles(ids);
       if (!articles) {
         return Response.json({ error: 'Articles not found' }, { status: 404 });
       }

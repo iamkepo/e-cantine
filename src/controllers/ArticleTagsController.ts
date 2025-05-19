@@ -101,9 +101,9 @@ const articleTagsController = {
   },
 
   deleteArticleTags: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const articleTags = await articleTagsModel.deleteManyArticleTags(body);
+      const articleTags = await articleTagsModel.deleteManyArticleTags(ids);
       if (!articleTags) {
         return new Response(JSON.stringify({ error: 'ArticleTags not found' }), { status: 404 });
       }

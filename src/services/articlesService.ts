@@ -2,6 +2,7 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
+import { ParamsQuery } from "@/core/interfaces";
 
 const articlesService = {
   createArticle(credentials: object) {
@@ -19,32 +20,11 @@ const articlesService = {
     });
   },
 
-  fetchArticles({ 
-    take = 10, 
-    search = "", 
-    status = "", 
-    categoryId = 0, 
-    typeId = 0,
-    page = 1,
-  }: { 
-    take?: number, 
-    search?: string, 
-    status?: string, 
-    categoryId?: number, 
-    typeId?: number,
-    page?: number,
-  }) {
+  fetchArticles(params: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
         .append('/article/list')
-        .params({
-          take,
-          search,
-          status,
-          categoryId,
-          typeId,
-          page,
-        })
+        .params(params)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -106,6 +86,21 @@ const articlesService = {
     return new Promise((resolve, reject) => {
       new Request()
         .append(`/article/${id}`)
+        .method(HttpRequestType.DELETE)
+        .then(async (response: AxiosResponse) => {
+          resolve(response.data.data);
+        })
+        .catch((error: AxiosError) => {
+          reject(error);
+        });
+    });
+  },
+
+  deleteArticles(ids: number[]) {
+    return new Promise((resolve, reject) => {
+      new Request()
+        .append(`/article/list`)
+        .setData({ ids })
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);

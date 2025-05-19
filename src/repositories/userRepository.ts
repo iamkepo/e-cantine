@@ -36,6 +36,10 @@ class UserRepository extends Repository<IUser> {
     return this.delete(usersService.deleteUser as (id: number) => Promise<IUser>, id);
   }
 
+  async deleteUsers(ids: number[]) {
+    return this.deleteList(usersService.deleteUsers as (ids: number[]) => Promise<IUser>, ids);
+  }
+
   formCreateUser() {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
@@ -55,19 +59,31 @@ class UserRepository extends Repository<IUser> {
     ]
   }
 
+  tableHeadUser = [
+    {label: 'Nom', key: 'name'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterUser = { take: 10, search: "", status: "", page: 1, }
+
   confirmDeleteUser = {
     title: "Supprimer l'utilisateur", 
     description: "Voulez-vous vraiment supprimer l'utilisateur ?",
   }
 
-  confirmChangeStatusUser = {
-    title: "Changer le status", 
-    description: "Voulez-vous vraiment changer le status de ce type ?",
+  confirmDeleteUsers = {
+    title: "Supprimer les utilisateurs", 
+    description: "Voulez-vous vraiment supprimer les utilisateurs ?",
   }
 
-  typeSchema = yup.object({
+  confirmChangeStatusUser = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status de ce utilisateur ?",
+  }
+
+  userSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom du type est requis'),
+    name: yup.string().required('Nom du utilisateur est requis'),
   })
 
   userFilterSchema = yup.object({

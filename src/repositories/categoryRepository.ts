@@ -36,6 +36,10 @@ class CategoryRepository extends Repository<ICategory> {
     return this.delete(categoriesService.deleteCategory as (id: number) => Promise<ICategory>, id);
   }
 
+  async deleteCategories(ids: number[]) {
+    return this.deleteList(categoriesService.deleteCategories as (ids: number[]) => Promise<ICategory>, ids);
+  }
+
   formCreateCategory() {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
@@ -55,9 +59,21 @@ class CategoryRepository extends Repository<ICategory> {
     ]
   }
 
+  tableHeadCategory = [
+    {label: 'Nom', key: 'name'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterCategory = { take: 10, search: "", status: "", page: 1, }
+
   confirmDeleteCategory = {
     title: "Supprimer la categorie", 
     description: "Voulez-vous vraiment supprimer la categorie ?",
+  }
+
+  confirmDeleteCategories = {
+    title: "Supprimer les categories", 
+    description: "Voulez-vous vraiment supprimer les categories ?",
   }
 
   confirmChangeStatusCategory = {

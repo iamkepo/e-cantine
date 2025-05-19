@@ -88,9 +88,9 @@ const tagsController = {
   },
 
   deleteTags: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const tags = await tagsModel.deleteManyTags(body);
+      const tags = await tagsModel.deleteManyTags(ids);
       if (!tags) {
         return new Response(JSON.stringify({ error: 'Tags not found' }), { status: 404 });
       }

@@ -36,6 +36,10 @@ class TagRepository extends Repository<ITag> {
     return this.delete(tagsService.deleteTag as (id: number) => Promise<ITag>, id);
   }
 
+  async deleteTags(ids: number[]) {
+    return this.deleteList(tagsService.deleteTags as (ids: number[]) => Promise<ITag>, ids);
+  }
+
   formCreateTag() {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
@@ -55,9 +59,21 @@ class TagRepository extends Repository<ITag> {
     ]
   }
 
+  tableHeadTag = [
+    {label: 'Nom', key: 'name'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterTag = { take: 10, search: "", status: "", page: 1, }
+
   confirmDeleteTag = {
     title: "Supprimer le tag", 
     description: "Voulez-vous vraiment supprimer le tag ?",
+  }
+
+  confirmDeleteTags = {
+    title: "Supprimer les tags", 
+    description: "Voulez-vous vraiment supprimer les tags ?",
   }
 
   confirmChangeStatusTag = {

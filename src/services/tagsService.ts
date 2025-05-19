@@ -2,6 +2,7 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
+import { ParamsQuery } from "@/core/interfaces";
 
 const tagsService = {
   createTag(credentials: object) {
@@ -19,26 +20,11 @@ const tagsService = {
     });
   },
 
-  fetchTags({ 
-    take = 10, 
-    search = "", 
-    status = "", 
-    page = 1 
-  }: { 
-    take?: number, 
-    search?: string, 
-    status?: string, 
-    page?: number 
-  }) {
+  fetchTags(params: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
         .append('/tag/list')
-        .params({
-          take,
-          search,
-          status,
-          page
-        })
+        .params(params)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -100,6 +86,21 @@ const tagsService = {
     return new Promise((resolve, reject) => {
       new Request()
         .append(`/tag/${id}`)
+        .method(HttpRequestType.DELETE)
+        .then(async (response: AxiosResponse) => {
+          resolve(response.data.data);
+        })
+        .catch((error: AxiosError) => {
+          reject(error);
+        });
+    });
+  },
+
+  deleteTags(ids: number[]) {
+    return new Promise((resolve, reject) => {
+      new Request()
+        .append(`/tag/list`)
+        .setData({ ids })
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);

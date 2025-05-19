@@ -36,6 +36,10 @@ class TypeRepository extends Repository<IType> {
     return this.delete(typesService.deleteType as (id: number) => Promise<IType>, id);
   }
 
+  async deleteTypes(ids: number[]) {
+    return this.deleteList(typesService.deleteTypes as (ids: number[]) => Promise<IType>, ids);
+  }
+
   formCreateType() {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
@@ -55,9 +59,21 @@ class TypeRepository extends Repository<IType> {
     ]
   }
 
+  tableHeadType = [
+    {label: 'Nom', key: 'name'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterType = { take: 10, search: "", status: "", page: 1, }
+
   confirmDeleteType = {
     title: "Supprimer le type", 
     description: "Voulez-vous vraiment supprimer le type ?",
+  }
+
+  confirmDeleteTypes = {
+    title: "Supprimer les types", 
+    description: "Voulez-vous vraiment supprimer les types ?",
   }
 
   confirmChangeStatusType = {

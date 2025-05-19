@@ -1,35 +1,28 @@
 "use client";
 
-import { useThemeStore } from "@/stores/themeStore";
 import { modal } from "@/stores/appStore";
 import { useEffect, useState } from "react";
 import { IType, Meta } from "@/core/interfaces";
-import { statusColorRender, statusRender } from "@/helpers/functions";
 import { useMemo } from "react";
 import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
-import { Dropdown } from "@/components/widgets/Dropdown";
 import { statusOptionsActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
+import { useCheckList } from "@/hooks/useCheckList";
+import { TableComponent } from "@/components/TableComponent";
+import { meta } from "@/core/constants";
+import BtnConfirmComponent from "@/components/BtnConfirmComponent";
+import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 
 const Page: React.FC = () => {
-  const { theme } = useThemeStore();
-  const [types, setTypes] = useState<{data: IType[], meta: Meta}>({
-    data: [],
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  });
-  const [params, setParams] = useState({
-    skip: 0,
-    take: 10,
-    search: "",
-    status: "",
-    page: 1,
-  });
-  const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
+  const [types, setTypes] = useState<{ data: IType[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(statusOptionsActivation);
+  const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
+  const [params, setParams] = useState(typeRepository.filterType);
+  const { checkList, checkAllList, handleCheckList } = useCheckList(types.data.map(type => type.id as number));
 
   useEffect(() => {
     typeRepository.fetchTypes(params);
@@ -60,26 +53,34 @@ const Page: React.FC = () => {
               />
             </div>
             <div className="col-12 col-md-4 text-end">
-              <button 
-                type="button" 
-                className="btn btn-primary" 
-                onClick={() => modal.open(
-                  <SubmitComponent
-                    title="Creer un type"
-                    fields={typeRepository.formCreateType() as unknown as IField[]}
-                    schema={typeRepository.typeSchema}
-                    btn="Creer"
-                    onSubmit={(data: IType) => typeRepository.createType(data)
-                      .then(() => typeRepository.fetchTypes(params))
-                      .catch((e) => console.log(e))
-                      .finally(() => modal.close())
-                    }
-                  />
-                )}
-              >
-                <i className="bi bi-plus"></i> 
-                <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un type</span>
-              </button>
+              {
+                checkList.length > 0 ? 
+                <BtnConfirmComponent 
+                  btn={{ label: `Supprimer ${checkList.length} tags`, color: "danger", icon: "trash" }}
+                  confirm={typeRepository.confirmDeleteTypes}
+                  onConfirm={() => typeRepository.deleteTypes(checkList)
+                    .then(() => typeRepository.fetchTypes(params))
+                    .then(() => checkAllList())
+                    .catch((error) => console.error(error))
+                    .finally(() => modal.close())
+                  }
+                />
+               :
+                <BtnSubmitComponent 
+                  btn={{ label: "Creer un tag", color: "primary", icon: "plus" }}
+                  submit={{
+                    title:"Creer un tag",
+                    btn:"Creer",
+                    fields:typeRepository.formCreateType() as unknown as IField[],
+                    schema:typeRepository.typeSchema
+                  }}
+                  onSubmit={ (data: IType) => typeRepository.createType(data)
+                    .then(() => typeRepository.fetchTypes(params))
+                    .catch((error) => console.error(error))
+                    .finally(() => modal.close())
+                  }
+                />
+              }
             </div>
           </div>
         </div>
@@ -90,80 +91,51 @@ const Page: React.FC = () => {
 
       <div className="table-responsive">
 
-        <table className={`table table-sm table-striped table-${theme}`}>
-          <thead className="table-primary">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nom</th>
-              <th scope="col" className="text-center">Status</th>
-              <th scope="col" className="text-end"></th>
-            </tr>
-          </thead>
-          <tbody className={`table-${theme}`}>
-            {
-              types.data.map((type: IType) => (
-                <tr key={type.id} className="align-middle">
-                  <th scope="row">{type.id}</th>
-                  <td>{type.name}</td>
-                  <td className="text-center">
-                    <button type="button" className={`btn btn-${statusColorRender(type.status)} btn-sm`}>
-                      <span className="me-2">{statusRender(type.status)}</span>
-                      <Dropdown
-                        chevron
-                        options={statusOptions.map((status) => ({
-                          label: statusRender(status),
-                          action: () => modal.open(
-                            <ConfirmComponent
-                              title={typeRepository.confirmChangeStatusType.title}
-                              description={typeRepository.confirmChangeStatusType.description}
-                              onConfirm={() => typeRepository.changeStatusType(type.id as number, status)
-                                .then(() => typeRepository.fetchTypes(params))
-                                .catch((e) => console.log(e))
-                                .finally(() => modal.close())
-                              }
-                            />
-                          )
-                        }))}
-                      />
-                    </button>
-                  </td>
-                  <td className="text-end">
-                    <i 
-                      className="bi bi-pencil text-primary me-2"
-                      onClick={() => modal.open(
-                        <SubmitComponent
-                          title="Modifier le type"
-                          fields={typeRepository.formUpdateType(type) as unknown as IField[]}
-                          schema={typeRepository.typeSchema}
-                          btn="Modifier"
-                          onSubmit={(data: IType) => typeRepository.updateType(type.id as number, data)
-                            .then(() => typeRepository.fetchTypes(params))
-                            .catch((e) => console.log(e))
-                            .finally(() => modal.close())
-                          }
-                        />
-                      )}
-                    ></i>
-                    <i 
-                      className="bi bi-trash text-danger"
-                      onClick={() => modal.open(
-                        <ConfirmComponent
-                          title={typeRepository.confirmDeleteType.title}
-                          description={typeRepository.confirmDeleteType.description}
-                          onConfirm={() => typeRepository.deleteType(type.id as number)
-                            .then(() => typeRepository.fetchTypes(params))
-                            .catch((e) => console.log(e))
-                            .finally(() => modal.close())
-                          }
-                        />
-                      )}
-                    ></i>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+        <TableComponent
+          checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
+          thead={typeRepository.tableHeadType}
+          list={types.data}
+          setList={(e: IType[]) => setTypes({...types, data: e})}
+          // eye={(e: IType) => false}
+          edit={(e: IType) => modal.open(
+            <SubmitComponent 
+              title={"Update type"} 
+              fields={typeRepository.formUpdateType(e) as unknown as IField[]} 
+              schema={typeRepository.typeSchema} 
+              btn="Update" 
+              onSubmit={(data) => typeRepository.updateType(e.id as number, data)
+                .then(() => typeRepository.fetchTypes(params))
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              } 
+            />
+          )}
+          trash={(id: number) => modal.open(
+            <ConfirmComponent 
+              title={typeRepository.confirmDeleteType.title}
+              description={typeRepository.confirmDeleteType.description}
+              onConfirm={() => typeRepository.deleteType(id)
+                .then(() => typeRepository.fetchTypes(params))
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              } 
+            />
+          )}
+          options={statusOptions.map(status => ({
+            label: status,
+            action: (id: number) => modal.open(
+              <ConfirmComponent 
+                title={typeRepository.confirmChangeStatusType.title}
+                description={typeRepository.confirmChangeStatusType.description}
+                onConfirm={ () => typeRepository.changeStatusType(id, status)
+                  .then(() => typeRepository.fetchTypes(params))
+                  .catch((error) => console.error(error))
+                  .finally(() => modal.close())
+                }
+              />
+            )}
+          ))}
+        />
 
         <PaginationComponent 
           page={params.page}

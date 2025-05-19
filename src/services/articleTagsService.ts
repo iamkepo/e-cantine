@@ -20,23 +20,11 @@ const articleTagsService = {
     });
   },
 
-  fetchArticleTags({ 
-    take = 10,
-    status = "",
-    articleId = 0,
-    tagId = 0,
-    page = 1 
-  }: ParamsQuery) {
+  fetchArticleTags(params: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
         .append('/article-tag/list')
-        .params({
-          take,
-          status,
-          articleId,
-          tagId,
-          page
-        })
+        .params(params)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -98,6 +86,21 @@ const articleTagsService = {
     return new Promise((resolve, reject) => {
       new Request()
         .append(`/article-tag/${id}`)
+        .method(HttpRequestType.DELETE)
+        .then(async (response: AxiosResponse) => {
+          resolve(response.data.data);
+        })
+        .catch((error: AxiosError) => {
+          reject(error);
+        });
+    });
+  },
+
+  deleteArticleTags(ids: number[]) {
+    return new Promise((resolve, reject) => {
+      new Request()
+        .append(`/article-tag/list`)
+        .setData({ ids })
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);

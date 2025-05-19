@@ -76,6 +76,16 @@ class Repository<T> {
     }
   }
 
+  async deleteList(callfront: (ids: number[]) => Promise<T>, ids: number[]): Promise<T> {
+    try {
+      const data = await callfront(ids);
+      return data;
+    } catch (error) {
+      console.error("Erreur delete liste :", error);
+      throw error;
+    }
+  }
+
 }
 
 export default Repository;

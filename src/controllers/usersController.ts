@@ -102,9 +102,9 @@ const usersController = {
   },
 
   deleteUsers: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const users = await usersModel.deleteManyUsers(body);
+      const users = await usersModel.deleteManyUsers(ids);
       if (!users) {
         return new Response(JSON.stringify({ error: 'Users not found' }), { status: 404 });
       }

@@ -1,3 +1,4 @@
+import { Meta } from "./interfaces";
 
 export const articlesPrincipal = [
   { 
@@ -282,6 +283,8 @@ export const methods = [
   { id: 'card', label: 'Carte de crédit' },
 ];
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+export const meta: Meta = {total: 0, page: 1, pageCount: 1, limit: 10};
 
 // Constants
 export const SHIPPING_RATE = 500.0;

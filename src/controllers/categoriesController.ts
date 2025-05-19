@@ -97,9 +97,9 @@ const categoriesController = {
   },
 
   deleteCategories: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const categories = await categoriesModel.deleteManyCategories(body);
+      const categories = await categoriesModel.deleteManyCategories(ids);
       if (!categories) {
         return new Response(JSON.stringify({ error: 'Categories not found' }), { status: 404 });
       }

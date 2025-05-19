@@ -7,23 +7,12 @@ import * as yup from 'yup';
 import Repository from "@/repositories/repository";
 import { statusOptionsActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
+import { meta } from "@/core/constants";
 
 class ArticleRepository extends Repository<IArticle> {
-  categories: {
-    data: ICategory[], 
-    meta: Meta
-  } = {
-    data: [], 
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  };
-  types: {
-    data: IType[], 
-    meta: Meta
-  } = {
-    data: [], 
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  };
-  
+  categories: { data: ICategory[], meta: Meta } = { data: [], meta };
+  types: { data: IType[], meta: Meta } = { data: [], meta };
+
   constructor(setArticles?: ({data, meta}: {data: IArticle[], meta: Meta}) => void) {
     super(setArticles);
     this.init();
@@ -60,6 +49,10 @@ class ArticleRepository extends Repository<IArticle> {
     return this.delete(articlesService.deleteArticle as (id: number) => Promise<IArticle>, id);
   }
 
+  async deleteArticles(ids: number[]) {
+    return this.deleteList(articlesService.deleteArticles as (ids: number[]) => Promise<IArticle>, ids);
+  }
+
   formCreateArticle() {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
@@ -91,9 +84,24 @@ class ArticleRepository extends Repository<IArticle> {
     ]
   }
 
+  tableHeadArticle = [
+    {label: 'Image', key: 'image'},
+    {label: 'Nom', key: 'name'},
+    {label: 'Type', key: 'typeId'},
+    {label: 'Categorie', key: 'categoryId'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterArticle = { take: 10, search: "", status: "", categoryId: 0, typeId: 0, page: 1, }
+
   confirmDeleteArticle = {
     title: "Supprimer l'article", 
     description: "Voulez-vous vraiment supprimer l'article ?",
+  }
+
+  confirmDeleteArticles = {
+    title: "Supprimer les articles", 
+    description: "Voulez-vous vraiment supprimer les articles ?",
   }
 
   confirmChangeStatusArticle = {

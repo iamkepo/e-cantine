@@ -1,34 +1,27 @@
 "use client";
 
-import { useThemeStore } from "@/stores/themeStore";
 import { modal } from "@/stores/appStore";
 import { ITag, Meta } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
-import { statusColorRender, statusRender } from "@/helpers/functions";
 import TagRepository from "@/repositories/tagRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
 import { statusOptionsActivation } from "@/enums";
-import { Dropdown } from "@/components/widgets/Dropdown";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
+import { useCheckList } from "@/hooks/useCheckList";
+import { TableComponent } from "@/components/TableComponent";
+import { meta } from "@/core/constants";
+import BtnConfirmComponent from "@/components/BtnConfirmComponent";
+import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 
 const Page: React.FC = () => {
-  const { theme } = useThemeStore();
-  const [tags, setTags] = useState<{data: ITag[], meta: Meta}>({
-    data: [],
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  });
-  const [params, setParams] = useState({
-    skip: 0,
-    take: 10,
-    search: "",
-    status: "",
-    page: 1,
-  });
-  const tagRepository = useMemo(() => new TagRepository(setTags), []);
+  const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(statusOptionsActivation);
+  const tagRepository = useMemo(() => new TagRepository(setTags), []);
+  const [params, setParams] = useState(tagRepository.filterTag);
+  const { checkList, checkAllList, handleCheckList } = useCheckList(tags.data.map(tag => tag.id as number));
 
 
   useEffect(() => {
@@ -59,26 +52,34 @@ const Page: React.FC = () => {
               />
             </div>
             <div className="col-12 col-md-4 text-end">
-              <button 
-                type="button" 
-                className="btn btn-primary" 
-                onClick={() => modal.open(
-                  <SubmitComponent
-                  title="Creer un tag"
-                  fields={tagRepository.formCreateTag() as unknown as IField[]}
-                  schema={tagRepository.tagSchema}
-                  btn="Creer"
+              {
+                checkList.length > 0 ? 
+                <BtnConfirmComponent 
+                  btn={{ label: `Supprimer ${checkList.length} tags`, color: "danger", icon: "trash" }}
+                  confirm={tagRepository.confirmDeleteTags}
+                  onConfirm={() => tagRepository.deleteTags(checkList)
+                    .then(() => tagRepository.fetchTags(params))
+                    .then(() => checkAllList())
+                    .catch((error) => console.error(error))
+                    .finally(() => modal.close())
+                  }
+                />
+               :
+                <BtnSubmitComponent 
+                  btn={{ label: "Creer un tag", color: "primary", icon: "plus" }}
+                  submit={{
+                    title:"Creer un tag",
+                    btn:"Creer",
+                    fields:tagRepository.formCreateTag() as unknown as IField[],
+                    schema:tagRepository.tagSchema
+                  }}
                   onSubmit={ (data: ITag) => tagRepository.createTag(data)
                     .then(() => tagRepository.fetchTags(params))
                     .catch((error) => console.error(error))
                     .finally(() => modal.close())
                   }
                 />
-              )}
-            >
-              <i className="bi bi-plus"></i> 
-              <span className="d-none d-md-inline-block ms-2 fw-bold">Creer un tag</span>
-            </button>
+              }
             </div>
           </div>
         </div>
@@ -89,83 +90,52 @@ const Page: React.FC = () => {
 
       <div className="table-responsive">
 
-        <table className={`table table-sm table-striped table-${theme}`}>
-          <thead className="table-primary">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nom</th>
-              <th scope="col" className="col-md-2 text-center">Status</th>
-              <th scope="col" className="col-md-2 text-end"></th>
-            </tr>
-          </thead>
-          <tbody className={`table-${theme}`}>
-            {
-              tags.data.map((tag) => (
-                <tr key={tag.id} className="align-middle">
-                  <th scope="row">{tag.id}</th>
-                  <td>{tag.name}</td>
-                  <td className="text-center">
-                    <button type="button" className={`btn btn-${statusColorRender(tag.status)} btn-sm`}>
-                      <span className="me-2">{statusRender(tag.status)}</span>
-                      <Dropdown
-                        chevron
-                        options={statusOptions.map((status) => (
-                          {
-                            label: statusRender(status),
-                            action: () => modal.open(
-                              <ConfirmComponent
-                                title={tagRepository.confirmChangeStatusTag.title}
-                                description={tagRepository.confirmChangeStatusTag.description}
-                                onConfirm={ () => tagRepository.changeStatusTag(tag.id as number, status)
-                                  .then(() => tagRepository.fetchTags(params))
-                                  .catch((error) => console.error(error))
-                                  .finally(() => modal.close())
-                                }
-                              />
-                            )
-                          }
-                        ))}
-                      />
-                    </button>
-                  </td>
-                  <td className="text-end">
-                <i 
-                  className="bi bi-pencil text-primary me-2"
-                  onClick={() => modal.open(
-                    <SubmitComponent
-                      title="Modifier le tag"
-                      fields={tagRepository.formUpdateTag(tag) as unknown as IField[]}
-                      schema={tagRepository.tagSchema}
-                      btn="Modifier"
-                      onSubmit={ (data: ITag) => tagRepository.updateTag(tag.id as number, data)
-                        .then(() => tagRepository.fetchTags(params))
-                        .catch((error) => console.error(error))
-                        .finally(() => modal.close())
-                      }
-                    />
-                  )}
-                ></i>
-                <i 
-                  className="bi bi-trash text-danger"
-                  onClick={() => modal.open(
-                    <ConfirmComponent
-                      title={tagRepository.confirmDeleteTag.title}
-                      description={tagRepository.confirmDeleteTag.description}
-                      onConfirm={ () => tagRepository.deleteTag(tag.id as number)
-                        .then(() => tagRepository.fetchTags(params))
-                        .catch((error) => console.error(error))
-                        .finally(() => modal.close())
-                      }
-                    />
-                  )}
-                ></i>
-              </td>
-            </tr>
-          ))
-          }
-          </tbody>
-        </table>
-
+        <TableComponent
+          checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
+          thead={tagRepository.tableHeadTag}
+          list={tags.data}
+          setList={(e: ITag[]) => setTags({...tags, data: e})}
+          // eye={(e: ITag) => false}
+          edit={(e: ITag) => modal.open(
+            <SubmitComponent 
+              title={"Update tag"} 
+              fields={tagRepository.formUpdateTag(e) as unknown as IField[]} 
+              schema={tagRepository.tagSchema} 
+              btn="Update" 
+              onSubmit={(data) => tagRepository.updateTag(e.id as number, data)
+                .then(() => tagRepository.fetchTags(params))
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              } 
+            />
+          )}
+          trash={(id: number) => modal.open(
+            <ConfirmComponent 
+              title={tagRepository.confirmDeleteTag.title}
+              description={tagRepository.confirmDeleteTag.description}
+              onConfirm={() => tagRepository.deleteTag(id)
+                .then(() => tagRepository.fetchTags(params))
+                .catch((error) => console.error(error))
+                .finally(() => modal.close())
+              } 
+            />
+          )}
+          options={statusOptions.map(status => ({
+            label: status,
+            action: (id: number) => modal.open(
+              <ConfirmComponent 
+                title={tagRepository.confirmChangeStatusTag.title}
+                description={tagRepository.confirmChangeStatusTag.description}
+                onConfirm={ () => tagRepository.changeStatusTag(id, status)
+                  .then(() => tagRepository.fetchTags(params))
+                  .catch((error) => console.error(error))
+                  .finally(() => modal.close())
+                }
+              />
+            )}
+          ))}
+        />
+        
         <PaginationComponent 
           page={params.page}
           total={tags.meta.pageCount}

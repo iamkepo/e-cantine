@@ -7,16 +7,11 @@ import * as yup from 'yup';
 import Repository from "@/repositories/repository";
 import { statusOptionsActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
+import { meta } from "@/core/constants";
 
 class ArticleTagRepository extends Repository<IArticleTag> {
-  articles: {data: IArticle[], meta: Meta} = {
-    data: [],
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  };
-  tags: {data: ITag[], meta: Meta} = {
-    data: [],
-    meta: {total: 0, page: 1, pageCount: 1, limit: 10}
-  };
+  articles: { data: IArticle[], meta: Meta } = { data: [],meta };
+  tags: { data: ITag[], meta: Meta } = {data: [], meta };
 
   constructor(setArticleTags?: ({data, meta}: {data: IArticleTag[], meta: Meta}) => void) {     
     super(setArticleTags as unknown as ({data, meta}: {data: IArticleTag[], meta: Meta}) => void);
@@ -54,6 +49,10 @@ class ArticleTagRepository extends Repository<IArticleTag> {
     return this.delete(articleTagsService.deleteArticleTag as (id: number) => Promise<IArticleTag>, id);
   }
 
+  async deleteArticleTags(ids: number[]) {
+    return this.deleteList(articleTagsService.deleteArticleTags as (ids: number[]) => Promise<IArticleTag>, ids);
+  }
+
   formCreateArticleTag() {
     return [
       { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })) },
@@ -76,10 +75,23 @@ class ArticleTagRepository extends Repository<IArticleTag> {
       { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
+  tableHeadArticleTag = [
+    {label: 'Type', key: 'typeId'},
+    {label: 'Article', key: 'articleId'},
+    {label: 'Status', key: 'status'}
+  ]
+
+  filterArticleTag = { take: 10, search: "", status: "", articleId: 0, typeId: 0, page: 1, }
+
 
   confirmDeleteArticleTag = {
     title: "Supprimer le tag", 
     description: "Voulez-vous vraiment supprimer le tag ?",
+  }
+
+  confirmDeleteArticleTags = {
+    title: "Supprimer les tags", 
+    description: "Voulez-vous vraiment supprimer les tags ?",
   }
 
   confirmChangeStatusArticleTag = {

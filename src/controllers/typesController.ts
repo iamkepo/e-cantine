@@ -94,9 +94,9 @@ const typesController = {
   },
 
   deleteTypes: async (req: Request) => {
-    const body = await req.json();
+    const { ids } = await req.json();
     try {
-      const types = await typesModel.deleteManyTypes(body);
+      const types = await typesModel.deleteManyTypes(ids);
       if (!types) {
         return new Response(JSON.stringify({ error: 'Types not found' }), { status: 404 });
       }
