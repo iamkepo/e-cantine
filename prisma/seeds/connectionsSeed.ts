@@ -4,7 +4,7 @@ import { IArticle } from "../../src/core/interfaces";
 /**
  * Associe un article à une liste de tags dans la table `articleTags`.
  */
-const seedArticleTags = async (
+const connectionsSeed = async (
   prisma: PrismaClient,
   article: IArticle,
   tags: number[]
@@ -14,16 +14,12 @@ const seedArticleTags = async (
     return;
   }
 
-  const now = new Date();
-
   await Promise.all(
-    tags.map((tagId) =>
-      prisma.articleTags.create({
+    tags.map(async (tagId) =>
+      await prisma.connections.create({
         data: {
           articleId: article.id as number,
           tagId,
-          createdAt: now,
-          updatedAt: now,
         },
       })
     )
@@ -32,4 +28,4 @@ const seedArticleTags = async (
   console.log(`✅ ${tags.length} tags liés à l'article [ID: ${article.id}]`);
 };
 
-export default seedArticleTags;
+export default connectionsSeed;

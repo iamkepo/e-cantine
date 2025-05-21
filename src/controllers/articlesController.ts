@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Params } from "@/core/interfaces";
+import { Params } from "@/core/types";
 import ArticlesModel from "@/models/articlesModel";
 import { NextRequest } from "next/server";
 
@@ -27,9 +27,11 @@ const articlesController = {
     const categoryId = parseInt(searchParams.get('categoryId') || '0', 10); // id de la catégorie
     const status = searchParams.get('status') || ''; // statut de l'article
     const page = parseInt(searchParams.get('page') || '1', 10); // page
+    const orderBy = searchParams.get('orderBy') || 'createdAt'; // champ sur lequel trier
+    const order = searchParams.get('order') || 'desc'; // ordre du tri
 
     try {
-      const articles = await articlesModel.getArticles({ typeId, categoryId, take, search, status, page });
+      const articles = await articlesModel.getArticles({ typeId, categoryId, take, search, status, page, orderBy, order });
       return new Response(JSON.stringify({data: articles}), { status: 200 });
     } catch (error) {
       console.error(error);

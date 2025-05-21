@@ -12,7 +12,7 @@ class CategoriesModel extends Model {
     return category;
   }
 
-  getCategories = async (params: { take: number, search: string, status: string, page: number }) => {
+  getCategories = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
     const categoriesList = await this.getAll(params);
     return categoriesList;
   }

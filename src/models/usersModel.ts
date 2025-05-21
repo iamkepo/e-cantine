@@ -22,7 +22,7 @@ class UsersModel extends Model {
     return user;
   }
 
-  getUsers = async (params: { take: number, search: string, status: string, page: number }) => {
+  getUsers = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
     const usersList = await this.getAll(params);
     return usersList;
   }

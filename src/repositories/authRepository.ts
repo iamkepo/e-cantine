@@ -1,6 +1,7 @@
-import { IUser, Meta } from "@/core/interfaces";
+import { IUser } from "@/core/interfaces";
 import authService from "@/services/authService";
 import Repository from "@/repositories/repository";
+import { Meta } from "@/core/types";
 
 class AuthRepository extends Repository<IUser> {
 

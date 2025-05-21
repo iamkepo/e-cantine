@@ -17,7 +17,7 @@ class AdminsModel extends Model {
     return admin;
   }
 
-  getAdmins = async (params: { take: number, search: string, userId: number, status: string, page: number }) => {
+  getAdmins = async (params: { take: number, search: string, userId: number, status: string, page: number, orderBy: string, order: string }) => {
     const { search, userId } = params;
     const where: any = {
       OR: [

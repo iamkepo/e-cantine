@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Params } from "@/core/interfaces";
+import { Params } from "@/core/types";
 import TypesModel from "@/models/typesModel";
 import { NextRequest } from "next/server";
 
@@ -25,9 +25,11 @@ const typesController = {
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const orderBy = searchParams.get('orderBy') || 'createdAt';
+    const order = searchParams.get('order') || 'desc';
   
     try {
-      const types = await typesModel.getTypes({ take, search, status, page });
+      const types = await typesModel.getTypes({ take, search, status, page, orderBy, order });
       return new Response(JSON.stringify({data: types}), { status: 200 });
     } catch (error) {
       console.error(error);

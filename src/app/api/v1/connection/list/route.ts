@@ -1,18 +1,18 @@
 "use server";
 
-import articleTagsController from "@/controllers/ArticleTagsController";
+import connectionsController from "@/controllers/connectionsController";
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/list:
+ * /api/v1/connection/list:
  *   get:
- *     summary: Récupérer la liste des articleTags
- *     tags: [ArticleTags]
+ *     summary: Récupérer la liste des connections
+ *     tags: [Connections]
  *     parameters:
  *       - in: query
  *         name: take
@@ -39,23 +39,33 @@ import articleTagsController from "@/controllers/ArticleTagsController";
  *         schema:
  *           type: integer
  *         description: Page
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *         description: Champ sur lequel trier
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *         description: Ordre du tri
  *     responses:
  *       200:
- *         description: Liste des articleTags
+ *         description: Liste des connections
  *       500:
  *         description: Erreur interne du serveur
  */
 
 export const GET = async (req: Request) => {
-  return articleTagsController.getArticleTags(req);
+  return connectionsController.getConnections(req);
 };
 
 /**
  * @swagger
- * /api/v1/article-tag/list:
+ * /api/v1/connection/list:
  *   delete:
- *     summary: Supprimer plusieurs articleTags
- *     tags: [ArticleTags]
+ *     summary: Supprimer plusieurs connections
+ *     tags: [Connections]
  *     parameters:
  *       - in: query
  *         name: ids
@@ -63,16 +73,16 @@ export const GET = async (req: Request) => {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des articleTags à supprimer
+ *         description: IDs des connections à supprimer
  *     responses:
  *       200:
- *         description: ArticleTags supprimés avec succès
+ *         description: Connections supprimées avec succès
  *       404:
- *         description: ArticleTags non trouvés
+ *         description: Connections non trouvées
  *       500:
  *         description: Erreur interne du serveur
  */
 export const DELETE = async (req: Request) => {
-  return articleTagsController.deleteArticleTags(req);
+  return connectionsController.deleteConnections(req);
 };
  

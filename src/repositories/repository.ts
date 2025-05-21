@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta } from "@/core/interfaces";
+import { Meta } from "@/core/types";
 
 class Repository<T> {
   setList?: ({data, meta}: {data: T[], meta: Meta}) => void;

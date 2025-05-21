@@ -1,13 +1,13 @@
 "use client";
 
 import { modal } from "@/stores/appStore";
-import { useEffect, useState } from "react";
-import { IType, Meta } from "@/core/interfaces";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { IType } from "@/core/interfaces";
+import { Meta } from "@/core/types";
 import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
@@ -19,7 +19,7 @@ import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 
 const Page: React.FC = () => {
   const [types, setTypes] = useState<{ data: IType[], meta: Meta }>({ data: [], meta});
-  const statusOptions = Object.values(statusOptionsActivation);
+  const statusOptions = Object.values(StatusActivation);
   const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
   const [params, setParams] = useState(typeRepository.filterType);
   const { checkList, checkAllList, handleCheckList } = useCheckList(types.data.map(type => type.id as number));
@@ -56,7 +56,7 @@ const Page: React.FC = () => {
               {
                 checkList.length > 0 ? 
                 <BtnConfirmComponent 
-                  btn={{ label: `Supprimer ${checkList.length} tags`, color: "danger", icon: "trash" }}
+                  btn={{ label: `Supprimer ${checkList.length} types`, color: "danger", icon: "trash" }}
                   confirm={typeRepository.confirmDeleteTypes}
                   onConfirm={() => typeRepository.deleteTypes(checkList)
                     .then(() => typeRepository.fetchTypes(params))

@@ -1,24 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 
 const rawCategories = [
-  "Petit Déjeuner",
-  "Déjeuner",
-  "Goûter",
-  "Dîner",
-  "uncategorised",
+  {name: "Petit Déjeuner"},
+  {name: "Déjeuner"},
+  {name: "Goûter"},
+  {name: "Dîner"},
+  {name: "uncategorised"},
 ];
 
 
 const categoriesSeed = async (prisma: PrismaClient) => {
-  const now = new Date();
-
   await Promise.all(
-    rawCategories.map((cat) =>
-      prisma.categories.create({
+    rawCategories.map(async (cat) =>
+      await prisma.categories.create({
         data: {
-          name: cat,
-          createdAt: now,
-          updatedAt: now,
+          name: cat.name,
         },
       })
     )

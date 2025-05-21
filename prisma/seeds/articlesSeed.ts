@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import articlesTagsSeed from "./articleTagsSeed";
+import connectionsSeed from "./connectionsSeed";
+import { IArticle } from "../../src/core/interfaces";
 
 const rawArticles = [
   { 
@@ -301,7 +302,7 @@ const articlesSeed = async (prisma: PrismaClient) => {
       });
 
       // Crée les relations dans articleTags
-      await articlesTagsSeed(prisma, createdArticle, article.tags);
+      await connectionsSeed(prisma, createdArticle as IArticle, article.tags);
 
       console.log(`✅ Article [ID: ${createdArticle.id}] créé avec succès.`);
     })

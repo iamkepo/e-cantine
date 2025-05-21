@@ -2,7 +2,7 @@
 
 import categoriesController from "@/controllers/categoriesController";
 import { NextRequest } from "next/server";
-import { ContextParams } from "@/core/interfaces";
+import { ContextParams } from "@/core/types";
 
 /**
  * @swagger

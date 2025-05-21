@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IUser, Meta, ParamsQuery } from "@/core/interfaces";
+import { Meta, ParamsQuery } from "@/core/types";
 import usersService from "@/services/usersService";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
+import { IUser } from "@/core/interfaces";
 
 class UserRepository extends Repository<IUser> {
 
@@ -55,7 +56,7 @@ class UserRepository extends Repository<IUser> {
   formFilterUser() {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
-      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
 

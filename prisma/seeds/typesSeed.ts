@@ -8,15 +8,11 @@ const rawTypes = [
 ];
 
 const typesSeed = async (prisma: PrismaClient) => {
-  const now = new Date();
-
   await Promise.all(
-    rawTypes.map((type) =>
-      prisma.types.create({
+    rawTypes.map(async (type) =>
+      await prisma.types.create({
         data: {
           name: type,
-          createdAt: now,
-          updatedAt: now,
         },
       })
     )

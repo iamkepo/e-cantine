@@ -17,7 +17,7 @@ class ClientsModel extends Model {
     return client;
   }
 
-  getClients = async (params: { take: number, search: string, userId: number, status: string, page: number }) => {
+  getClients = async (params: { take: number, search: string, userId: number, status: string, page: number, orderBy: string, order: string }) => {
     const { search, userId } = params;
     const where: any = {
       OR: [

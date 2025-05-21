@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IArticle, ICategory, IType, Meta, ParamsQuery } from "@/core/interfaces";
+import { IArticle, ICategory, IType } from "@/core/interfaces";
 import articlesService from "@/services/articlesService";
 import CategoryRepository from "./categoryRepository";
 import TypeRepository from "./typeRepository";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { meta } from "@/core/constants";
+import { Meta, ParamsQuery } from "@/core/types";
 
 class ArticleRepository extends Repository<IArticle> {
   categories: { data: ICategory[], meta: Meta } = { data: [], meta };
@@ -80,7 +81,7 @@ class ArticleRepository extends Repository<IArticle> {
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
       { id: "typeId", type: "select", placeholder: "Type", colSize: "col-12 col-md-2", options: this.types.data.map((type: IType) => ({ label: type.name, value: type.id })) },
       { id: "categoryId", type: "select", placeholder: "Categorie", colSize: "col-12 col-md-2", options: this.categories.data.map((category: ICategory) => ({ label: category.name, value: category.id })) },
-      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
 

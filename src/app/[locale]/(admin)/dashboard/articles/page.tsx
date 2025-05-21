@@ -1,9 +1,9 @@
 "use client";
 
 import { modal } from "@/stores/appStore";
-import { IArticle, Meta } from "@/core/interfaces";
+import { IArticle } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import ArticleRepository from "@/repositories/articleRepository";
 import { IField } from "@/components/FormComponent";
 import SubmitComponent from "@/components/SubmitComponent";
@@ -13,12 +13,13 @@ import FilterComponent from "@/components/FilterComponent";
 import { TableComponent } from "@/components/TableComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import { meta } from "@/core/constants";
+import { Meta } from "@/core/types";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 
 const Page: React.FC = () => {
   const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
-  const statusOptions = Object.values(statusOptionsActivation);
+  const statusOptions = Object.values(StatusActivation);
   const articleRepository = useMemo(() => new ArticleRepository(setArticles), []);
   const [params, setParams] = useState(articleRepository.filterArticle);
   const { checkList, checkAllList, handleCheckList } = useCheckList(articles.data.map(article => article.id as number));

@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const name = "test";
 const password = "test";
 
-const seedUsers = async (prisma: PrismaClient) => {
+const usersSeed = async (prisma: PrismaClient) => {
   const user = await prisma.users.create({
     data: {
       name,
@@ -16,4 +16,4 @@ const seedUsers = async (prisma: PrismaClient) => {
   return user;
 };
 
-export default seedUsers;
+export default usersSeed;

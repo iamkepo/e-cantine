@@ -2,13 +2,13 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
-import { ParamsQuery } from "@/core/interfaces";
+import { ParamsQuery } from "@/core/types";
 
-const articleTagsService = {
-  createArticleTag(credentials: object) {
+const connectionsService = {
+  createConnection(credentials: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/article-tag/create')
+        .append('/connection/create')
         .setData(credentials)
         .method(HttpRequestType.POST)
         .then(async (response: AxiosResponse) => {
@@ -20,10 +20,10 @@ const articleTagsService = {
     });
   },
 
-  fetchArticleTags(params: ParamsQuery) {
+  fetchConnections(params: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/article-tag/list')
+        .append('/connection/list')
         .params(params)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
@@ -35,10 +35,10 @@ const articleTagsService = {
     });
   },
 
-  fetchArticleTag(id: number) {
+  fetchConnection(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article-tag/${id}`)
+        .append(`/connection/${id}`)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -49,10 +49,10 @@ const articleTagsService = {
     });
   },
 
-  patchArticleTag(id: number, patch: any) {
+  patchConnection(id: number, patch: any) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article-tag/${id}`)
+        .append(`/connection/${id}`)
         .setData({
           attr: patch.attr,
           val: patch.val
@@ -67,10 +67,10 @@ const articleTagsService = {
     });
   },
 
-  updateArticleTag(id: number, credentials: object) {
+  updateConnection(id: number, credentials: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article-tag/${id}`)
+        .append(`/connection/${id}`)
         .setData(credentials)
         .method(HttpRequestType.PUT)
         .then(async (response: AxiosResponse) => {
@@ -82,10 +82,10 @@ const articleTagsService = {
     });
   },
 
-  deleteArticleTag(id: number) {
+  deleteConnection(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article-tag/${id}`)
+        .append(`/connection/${id}`)
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -96,10 +96,10 @@ const articleTagsService = {
     });
   },
 
-  deleteArticleTags(ids: number[]) {
+  deleteConnections(ids: number[]) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/article-tag/list`)
+        .append(`/connection/list`)
         .setData({ ids })
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
@@ -112,4 +112,4 @@ const articleTagsService = {
   }
 };
 
-export default articleTagsService;
+export default connectionsService;

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ITag, Meta, ParamsQuery } from "@/core/interfaces";
+import { Meta, ParamsQuery } from "@/core/types";
 import tagsService from "@/services/tagsService";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
+import { ITag } from "@/core/interfaces";
 
 class TagRepository extends Repository<ITag> {
 
@@ -55,7 +56,7 @@ class TagRepository extends Repository<ITag> {
   formFilterTag() {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
-      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(statusOptionsActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
 

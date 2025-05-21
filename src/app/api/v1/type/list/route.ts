@@ -34,6 +34,16 @@ import typesController from "@/controllers/typesController";
  *         schema:
  *           type: integer
  *         description: Page
+ *       - in: query
+ *         name: orderBy
+ *         schema:
+ *           type: string
+ *         description: Champ sur lequel trier
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *         description: Ordre du tri
  *     responses:
  *       200:
  *         description: Liste des types

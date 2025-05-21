@@ -20,9 +20,9 @@ class Model {
     }
   }
 
-  getAll = async (params: { take: number, search: string, status: string, page: number }, where?: any) => {
+  getAll = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }, where?: any) => {
     try {
-      const { take, search, status, page } = params;
+      const { take = 10, search = '', status = '', page = 1, orderBy = 'createdAt', order = 'desc' } = params;
       const whereModel: any = where ? where : {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },
@@ -35,7 +35,7 @@ class Model {
         where: whereModel,
         skip: (page - 1) * take,
         take,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { [orderBy]: order },
       });
       const total = await this.model.count({ where: whereModel });
   

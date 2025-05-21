@@ -1,9 +1,9 @@
 "use client";
 
 import { modal } from "@/stores/appStore";
-import { ICategory, Meta } from "@/core/interfaces";
+import { ICategory } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
 import CategoryRepository from "@/repositories/categoryRepository";
@@ -13,13 +13,14 @@ import FilterComponent from "@/components/FilterComponent";
 import { TableComponent } from "@/components/TableComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import { meta } from "@/core/constants";
+import { Meta } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 
 
 const Page: React.FC = () => {
   const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
-  const statusOptions = Object.values(statusOptionsActivation);
+  const statusOptions = Object.values(StatusActivation);
   const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
   const [params, setParams] = useState(categoryRepository.filterCategory);
   const { checkList, checkAllList, handleCheckList } = useCheckList(categories.data.map(category => category.id as number));

@@ -2,7 +2,7 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
-import { ParamsQuery } from "@/core/interfaces";
+import { ParamsQuery } from "@/core/types";
 
 const articlesService = {
   createArticle(credentials: object) {

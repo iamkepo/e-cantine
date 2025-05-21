@@ -12,7 +12,7 @@ class ArticlesModel extends Model {
     return article;
   }
 
-  getArticles = async (params: { take: number, typeId: number, categoryId: number, search: string, status: string, page: number }) => {
+  getArticles = async (params: { take: number, typeId: number, categoryId: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
     const { typeId, categoryId, search } = params;
     const where: any = {
       OR: [

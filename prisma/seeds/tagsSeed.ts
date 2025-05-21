@@ -7,16 +7,12 @@ const rawTags = [
   "Viande",
 ];
 
-const seedTags = async (prisma: PrismaClient) => {
-  const now = new Date();
-
+const tagsSeed = async (prisma: PrismaClient) => {
   await Promise.all(
-    rawTags.map((tag) =>
-      prisma.tags.create({
+    rawTags.map(async (tag) =>
+      await prisma.tags.create({
         data: {
           name: tag,
-          createdAt: now,
-          updatedAt: now,
         },
       })
     )
@@ -25,4 +21,4 @@ const seedTags = async (prisma: PrismaClient) => {
   console.log("✅ Tags créés.");
 };
 
-export default seedTags;
+export default tagsSeed;

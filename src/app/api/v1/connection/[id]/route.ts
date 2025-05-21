@@ -1,20 +1,20 @@
 "use server";
 
-import articleTagsController from "@/controllers/ArticleTagsController";
-import { ContextParams } from "@/core/interfaces";
+import connectionsController from "@/controllers/connectionsController";
+import { ContextParams } from "@/core/types";
 import { NextRequest } from "next/server";
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/{id}:
+ * /api/v1/connection/{id}:
  *   get:
- *     summary: Récupérer un articleTag
- *     tags: [ArticleTags]
+ *     summary: Récupérer une connection
+ *     tags: [Connections]
  *     parameters:
  *       - in: path
  *         name: id
@@ -24,28 +24,28 @@ import { NextRequest } from "next/server";
  *         description: ID du tag
  *     responses:
  *       200:
- *         description: ArticleTag récupéré avec succès
+ *         description: Connection récupérée avec succès
  *       404:
- *         description: ArticleTag non trouvé
+ *         description: Connection non trouvée
  *       500:
  *         description: Erreur interne du serveur
  */
 
 export const GET = async (req: NextRequest, context: ContextParams) => {
-  return articleTagsController.getArticleTag(req, context.params);
+  return connectionsController.getConnection(req, context.params);
 };
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/{id}:
+ * /api/v1/connection/{id}:
  *   patch:
- *     summary: Mettre à jour un articleTag
- *     tags: [ArticleTags]
+ *     summary: Mettre à jour une connection
+ *     tags: [Connections]
  *     parameters:
  *       - in: path
  *         name: id
@@ -55,27 +55,27 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
  *         description: ID du tag
  *     responses:
  *       200:
- *         description: ArticleTag mis à jour avec succès
+ *         description: Connection mise à jour avec succès
  *       404:
- *         description: ArticleTag non trouvé
+ *         description: Connection non trouvée
  *       500:
  *         description: Erreur interne du serveur
  */
 export const PATCH = async (req: NextRequest, context: ContextParams) => {
-  return articleTagsController.patchArticleTag(req, context.params);
+  return connectionsController.patchConnection(req, context.params);
 };
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/{id}:
+ * /api/v1/connection/{id}:
  *   put:
- *     summary: Mettre à jour un articleTag
- *     tags: [ArticleTags]
+ *     summary: Mettre à jour une connection
+ *     tags: [Connections]
  *     parameters:
  *       - in: path
  *         name: id
@@ -85,27 +85,27 @@ export const PATCH = async (req: NextRequest, context: ContextParams) => {
  *         description: ID du tag
  *     responses:
  *       200:
- *         description: ArticleTag mis à jour avec succès
+ *         description: Connection mise à jour avec succès
  *       404:
- *         description: ArticleTag non trouvé
+ *         description: Connection non trouvée
  *       500:
  *         description: Erreur interne du serveur
  */
 export const PUT = async (req: NextRequest, context: ContextParams) => {
-  return articleTagsController.updateArticleTag(req, context.params);
+  return connectionsController.updateConnection(req, context.params);
 };
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/{id}:
+ * /api/v1/connection/{id}:
  *   delete:
- *     summary: Supprimer un articleTag
- *     tags: [ArticleTags]
+ *     summary: Supprimer une connection
+ *     tags: [Connections]
  *     parameters:
  *       - in: path
  *         name: id
@@ -115,12 +115,12 @@ export const PUT = async (req: NextRequest, context: ContextParams) => {
  *         description: ID du tag
  *     responses:
  *       200:
- *         description: ArticleTag supprimé avec succès
+ *         description: Connection supprimée avec succès
  *       404:
- *         description: ArticleTag non trouvé
+ *         description: Connection non trouvée
  *       500:
  *         description: Erreur interne du serveur
  */
 export const DELETE = async (req: NextRequest, context: ContextParams) => {
-  return articleTagsController.deleteArticleTag(req, context.params);
+  return connectionsController.deleteConnection(req, context.params);
 };

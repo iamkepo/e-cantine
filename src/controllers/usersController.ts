@@ -2,7 +2,7 @@
 
 import { prisma } from "@/libs/prisma";
 import UsersModel from "@/models/usersModel";
-import { Params } from "@/core/interfaces";
+import { Params } from "@/core/types";
 import { NextRequest } from "next/server";
 
 const usersModel = new UsersModel();
@@ -32,9 +32,11 @@ const usersController = {
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const orderBy = searchParams.get('orderBy') || 'createdAt';
+    const order = searchParams.get('order') || 'desc';
   
     try {
-      const users = await usersModel.getUsers({ take, search, status, page });
+      const users = await usersModel.getUsers({ take, search, status, page, orderBy, order });
   
       return new Response(JSON.stringify({data: users}), { status: 200 });
     } catch (error: any) {

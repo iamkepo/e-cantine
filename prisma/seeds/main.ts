@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import typesSeed from './typesSeed';
 import categoriesSeed from './categoriesSeed';
-import articles from './articlesSeed';
+import articlesSeed from './articlesSeed';
 import tagsSeed from './tagsSeed';
 
 const prisma = new PrismaClient();
@@ -17,7 +17,7 @@ async function main() {
   // Crée les Tags
   await tagsSeed(prisma);
   // Crée les Articles
-  await articles(prisma);
+  await articlesSeed(prisma);
 
   const end = new Date();
   console.log(`Seeding completed in ${end.getTime() - start.getTime()}ms`);

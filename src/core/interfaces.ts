@@ -1,41 +1,110 @@
-export interface Params { 
-  id?: string;
- };
-export interface ContextParams { params: Promise<Params> };
-
-export interface ParamsQuery { 
-  take?: number;
-  search?: string;
-  typeId?: number;
-  categoryId?: number;
-  tagId?: number;
-  page?: number;
-  status?: string;
-  articleId?: number;
- };
-export interface ResponseData<T> {
-  data: T;
-}
-export interface Meta {
-  total: number;
-  page: number;
-  pageCount: number;
-  limit: number;
-}
+import { 
+  StatusActivation, 
+  StatusCommand, 
+  StatusDelivery, 
+  StatusTransaction, 
+  Slot,
+  Day
+} from "@/enums";
 
 export interface IUser {
   id?: number;
-  name: string;
   password: string;
-  status: string;
+  name: string;
+  status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface INotification {
+  id?: number;
+  message: string;
+  seen: boolean;
+  type: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
+export interface IAdmin {
+  id?: number;
+  email: string;
+  name: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
+export interface IPromo {
+  id?: number;
+  code: string;
+  discount: number;
+  maxUsage: number;
+  countUsage: number;
+  startDate: Date;
+  endDate?: Date;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IMethod {
+  id?: number;
+  name: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IRestaurant {
+  id?: number;
+  phone: string;
+  name: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
+export interface IDeliverer {
+  id?: number;
+  phone: string;
+  name: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
+export interface IClient {
+  id?: number;
+  phone: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
+export interface ILocation {
+  id?: number;
+  address: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  country: string;
+  zipCode: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  clientId: number;
 }
 
 export interface IType {
   id?: number;
   name: string;
-  status: string;
+  status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -43,15 +112,7 @@ export interface IType {
 export interface ICategory {
   id?: number;
   name: string;
-  status: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface ITag {
-  id?: number;
-  name: string;
-  status: string;
+  status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -59,21 +120,105 @@ export interface ITag {
 export interface IArticle {
   id?: number;
   name: string;
-  image: string;
   price: number;
   description: string;
-  status: string;
+  image: string;
+  status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  categoryId: number;
   typeId: number;
+  categoryId: number;
 }
 
-export interface IArticleTag {
+export interface ITag {
   id?: number;
-  articleId: number;
-  tagId: number;
-  status: string;
+  name: string;
+  status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface IConnection {
+  id?: number;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  tagId: number;
+  articleId: number;
+}
+
+export interface IPreference {
+  id?: number;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  tagId: number;
+  clientId: number;
+}
+
+export interface ISubscription {
+  id?: number;
+  weeks: number;
+  checkedDays: Day[];
+  startDate: Date;
+  transactionId: number;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ITransaction {
+  id?: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  total: number;
+  status: StatusTransaction;
+  createdAt?: Date;
+  updatedAt?: Date;
+  clientId: number;
+  promoId?: number;
+  subscriptionId: number;
+  methodId: number;
+}
+
+
+
+export interface IDate {
+  id?: number;
+  deliveryDate: Date;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  subscriptionId: number;
+}
+
+export interface IEvent {
+  id?: number;
+  count: number;
+  slot: Slot;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  articleId: number;
+  dateId: number;
+  subscriptionId: number;
+}
+
+export interface ICommand {
+  id?: number;
+  status: StatusCommand;
+  createdAt?: Date;
+  updatedAt?: Date;
+  eventId: number;
+  restaurantId?: number;
+}
+
+export interface IDelivery {
+  id?: number;
+  status: StatusDelivery;
+  createdAt?: Date;
+  updatedAt?: Date;
+  commandId: number;
+  delivererId?: number;
 }

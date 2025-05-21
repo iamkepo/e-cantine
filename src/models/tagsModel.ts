@@ -12,7 +12,7 @@ class TagsModel extends Model {
     return tag;
   }
 
-  getTags = async (params: { take: number, search: string, status: string, page: number }) => {
+  getTags = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
     const tagsList = await this.getAll(params);
     return tagsList;
   }

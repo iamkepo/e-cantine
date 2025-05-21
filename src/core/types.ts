@@ -20,7 +20,32 @@ export interface Option {
   label: string;
   action: ()=> void
 }
+export interface Params { 
+  id?: string;
+ };
+export interface ContextParams { params: Promise<Params> };
 
+export interface ParamsQuery { 
+  take?: number;
+  search?: string;
+  typeId?: number;
+  categoryId?: number;
+  tagId?: number;
+  page?: number;
+  status?: string;
+  articleId?: number;
+  orderBy?: string;
+  order?: string;
+ };
+export interface ResponseData<T> {
+  data: T;
+}
+export interface Meta {
+  total: number;
+  page: number;
+  pageCount: number;
+  limit: number;
+}
 export type CommandStatus = "pending" | "paid" | "shipped" | "cancelled";
 export type HistoryStatus = "pending" | "shipped" | "delivered";
 export interface PlanningEvent { id: number; title: string; date: string; slot: string };

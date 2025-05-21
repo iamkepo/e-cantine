@@ -1,7 +1,7 @@
 "use server";
 
 import tagsController from "@/controllers/tagsController";
-import { ContextParams } from "@/core/interfaces";
+import { ContextParams } from "@/core/types";
 import { NextRequest } from "next/server";
 
 /**

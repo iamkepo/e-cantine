@@ -1,24 +1,25 @@
 "use client";
 
 import { modal } from "@/stores/appStore";
-import { ITag, Meta } from "@/core/interfaces";
+import { ITag } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import TagRepository from "@/repositories/tagRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { IField } from "@/components/FormComponent";
-import { statusOptionsActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import { TableComponent } from "@/components/TableComponent";
 import { meta } from "@/core/constants";
+import { Meta } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 
 const Page: React.FC = () => {
   const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
-  const statusOptions = Object.values(statusOptionsActivation);
+  const statusOptions = Object.values(StatusActivation);
   const tagRepository = useMemo(() => new TagRepository(setTags), []);
   const [params, setParams] = useState(tagRepository.filterTag);
   const { checkList, checkAllList, handleCheckList } = useCheckList(tags.data.map(tag => tag.id as number));

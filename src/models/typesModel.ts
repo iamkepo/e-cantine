@@ -12,7 +12,7 @@ class TypesModel extends Model {
     return type;
   }
 
-  getTypes = async (params: { take: number, search: string, status: string, page: number }) => {
+  getTypes = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
     const typesList = await this.getAll(params);
     return typesList;
   }

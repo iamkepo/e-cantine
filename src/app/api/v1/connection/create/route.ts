@@ -1,18 +1,18 @@
 "use server";
 
-import articleTagsController from "@/controllers/ArticleTagsController";
+import connectionsController from "@/controllers/connectionsController";
 
 /**
  * @swagger
  * tags:
- *   name: ArticleTags
- *   description: API for managing article tags
+ *   name: Connections
+ *   description: API for managing connections
  *
  * @swagger 
- * /api/v1/article-tag/create:
+ * /api/v1/connection/create:
  *   post:
- *     summary: Créer un tag
- *     tags: [ArticleTags]
+ *     summary: Créer une connection
+ *     tags: [Connections]
  *     requestBody:
  *       required: true
  *       content:
@@ -26,11 +26,11 @@ import articleTagsController from "@/controllers/ArticleTagsController";
  *                 type: number
  *     responses:
  *       201:
- *         description: ArticleTag créé avec succès
+ *         description: Connection créée avec succès
  *       400:
- *         description: Erreur lors de la création de l'articleTag
+ *         description: Erreur lors de la création de la connection
  */
 
 export const POST = async (req: Request) => {
-  return articleTagsController.createArticleTag(req);
+  return connectionsController.createConnection(req);
 };

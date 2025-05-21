@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Params } from "@/core/interfaces";
+import { Params } from "@/core/types";
 import CategoriesModel from "@/models/categoriesModel";
 import { NextRequest } from "next/server";
 
@@ -25,9 +25,11 @@ const categoriesController = {
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const orderBy = searchParams.get('orderBy') || 'createdAt';
+    const order = searchParams.get('order') || 'desc';
   
     try {
-      const categories = await categoriesModel.getCategories({ take, search, status, page });
+      const categories = await categoriesModel.getCategories({ take, search, status, page, orderBy, order });
       return new Response(JSON.stringify({data: categories}), { status: 200 });
     } catch (error) {
       console.error(error);
