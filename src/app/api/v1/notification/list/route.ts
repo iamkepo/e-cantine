@@ -80,7 +80,7 @@ export async function GET(req: Request) {
  *     summary: Delete notifications
  *     tags: [Notifications]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array

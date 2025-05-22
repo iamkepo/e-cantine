@@ -75,7 +75,7 @@ export async function GET(req: Request) {
  *     summary: Delete deliveries
  *     tags: [Deliveries]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array

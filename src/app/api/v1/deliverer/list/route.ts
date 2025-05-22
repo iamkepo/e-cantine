@@ -1,17 +1,17 @@
 "use server";
-import locationsController from '@/controllers/locationsController';
+import deliverersController from '@/controllers/deliverersController';
 
 /**
  * @swagger
  * tags:
- *   name: Locations
- *   description: API for managing locations
+ *   name: Deliverers
+ *   description: API for managing deliverers
  *
  * @swagger
- * /api/v1/location/list:
+ * /api/v1/deliverer/list:
  *   get:
- *     summary: Get locations
- *     tags: [Locations]
+ *     summary: Get deliverers
+ *     tags: [Deliverers]
  *     parameters:
  *       - in: query
  *         name: take
@@ -44,10 +44,10 @@ import locationsController from '@/controllers/locationsController';
  *           type: string
  *         description: Ordre du tri
  *       - in: query
- *         name: clientId
+ *         name: userId
  *         schema:
  *           type: integer
- *         description: ID du client
+ *         description: ID de l'utilisateur
  *     responses:
  *       200:
  *         description: Success
@@ -55,20 +55,20 @@ import locationsController from '@/controllers/locationsController';
  *         description: Error
  */
 export async function GET(req: Request) {
-  return locationsController.getLocations(req);
+  return deliverersController.getDeliverers(req);
 }
 
 /**
  * @swagger
  * tags:
- *   name: Locations
- *   description: API for managing locations
+ *   name: Deliverers
+ *   description: API for managing deliverers
  *
  * @swagger
- * /api/v1/location/list:
+ * /api/v1/deliverer/list:
  *   delete:
- *     summary: Delete locations
- *     tags: [Locations]
+ *     summary: Delete deliverers
+ *     tags: [Deliverers]
  *     parameters:
  *       - in: query
  *         name: ids
@@ -76,13 +76,13 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des locations à supprimer
+ *         description: IDs des livreurs à supprimer
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livreur supprimé
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
-export async function DELETE(req: Request) {
-  return locationsController.deleteLocations(req);
+  export async function DELETE(req: Request) {
+  return deliverersController.deleteDeliverers(req);
 }
