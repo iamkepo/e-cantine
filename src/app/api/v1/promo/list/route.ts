@@ -79,7 +79,7 @@ export async function GET(req: Request) {
  *     summary: Supprimer la liste des promos
  *     tags: [Promo]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array

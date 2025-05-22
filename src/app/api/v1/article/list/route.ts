@@ -71,7 +71,7 @@ export const GET = async (req: Request) => {
  *     summary: Supprimer plusieurs articles
  *     tags: [Articles]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array

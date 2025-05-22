@@ -65,7 +65,7 @@ export async function GET(req: Request) {
  *     summary: Delete methods
  *     tags: [Methods]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array

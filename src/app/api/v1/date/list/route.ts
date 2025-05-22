@@ -1,17 +1,17 @@
 "use server";
-import restaurantsController from '@/controllers/restaurantsController';
+import datesController from '@/controllers/datesController';
 
 /**
  * @swagger
  * tags:
- *   name: Restaurants
- *   description: API for managing restaurants
+ *   name: Dates
+ *   description: API for managing dates
  *
  * @swagger
- * /api/v1/restaurant/list:
+ * /api/v1/date/list:
  *   get:
- *     summary: Récupérer la liste des restaurants
- *     tags: [Restaurants]
+ *     summary: Get dates
+ *     tags: [Dates]
  *     parameters:
  *       - in: query
  *         name: take
@@ -43,24 +43,37 @@ import restaurantsController from '@/controllers/restaurantsController';
  *         schema:
  *           type: string
  *         description: Ordre du tri
+ *       - in: query
+ *         name: subscriptionId
+ *         schema:
+ *           type: integer
+ *         description: ID de la souscription
+ *       - in: query
+ *         name: locationId
+ *         schema:
+ *           type: integer
+ *         description: ID de la localisation
  *     responses:
  *       200:
- *         description: Liste des restaurants
- *       404:
- *         description: Restaurants non trouvés
+ *         description: Success
  *       500:
- *         description: Erreur interne du serveur
+ *         description: Error
  */
 export async function GET(req: Request) {
-  return restaurantsController.getRestaurants(req);
+  return datesController.getDates(req);
 }
 
 /**
  * @swagger
- * /api/v1/restaurant/list:
+ * tags:
+ *   name: Dates
+ *   description: API for managing dates
+ *
+ * @swagger
+ * /api/v1/date/list:
  *   delete:
- *     summary: Supprimer la liste des restaurants
- *     tags: [Restaurants]
+ *     summary: Delete dates
+ *     tags: [Dates]
  *     parameters:
  *       - in: query
  *         name: ids
@@ -68,16 +81,13 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des restaurants à supprimer
+ *         description: IDs des dates à supprimer
  *     responses:
  *       200:
- *         description: Liste des restaurants supprimée
- *       404:
- *         description: Restaurants non trouvés
+ *         description: Dates supprimées avec succès
  *       500:
  *         description: Erreur interne du serveur
  */
 export async function DELETE(req: Request) {
-  return restaurantsController.deleteRestaurants(req);
+  return datesController.deleteDates(req);
 }
-  

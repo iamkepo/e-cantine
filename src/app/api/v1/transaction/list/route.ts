@@ -77,7 +77,7 @@ export async function GET(req: Request) {
  *     summary: Supprimer une transaction
  *     tags: [Transactions]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array
