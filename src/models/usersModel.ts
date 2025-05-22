@@ -2,6 +2,7 @@
 import { prisma } from "@/libs/prisma";
 import bcrypt from 'bcrypt';
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class UsersModel extends Model {
   constructor() {
@@ -22,8 +23,17 @@ class UsersModel extends Model {
     return user;
   }
 
-  getUsers = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
-    const usersList = await this.getAll(params);
+  getUsers = async (params: ParamsQuery) => {
+    const where: any = {};
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: 'insensitive' } },
+      ];
+    }
+    if (params.status) {
+      where.status = params.status;
+    }
+    const usersList = await this.getAll(params, where);
     return usersList;
   }
 

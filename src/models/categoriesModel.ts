@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class CategoriesModel extends Model {
   constructor() {
@@ -12,8 +13,17 @@ class CategoriesModel extends Model {
     return category;
   }
 
-  getCategories = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
-    const categoriesList = await this.getAll(params);
+  getCategories = async (params: ParamsQuery) => {
+    const where: any = {};
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: 'insensitive' } },
+      ];
+    }
+    if (params.status) {
+      where.status = params.status;
+    }
+    const categoriesList = await this.getAll(params, where);
     return categoriesList;
   }
 
@@ -23,7 +33,7 @@ class CategoriesModel extends Model {
   }
 
   checkAttributeCategory = (att: string) => {
-    return ['name', 'status'].includes(att);
+    return this.checkAttribute(['name', 'status'], att);
   }
 
   patchCategory = async (id: number, patch: {attr: string, val: any}) => {

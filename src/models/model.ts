@@ -1,3 +1,5 @@
+import { ParamsQuery } from "@/core/types";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 class Model {
   model: any;
@@ -20,17 +22,11 @@ class Model {
     }
   }
 
-  getAll = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }, where?: any) => {
+  getAll = async (params: ParamsQuery & unknown, where?: any) => {
     try {
-      const { take = 10, search = '', status = '', page = 1, orderBy = 'createdAt', order = 'desc' } = params;
-      const whereModel: any = where ? where : {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-        ]
-      };
-      if (status) {
-        whereModel.status = status;
-      }
+      const { take = 10, page = 1, orderBy = 'createdAt', order = 'desc' } = params;
+      const whereModel: any = where ? where : {};
+
       const data = await this.model.findMany({
         where: whereModel,
         skip: (page - 1) * take,

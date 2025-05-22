@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class ArticlesModel extends Model {
   constructor() {
@@ -12,23 +13,26 @@ class ArticlesModel extends Model {
     return article;
   }
 
-  getArticles = async (params: { take: number, typeId: number, categoryId: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
-    const { typeId, categoryId, search } = params;
-    const where: any = {
-      OR: [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-      ]
-    };
-
-    if (typeId > 0) {
-      where.typeId = typeId;
+  getArticles = async (params: ParamsQuery & {typeId?: number, categoryId?: number, price?: number}) => {
+    const where: any = {};
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: 'insensitive' } },
+        { description: { contains: params.search, mode: 'insensitive' } }
+      ];
     }
-
-    if (categoryId > 0) {
-      where.categoryId = categoryId;
+    if (params.price) {
+      where.price = { gte: params.price };
     }
-
+    if (params.typeId) {
+      where.typeId = params.typeId;
+    }
+    if (params.categoryId) {
+      where.categoryId = params.categoryId;
+    }
+    if (params.status) {
+      where.status = params.status;
+    }
     const articlesList = await this.getAll(params, where);
     return articlesList;
   }

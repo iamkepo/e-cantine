@@ -4,7 +4,8 @@ import {
   StatusDelivery, 
   StatusTransaction, 
   Slot,
-  Day
+  Day,
+  NotificationType
 } from "@/enums";
 
 export interface IUser {
@@ -20,7 +21,7 @@ export interface INotification {
   id?: number;
   message: string;
   seen: boolean;
-  type: string;
+  type: NotificationType;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -161,7 +162,9 @@ export interface ISubscription {
   weeks: number;
   checkedDays: Day[];
   startDate: Date;
+  endDate?: Date;
   transactionId: number;
+  clientId: number;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -176,7 +179,6 @@ export interface ITransaction {
   status: StatusTransaction;
   createdAt?: Date;
   updatedAt?: Date;
-  clientId: number;
   promoId?: number;
   subscriptionId: number;
   methodId: number;
@@ -191,6 +193,7 @@ export interface IDate {
   createdAt?: Date;
   updatedAt?: Date;
   subscriptionId: number;
+  locationId: number
 }
 
 export interface IEvent {

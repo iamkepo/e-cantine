@@ -50,7 +50,20 @@ enum Day {
   saturday
   sunday
 }
-
+enum NotificationType {
+  command
+  delivery
+  subscription
+  transaction
+  promo
+  event
+  restaurant
+  deliverer
+  client
+  location
+  preferences
+  connections
+}
 
 
 model users {
@@ -75,7 +88,7 @@ model notifications {
   id                  Int               @id @default(autoincrement())
   message             String
   seen                Boolean           @default(false)
-  type                String
+  type                NotificationType
   status              StatusActivation  @default(pending) @map("status")
   createdAt           DateTime          @default(now()) @map("created_at")
   updatedAt           DateTime          @updatedAt @default(now()) @map("updated_at")

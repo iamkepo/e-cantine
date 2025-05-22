@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class ClientsModel extends Model {
   constructor() {
@@ -17,15 +18,19 @@ class ClientsModel extends Model {
     return client;
   }
 
-  getClients = async (params: { take: number, search: string, userId: number, status: string, page: number, orderBy: string, order: string }) => {
-    const { search, userId } = params;
-    const where: any = {
-      OR: [
-        { phone: { contains: search, mode: 'insensitive' } },
-      ]
-    };
-    if (userId > 0) {
-      where.userId = userId;
+  getClients = async (params: ParamsQuery & {userId?: number}) => {
+    const where: any = {};
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: 'insensitive' } },
+        { phone: { contains: params.search, mode: 'insensitive' } },
+      ];
+    }
+    if (params.userId) {
+      where.userId = params.userId;
+    }
+    if (params.status) {
+      where.status = params.status;
     }
     const clientsList = await this.getAll(params, where);
     return clientsList;
@@ -37,7 +42,7 @@ class ClientsModel extends Model {
   }
 
   checkAttributeClient = (att: string) => {
-    return this.checkAttribute(['userId', 'status'], att);
+    return this.checkAttribute(['name', 'phone', 'userId', 'status'], att);
   }
 
   patchClient = async (id: number, patch: {attr: string, val: any}) => {

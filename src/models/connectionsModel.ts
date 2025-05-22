@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class ConnectionsModel extends Model {
   constructor() {
@@ -12,17 +13,19 @@ class ConnectionsModel extends Model {
     return connection;
   }
 
-  getConnections = async (params: { take: number, articleId: number, tagId: number, status: string, page: number, orderBy: string, order: string }) => {
-    const { articleId, tagId } = params;
+  getConnections = async (params: ParamsQuery & {articleId?: number, tagId?: number}) => {
     const where: any = {};
-      if (articleId > 0) {
-        where.articleId = articleId;
-      }
-      if (tagId > 0) {
-        where.tagId = tagId;
-      }
-      const connectionsList = await this.getAll({ ...params, search: '' }, where);
-      return connectionsList;
+    if (params.articleId) {
+      where.articleId = params.articleId;
+    }
+    if (params.tagId) {
+      where.tagId = params.tagId;
+    }
+    if (params.status) {
+      where.status = params.status;
+    }
+    const connectionsList = await this.getAll(params, where);
+    return connectionsList;
   }
 
   getConnection = async (id: number) => {
