@@ -67,7 +67,7 @@ export const GET = async (req: Request) => {
  *     summary: Supprimer plusieurs connections
  *     tags: [Connections]
  *     parameters:
- *       - in: query
+ *       - in: body
  *         name: ids
  *         schema:
  *           type: array

@@ -2,6 +2,11 @@ import transactionsController from '@/controllers/transactionsController';
 
 /**
  * @swagger
+ * tags:
+ *   name: Transactions
+ *   description: API for managing transactions
+ *
+ * @swagger
  * /api/v1/transaction/create:
  *   post:
  *     summary: Créer une transaction
@@ -30,10 +35,8 @@ import transactionsController from '@/controllers/transactionsController';
  *     responses:
  *       201:
  *         description: Transaction créée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Transaction'
+ *       500:
+ *         description: Erreur lors de la création de la transaction
  */
 export async function POST(req: Request) {
   return transactionsController.createTransaction(req);
