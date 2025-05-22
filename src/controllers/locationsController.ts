@@ -54,6 +54,9 @@ const locationsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!locationsModel.checkAttributeLocation(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -70,6 +73,9 @@ const locationsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const location = await locationsModel.updateLocation(id, body);
       if (!location) {
         return new Response(JSON.stringify({ error: 'Location not found' }), { status: 404 });
@@ -92,9 +98,11 @@ const locationsController = {
     }
   },
   deleteLocations: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const locations = await locationsModel.deleteManyLocations(ids);
       if (!locations) {
         return new Response(JSON.stringify({ error: 'Locations not found' }), { status: 404 });

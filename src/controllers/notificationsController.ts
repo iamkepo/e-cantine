@@ -59,6 +59,9 @@ const notificationsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!notificationsModel.checkAttributeNotification(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -76,6 +79,9 @@ const notificationsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const notification = await notificationsModel.updateNotification(id, body);
       if (!notification) {
         return new Response(JSON.stringify({ error: 'Notification not found' }), { status: 404 });
@@ -100,9 +106,11 @@ const notificationsController = {
   },
 
   deleteNotifications: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const notifications = await notificationsModel.deleteManyNotifications(ids);
       if (!notifications) {
         return new Response(JSON.stringify({ error: 'Notifications not found' }), { status: 404 });

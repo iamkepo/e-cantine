@@ -50,6 +50,9 @@ const methodsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!methodsModel.checkAttributeMethod(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -66,6 +69,9 @@ const methodsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const method = await methodsModel.updateMethod(id, body);
       if (!method) {
         return new Response(JSON.stringify({ error: 'Method not found' }), { status: 404 });
@@ -88,9 +94,11 @@ const methodsController = {
     }
   },
   deleteMethods: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const methods = await methodsModel.deleteManyMethods(ids);
       if (!methods) {
         return new Response(JSON.stringify({ error: 'Methods not found' }), { status: 404 });

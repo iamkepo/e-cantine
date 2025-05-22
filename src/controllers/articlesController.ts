@@ -57,6 +57,9 @@ const articlesController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if( !attr || !val ) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!articlesModel.checkAttributeArticle(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -75,6 +78,9 @@ const articlesController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const article = await articlesModel.updateArticle(id, body);
       if (!article) {
         return new Response(JSON.stringify({ error: 'Article not found' }), { status: 404 });
@@ -103,6 +109,9 @@ const articlesController = {
   deleteArticles: async (req: Request) => {
     const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const articles = await articlesModel.deleteManyArticles(ids);
       if (!articles) {
         return Response.json({ error: 'Articles not found' }, { status: 404 });

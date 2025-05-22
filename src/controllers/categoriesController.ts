@@ -55,6 +55,9 @@ const categoriesController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!categoriesModel.checkAttributeCategory(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -73,6 +76,9 @@ const categoriesController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const category = await categoriesModel.updateCategory(id, body);
       if (!category) {
         return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });

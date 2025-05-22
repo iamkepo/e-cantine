@@ -62,6 +62,9 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!usersModel.checkAttributeUser(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -80,6 +83,9 @@ const usersController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const user = await usersModel.updateUser(id, body);
       if (!user) {
         return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
@@ -108,6 +114,9 @@ const usersController = {
   deleteUsers: async (req: Request) => {
     const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const users = await usersModel.deleteManyUsers(ids);
       if (!users) {
         return new Response(JSON.stringify({ error: 'Users not found' }), { status: 404 });

@@ -52,7 +52,10 @@ const typesController = {
   patchType: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
-    try {    
+    try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!typesModel.checkAttributeType(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -71,6 +74,9 @@ const typesController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const type = await typesModel.updateType(id, body);
       if (!type) {
         return new Response(JSON.stringify({ error: 'Type not found' }), { status: 404 });
@@ -99,6 +105,9 @@ const typesController = {
   deleteTypes: async (req: Request) => {
     const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const types = await typesModel.deleteManyTypes(ids);
       if (!types) {
         return new Response(JSON.stringify({ error: 'Types not found' }), { status: 404 });

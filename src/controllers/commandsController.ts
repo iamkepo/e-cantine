@@ -49,13 +49,18 @@ const commandsController = {
   },
   patchCommand: async (req: NextRequest, params: Promise<Params>) => {
     const id = parseInt((await params).id || '0', 10);
-    const body = await req.json();
-    const { attr, val } = body;
+    const { attr, val } = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!commandsModel.checkAttributeCommand(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
       const command = await commandsModel.patchCommand(id, {attr, val});
+      if (!command) {
+        return new Response(JSON.stringify({ error: 'Command not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({ data: command }), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Patch failed: ${error}` }), { status: 400 });
@@ -65,7 +70,13 @@ const commandsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const command = await commandsModel.updateCommand(id, body);
+      if (!command) {
+        return new Response(JSON.stringify({ error: 'Command not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({ data: command }), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Update failed: ${error}` }), { status: 400 });
@@ -75,15 +86,20 @@ const commandsController = {
     const id = parseInt((await params).id || '0', 10);
     try {
       const command = await commandsModel.deleteCommand(id);
+      if (!command) {
+        return new Response(JSON.stringify({ error: 'Command not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({ data: command }), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Delete failed: ${error}` }), { status: 400 });
     }
   },
   deleteCommands: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const commands = await commandsModel.deleteManyCommands(ids);
       if (!commands) {
         return new Response(JSON.stringify({ error: 'Commands not found' }), { status: 404 });

@@ -50,6 +50,9 @@ const tagsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!tagsModel.checkAttributeTag(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -68,6 +71,9 @@ const tagsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const tag = await tagsModel.updateTag(id, body);
       if (!tag) {
         return new Response(JSON.stringify({ error: 'Tag update failed' }), { status: 400 });
@@ -93,6 +99,9 @@ const tagsController = {
   deleteTags: async (req: Request) => {
     const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const tags = await tagsModel.deleteManyTags(ids);
       if (!tags) {
         return new Response(JSON.stringify({ error: 'Tags not found' }), { status: 404 });

@@ -55,6 +55,9 @@ const promosController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!promosModel.checkAttributePromo(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -71,6 +74,9 @@ const promosController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const promo = await promosModel.updatePromo(id, body);
       if (!promo) {
         return new Response(JSON.stringify({ error: 'Promo not found' }), { status: 404 });
@@ -93,9 +99,11 @@ const promosController = {
     }
   },
   deletePromos: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const promos = await promosModel.deleteManyPromos(ids);
       if (!promos) {
         return new Response(JSON.stringify({ error: 'Promos not found' }), { status: 404 });

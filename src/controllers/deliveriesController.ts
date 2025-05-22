@@ -51,6 +51,9 @@ const deliveriesController = {
     const id = parseInt((await params).id || '0', 10);
     const { attr, val } = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!deliveriesModel.checkAttributeDelivery(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -67,7 +70,13 @@ const deliveriesController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const delivery = await deliveriesModel.updateDelivery(id, body);
+      if (!delivery) {
+        return new Response(JSON.stringify({ error: 'Delivery not found' }), { status: 404 });
+      }
       return new Response(JSON.stringify({ data: delivery }), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: `Update failed: ${error}` }), { status: 400 });
@@ -83,9 +92,11 @@ const deliveriesController = {
     }
   },
   deleteDeliveries: async (req: Request) => {
-    const body = await req.json();
-    const { ids } = body;
+    const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const deliveries = await deliveriesModel.deleteManyDeliveries(ids);
       if (!deliveries) {
         return new Response(JSON.stringify({ error: 'Deliveries not found' }), { status: 404 });

@@ -59,6 +59,9 @@ const connectionsController = {
     const id = parseInt((await params).id || '0', 10);
     const {attr, val} = await req.json();
     try {
+      if(!attr || !val) {
+        return new Response(JSON.stringify({ error: 'Missing patch attribute' }), { status: 400 });
+      }
       if(!connectionsModel.checkAttributeConnection(attr as string)) {
         return new Response(JSON.stringify({ error: 'Invalid patch attribute' }), { status: 400 });
       }
@@ -77,6 +80,9 @@ const connectionsController = {
     const id = parseInt((await params).id || '0', 10);
     const body = await req.json();
     try {
+      if(!body) {
+        return new Response(JSON.stringify({ error: 'Missing update body' }), { status: 400 });
+      }
       const connection = await connectionsModel.updateConnection(id, body);
       if (!connection) {
         return new Response(JSON.stringify({ error: 'Connection not found' }), { status: 404 });
@@ -105,6 +111,9 @@ const connectionsController = {
   deleteConnections: async (req: Request) => {
     const { ids } = await req.json();
     try {
+      if(!ids || ids.length === 0) {
+        return new Response(JSON.stringify({ error: 'Missing ids' }), { status: 400 });
+      }
       const connections = await connectionsModel.deleteManyConnections(ids);
       if (!connections) {
         return new Response(JSON.stringify({ error: 'Connections not found' }), { status: 404 });
