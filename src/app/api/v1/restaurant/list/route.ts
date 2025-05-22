@@ -1,18 +1,17 @@
 "use server";
-import transactionsController from '@/controllers/transactionsController';
-
+import restaurantsController from '@/controllers/restaurantsController';
 
 /**
  * @swagger
  * tags:
- *   name: Transactions
- *   description: API for managing transactions
+ *   name: Restaurants
+ *   description: API for managing restaurants
  *
- * @swagger 
- * /api/v1/transaction/list:
+ * @swagger
+ * /api/v1/restaurant/list:
  *   get:
- *     summary: Récupérer la liste des transactions
- *     tags: [Transactions]
+ *     summary: Récupérer la liste des restaurants
+ *     tags: [Restaurants]
  *     parameters:
  *       - in: query
  *         name: take
@@ -44,38 +43,24 @@ import transactionsController from '@/controllers/transactionsController';
  *         schema:
  *           type: string
  *         description: Ordre du tri
- *       - in: query
- *         name: subscriptionId
- *         schema:
- *           type: integer
- *         description: ID de la souscription
- *       - in: query
- *         name: promoId
- *         schema:
- *           type: integer
- *         description: ID de la promotion
- *       - in: query
- *         name: methodId
- *         schema:
- *           type: integer
- *         description: ID du mode de paiement
  *     responses:
  *       200:
- *         description: Liste des transactions
+ *         description: Liste des restaurants
+ *       404:
+ *         description: Restaurants non trouvés
  *       500:
  *         description: Erreur interne du serveur
  */
-
 export async function GET(req: Request) {
-  return transactionsController.getTransactions(req);
+  return restaurantsController.getRestaurants(req);
 }
 
 /**
  * @swagger
- * /api/v1/transaction/list:
+ * /api/v1/restaurant/list:
  *   delete:
- *     summary: Supprimer une transaction
- *     tags: [Transactions]
+ *     summary: Supprimer la liste des restaurants
+ *     tags: [Restaurants]
  *     parameters:
  *       - in: body
  *         name: ids
@@ -83,15 +68,16 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des transactions à supprimer
+ *         description: IDs des restaurants à supprimer
  *     responses:
  *       200:
- *         description: Transaction supprimée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Transaction'
+ *         description: Liste des restaurants supprimée
+ *       404:
+ *         description: Restaurants non trouvés
+ *       500:
+ *         description: Erreur interne du serveur
  */
 export async function DELETE(req: Request) {
-  return transactionsController.deleteTransactions(req);
+  return restaurantsController.deleteRestaurants(req);
 }
+  

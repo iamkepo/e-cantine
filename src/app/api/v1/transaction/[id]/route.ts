@@ -1,3 +1,4 @@
+"use server";
 import transactionsController from '@/controllers/transactionsController';
 import { ContextParams } from '@/core/types';
 import { NextRequest } from 'next/server';

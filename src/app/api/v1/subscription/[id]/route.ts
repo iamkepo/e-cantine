@@ -1,3 +1,4 @@
+"use server";
 import subscriptionsController from '@/controllers/subscriptionsController';
 import { ContextParams } from '@/core/types';
 import { NextRequest } from 'next/server';

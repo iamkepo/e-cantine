@@ -1,18 +1,17 @@
 "use server";
-import transactionsController from '@/controllers/transactionsController';
-
+import subscriptionsController from '@/controllers/subscriptionsController';
 
 /**
  * @swagger
  * tags:
- *   name: Transactions
- *   description: API for managing transactions
+ *   name: Subscriptions
+ *   description: API for managing subscriptions
  *
- * @swagger 
- * /api/v1/transaction/list:
+ * @swagger
+ * /api/v1/subscription/list:
  *   get:
- *     summary: Récupérer la liste des transactions
- *     tags: [Transactions]
+ *     summary: Récupérer la liste des subscriptions
+ *     tags: [Subscription]
  *     parameters:
  *       - in: query
  *         name: take
@@ -45,37 +44,36 @@ import transactionsController from '@/controllers/transactionsController';
  *           type: string
  *         description: Ordre du tri
  *       - in: query
- *         name: subscriptionId
+ *         name: clientId
  *         schema:
  *           type: integer
- *         description: ID de la souscription
+ *         description: ID du client
  *       - in: query
- *         name: promoId
+ *         name: transactionId
  *         schema:
  *           type: integer
- *         description: ID de la promotion
- *       - in: query
- *         name: methodId
- *         schema:
- *           type: integer
- *         description: ID du mode de paiement
+ *         description: ID de la transaction
  *     responses:
  *       200:
- *         description: Liste des transactions
+ *         description: Liste des subscriptions
  *       500:
  *         description: Erreur interne du serveur
  */
-
 export async function GET(req: Request) {
-  return transactionsController.getTransactions(req);
+  return subscriptionsController.getSubscriptions(req);
 }
 
 /**
  * @swagger
- * /api/v1/transaction/list:
+ * tags:
+ *   name: Subscriptions
+ *   description: API for managing subscriptions
+ *
+ * @swagger
+ * /api/v1/subscription/list:
  *   delete:
- *     summary: Supprimer une transaction
- *     tags: [Transactions]
+ *     summary: Supprimer plusieurs subscriptions
+ *     tags: [Subscription]
  *     parameters:
  *       - in: body
  *         name: ids
@@ -83,15 +81,15 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des transactions à supprimer
+ *         description: IDs des subscriptions à supprimer
  *     responses:
  *       200:
- *         description: Transaction supprimée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Transaction'
+ *         description: Subscriptions supprimées avec succès
+ *       404:
+ *         description: Subscriptions non trouvées
+ *       500:
+ *         description: Erreur interne du serveur
  */
 export async function DELETE(req: Request) {
-  return transactionsController.deleteTransactions(req);
+  return subscriptionsController.deleteSubscriptions(req);
 }
