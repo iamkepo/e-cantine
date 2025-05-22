@@ -34,9 +34,11 @@ const usersController = {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
     const order = searchParams.get('order') || 'desc';
+
+    const params = { take, search, status, page, orderBy, order };
   
     try {
-      const users = await usersModel.getUsers({ take, search, status, page, orderBy, order });
+      const users = await usersModel.getUsers(params);
   
       return new Response(JSON.stringify({data: users}), { status: 200 });
     } catch (error: any) {

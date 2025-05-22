@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Params } from "@/core/types";
 import TagsModel from "@/models/tagsModel";
 import { NextRequest } from "next/server";
@@ -24,9 +23,11 @@ const tagsController = {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
     const order = searchParams.get('order') || 'desc';
+
+    const params = { take, search, status, page, orderBy, order };
   
     try {
-      const tags = await tagsModel.getTags({ take, search, status, page, orderBy, order });
+      const tags = await tagsModel.getTags(params);
       return new Response(JSON.stringify({data: tags}), { status: 200 });
     } catch (error) {
       console.error(error);

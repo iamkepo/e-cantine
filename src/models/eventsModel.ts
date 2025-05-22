@@ -16,10 +16,8 @@ class EventsModel extends Model {
 
   getEvents = async (params: ParamsQuery & {articleId?: number, dateId?: number, subscriptionId?: number, slot: Slot}) => {
     const where: any = {};
-    if (params.search) {
-      where.OR = [
-        { slot: { contains: params.search, mode: 'insensitive' } },
-      ];
+    if (params.slot) {
+      where.slot = params.slot;
     }
     if (params.articleId) {
       where.clientId = params.articleId;

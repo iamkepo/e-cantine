@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/libs/prisma";
 import Model from "./model";
+import { ParamsQuery } from "@/core/types";
 
 class TypesModel extends Model {
   constructor() {
@@ -12,8 +13,17 @@ class TypesModel extends Model {
     return type;
   }
 
-  getTypes = async (params: { take: number, search: string, status: string, page: number, orderBy: string, order: string }) => {
-    const typesList = await this.getAll(params);
+  getTypes = async (params: ParamsQuery) => {
+    const where: any = {};
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: 'insensitive' } },
+      ];
+    }
+    if (params.status) {
+      where.status = params.status;
+    }
+    const typesList = await this.getAll(params, where);
     return typesList;
   }
 
