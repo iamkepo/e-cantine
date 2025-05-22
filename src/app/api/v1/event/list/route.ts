@@ -1,18 +1,17 @@
 "use server";
-import transactionsController from '@/controllers/transactionsController';
-
+import eventsController from '@/controllers/eventsController';
 
 /**
  * @swagger
  * tags:
- *   name: Transactions
- *   description: API for managing transactions
+ *   name: Events
+ *   description: API for managing events
  *
- * @swagger 
- * /api/v1/transaction/list:
+ * @swagger
+ * /api/v1/event/list:
  *   get:
- *     summary: Récupérer la liste des transactions
- *     tags: [Transactions]
+ *     summary: Get events
+ *     tags: [Events]
  *     parameters:
  *       - in: query
  *         name: take
@@ -45,37 +44,36 @@ import transactionsController from '@/controllers/transactionsController';
  *           type: string
  *         description: Ordre du tri
  *       - in: query
- *         name: subscriptionId
+ *         name: articleId
  *         schema:
  *           type: integer
- *         description: ID de la souscription
+ *         description: ID de l'article
  *       - in: query
- *         name: promoId
+ *         name: dateId
  *         schema:
  *           type: integer
- *         description: ID de la promotion
- *       - in: query
- *         name: methodId
- *         schema:
- *           type: integer
- *         description: ID du mode de paiement
+ *         description: ID de la date
  *     responses:
  *       200:
- *         description: Liste des transactions
+ *         description: Success
  *       500:
- *         description: Erreur interne du serveur
+ *         description: Error
  */
-
 export async function GET(req: Request) {
-  return transactionsController.getTransactions(req);
+  return eventsController.getEvents(req);
 }
 
 /**
  * @swagger
- * /api/v1/transaction/list:
+ * tags:
+ *   name: Events
+ *   description: API for managing events
+ *
+ * @swagger
+ * /api/v1/event/list:
  *   delete:
- *     summary: Supprimer une transaction
- *     tags: [Transactions]
+ *     summary: Delete events
+ *     tags: [Events]
  *     parameters:
  *       - in: body
  *         name: ids
@@ -83,13 +81,13 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: IDs des transactions à supprimer
+ *         description: IDs des events à supprimer
  *     responses:
  *       200:
- *         description: Transaction supprimée
+ *         description: Success
  *       500:
- *         description: Erreur interne du serveur
+ *         description: Error
  */
 export async function DELETE(req: Request) {
-  return transactionsController.deleteTransactions(req);
+  return eventsController.deleteEvents(req);
 }

@@ -205,7 +205,6 @@ export interface IEvent {
   updatedAt?: Date;
   articleId: number;
   dateId: number;
-  subscriptionId: number;
 }
 
 export interface ICommand {
