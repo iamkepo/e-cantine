@@ -62,7 +62,7 @@ export const GET = async (req: Request) => {
  *     summary: Supprimer plusieurs catégories
  *     tags: [Categories]
  *     parameters:
- *       - in: query
+ *       - in: body
  *         name: ids
  *         schema:
  *           type: array

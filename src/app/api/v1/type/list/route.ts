@@ -62,7 +62,7 @@ export const GET = async (req: Request) => {
  *     summary: Supprimer plusieurs types
  *     tags: [Types]
  *     parameters:
- *       - in: query
+ *       - in: body
  *         name: ids
  *         schema:
  *           type: array
