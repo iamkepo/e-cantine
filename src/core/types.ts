@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Article{  
   id: number;
   label: string;
@@ -74,3 +75,20 @@ export interface Meta {
   pageCount: number;
   limit: number;
 }
+export interface IField {
+  type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime' | 'hidden';
+  id: string;
+  label?: string;
+  placeholder?: string;  
+  colSize: string;
+  color?: string;
+  options?: { label: string; value: string }[];  
+  isChecked?: boolean;  
+  multiple?: boolean;  
+  readOnly?: boolean;  
+  value?: any;
+  accept?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+};

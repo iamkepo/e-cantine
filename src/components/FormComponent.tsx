@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from 'react';
 import { useThemeStore } from '../stores/themeStore';
@@ -12,24 +11,7 @@ import { renderCheckboxField } from './fieldRenderers/renderCheckboxField';
 import { renderRadioField } from './fieldRenderers/renderRadioField';
 import { renderFileField } from './fieldRenderers/renderFileField';
 import { renderDateTimeField } from './fieldRenderers/renderDateTimeField';
-
-export interface IField {
-  type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime' | 'hidden';
-  id: string;
-  label?: string;
-  placeholder?: string;  
-  colSize: string;
-  color?: string;
-  options?: { label: string; value: string }[];  
-  isChecked?: boolean;  
-  multiple?: boolean;  
-  readOnly?: boolean;  
-  value?: any;
-  accept?: string;
-  min?: number;
-  max?: number;
-  step?: number;
-};
+import { IField } from '@/core/types';
 
 interface FormComponentProps {
   fields: (IField | IField[])[];

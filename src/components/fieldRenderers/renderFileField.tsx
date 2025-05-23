@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { IField } from '../FormComponent';
+import { IField } from '@/core/types';
 
 export const renderFileField = (field: IField, control: unknown, errors: FieldErrors<FieldValues>, theme: string) => (
   <>

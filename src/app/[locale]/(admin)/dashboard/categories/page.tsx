@@ -1,21 +1,19 @@
 "use client";
-
 import { modal } from "@/stores/appStore";
 import { ICategory } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
 import SubmitComponent from "@/components/SubmitComponent";
-import { IField } from "@/components/FormComponent";
 import CategoryRepository from "@/repositories/categoryRepository";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
-import { TableComponent } from "@/components/TableComponent";
+import TableComponent from "@/components/TableComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { meta } from "@/core/constants";
-import { Meta } from "@/core/types";
+import { Meta, IField } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
+import { meta } from "@/core/constants";
 
 
 const Page: React.FC = () => {

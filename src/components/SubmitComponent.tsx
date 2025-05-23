@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import FormComponent, { IField } from "./FormComponent";
+import FormComponent from "./FormComponent";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useThemeStore } from "../stores/themeStore";
 import { modal } from "../stores/appStore";
+import { IField } from "@/core/types";
 
 interface SubmitComponentProps {
   title?: string;

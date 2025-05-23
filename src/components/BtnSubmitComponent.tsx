@@ -3,7 +3,7 @@
 import React from 'react';
 import { modal } from '@/stores/appStore';
 import SubmitComponent from './SubmitComponent';
-import { IField } from './FormComponent';
+import { IField } from '@/core/types';
 
 interface BtnSubmitComponentProps {
   btn: {

@@ -17,7 +17,7 @@ export interface TableComponentProps {
   options?: {label: string, action: (e: any) => void}[];
 }
 
-export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, orderBy, eye, edit, trash, options }) => {
+const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, orderBy, eye, edit, trash, options }) => {
   const { theme } = useThemeStore();
 
   const [hoverTh, setHoverTh] = useState<string | null>(null);
@@ -137,3 +137,5 @@ export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead,
     </table>
   )
 }
+
+export default TableComponent;

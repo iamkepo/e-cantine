@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import FormComponent, { IField } from "./FormComponent";
+import FormComponent from "./FormComponent";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IField } from '@/core/types';
 
 interface FilterComponentProps {
   fields: IField[];

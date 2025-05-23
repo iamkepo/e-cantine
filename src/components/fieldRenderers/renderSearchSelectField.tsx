@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { IField } from '../FormComponent';
+import { IField } from '@/core/types';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { useThemeStore } from '../../stores/themeStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 export const renderSearchSelectField = (
   field: IField,

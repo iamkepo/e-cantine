@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { IField } from '../FormComponent';
+import { IField } from '@/core/types';
 
 export const renderTextareaField = (field: IField, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>, theme: string) => (
   <>

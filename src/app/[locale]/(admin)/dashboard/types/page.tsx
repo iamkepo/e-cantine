@@ -1,18 +1,16 @@
 "use client";
-
 import { modal } from "@/stores/appStore";
 import { useEffect, useMemo, useState } from "react";
 import { IType } from "@/core/interfaces";
-import { Meta } from "@/core/types";
+import { Meta, IField } from "@/core/types";
 import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
-import { IField } from "@/components/FormComponent";
 import { StatusActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { TableComponent } from "@/components/TableComponent";
+import TableComponent from "@/components/TableComponent";
 import { meta } from "@/core/constants";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";

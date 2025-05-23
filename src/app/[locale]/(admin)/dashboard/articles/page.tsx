@@ -5,18 +5,17 @@ import { IArticle } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
 import ArticleRepository from "@/repositories/articleRepository";
-import { IField } from "@/components/FormComponent";
 import SubmitComponent from "@/components/SubmitComponent";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
-import { TableComponent } from "@/components/TableComponent";
+import TableComponent from "@/components/TableComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import ArticleComponent from "@/components/ArticleComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import { meta } from "@/core/constants";
-import { Meta } from "@/core/types";
+import { Meta, IField } from "@/core/types";
 
 const Page: React.FC = () => {
   const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
