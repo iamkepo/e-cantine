@@ -1,12 +1,17 @@
 "use server";
-import methodsController from '@/controllers/methodsController';
+import clientsController from "@/controllers/clientsController";
 
 /**
  * @swagger
- * /api/v1/method/list:
+ * tags:
+ *   name: Clients
+ *   description: API for managing clients
+ *
+ * @swagger
+ * /api/v1/client/list:
  *   get:
- *     summary: Récupérer la liste des méthodes
- *     tags: [Methods]
+ *     summary: Récupérer la liste des clients
+ *     tags: [Clients]
  *     parameters:
  *       - in: query
  *         name: take
@@ -17,43 +22,45 @@ import methodsController from '@/controllers/methodsController';
  *         name: search
  *         schema:
  *           type: string
- *         description: Recherche textuelle dans les méthodes
+ *         description: Recherche
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *         description: Statut de la méthode (active/inactive)
+ *         description: Statut
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page courante pour la pagination
+ *         description: Page
  *       - in: query
  *         name: orderBy
  *         schema:
  *           type: string
- *         description: Champ sur lequel trier la liste
+ *         description: Champ sur lequel trier
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
- *         description: Ordre du tri (asc/desc)
+ *         description: Ordre du tri
  *     responses:
  *       200:
- *         description: Liste des méthodes
+ *         description: Liste des clients
+ *       404:
+ *         description: Clients non trouvés
  *       500:
  *         description: Erreur interne du serveur
  */
 export async function GET(req: Request) {
-  return methodsController.getMethods(req);
+  return clientsController.getClients(req);
 }
 
 /**
  * @swagger
- * /api/v1/method/list:
+ * /api/v1/client/list:
  *   delete:
- *     summary: Supprimer plusieurs méthodes
- *     tags: [Methods]
+ *     summary: Supprimer la liste des clients
+ *     tags: [Clients]
  *     parameters:
  *       - in: query
  *         name: ids
@@ -61,13 +68,16 @@ export async function GET(req: Request) {
  *           type: array
  *           items:
  *             type: integer
- *         description: Liste des IDs des méthodes à supprimer
+ *         description: IDs des clients à supprimer
  *     responses:
  *       200:
- *         description: Méthodes supprimées avec succès
+ *         description: Liste des clients supprimée
+ *       404:
+ *         description: Clients non trouvés
  *       500:
  *         description: Erreur interne du serveur
  */
 export async function DELETE(req: Request) {
-  return methodsController.deleteMethods(req);
+  return clientsController.deleteClients(req);
 }
+  

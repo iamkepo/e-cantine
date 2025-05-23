@@ -4,11 +4,6 @@ import articlesController from "@/controllers/articlesController";
 
 /**
  * @swagger
- * tags:
- *   name: Articles
- *   description: API for managing articles
- *
- * @swagger 
  * /api/v1/article/create:
  *   post:
  *     summary: Créer un article
@@ -22,16 +17,22 @@ import articlesController from "@/controllers/articlesController";
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nom de l'article
  *               price:
  *                 type: number
+ *                 description: Prix de l'article
  *               description:
  *                 type: string
+ *                 description: Description de l'article
  *               image:
  *                 type: string
+ *                 description: URL de l'image
  *               categoryId:
  *                 type: number
+ *                 description: ID de la catégorie
  *               typeId:
  *                 type: number
+ *                 description: ID du type
  *     responses:
  *       201:
  *         description: Article créé avec succès

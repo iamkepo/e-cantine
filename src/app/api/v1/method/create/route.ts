@@ -4,11 +4,6 @@ import methodsController from '@/controllers/methodsController';
 
 /**
  * @swagger
- * tags:
- *   name: Methods
- *   description: API for managing methods
- *
- * @swagger
  * /api/v1/method/create:
  *   post:
  *     summary: Create method
@@ -22,8 +17,10 @@ import methodsController from '@/controllers/methodsController';
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nom de la méthode
  *               status:
  *                 type: string
+ *                 description: Statut de la méthode
  *     responses:
  *       200:
  *         description: Success

@@ -11,7 +11,7 @@ import subscriptionsController from '@/controllers/subscriptionsController';
  * /api/v1/subscription/list:
  *   get:
  *     summary: Récupérer la liste des subscriptions
- *     tags: [Subscription]
+ *     tags: [Subscriptions]
  *     parameters:
  *       - in: query
  *         name: take
@@ -73,9 +73,9 @@ export async function GET(req: Request) {
  * /api/v1/subscription/list:
  *   delete:
  *     summary: Supprimer plusieurs subscriptions
- *     tags: [Subscription]
+ *     tags: [Subscriptions]
  *     parameters:
- *       - in: body
+ *       - in: query
  *         name: ids
  *         schema:
  *           type: array
@@ -85,8 +85,6 @@ export async function GET(req: Request) {
  *     responses:
  *       200:
  *         description: Subscriptions supprimées avec succès
- *       404:
- *         description: Subscriptions non trouvées
  *       500:
  *         description: Erreur interne du serveur
  */

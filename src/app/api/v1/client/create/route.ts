@@ -1,17 +1,17 @@
 "use server";
-import restaurantsController from '@/controllers/restaurantsController';
+import clientsController from '@/controllers/clientsController';
 
 /**
  * @swagger
  * tags:
- *   name: Restaurants
- *   description: API for managing restaurants
+ *   name: Clients
+ *   description: API for managing clients
  *
  * @swagger
- * /api/v1/restaurant/create:
+ * /api/v1/client/create:
  *   post:
- *     summary: Créer un restaurant
- *     tags: [Restaurants]
+ *     summary: Créer un client
+ *     tags: [Clients]
  *     requestBody:
  *       required: true
  *       content:
@@ -27,12 +27,12 @@ import restaurantsController from '@/controllers/restaurantsController';
  *                 type: integer
  *     responses:
  *       201:
- *         description: Restaurant créé
+ *         description: Client créé
  *       400:
  *         description: Données invalides
  *       500:
  *         description: Erreur interne du serveur
  */
 export async function POST(req: Request) {
-  return restaurantsController.createRestaurant(req);
+  return clientsController.createClient(req);
 }

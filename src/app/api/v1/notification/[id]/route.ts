@@ -101,14 +101,12 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *                 type: boolean
  *               type:
  *                 type: string
+ *                 enum: ['PROMOTION', 'ORDER', 'SUBSCRIPTION']
  *               status:
  *                 type: string
+ *                 enum: ['PENDING', 'DELIVERED', 'FAILED']
  *               userId:
  *                 type: integer
- *               seen:
- *                 type: boolean
- *               type:
- *                 type: string
  *     responses:
  *       200:
  *         description: Success

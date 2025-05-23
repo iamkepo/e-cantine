@@ -5,8 +5,8 @@ const rawCategories = [
   {name: "Déjeuner"},
   {name: "Goûter"},
   {name: "Dîner"},
-  {name: "uncategorised"},
 ];
+const uncategorised = {name: "uncategorised"};
 
 
 const categoriesSeed = async (prisma: PrismaClient) => {
@@ -19,6 +19,12 @@ const categoriesSeed = async (prisma: PrismaClient) => {
       })
     )
   );
+  
+  await prisma.categories.create({
+    data: {
+      name: uncategorised.name,
+    },
+  })
 
   console.log("✅ Categories créées.");
 };

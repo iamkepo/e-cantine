@@ -9,7 +9,7 @@ import { ContextParams } from '@/core/types';
  * /api/v1/promo/{id}:
  *   get:
  *     summary: Récupérer une promo
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: path
  *         name: id
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, context: ContextParams) {
  * /api/v1/promo/{id}:
  *   patch:
  *     summary: Mettre à jour une promo
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: path
  *         name: id
@@ -49,8 +49,10 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Nom de l'attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
  *         description: Promo mise à jour
@@ -66,7 +68,7 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  * /api/v1/promo/{id}:
  *   put:
  *     summary: Mettre à jour une promo
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: path
  *         name: id
@@ -83,18 +85,24 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *             properties:
  *               code:
  *                 type: string
+ *                 description: Code de la promo
  *               discount:
- *                 type: float
+ *                 type: number
+ *                 description: Pourcentage ou montant de réduction
  *               maxUsage:
  *                 type: number
+ *                 description: Nombre maximal d'utilisations
  *               countUsage:
  *                 type: number
+ *                 description: Nombre d'utilisations actuelles
  *               startDate:
  *                 type: string
  *                 format: date
+ *                 description: Date de début
  *               endDate:
  *                 type: string
  *                 format: date
+ *                 description: Date de fin
  *     responses:
  *       200:
  *         description: Promo mise à jour
@@ -110,7 +118,7 @@ export async function PUT(req: NextRequest, context: ContextParams) {
  * /api/v1/promo/{id}:
  *   delete:
  *     summary: Supprimer une promo
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: path
  *         name: id

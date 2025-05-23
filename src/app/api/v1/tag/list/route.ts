@@ -4,11 +4,6 @@ import tagsController from "@/controllers/tagsController";
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/list:
  *   get:
  *     summary: Récupérer la liste des tags
@@ -23,17 +18,17 @@ import tagsController from "@/controllers/tagsController";
  *         name: search
  *         schema:
  *           type: string
- *         description: Recherche
+ *         description: Recherche textuelle
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *         description: Statut
+ *         description: Statut du tag
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page
+ *         description: Page courante
  *       - in: query
  *         name: orderBy
  *         schema:
@@ -43,7 +38,7 @@ import tagsController from "@/controllers/tagsController";
  *         name: order
  *         schema:
  *           type: string
- *         description: Ordre du tri
+ *         description: Ordre du tri (asc/desc)
  *     responses:
  *       200:
  *         description: Liste des tags
@@ -61,14 +56,18 @@ export const GET = async (req: Request) => {
  *   delete:
  *     summary: Supprimer plusieurs tags
  *     tags: [Tags]
- *     parameters:
- *       - in: body
- *         name: ids
- *         schema:
- *           type: array
- *           items:
- *             type: integer
- *         description: IDs des tags à supprimer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Liste des IDs des tags à supprimer
  *     responses:
  *       200:
  *         description: Tags supprimés avec succès

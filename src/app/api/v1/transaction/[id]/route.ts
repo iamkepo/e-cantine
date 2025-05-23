@@ -5,11 +5,6 @@ import { NextRequest } from 'next/server';
 
 /**
  * @swagger
- * tags:
- *   name: Transactions
- *   description: API for managing transactions
- *
- * @swagger 
  * /api/v1/transaction/{id}:
  *   get:
  *     summary: Récupérer une transaction
@@ -18,9 +13,9 @@ import { NextRequest } from 'next/server';
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: ID de la transaction
+ *         description: ID de la transaction à récupérer
  *     responses:
  *       200:
  *         description: Transaction récupérée avec succès
@@ -28,29 +23,24 @@ import { NextRequest } from 'next/server';
  *         description: Transaction non trouvée
  *       500:
  *         description: Erreur interne du serveur
- **/
+ */
 export async function GET(req: NextRequest, context: ContextParams) {
   return transactionsController.getTransaction(req, context.params);
 }
 
 /**
  * @swagger
- * tags:
- *   name: Transactions
- *   description: API for managing transactions
- *
- * @swagger 
  * /api/v1/transaction/{id}:
  *   patch:
- *     summary: Mettre à jour une transaction
+ *     summary: Modifier une transaction
  *     tags: [Transactions]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: ID de la transaction
+ *         description: ID de la transaction à modifier
  *     requestBody:
  *       required: true
  *       content:
@@ -60,11 +50,13 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
- *         description: Transaction mise à jour avec succès
+ *         description: Transaction modifiée avec succès
  *       404:
  *         description: Transaction non trouvée
  *       500:
@@ -76,11 +68,6 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Transactions
- *   description: API for managing transactions
- *
- * @swagger 
  * /api/v1/transaction/{id}:
  *   put:
  *     summary: Mettre à jour une transaction
@@ -89,9 +76,9 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: ID de la transaction
+ *         description: ID de la transaction à mettre à jour
  *     requestBody:
  *       required: true
  *       content:
@@ -127,11 +114,6 @@ export async function PUT(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Transactions
- *   description: API for managing transactions
- *
- * @swagger 
  * /api/v1/transaction/{id}:
  *   delete:
  *     summary: Supprimer une transaction
@@ -140,9 +122,9 @@ export async function PUT(req: NextRequest, context: ContextParams) {
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: ID de la transaction
+ *         description: ID de la transaction à supprimer
  *     responses:
  *       200:
  *         description: Transaction supprimée avec succès

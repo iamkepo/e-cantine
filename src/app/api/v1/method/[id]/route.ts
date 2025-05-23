@@ -5,14 +5,9 @@ import { ContextParams } from '@/core/types';
 
 /**
  * @swagger
- * tags:
- *   name: Methods
- *   description: API for managing methods
- *
- * @swagger
  * /api/v1/method/{id}:
  *   get:
- *     summary: Get method
+ *     summary: Récupérer une méthode
  *     tags: [Methods]
  *     parameters:
  *       - in: path
@@ -20,12 +15,14 @@ import { ContextParams } from '@/core/types';
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the method to retrieve
+ *         description: ID de la méthode à récupérer
  *     responses:
  *       200:
- *         description: Success
+ *         description: Méthode récupérée avec succès
+ *       404:
+ *         description: Méthode non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function GET(req: NextRequest, context: ContextParams) {
   return methodsController.getMethod(req, context.params);
@@ -33,14 +30,9 @@ export async function GET(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Methods
- *   description: API for managing methods
- *
- * @swagger
  * /api/v1/method/{id}:
  *   patch:
- *     summary: Patch method
+ *     summary: Mettre à jour une méthode
  *     tags: [Methods]
  *     parameters:
  *       - in: path
@@ -48,7 +40,7 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the method to patch
+ *         description: ID de la méthode à modifier
  *     requestBody:
  *       required: true
  *       content:
@@ -58,13 +50,17 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
- *         description: Success
+ *         description: Méthode modifiée avec succès
+ *       404:
+ *         description: Méthode non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PATCH(req: NextRequest, context: ContextParams) {
   return methodsController.patchMethod(req, context.params);
@@ -72,14 +68,9 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Methods
- *   description: API for managing methods
- *
- * @swagger
  * /api/v1/method/{id}:
  *   put:
- *     summary: Update method
+ *     summary: Mettre à jour une méthode
  *     tags: [Methods]
  *     parameters:
  *       - in: path
@@ -87,7 +78,7 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the method to update
+ *         description: ID de la méthode à mettre à jour
  *     requestBody:
  *       required: true
  *       content:
@@ -97,13 +88,17 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nouveau nom de la méthode
  *               status:
  *                 type: string
+ *                 description: Statut de la méthode
  *     responses:
  *       200:
- *         description: Success
+ *         description: Méthode mise à jour avec succès
+ *       404:
+ *         description: Méthode non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PUT(req: NextRequest, context: ContextParams) {
   return methodsController.updateMethod(req, context.params);

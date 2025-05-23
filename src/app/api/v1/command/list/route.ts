@@ -3,11 +3,6 @@ import commandsController from '@/controllers/commandsController';
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger
  * /api/v1/command/list:
  *   get:
  *     summary: Lister les commandes
@@ -22,17 +17,17 @@ import commandsController from '@/controllers/commandsController';
  *         name: search
  *         schema:
  *           type: string
- *         description: Recherche
+ *         description: Recherche textuelle
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *         description: Statut
+ *         description: Statut de la commande
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page
+ *         description: Page courante
  *       - in: query
  *         name: orderBy
  *         schema:
@@ -42,7 +37,7 @@ import commandsController from '@/controllers/commandsController';
  *         name: order
  *         schema:
  *           type: string
- *         description: Ordre du tri
+ *         description: Ordre du tri (asc/desc)
  *       - in: query
  *         name: eventId
  *         schema:
@@ -53,16 +48,6 @@ import commandsController from '@/controllers/commandsController';
  *         schema:
  *           type: integer
  *         description: ID du restaurant
- *       - in: query
- *         name: restaurantId
- *         schema:
- *           type: integer
- *         description: ID du restaurant
- *       - in: query
- *         name: eventId
- *         schema:
- *           type: integer
- *         description: ID de l'événement
  *     responses:
  *       200:
  *         description: Liste des commandes
@@ -77,23 +62,22 @@ export async function GET(req: Request) {
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger
  * /api/v1/command/list:
  *   delete:
- *     summary: Supprimer toutes les commandes
+ *     summary: Supprimer plusieurs commandes
  *     tags: [Commands]
- *     parameters:
- *       - in: query
- *         name: ids
- *         schema:
- *           type: array
- *           items:
- *             type: integer
- *         description: IDs des commandes à supprimer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Liste des IDs des commandes à supprimer
  *     responses:
  *       200:
  *         description: Commandes supprimées avec succès

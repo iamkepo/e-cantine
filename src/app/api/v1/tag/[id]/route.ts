@@ -6,11 +6,6 @@ import { NextRequest } from "next/server";
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/{id}:
  *   get:
  *     summary: Récupérer un tag
@@ -37,11 +32,6 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/{id}:
  *   patch:
  *     summary: Mettre à jour un tag
@@ -67,11 +57,6 @@ export const PATCH = async (req: NextRequest, context: ContextParams) => {
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/{id}:
  *   put:
  *     summary: Mettre à jour un tag
@@ -97,11 +82,6 @@ export const PUT = async (req: NextRequest, context: ContextParams) => {
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/{id}:
  *   delete:
  *     summary: Supprimer un tag

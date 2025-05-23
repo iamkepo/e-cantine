@@ -37,11 +37,6 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
 
 /**
  * @swagger
- * tags:
- *   name: Types
- *   description: API for managing types
- *
- * @swagger 
  * /api/v1/type/{id}:
  *   patch:
  *     summary: Mettre à jour un type
@@ -52,7 +47,20 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
  *         schema:
  *           type: string
  *         required: true
- *         description: ID du type
+ *         description: ID du type à mettre à jour
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               attr:
+ *                 type: string
+ *                 description: Attribut à modifier
+ *               val:
+ *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
  *         description: Type mis à jour avec succès

@@ -65,7 +65,6 @@ import transactionsController from '@/controllers/transactionsController';
  *       500:
  *         description: Erreur interne du serveur
  */
-
 export async function GET(req: Request) {
   return transactionsController.getTransactions(req);
 }
@@ -74,7 +73,7 @@ export async function GET(req: Request) {
  * @swagger
  * /api/v1/transaction/list:
  *   delete:
- *     summary: Supprimer une transaction
+ *     summary: Supprimer une ou plusieurs transactions
  *     tags: [Transactions]
  *     parameters:
  *       - in: query
@@ -86,7 +85,9 @@ export async function GET(req: Request) {
  *         description: IDs des transactions à supprimer
  *     responses:
  *       200:
- *         description: Transaction supprimée
+ *         description: Transactions supprimées avec succès
+ *       404:
+ *         description: Transactions non trouvées
  *       500:
  *         description: Erreur interne du serveur
  */

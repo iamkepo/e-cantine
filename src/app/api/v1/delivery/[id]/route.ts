@@ -5,14 +5,9 @@ import { ContextParams } from '@/core/types';
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/{id}:
  *   get:
- *     summary: Get delivery
+ *     summary: Récupérer une livraison
  *     tags: [Deliveries]
  *     parameters:
  *       - in: path
@@ -20,12 +15,14 @@ import { ContextParams } from '@/core/types';
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the delivery to retrieve
+ *         description: ID de la livraison à récupérer
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livraison récupérée avec succès
+ *       404:
+ *         description: Livraison non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function GET(req: NextRequest, context: ContextParams) {
   return deliveriesController.getDelivery(req, context.params);
@@ -33,14 +30,9 @@ export async function GET(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/{id}:
  *   patch:
- *     summary: Patch delivery
+ *     summary: Mettre à jour partiellement une livraison
  *     tags: [Deliveries]
  *     parameters:
  *       - in: path
@@ -48,7 +40,7 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the delivery to patch
+ *         description: ID de la livraison à modifier
  *     requestBody:
  *       required: true
  *       content:
@@ -58,13 +50,17 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livraison modifiée avec succès
+ *       404:
+ *         description: Livraison non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PATCH(req: NextRequest, context: ContextParams) {
   return deliveriesController.patchDelivery(req, context.params);
@@ -72,14 +68,9 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/{id}:
  *   put:
- *     summary: Update delivery
+ *     summary: Mettre à jour une livraison
  *     tags: [Deliveries]
  *     parameters:
  *       - in: path
@@ -87,7 +78,7 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the delivery to update
+ *         description: ID de la livraison à mettre à jour
  *     requestBody:
  *       required: true
  *       content:
@@ -97,30 +88,31 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *             properties:
  *               status:
  *                 type: string
+ *                 description: Nouveau statut de la livraison
  *               commandId:
  *                 type: integer
+ *                 description: ID de la commande associée
  *               delivererId:
  *                 type: integer
+ *                 description: ID du livreur
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livraison mise à jour avec succès
+ *       404:
+ *         description: Livraison non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PUT(req: NextRequest, context: ContextParams) {
   return deliveriesController.updateDelivery(req, context.params);
 }
 
+
 /**
- * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
  * @swagger
  * /api/v1/delivery/{id}:
  *   delete:
- *     summary: Delete delivery
+ *     summary: Supprimer une livraison
  *     tags: [Deliveries]
  *     parameters:
  *       - in: path
@@ -128,12 +120,14 @@ export async function PUT(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the delivery to delete
+ *         description: ID de la livraison à supprimer
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livraison supprimée avec succès
+ *       404:
+ *         description: Livraison non trouvée
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function DELETE(req: NextRequest, context: ContextParams) {
   return deliveriesController.deleteDelivery(req, context.params);

@@ -29,10 +29,6 @@ import notificationsController from '@/controllers/notificationsController';
  *                 type: string
  *               userId:
  *                 type: integer
- *               seen:
- *                 type: boolean
- *               type:
- *                 type: string
  *     responses:
  *       200:
  *         description: Success

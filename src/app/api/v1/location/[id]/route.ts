@@ -33,14 +33,9 @@ export async function GET(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Locations
- *   description: API for managing locations
- *
- * @swagger
  * /api/v1/location/{id}:
  *   patch:
- *     summary: Patch location
+ *     summary: Mettre à jour un emplacement
  *     tags: [Locations]
  *     parameters:
  *       - in: path
@@ -48,7 +43,7 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the location to patch
+ *         description: ID de l'emplacement à modifier
  *     requestBody:
  *       required: true
  *       content:
@@ -58,13 +53,17 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
- *         description: Success
+ *         description: Emplacement modifié avec succès
+ *       404:
+ *         description: Emplacement non trouvé
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PATCH(req: NextRequest, context: ContextParams) {
   return locationsController.patchLocation(req, context.params);
@@ -72,14 +71,9 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Locations
- *   description: API for managing locations
- *
- * @swagger
  * /api/v1/location/{id}:
  *   put:
- *     summary: Update location
+ *     summary: Mettre à jour un emplacement
  *     tags: [Locations]
  *     parameters:
  *       - in: path
@@ -87,7 +81,7 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID of the location to update
+ *         description: ID de l'emplacement à mettre à jour
  *     requestBody:
  *       required: true
  *       content:
@@ -97,25 +91,32 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *             properties:
  *               address:
  *                 type: string
- *               latitude:
- *                 type: number
+ *                 description: Adresse complète
  *               longitude:
  *                 type: number
+ *                 description: Longitude GPS
  *               city:
  *                 type: string
+ *                 description: Ville
  *               country:
  *                 type: string
+ *                 description: Pays
  *               zipCode:
  *                 type: string
+ *                 description: Code postal
  *               status:
  *                 type: string
+ *                 description: Statut de l'emplacement
  *               clientId:
  *                 type: integer
+ *                 description: ID du client associé
  *     responses:
  *       200:
- *         description: Success
+ *         description: Emplacement mis à jour avec succès
+ *       404:
+ *         description: Emplacement non trouvé
  *       500:
- *         description: Error
+ *         description: Erreur interne du serveur
  */
 export async function PUT(req: NextRequest, context: ContextParams) {
   return locationsController.updateLocation(req, context.params);

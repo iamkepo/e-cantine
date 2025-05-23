@@ -6,7 +6,7 @@ import promosController from '@/controllers/promosController';
  * /api/v1/promo/create:
  *   post:
  *     summary: Créer une promo
- *     tags: [Promo]
+ *     tags: [Promos]
  *     requestBody:
  *       required: true
  *       content:
@@ -16,18 +16,24 @@ import promosController from '@/controllers/promosController';
  *             properties:
  *               code:
  *                 type: string
+ *                 description: Code de la promo
  *               discount:
- *                 type: float
+ *                 type: number
+ *                 description: Montant ou pourcentage de réduction
  *               maxUsage:
  *                 type: number
+ *                 description: Nombre maximal d'utilisations
  *               countUsage:
  *                 type: number
+ *                 description: Nombre d'utilisations actuelles
  *               startDate:
  *                 type: string
  *                 format: date
+ *                 description: Date de début
  *               endDate:
  *                 type: string
  *                 format: date
+ *                 description: Date de fin
  *     responses:
  *       201:
  *         description: Promo créée

@@ -6,7 +6,7 @@ import promosController from '@/controllers/promosController';
  * /api/v1/promo/list:
  *   get:
  *     summary: Récupérer la liste des promos
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: query
  *         name: take
@@ -17,17 +17,17 @@ import promosController from '@/controllers/promosController';
  *         name: search
  *         schema:
  *           type: string
- *         description: Recherche
+ *         description: Recherche textuelle
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *         description: Statut
+ *         description: Statut de la promo
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page
+ *         description: Page courante
  *       - in: query
  *         name: orderBy
  *         schema:
@@ -37,11 +37,11 @@ import promosController from '@/controllers/promosController';
  *         name: order
  *         schema:
  *           type: string
- *         description: Ordre du tri
+ *         description: Ordre du tri (asc/desc)
  *       - in: query
  *         name: discount
  *         schema:
- *           type: float
+ *           type: number
  *         description: Taux de réduction
  *       - in: query
  *         name: maxUsage
@@ -77,7 +77,7 @@ export async function GET(req: Request) {
  * /api/v1/promo/list:
  *   delete:
  *     summary: Supprimer la liste des promos
- *     tags: [Promo]
+ *     tags: [Promos]
  *     parameters:
  *       - in: query
  *         name: ids

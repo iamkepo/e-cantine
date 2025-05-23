@@ -36,8 +36,8 @@ class ClientsModel extends Model {
     return clientsList;
   }
 
-  getClient = async (phone: string) => {
-    const client = await this.getOne('phone', phone);
+  getClient = async (id: number) => {
+    const client = await this.getOne('id', id);
     return client;
   }
 

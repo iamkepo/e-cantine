@@ -37,11 +37,6 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
 
 /**
  * @swagger
- * tags:
- *   name: Categories
- *   description: API for managing categories
- *
- * @swagger 
  * /api/v1/category/{id}:
  *   patch:
  *     summary: Mettre à jour une catégorie
@@ -52,7 +47,20 @@ export const GET = async (req: NextRequest, context: ContextParams) => {
  *         schema:
  *           type: string
  *         required: true
- *         description: ID de la catégorie
+ *         description: ID de la catégorie à mettre à jour
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               attr:
+ *                 type: string
+ *                 description: Attribut à modifier
+ *               val:
+ *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
  *         description: Catégorie mise à jour avec succès

@@ -6,11 +6,6 @@ import { ContextParams } from '@/core/types';
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger 
  * /api/v1/command/{id}:
  *   get:
  *     summary: Récupérer une commande
@@ -36,11 +31,6 @@ export async function GET(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger 
  * /api/v1/command/{id}:
  *   patch:
  *     summary: Mettre à jour une commande
@@ -61,8 +51,10 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *             properties:
  *               attr:
  *                 type: string
+ *                 description: Attribut à modifier
  *               val:
  *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
  *         description: Commande mise à jour avec succès
@@ -77,11 +69,6 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger 
  * /api/v1/command/{id}:
  *   put:
  *     summary: Mettre à jour une commande
@@ -102,11 +89,13 @@ export async function PATCH(req: NextRequest, context: ContextParams) {
  *             properties:
  *               status:
  *                 type: string
- *                 enum: [pending, accepted, rejected]
- *               restaurantId:
- *                 type: integer
+ *                 description: Nouveau statut de la commande
  *               eventId:
  *                 type: integer
+ *                 description: ID de l'événement associé
+ *               restaurantId:
+ *                 type: integer
+ *                 description: ID du restaurant
  *     responses:
  *       200:
  *         description: Commande mise à jour avec succès
@@ -121,11 +110,6 @@ export async function PUT(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger 
  * /api/v1/command/{id}:
  *   delete:
  *     summary: Supprimer une commande

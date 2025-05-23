@@ -12,6 +12,11 @@ class RestaurantsModel extends Model {
     const restaurant = await this.create(credentials);
     return restaurant;
   }
+  
+  checkRestaurant = async (phone: string) => {
+    const restaurant = await this.getOne('phone', phone);
+    return restaurant;
+  }
 
   getRestaurants = async (params: ParamsQuery & {userId?: number}) => {
     const where: any = {};

@@ -3,11 +3,6 @@ import commandsController from '@/controllers/commandsController';
 
 /**
  * @swagger
- * tags:
- *   name: Commands
- *   description: API for managing commands
- *
- * @swagger 
  * /api/v1/command/create:
  *   post:
  *     summary: Créer une commande
@@ -21,16 +16,18 @@ import commandsController from '@/controllers/commandsController';
  *             properties:
  *               eventId:
  *                 type: integer
+ *                 description: ID de l'événement
  *                 example: 1
  *               restaurantId:
  *                 type: integer
+ *                 description: ID du restaurant
  *                 example: 2
  *             required:
  *               - eventId
  *               - restaurantId
  *     responses:
  *       201:
- *         description: Commande créée
+ *         description: Commande créée avec succès
  *       400:
  *         description: Erreur de validation
  *       500:

@@ -13,6 +13,10 @@ class DeliverersModel extends Model {
     return deliverer;
   }
 
+  checkDeliverer = async (phone: string) => {
+    const deliverer = await this.getOne('phone', phone);
+    return deliverer;
+  }
   getDeliverers = async (params: ParamsQuery) => {
     const where: any = {};
     if (params.search) {

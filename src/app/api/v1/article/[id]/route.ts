@@ -37,11 +37,6 @@ export async function GET(req: NextRequest, context: ContextParams) {
 
 /**
  * @swagger
- * tags:
- *   name: Articles
- *   description: API for managing articles
- *
- * @swagger 
  * /api/v1/article/{id}:
  *   patch:
  *     summary: Mettre à jour un article
@@ -52,7 +47,20 @@ export async function GET(req: NextRequest, context: ContextParams) {
  *         schema:
  *           type: string
  *         required: true
- *         description: ID de l'article
+ *         description: ID de l'article à modifier
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               attr:
+ *                 type: string
+ *                 description: Attribut à modifier
+ *               val:
+ *                 type: string
+ *                 description: Nouvelle valeur
  *     responses:
  *       200:
  *         description: Article mis à jour avec succès

@@ -4,11 +4,6 @@ import tagsController from "@/controllers/tagsController";
 
 /**
  * @swagger
- * tags:
- *   name: Tags
- *   description: API for managing tags
- *
- * @swagger 
  * /api/v1/tag/create:
  *   post:
  *     summary: Créer un tag
@@ -22,6 +17,7 @@ import tagsController from "@/controllers/tagsController";
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nom du tag
  *     responses:
  *       201:
  *         description: Tag créé avec succès

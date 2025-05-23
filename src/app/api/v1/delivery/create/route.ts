@@ -3,11 +3,6 @@ import deliveriesController from '@/controllers/deliveriesController';
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/create:
  *   post:
  *     summary: Create delivery
@@ -21,13 +16,15 @@ import deliveriesController from '@/controllers/deliveriesController';
  *             properties:
  *               commandId:
  *                 type: integer
+ *                 description: ID de la commande
  *               delivererId:
  *                 type: integer
+ *                 description: ID du livreur
  *     responses:
  *       200:
- *         description: Success
+ *         description: Livraison créée avec succès
  *       500:
- *         description: Error
+ *         description: Erreur lors de la création de la livraison
  */
 export async function POST(req: Request) {
   return deliveriesController.createDelivery(req);

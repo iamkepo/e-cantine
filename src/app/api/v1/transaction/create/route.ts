@@ -11,7 +11,7 @@ import transactionsController from '@/controllers/transactionsController';
  * /api/v1/transaction/create:
  *   post:
  *     summary: Créer une transaction
- *     tags: [Transaction]
+ *     tags: [Transactions]
  *     requestBody:
  *       required: true
  *       content:

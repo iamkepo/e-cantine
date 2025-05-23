@@ -69,5 +69,8 @@
     "prisma": "^6.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "scarfSettings": {
+    "enabled": false
   }
 }

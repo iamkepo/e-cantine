@@ -3,14 +3,9 @@ import deliveriesController from '@/controllers/deliveriesController';
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/list:
  *   get:
- *     summary: Get deliveries
+ *     summary: Récupérer la liste des livraisons
  *     tags: [Deliveries]
  *     parameters:
  *       - in: query
@@ -22,17 +17,17 @@ import deliveriesController from '@/controllers/deliveriesController';
  *         name: search
  *         schema:
  *           type: string
- *         description: Recherche
+ *         description: Recherche textuelle
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *         description: Statut
+ *         description: Statut de la livraison
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page
+ *         description: Page courante
  *       - in: query
  *         name: orderBy
  *         schema:
@@ -42,7 +37,7 @@ import deliveriesController from '@/controllers/deliveriesController';
  *         name: order
  *         schema:
  *           type: string
- *         description: Ordre du tri
+ *         description: Ordre du tri (asc/desc)
  *       - in: query
  *         name: commandId
  *         schema:
@@ -65,26 +60,25 @@ export async function GET(req: Request) {
 
 /**
  * @swagger
- * tags:
- *   name: Deliveries
- *   description: API for managing deliveries
- *
- * @swagger
  * /api/v1/delivery/list:
  *   delete:
- *     summary: Delete deliveries
+ *     summary: Supprimer plusieurs livraisons
  *     tags: [Deliveries]
- *     parameters:
- *       - in: query
- *         name: ids
- *         schema:
- *           type: array
- *           items:
- *             type: integer
- *         description: IDs des livraisons à supprimer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Liste des IDs des livraisons à supprimer
  *     responses:
  *       200:
- *         description: Livraison supprimée
+ *         description: Livraisons supprimées avec succès
  *       500:
  *         description: Erreur interne du serveur
  */
