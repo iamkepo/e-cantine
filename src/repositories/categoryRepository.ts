@@ -65,7 +65,7 @@ class CategoryRepository extends Repository<ICategory> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterCategory = { take: 10, search: "", status: "", page: 1, }
+  filterCategory = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteCategory = {
     title: "Supprimer la categorie", 

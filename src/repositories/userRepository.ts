@@ -65,7 +65,7 @@ class UserRepository extends Repository<IUser> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterUser = { take: 10, search: "", status: "", page: 1, }
+  filterUser = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteUser = {
     title: "Supprimer l'utilisateur", 

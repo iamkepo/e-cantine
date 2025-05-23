@@ -82,7 +82,7 @@ class ConnectionRepository extends Repository<IConnection> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterConnection = { take: 10, search: "", status: "", articleId: 0, tagId: 0, page: 1, }
+  filterConnection = { take: 10, search: "", status: "", articleId: 0, tagId: 0, page: 1, orderBy: "createdAt", order: "desc" }
 
 
   confirmDeleteConnection = {

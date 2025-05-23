@@ -16,6 +16,7 @@ import { meta } from "@/core/constants";
 import { Meta } from "@/core/types";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
+import ArticleComponent from "@/components/ArticleComponent";
 
 const Page: React.FC = () => {
   const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
@@ -57,7 +58,7 @@ const Page: React.FC = () => {
               {
                 checkList.length > 0 ? 
                 <BtnConfirmComponent 
-                  btn={{ label: `Supprimer ${checkList.length} articles`, color: "danger", icon: "trash" }}
+                  btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={articleRepository.confirmDeleteArticles}
                   onConfirm={() => articleRepository.deleteArticles(checkList)
                     .then(() => articleRepository.fetchArticles(params))
@@ -68,7 +69,7 @@ const Page: React.FC = () => {
                 />
                :
                 <BtnSubmitComponent 
-                  btn={{ label: "Creer un article", color: "primary", icon: "plus" }}
+                  btn={{ label: "Creer", color: "primary", icon: "plus" }}
                   submit={{
                     title:"Creer un article",
                     btn:"Creer",
@@ -95,14 +96,23 @@ const Page: React.FC = () => {
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={articleRepository.tableHeadArticle}
           list={articles.data}
-          setList={(e: IArticle[]) => setArticles({...articles, data: e})}
-          // eye={(e: IArticle) => false}
+          orderBy={{
+            orderBy: params.orderBy,
+            order: params.order,
+            onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})
+          }}
+          eye={(e: IArticle) => modal.open(
+            <ArticleComponent
+              article={e}
+              horizontal
+            />, 'lg'
+          )}
           edit={(e: IArticle) => modal.open(
             <SubmitComponent 
-              title={"Update article"} 
+              title={"Modifier l'article"} 
               fields={articleRepository.formUpdateArticle(e) as unknown as IField[]} 
               schema={articleRepository.articleSchema} 
-              btn="Update" 
+              btn="Modifier" 
               onSubmit={(data) => articleRepository.updateArticle(e.id as number, data)
                 .then(() => articleRepository.fetchArticles(params))
                 .catch((error) => console.error(error))

@@ -65,7 +65,7 @@ class TypeRepository extends Repository<IType> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterType = { take: 10, search: "", status: "", page: 1, }
+  filterType = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteType = {
     title: "Supprimer le type", 

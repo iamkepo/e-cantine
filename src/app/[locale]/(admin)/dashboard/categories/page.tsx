@@ -56,7 +56,7 @@ const Page: React.FC = () => {
               {
                 checkList.length > 0 ? 
                 <BtnConfirmComponent 
-                  btn={{ label: `Supprimer ${checkList.length} categories`, color: "danger", icon: "trash" }}
+                  btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={categoryRepository.confirmDeleteCategories}
                   onConfirm={() => categoryRepository.deleteCategories(checkList)
                     .then(() => categoryRepository.fetchCategories(params))
@@ -67,7 +67,7 @@ const Page: React.FC = () => {
                 />
                :
                 <BtnSubmitComponent 
-                  btn={{ label: "Creer une categorie", color: "primary", icon: "plus" }}
+                  btn={{ label: "Creer", color: "primary", icon: "plus" }}
                   submit={{
                     title:"Creer une categorie",
                     btn:"Creer",
@@ -95,14 +95,13 @@ const Page: React.FC = () => {
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={categoryRepository.tableHeadCategory}
           list={categories.data}
-          setList={(e: ICategory[]) => setCategories({...categories, data: e})}
-          // eye={(e: ICategory) => false}
+          orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ICategory) => modal.open(
             <SubmitComponent 
-              title={"Update categorie"} 
+              title={"Modifier la categorie"} 
               fields={categoryRepository.formUpdateCategory(e) as unknown as IField[]} 
               schema={categoryRepository.categorySchema} 
-              btn="Update" 
+              btn="Modifier" 
               onSubmit={(data) => categoryRepository.updateCategory(e.id as number, data)
                 .then(() => categoryRepository.fetchCategories(params))
                 .catch((error) => console.error(error))

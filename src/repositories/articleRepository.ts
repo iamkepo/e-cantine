@@ -55,6 +55,7 @@ class ArticleRepository extends Repository<IArticle> {
   }
 
   formCreateArticle() {
+    this.init();
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "price", type: "number", label: "Prix", required: true, colSize: "col-12" },
@@ -66,6 +67,7 @@ class ArticleRepository extends Repository<IArticle> {
   }
 
   formUpdateArticle(article: IArticle) {
+    this.init();
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: article.name },
       { id: "price", type: "number", label: "Prix", required: true, colSize: "col-12", value: article.price },
@@ -93,7 +95,7 @@ class ArticleRepository extends Repository<IArticle> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterArticle = { take: 10, search: "", status: "", categoryId: 0, typeId: 0, page: 1, }
+  filterArticle = { take: 10, search: "", status: "", categoryId: 0, typeId: 0, page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteArticle = {
     title: "Supprimer l'article", 

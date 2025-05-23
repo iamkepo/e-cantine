@@ -65,7 +65,7 @@ class TagRepository extends Repository<ITag> {
     {label: 'Status', key: 'status'}
   ]
 
-  filterTag = { take: 10, search: "", status: "", page: 1, }
+  filterTag = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteTag = {
     title: "Supprimer le tag", 

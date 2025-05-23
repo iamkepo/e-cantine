@@ -289,3 +289,24 @@ export const meta: Meta = {total: 0, page: 1, pageCount: 1, limit: 10};
 // Constants
 export const SHIPPING_RATE = 500.0;
 export const TAX = 20.0;
+
+export const dashboardNav = [
+  { icon: 'tag', name: 'Tags', path: '/dashboard/tags' },
+  { icon: 'list', name: 'Articles', path: '/dashboard/articles' },
+  { icon: 'list', name: 'Types', path: '/dashboard/types' },
+  { icon: 'list', name: 'Categories', path: '/dashboard/categories' },
+  { icon: 'list', name: 'Subscriptions', path: '/dashboard/subscriptions' },
+  { icon: 'list', name: 'Transactions', path: '/dashboard/transactions' },
+  { icon: 'list', name: 'Dates', path: '/dashboard/dates' },
+  { icon: 'list', name: 'Events', path: '/dashboard/events' },
+  { icon: 'list', name: 'Commandes', path: '/dashboard/commands' },
+  { icon: 'list', name: 'Deliveries', path: '/dashboard/deliveries' },
+  { icon: 'list', name: 'Methods', path: '/dashboard/methods' },
+  { icon: 'list', name: 'Promos', path: '/dashboard/promos' },
+  { icon: 'people', name: 'Clients', path: '/dashboard/clients' },
+  { icon: 'people', name: 'Restaurants', path: '/dashboard/restaurants' },
+  { icon: 'people', name: 'Deliverers', path: '/dashboard/deliverers' },
+  { icon: 'people', name: 'Admins', path: '/dashboard/admins' },
+  { icon: 'person-workspace', name: 'Users', path: '/dashboard/users' },
+  { icon: 'person', name: 'Profile', path: '/dashboard/profile' },
+];

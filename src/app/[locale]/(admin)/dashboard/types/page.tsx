@@ -56,7 +56,7 @@ const Page: React.FC = () => {
               {
                 checkList.length > 0 ? 
                 <BtnConfirmComponent 
-                  btn={{ label: `Supprimer ${checkList.length} types`, color: "danger", icon: "trash" }}
+                  btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={typeRepository.confirmDeleteTypes}
                   onConfirm={() => typeRepository.deleteTypes(checkList)
                     .then(() => typeRepository.fetchTypes(params))
@@ -67,9 +67,9 @@ const Page: React.FC = () => {
                 />
                :
                 <BtnSubmitComponent 
-                  btn={{ label: "Creer un tag", color: "primary", icon: "plus" }}
+                  btn={{ label: "Creer", color: "primary", icon: "plus" }}
                   submit={{
-                    title:"Creer un tag",
+                    title:"Creer un type",
                     btn:"Creer",
                     fields:typeRepository.formCreateType() as unknown as IField[],
                     schema:typeRepository.typeSchema
@@ -95,14 +95,13 @@ const Page: React.FC = () => {
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={typeRepository.tableHeadType}
           list={types.data}
-          setList={(e: IType[]) => setTypes({...types, data: e})}
-          // eye={(e: IType) => false}
+          orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: IType) => modal.open(
             <SubmitComponent 
-              title={"Update type"} 
+              title={"Modifier le type"} 
               fields={typeRepository.formUpdateType(e) as unknown as IField[]} 
               schema={typeRepository.typeSchema} 
-              btn="Update" 
+              btn="Modifier" 
               onSubmit={(data) => typeRepository.updateType(e.id as number, data)
                 .then(() => typeRepository.fetchTypes(params))
                 .catch((error) => console.error(error))

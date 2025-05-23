@@ -56,7 +56,7 @@ const Page: React.FC = () => {
               {
                 checkList.length > 0 ? 
                 <BtnConfirmComponent 
-                  btn={{ label: `Supprimer ${checkList.length} tags`, color: "danger", icon: "trash" }}
+                  btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={tagRepository.confirmDeleteTags}
                   onConfirm={() => tagRepository.deleteTags(checkList)
                     .then(() => tagRepository.fetchTags(params))
@@ -67,7 +67,7 @@ const Page: React.FC = () => {
                 />
                :
                 <BtnSubmitComponent 
-                  btn={{ label: "Creer un tag", color: "primary", icon: "plus" }}
+                  btn={{ label: "Creer", color: "primary", icon: "plus" }}
                   submit={{
                     title:"Creer un tag",
                     btn:"Creer",
@@ -95,14 +95,13 @@ const Page: React.FC = () => {
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={tagRepository.tableHeadTag}
           list={tags.data}
-          setList={(e: ITag[]) => setTags({...tags, data: e})}
-          // eye={(e: ITag) => false}
+          orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ITag) => modal.open(
             <SubmitComponent 
-              title={"Update tag"} 
+              title={"Modifier le tag"} 
               fields={tagRepository.formUpdateTag(e) as unknown as IField[]} 
               schema={tagRepository.tagSchema} 
-              btn="Update" 
+              btn="Modifier" 
               onSubmit={(data) => tagRepository.updateTag(e.id as number, data)
                 .then(() => tagRepository.fetchTags(params))
                 .catch((error) => console.error(error))

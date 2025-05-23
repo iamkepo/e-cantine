@@ -10,27 +10,18 @@ export interface TableComponentProps {
   checkbox?: {checkList: number[], checkAllList: () => void, handleCheckList: (e: number) => void};
   thead: {label: string, key: string}[];
   list: any[];
-  setList: (e: any[]) => void;
+  orderBy?: {orderBy: string, order: string, onChange: (orderBy: string, order: string) => void};
   eye?: (e: any) => void;
   edit?: (e: any) => void;
   trash?: (e: number) => void;
   options?: {label: string, action: (e: any) => void}[];
 }
 
-export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, setList, eye, edit, trash, options }) => {
+export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, orderBy, eye, edit, trash, options }) => {
   const { theme } = useThemeStore();
 
   const [hoverTh, setHoverTh] = useState<string | null>(null);
-  const [isAZ, setIsAZ] = useState<boolean>(true); // État du tri, true pour AZ, false pour ZA
 
-  const order = (key: string) => {
-    if (isAZ) {
-      setList([...list.sort((a, b) => (a[key] > b[key] ? 1 : -1))]);
-    } else {
-      setList([...list.sort((a, b) => (a[key] < b[key] ? 1 : -1))]);
-    }
-    setIsAZ(!isAZ); // Inverser l'état du tri
-  };
 
   const itemRender = (item: any, key: string) => {
     return (item[key]);
@@ -58,7 +49,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead,
                 className={`py-2 ${el.label == 'Status' ? 'text-center': 'text-truncate'}`}
                 onMouseEnter={()=> setHoverTh(el.label as string)}
                 onMouseLeave={()=> setHoverTh(null)}
-                onClick={()=> order(el.key)}
+                onClick={()=> orderBy?.onChange(el.key, orderBy.order == 'asc' ? 'desc' : 'asc')}
               >
                 {el.label}
                 <i 
@@ -79,7 +70,7 @@ export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead,
       </thead>
       <tbody>
         {list.map((item, index) => (
-          <tr key={index}>
+          <tr key={index} className="align-middle">
             {
               checkbox && 
               <td className="py-2 text-center">
@@ -114,13 +105,8 @@ export const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead,
                     </button>
                     :
                     (
-                      (eye && i == 0) ?
-                      <div className="text-primary text-truncate fw-bold cursor-pointer" onClick={() => eye(item)}>
-                        {itemRender(item, el.key as string)}
-                      </div>
-                      :
                       (el.label == 'Image' ?
-                      <div className="text-truncate">
+                      <div className="text-truncate" onClick={() => eye?.(item)}>
                         <img 
                           src={itemRender(item, el.key as string)} 
                           alt={itemRender(item, 'name') as string} 
