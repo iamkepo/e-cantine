@@ -20,9 +20,9 @@ class ArticleRepository extends Repository<IArticle> {
   }
 
   async init() {
-    await new CategoryRepository().fetchCategories({})
+    await new CategoryRepository().fetchCategories({take: 100})
     .then((data) => this.categories = data as { data: ICategory[], meta: Meta })
-    await new TypeRepository().fetchTypes({})
+    await new TypeRepository().fetchTypes({take: 100})
     .then((data) => this.types = data as { data: IType[], meta: Meta })
   }
 

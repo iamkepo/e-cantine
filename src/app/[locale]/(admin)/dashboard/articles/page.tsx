@@ -11,12 +11,12 @@ import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { TableComponent } from "@/components/TableComponent";
-import { useCheckList } from "@/hooks/useCheckList";
-import { meta } from "@/core/constants";
-import { Meta } from "@/core/types";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import ArticleComponent from "@/components/ArticleComponent";
+import { useCheckList } from "@/hooks/useCheckList";
+import { meta } from "@/core/constants";
+import { Meta } from "@/core/types";
 
 const Page: React.FC = () => {
   const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
