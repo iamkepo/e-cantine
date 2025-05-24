@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { useThemeStore } from "../../stores/themeStore";
-import { useLangStore } from "../../stores/langStore";
+import { useThemeStore } from "@/stores/themeStore";
+import { useLangStore } from "@/stores/langStore";
 
 export default function Page() {
   const { theme } = useThemeStore();
