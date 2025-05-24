@@ -82,6 +82,7 @@ export interface IDeliverer {
 export interface IClient {
   id?: number;
   phone: string;
+  name: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;

@@ -1,29 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Meta, ParamsQuery } from "@/core/types";
 import connectionsService from "@/services/connectionsService";
-import ArticleRepository from "./articleRepository";
-import TagRepository from "./tagRepository";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IArticle, IConnection, ITag } from "@/core/interfaces";
-import { meta } from "@/core/constants";
 
 class ConnectionRepository extends Repository<IConnection> {
-  articles: { data: IArticle[], meta: Meta } = { data: [],meta };
-  tags: { data: ITag[], meta: Meta } = {data: [], meta };
 
   constructor(setConnections?: ({data, meta}: {data: IConnection[], meta: Meta}) => void) {     
     super(setConnections as unknown as ({data, meta}: {data: IConnection[], meta: Meta}) => void);
-    this.init();
-  }
-
-  async init() {
-    await new ArticleRepository().fetchArticles({})
-    .then((res) => this.articles = res as {data: IArticle[], meta: Meta});
-    await new TagRepository().fetchTags({})
-    .then((res) => this.tags = res as {data: ITag[], meta: Meta});
   }
 
   async fetchConnections(params: ParamsQuery) {
@@ -54,25 +41,25 @@ class ConnectionRepository extends Repository<IConnection> {
     return this.deleteList(connectionsService.deleteConnections as (ids: number[]) => Promise<IConnection>, ids);
   }
 
-  formCreateConnection() {
+  formCreateConnection(articles: IArticle[], tags: ITag[]) {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })) },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
     ]
   }
 
-  formUpdateConnection(connection: IConnection) {
+  formUpdateConnection(connection: IConnection, articles: IArticle[], tags: ITag[]) {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })), value: connection.articleId },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: connection.tagId },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })), value: connection.articleId },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: connection.tagId },
     ]
   }
 
-  formFilterConnection() {
+  formFilterConnection(articles: IArticle[], tags: ITag[]) {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
-      { id: "tagId", type: "select", placeholder: "Tag", colSize: "col-12 col-md-2", options: this.tags.data.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
-      { id: "articleId", type: "select", placeholder: "Article", colSize: "col-12 col-md-2", options: this.articles.data.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "tagId", type: "select", placeholder: "Tag", colSize: "col-12 col-md-2", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "select", placeholder: "Article", colSize: "col-12 col-md-2", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })) },
       { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }

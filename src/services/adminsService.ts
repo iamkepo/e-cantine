@@ -4,11 +4,11 @@ import { AxiosError, AxiosResponse } from "axios";
 import Request from "@/services/request";
 import { ParamsQuery } from "@/core/types";
 
-const clientService = {
-  createClient(data: object) {
+const adminService = {
+  createAdmin(data: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/client/create')
+        .append('/admin/create')
         .setData(data)
         .method(HttpRequestType.POST)
         .then(async (response: AxiosResponse) => {
@@ -20,10 +20,10 @@ const clientService = {
     });
   },
 
-  fetchClients(params: ParamsQuery) {
+  fetchAdmins(params: ParamsQuery) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append('/client/list')
+        .append('/admin/list')
         .params(params)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
@@ -35,10 +35,10 @@ const clientService = {
     });
   },
 
-  fetchClient(id: number) {
+  fetchAdmin(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/client/${id}`)
+        .append(`/admin/${id}`)
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -49,10 +49,10 @@ const clientService = {
     });
   },
 
-  patchClient(id: number, patch: { attr: string, val: any }) {
+  patchAdmin(id: number, patch: { attr: string, val: any }) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/client/${id}`)
+        .append(`/admin/${id}`)
         .setData({ attr: patch.attr, val: patch.val })
         .method(HttpRequestType.PATCH)
         .then(async (response: AxiosResponse) => {
@@ -64,10 +64,10 @@ const clientService = {
     });
   },
 
-  updateClient(id: number, data: object) {
+  updateAdmin(id: number, data: object) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/client/${id}`)
+        .append(`/admin/${id}`)
         .setData(data)
         .method(HttpRequestType.PUT)
         .then(async (response: AxiosResponse) => {
@@ -79,10 +79,10 @@ const clientService = {
     });
   },
 
-  deleteClient(id: number) {
+  deleteAdmin(id: number) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/client/${id}`)
+        .append(`/admin/${id}`)
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
           resolve(response.data.data);
@@ -93,10 +93,10 @@ const clientService = {
     });
   },
 
-  deleteClients(ids: number[]) {
+  deleteAdmins(ids: number[]) {
     return new Promise((resolve, reject) => {
       new Request()
-        .append(`/client/list`)
+        .append(`/admin/list`)
         .setData({ ids })
         .method(HttpRequestType.DELETE)
         .then(async (response: AxiosResponse) => {
@@ -109,4 +109,4 @@ const clientService = {
   }
 };
 
-export default clientService;
+export default adminService;

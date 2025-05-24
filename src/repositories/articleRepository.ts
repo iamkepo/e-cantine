@@ -1,29 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IArticle, ICategory, IType } from "@/core/interfaces";
 import articlesService from "@/services/articlesService";
-import CategoryRepository from "./categoryRepository";
-import TypeRepository from "./typeRepository";
 import * as yup from 'yup';
 import Repository from "@/repositories/repository";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { meta } from "@/core/constants";
 import { Meta, ParamsQuery } from "@/core/types";
 
 class ArticleRepository extends Repository<IArticle> {
-  categories: { data: ICategory[], meta: Meta } = { data: [], meta };
-  types: { data: IType[], meta: Meta } = { data: [], meta };
 
   constructor(setArticles?: ({data, meta}: {data: IArticle[], meta: Meta}) => void) {
     super(setArticles);
-    this.init();
-  }
-
-  async init() {
-    await new CategoryRepository().fetchCategories({take: 100})
-    .then((data) => this.categories = data as { data: ICategory[], meta: Meta })
-    await new TypeRepository().fetchTypes({take: 100})
-    .then((data) => this.types = data as { data: IType[], meta: Meta })
   }
 
   async fetchArticles(params: ParamsQuery) {
@@ -54,35 +41,33 @@ class ArticleRepository extends Repository<IArticle> {
     return this.deleteList(articlesService.deleteArticles as (ids: number[]) => Promise<IArticle>, ids);
   }
 
-  formCreateArticle() {
-    this.init();
+  formCreateArticle(categories: ICategory[], types: IType[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "price", type: "number", label: "Prix", required: true, colSize: "col-12" },
       { id: "image", type: "text", label: "Image", required: true, colSize: "col-12" },
       { id: "description", type: "textarea", label: "Description", required: true, colSize: "col-12" },
-      { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12", options: this.categories.data.map((category: ICategory) => ({ label: category.name, value: category.id })) },
-      { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12", options: this.types.data.map((type: IType) => ({ label: type.name, value: type.id })) },
+      { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12", options: categories.map((category: ICategory) => ({ label: category.name, value: category.id })) },
+      { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12", options: types.map((type: IType) => ({ label: type.name, value: type.id })) },
     ]
   }
 
-  formUpdateArticle(article: IArticle) {
-    this.init();
+  formUpdateArticle(article: IArticle, categories: ICategory[], types: IType[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: article.name },
       { id: "price", type: "number", label: "Prix", required: true, colSize: "col-12", value: article.price },
       { id: "image", type: "text", label: "Image", required: true, colSize: "col-12", value: article.image },
       { id: "description", type: "textarea", label: "Description", required: true, colSize: "col-12", value: article.description },
-      { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12", options: this.categories.data.map((category: ICategory) => ({ label: category.name, value: category.id })), value: article.categoryId },
-      { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12", options: this.types.data.map((type: IType) => ({ label: type.name, value: type.id })), value: article.typeId },
+      { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12", options: categories.map((category: ICategory) => ({ label: category.name, value: category.id })), value: article.categoryId },
+      { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12", options: types.map((type: IType) => ({ label: type.name, value: type.id })), value: article.typeId },
     ]
   }
 
-  formFilterArticle() {
+  formFilterArticle(types: IType[], categories: ICategory[]) {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
-      { id: "typeId", type: "select", placeholder: "Type", colSize: "col-12 col-md-2", options: this.types.data.map((type: IType) => ({ label: type.name, value: type.id })) },
-      { id: "categoryId", type: "select", placeholder: "Categorie", colSize: "col-12 col-md-2", options: this.categories.data.map((category: ICategory) => ({ label: category.name, value: category.id })) },
+      { id: "typeId", type: "select", placeholder: "Type", colSize: "col-12 col-md-2", options: types.map((type: IType) => ({ label: type.name, value: type.id })) },
+      { id: "categoryId", type: "select", placeholder: "Categorie", colSize: "col-12 col-md-2", options: categories.map((category: ICategory) => ({ label: category.name, value: category.id })) },
       { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
