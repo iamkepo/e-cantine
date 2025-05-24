@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ArticlesModel from "@/models/articlesModel";
 import CommandsModel from "@/models/commandsModel";
 import DeliveriesModel from "@/models/deliveriesModel";
 import UsersModel from "@/models/usersModel";
 
 const statisticsController = {
-  getStatistics: async (req: Request) => {
+  getStatistics: async () => {
     try {
       const articles = await new ArticlesModel().count({});
       const commands = await new CommandsModel().count({});

@@ -1,37 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# e-cantine
 
+e-cantine est une application web moderne de gestion de cantine scolaire, permettant l’administration des menus, des articles, des commandes, des utilisateurs et bien plus. Elle s’appuie sur Next.js, Prisma, PostgreSQL et une interface d’administration avancée.
 
-## Getting Started
+## Fonctionnalités principales
 
-First, run the development server:
+- **Gestion des articles** : création, modification, suppression et filtrage des plats/produits proposés.
+- **Gestion des catégories et types** : organisation des articles par catégories et types pour une meilleure navigation.
+- **Gestion des utilisateurs** : administration des profils, rôles (admin, client, etc.) et statuts d’activation.
+- **Gestion des commandes** : suivi des commandes, paiements, livraisons et historiques.
+- **Tableaux de bord** : statistiques et visualisation des données en temps réel pour les administrateurs.
+- **Authentification sécurisée** : gestion des accès et des sessions.
+- **API RESTful** : endpoints pour l’intégration externe ou mobile.
+- **Pagination, filtres, recherche avancée** sur toutes les entités.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Stack technique
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Next.js** (React 19) — Frontend et Backend unifiés (App Router)
+- **Prisma** — ORM pour PostgreSQL
+- **TypeScript** — Typage fort sur tout le projet
+- **Bootstrap 5** — UI moderne et responsive
+- **Zustand** — State management
+- **Yup / React Hook Form** — Validation et gestion des formulaires
+- **Swagger** — Documentation interactive de l’API
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Cloner le dépôt**
+   ```bash
+   git clone <url-du-repo>
+   cd e-cantine
+   ```
 
-## Learn More
+2. **Configurer les variables d’environnement**
+   - Copier `.env.example` en `.env` et renseigner les accès à la base PostgreSQL.
 
-To learn more about Next.js, take a look at the following resources:
+3. **Installer les dépendances**
+   ```bash
+   yarn install
+   # ou
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Préparer la base de données**
+   ```bash
+   yarn prisma migrate dev
+   yarn prisma generate
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Lancer le serveur de développement**
+   ```bash
+   yarn dev
+   # ou
+   npm run dev
+   ```
 
-## Deploy on Vercel
+6. Accéder à l’application sur [http://localhost:3000](http://localhost:3000)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts utiles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `yarn dev` : Démarre le serveur Next.js en mode développement
+- `yarn build` : Build production
+- `yarn start` : Démarre le serveur Next.js en production
+- `yarn prisma migrate dev` : Applique les migrations Prisma
+- `yarn prisma generate` : Génère le client Prisma
+
+## Structure du projet
+
+- `src/app` : Pages et routes de l’application (admin, client, auth…)
+- `prisma/schema.prisma` : Modèle de données
+- `public/` : Fichiers statiques
+- `components/` : Composants réutilisables
+- `stores/` : State management
+- `repositories/` : Accès aux données (pattern repository)
+
+## Contribution
+
+Les contributions sont les bienvenues ! Merci de créer une issue ou une pull request.
+
+## Licence
+
+Projet sous licence MIT.

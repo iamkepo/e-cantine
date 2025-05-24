@@ -19,6 +19,6 @@ import statisticsController from "@/controllers/statisticsController";
  *       500:
  *         description: Erreur interne du serveur
  */
-export const GET = async (req: Request) => {
-  return statisticsController.getStatistics(req);
+export const GET = async () => {
+  return statisticsController.getStatistics();
 };

@@ -5,8 +5,8 @@ import StatisticRepository from "@/repositories/statisticRepository";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const [stats, setStats] = useState([]);
-  const statisticRepository = useMemo(() => new StatisticRepository(setStats as (data: any[]) => void), []);
+  const [stats, setStats] = useState<{ label: string; value: number }[]>([]);
+  const statisticRepository = useMemo(() => new StatisticRepository(setStats), []);
 
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Page: React.FC = () => {
     <div className="col-12">
       <h5 className="card-title">Statistiques</h5>
       <div className="row g-3">
-        {stats.map((stat: any, index: number) => (
+        {stats.map((stat, index: number) => (
           <div className="col-12 col-md-3" key={index}>
             <div className={`card text-bg-${theme}`}>
               <div className="card-body">

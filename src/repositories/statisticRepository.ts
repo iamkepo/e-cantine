@@ -1,17 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import statisticsService from "@/services/statisticsService";
 
 export default class StatisticRepository {
-  setStatistics?: (data: any[]) => void;
+  setList?: (data: { label: string; value: number }[]) => void;
 
-  constructor(setStatistics?: (data: any[]) => void) {
-    this.setStatistics = setStatistics;
+  constructor(setStatistics?: (data: { label: string; value: number }[]) => void) {
+    this.setList = setStatistics;
   }
 
   async fetchStatistics() {
-    return statisticsService.getStatistics()
+    await statisticsService.getStatistics()
       .then((data) => {
-        this.setStatistics?.(data as any[]);
+        if(this.setList ){
+          this.setList(data as { label: string; value: number }[]);
+        }
+        return data
       })
       .catch((error) => console.error(error));
   }
