@@ -21,7 +21,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, 
         </li>
         {
           Array.from({ length: total }, (_, i) => i + 1).map((item) => (
-            <li key={item} className={`page-item ${page === item ? "active" : ""}`}>
+            <li key={item} className={`page-item mx-1 ${page === item ? "active" : ""}`}>
               <button 
                 type="button" 
                 className={`btn btn-sm btn-${page === item ? "primary" : "outline-primary"}`} 

@@ -38,6 +38,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <span className="text-secondary d-none d-md-inline">-</span>
               <span className="text-secondary d-none d-md-inline text-break">Cantine</span>
             </Link>
+
             <ul className="nav flex-column mt-3">
               <li className="nav-item mb-3 ps-md-2 ps-0">
                 <Link className={`btn btn-outline-${pathname === '/'+lang+'/dashboard' ? 'primary' : 'secondary border-0'}`} href={'/'+lang+'/dashboard'}>
@@ -45,22 +46,24 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <small className="d-none d-md-inline-block ms-2 fw-bold text-break">Dashboard</small>
                 </Link>
               </li>
-              { dashboardNav.map((item, index) => (
-                <li className="nav-item mb-3 ps-md-2 ps-0" key={index}>
-                  <Link className={`btn btn-outline-${routeMatch(item.path) ? 'primary' : 'secondary border-0'}`} href={'/'+lang+item.path}>
-                    <i className={`bi bi-${item.icon}`}></i>
-                    <small className="d-none d-md-inline-block ms-2 fw-bold text-break">{item.name}</small>
-                  </Link>
-                </li>
-              ))}
+
+              {
+                dashboardNav.map((item, index) => (
+                  <li className="nav-item mb-3 ps-md-2 ps-0" key={index}>
+                    <Link className={`btn btn-outline-${routeMatch(item.path) ? 'primary' : 'secondary border-0'}`} href={'/'+lang+item.path}>
+                      <i className={`bi bi-${item.icon}`}></i>
+                      <small className="d-none d-md-inline-block ms-2 fw-bold text-break">{item.name}</small>
+                    </Link>
+                  </li>
+                ))
+              }
             </ul>
+
           </div>
         </nav>
 
-        <div className="col h-100 ps-0">
+        <div className="col-10 h-100 ps-0">
           {children}
-          <br /><br /><br /><br />
-          <br /><br /><br /><br />
         </div>
       </div>
     </div>

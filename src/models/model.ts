@@ -104,6 +104,15 @@ class Model {
       throw error;
     }
   }
+  count = async (where?: any) => {
+    try {
+      const total = await this.model.count({ where });
+      return total;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 export default Model;

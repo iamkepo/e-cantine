@@ -8,9 +8,9 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const { theme } = useThemeStore();
   const pathname = usePathname();
   return (
-    <div className="col-12 h-100 px-3">
+    <div className="col-12 h-100 px-3 overflow-scroll">
       <h3 className="my-4 text-break">{capitalize(pathname.split('/').pop() || '')}</h3>
-      <div className={`card text-bg-${theme} h-90 mb-3 overflow-scroll`}>
+      <div className={`card text-bg-${theme}`}>
         <div className="card-body">
           {children}
         </div>
