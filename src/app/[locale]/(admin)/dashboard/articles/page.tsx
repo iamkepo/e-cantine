@@ -1,10 +1,12 @@
 "use client";
 
 import { modal } from "@/stores/appStore";
-import { IArticle } from "@/core/interfaces";
+import { IArticle, ICategory, IType } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
 import ArticleRepository from "@/repositories/articleRepository";
+import CategoryRepository from "@/repositories/categoryRepository";
+import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
@@ -18,15 +20,21 @@ import { meta } from "@/core/constants";
 import { Meta, IField } from "@/core/types";
 
 const Page: React.FC = () => {
-  const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(StatusActivation);
+  const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
   const articleRepository = useMemo(() => new ArticleRepository(setArticles), []);
+  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
+  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+  const [types, setTypes] = useState<{ data: IType[], meta: Meta }>({ data: [], meta});
+  const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
   const [params, setParams] = useState(articleRepository.filterArticle);
   const { checkList, checkAllList, handleCheckList } = useCheckList(articles.data.map(article => article.id as number));
 
   useEffect(() => {
     articleRepository.fetchArticles(params);
-  }, [articleRepository, params]);
+    categoryRepository.fetchCategories({});
+    typeRepository.fetchTypes({});
+  }, [articleRepository, categoryRepository, params, typeRepository]);
 
 
   return (
@@ -40,7 +48,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-9">
               <FilterComponent 
-                fields={articleRepository.formFilterArticle() as unknown as IField[]}
+                fields={articleRepository.formFilterArticle(types.data, categories.data) as unknown as IField[]}
                 schema={articleRepository.articleFilterSchema}
                 onSubmit={(data: {search: string, status: string, categoryId: string, typeId: string}) => {
                   setParams({
@@ -72,7 +80,7 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer un article",
                     btn:"Creer",
-                    fields:articleRepository.formCreateArticle() as unknown as IField[],
+                    fields:articleRepository.formCreateArticle(types.data, categories.data) as unknown as IField[],
                     schema:articleRepository.articleSchema
                   }}
                   onSubmit={ (data: IArticle) => articleRepository.createArticle(data)
@@ -109,7 +117,7 @@ const Page: React.FC = () => {
           edit={(e: IArticle) => modal.open(
             <SubmitComponent 
               title={"Modifier l'article"} 
-              fields={articleRepository.formUpdateArticle(e) as unknown as IField[]} 
+              fields={articleRepository.formUpdateArticle(e, types.data, categories.data) as unknown as IField[]} 
               schema={articleRepository.articleSchema} 
               btn="Modifier" 
               onSubmit={(data) => articleRepository.updateArticle(e.id as number, data)
