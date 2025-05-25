@@ -24,7 +24,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const tagRepository = useMemo(() => new TagRepository(setTags), []);
 
   useEffect(() => {
-    categoryRepository.fetchCategories({});
+    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
     tagRepository.fetchTags({take: 100});
   }, [categoryRepository, tagRepository]);
 
@@ -37,7 +37,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="col-12 clearfix mb-3 mb-md-0">
         <div className="row mb-3">
           <div className="col-md-9 mb-3 mb-md-0">
-            <ul className="nav nav-tabs">
+            <ul className="nav nav-tabs flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <li>
                 <Link
                   className={`nav-link text-bg-${((params.id == undefined) || parseInt(params.id as string) === null) ? "primary active" : theme}`} 
@@ -46,10 +46,10 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   Tous
                 </Link>
               </li>
-              { categories.data.map((category, i) => (
+              { categories.data.filter(el => el.id != null && el.id != 5).map((category, i) => (
                 <li key={i} className="nav-item">
                   <Link
-                    className={`nav-link text-bg-${(category.id == null || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
+                    className={`nav-link text-truncate text-bg-${(category.id == null || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
                     href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
                   >
                     {category.name}
@@ -75,7 +75,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>
           <div className="filter-group">
             <h6 className="mb-3">Filter by Tag:</h6>
-            <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll'>
+            <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
               <button
                 type="button"
                 className={`btn btn-sm btn-${selected.tagIds === null ? "primary" : "outline-primary"}`}
@@ -91,7 +91,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   onClick={() => tagSelect(tag.id as number)}
                   title={tag.name}
                 >
-                  {tag.name}
+                  <span className='text-truncate'>{tag.name}</span>
                 </button>
               ))}
             </div>

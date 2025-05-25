@@ -44,7 +44,7 @@ const Page: React.FC = () => {
   return (
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {
-        articles.data.map((article: IArticle, i) => (
+        articles.data.filter(el => el.categoryId != null && el.categoryId != 5).map((article: IArticle, i) => (
           <div 
             key={i} 
             className="col"

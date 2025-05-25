@@ -32,12 +32,13 @@ const Page: React.FC = () => {
     .then(data => setArticlesAccompagnement(data || {data: [], meta: meta}));
     articleRepository.fetchArticles({take: 100})
     .then(data => setArticlesPrincipal(data || {data: [], meta: meta}));
-    categoryRepository.fetchCategories({take: 100});
+    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
   }, [articleRepository, categoryRepository]);
   
   useEffect(() => {
     const updated = categories.data
       .filter((category) => category.id != null)
+      .filter((category) => category.id != 5)
       .map((category) => ({ 
         id: category.id as number, 
         name: category.name, 
@@ -69,7 +70,7 @@ const Page: React.FC = () => {
   const ignoreCategory = (category: number) => {
     modal.open(
       <div className="text-center">
-        <p>Êtes-vous sûr de vouloir ignorer le {categories.data.find(c => c.id === category)?.name} ?</p>
+        <p>Êtes-vous sûr de vouloir ignorer la catégorie {categories.data.find(c => c.id === category)?.name} ?</p>
         <div className="d-flex justify-content-between">
           <button type="button" className="btn btn-outline-danger" onClick={() => modal.close()}>Non</button>
           <button type="button" className="btn btn-outline-success" onClick={() => {
