@@ -7,7 +7,7 @@ export default function Loading() {
   return (
     <div className="col h-100">
       <div className={`card text-bg-${theme} h-100`}>
-        <div className="card-body d-flex justify-content-center align-items-center">
+        <div className="card-body h-100 d-flex justify-content-center align-items-center">
           <div className="spinner-border" role="status"></div>
         </div>
       </div>
