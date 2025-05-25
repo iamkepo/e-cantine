@@ -272,9 +272,9 @@ export const categories = [
   { id: 4, label: "Dîner", hour: "19:00" },
 ];
 export const listStep = [
-  { id: 0, label: "Panier", icon: "check", path: 'cart' }, 
-  { id: 1, label: "Plannification", icon: "calendar", path: 'cart/planning' }, 
-  { id: 2, label: "Paiement", icon: "credit-card", path: 'cart/checkout' }, 
+  { id: 0, label: "Panier", icon: "check", path: 'my/cart' }, 
+  { id: 1, label: "Plannification", icon: "calendar", path: 'my/cart/planning' }, 
+  { id: 2, label: "Paiement", icon: "credit-card", path: 'my/cart/checkout' }, 
 ];
 export const methods = [
   { id: 'mtn', label: 'MTN Mobile Money' },

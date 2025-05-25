@@ -23,7 +23,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
   return (
     <div className={`card text-bg-${theme}`}>
       <div className="row g-0">
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <img 
             src={article.img} 
             className="img-fluid rounded-start" 
@@ -31,12 +31,37 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
             style={{ objectFit: 'cover' }}
           />
         </div>
-        <div className="col-md-6">
-          <div className="card-body">
-            <h4 className="card-title mb-3">
-              {article.label}
-            </h4>
-            <div className="row mb-4">
+        <div className="col-12 col-md-6">
+          <div className="card-body d-flex flex-column gap-5">
+            <div className="d-flex flex-column gap-2">
+              <h4 className="card-title mb-3">
+                {article.label}
+              </h4>
+              
+              <p className="card-text">
+                <span className="badge text-bg-primary">
+                  {categoryRender(article.category as number)}
+                </span>
+              </p>
+              <p className="card-text">
+                {article.description}
+              </p>
+              <p className="card-text">
+                { 
+                  (article.tags || []).map((tag, j) => (
+                    <span key={j} className="badge text-bg-secondary me-2">
+                      {tagRender(tag)}
+                    </span>
+                  ))
+                }
+              </p>
+              <p className="card-text">
+                <small className="text-muted">
+                  {formatDate(article.date_updated?.toString() || '')}
+                </small>
+              </p>
+            </div>
+            <div className="row">
               <h5 className="col col-md-8 text-danger text-nowrap">{article.price} XOF</h5>
               <div className="col col-md-4">
                 {
@@ -62,28 +87,6 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
                 }
               </div>  
             </div>
-            <p className="card-text">
-              <span className="badge text-bg-primary">
-                {categoryRender(article.category as number)}
-              </span>
-            </p>
-            <p className="card-text">
-              {article.description}
-            </p>
-            <p className="card-text">
-              { 
-                (article.tags || []).map((tag, j) => (
-                  <span key={j} className="badge text-bg-secondary me-2">
-                    {tagRender(tag)}
-                  </span>
-                ))
-              }
-            </p>
-            <p className="card-text">
-              <small className="text-muted">
-                {formatDate(article.date_updated?.toString() || '')}
-              </small>
-            </p>
           </div>
         </div>
       </div>

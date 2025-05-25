@@ -27,7 +27,12 @@ const Page: React.FC = () => {
         <hr />
         <p className="card-text">Email: {user?.email}</p>
         <p className="card-text">Role: {user?.role}</p>
-        <p className="card-text">Preferences: {user?.preferences?.join(', ')}</p>
+        <Link
+          href={'/'+lang+'/my/preferences'}
+          className={`btn btn-${theme} border-1 border-secondary`}
+        >
+          Preferences
+        </Link>
         <hr />
         <button type="button" className={`btn btn-danger`} onClick={() => {logout(); router.push('/'+lang)}}>
           <i className={`bi bi-box-arrow-right fs-6`}></i> 

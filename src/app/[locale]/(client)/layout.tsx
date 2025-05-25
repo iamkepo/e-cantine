@@ -23,52 +23,50 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   
   return (
     <div className="col-12 col-md-8 col-lg-10 mx-auto p-3">
-      <Link className='fs-1' href={'/'+lang}>
-        <span className="text-primary">E</span>-
-        <span className="text-secondary">Cantine</span>
-      </Link>
+      <div className={`col-12 mb-3 ${routeMatch('my') ? 'text-center text-lg-start' : 'text-start'}`}>
+        <Link className="fs-1" href={'/'+lang}>
+          <span className="text-primary">E</span>-
+          <span className="text-secondary">Cantine</span>
+        </Link>
+      </div>
       <div className={`col col-lg-${user ? '8' : '4'} fixed-bottom mx-auto`}>
         <div className={`card text-bg-${theme} shadow-lg mb-md-3 mb-0 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
-            {/* <Link className={`btn btn-${route == '/' ? 'primary' : 'outline-secondary'}`} href={'/'+lang}>
-              <i className={`bi bi-house fs-6`}></i> 
-              <span className='d-none d-md-inline-block ms-2'>Accueil</span>
-            </Link> */}
-            <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang+'/filter'}>
+            <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang}>
               <i className={`bi bi-list fs-6`}></i> 
               <span className='d-none d-md-inline-block ms-2'>Accueil</span>
             </Link>
-            {
-              cart.length > 0 ?
-              <Link className={`btn btn-${routeMatch('cart') ? 'primary' : 'outline-secondary'} position-relative`} href={'/'+lang+'/cart'}>
-                <i className={`bi bi-cart fs-6`}></i>
-                <span className='d-none d-md-inline-block ms-2'>Panier</span>
+            
+            <Link className={`btn btn-${routeMatch('cart') ? 'primary' : 'outline-secondary'} position-relative`} href={'/'+lang+'/my/cart'}>
+              <i className={`bi bi-cart fs-6`}></i>
+              <span className='d-none d-md-inline-block ms-2'>Panier</span>
+              { cart.length > 0 ?
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {cart.length}
                   <span className="visually-hidden">unread messages</span>
                 </span>
-              </Link>
-              :
-              false
-            }
+                :
+                false
+              }
+            </Link>
             { user ? (
               <>
                 <div className="btn-group" role="group">
-                  <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/orders'}>
+                  <Link className={`btn btn-${routeMatch('orders') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/orders'}>
                     <i className="bi bi-file-earmark"></i>
                     <span className='d-none d-md-inline-block ms-2'>Commandes</span>
                   </Link>
-                  <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/history'}>
+                  <Link className={`btn btn-${routeMatch('history') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/history'}>
                     <i className="bi bi-graph-up"></i>
                     <span className='d-none d-md-inline-block ms-2'>Historique</span>
                   </Link>
                 </div>
                 <div className="btn-group" role="group">
-                  <Link className={`btn btn-${routeMatch('friends') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/friends'}>
+                  <Link className={`btn btn-${routeMatch('friends') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/friends'}>
                     <i className="bi bi-people"></i>
                     <span className='d-none d-md-inline-block ms-2'>Amis</span>
                   </Link>
-                  <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/profile'}>
+                  <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/profile'}>
                     <i className={`bi bi-person fs-6`}></i>
                     <span className='d-none d-md-inline-block ms-2'>Profil</span>
                   </Link>

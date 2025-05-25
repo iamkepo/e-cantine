@@ -44,14 +44,17 @@ const ModalComponent: React.FC = () => {
   }, [app.modal.show, modalElement]);
 
   const handleModalClose = () => modal.close();
+
   if (!app.modal.show) return null;
   return (
     <div className="modal fade" id="myModal" tabIndex={-1} aria-labelledby="myModalLabel" aria-hidden="true">
       <div className={`modal-dialog modal-${app.modal.size || 'md'} modal-dialog-centered modal-dialog-scrollable`}>
         <div className="modal-content">
           <div className={`modal-body text-bg-${app.modal.size == 'fullscreen' ? 'secondary' : theme}`}>
-            <button type="button" className="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-            <button type="button" className="btn btn-sm btn-outline-danger mb-3 d-block d-md-none" onClick={() => modal.close()}>Fermer</button>
+            <button type="button" className="btn btn-sm btn-outline-danger mb-3" onClick={handleModalClose}>
+              <i className="bi bi-x"></i>
+              <span className="d-none d-md-inline-block ms-2 fw-bold">Fermer</span>
+            </button>
             {app.modal.body}
           </div>
         </div>

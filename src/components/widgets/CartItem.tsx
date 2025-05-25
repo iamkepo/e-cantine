@@ -2,7 +2,7 @@
 "use client";
 import { Article } from '@/core/types';
 import { modal } from '@/stores/appStore';
-import { addAccompanement, addBoisson, addItemCart, findAccompanement, findBoisson, findItem, priceAccomp, priceBoisson, removeAccompanement, removeBoisson, removeItemCart } from '@/stores/cartStore';
+import { addAccompanement, addItemCart, findAccompanement, findItem, priceAccomp, removeAccompanement, removeItemCart } from '@/stores/cartStore';
 import ArticleHComponent from '@/components/ArticleHComponent';
 import { articlesBoisson, articlesSupplement } from '@/core/constants';
 import { useEffect, useState } from 'react';
@@ -43,37 +43,25 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
           </span>
         </h5>
         {cartItem && (
-          <>
-            <ItemList
-              label="Accompagnement"
-              items={cartItem.accompanement}
-              articles={articlesSupplement}
-              findFn={(subId) => findAccompanement(item.id as number, subId)}
-              addFn={(subId) => addAccompanement(item.id as number, subId)}
-              removeFn={(subId) => removeAccompanement(item.id as number, subId)}
-              onRemove={(subId) => removeAccompanement(item.id as number, subId)}
-            />
-            <ItemList
-              label="Boisson"
-              items={cartItem.boisson}
-              articles={articlesBoisson}
-              findFn={(subId) => findBoisson(item.id as number, subId)}
-              addFn={(subId) => addBoisson(item.id as number, subId)}
-              removeFn={(subId) => removeBoisson(item.id as number, subId)}
-              onRemove={(subId) => removeBoisson(item.id as number, subId)}
-            />
-          </>
+          <ItemList
+            label="Accompagnement"
+            items={cartItem.accompanement}
+            articles={[...articlesSupplement, ...articlesBoisson]}
+            findFn={(subId) => findAccompanement(item.id as number, subId)}
+            addFn={(subId) => addAccompanement(item.id as number, subId)}
+            removeFn={(subId) => removeAccompanement(item.id as number, subId)}
+            onRemove={(subId) => removeAccompanement(item.id as number, subId)}
+          />
         )}
       </div>
 
       <div className="col-md-3 text-end">
-        <p className="fs-6 fw-bold">
+        <h6 className="card-title">
           { cartItem ?
             ((item.price || 0) 
-            + priceAccomp(articlesSupplement, cartItem as Cart) 
-            + priceBoisson(articlesBoisson, cartItem as Cart)).toFixed(2)
+            + priceAccomp(articlesSupplement, cartItem as Cart)).toFixed(2)
           : 0} XOF
-        </p>
+        </h6>
         <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeItemCart(item.id as number)}>
           <i className="bi bi-trash"></i>
         </button>

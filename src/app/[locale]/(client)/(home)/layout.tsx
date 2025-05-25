@@ -9,7 +9,7 @@ import { categories, tags } from '@/core/constants';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
+const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
   const params = useParams();
@@ -94,4 +94,4 @@ const FilterLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   );
 };
 
-export default FilterLayout;
+export default HomeLayout;

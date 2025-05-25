@@ -9,7 +9,6 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { generateDates } from "@/helpers/planner";
@@ -48,7 +47,7 @@ const Page: React.FC = () => {
     if (!isAuthenticated) {
       router.push('/' + lang + '/login');
     } else {
-      router.push('/' + lang + '/cart/checkout');
+      router.push('/' + lang + '/my/cart/checkout');
     }
   }
 
@@ -147,7 +146,7 @@ const Page: React.FC = () => {
             </p>
             <hr />
             <div className="d-flex justify-content-between">
-              <Link className="btn btn-secondary" href={'/'+lang+'/cart'}>Retour</Link>
+              <button type="button" className="btn btn-secondary" onClick={() => router.back()}>Retour</button>
               <button type="button" className="btn btn-primary" onClick={handleCheckout}>Suivant</button>
             </div>
           </div>

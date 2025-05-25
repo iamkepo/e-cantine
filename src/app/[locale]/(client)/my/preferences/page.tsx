@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useThemeStore } from "@/stores/themeStore";
-import Link from "next/link";
-import { useLangStore } from "@/stores/langStore";
 import TagRepository from "@/repositories/tagRepository";
 import { useMemo } from "react";
 import { useCheckList } from "@/hooks/useCheckList";
@@ -13,7 +11,6 @@ import { meta } from "@/core/constants";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const { lang } = useLangStore();
   const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
   const tagRepository = useMemo(() => new TagRepository(setTags), []);
   // const [preferences, setPreferences] = useState<{ data: IPreference[], meta: Meta }>({ data: [], meta});
@@ -32,13 +29,13 @@ const Page: React.FC = () => {
       <div className="card-body">
         <div className="d-flex justify-content-between">
           <h4 className="card-title text-break">Choisissez vos préférences</h4>
-          <Link 
-            href={'/'+lang+'/filter'} 
+          <button 
+            type="button" 
             className="btn btn-primary" 
           >
-            <span className="d-none d-md-inline-block me-2 fw-bold">commencer</span>
-            <i className="bi bi-arrow-right"></i>
-          </Link>
+            <i className="bi bi-save"></i>
+            <span className="d-none d-md-inline-block ms-2 fw-bold">Enregistrer</span>
+          </button>
         </div>
         <hr />
         <div className="d-flex flex-wrap gap-2">
