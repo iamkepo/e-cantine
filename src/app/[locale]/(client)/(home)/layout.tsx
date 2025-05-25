@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, Suspense } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
@@ -11,6 +11,7 @@ import { Meta } from '@/core/types';
 import TagRepository from '@/repositories/tagRepository';
 import CategoryRepository from '@/repositories/categoryRepository';
 import { meta } from '@/core/constants';
+import Loading from './loading';
 
 const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { theme } = useThemeStore();
@@ -35,9 +36,9 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="row">
       <div className="col-12 clearfix mb-3 mb-md-0">
-        <div className="row mb-3">
+        <div className="row g-2 mb-3">
           <div className="col-md-9 mb-3 mb-md-0">
-            <ul className="nav nav-tabs flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
+            <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <li>
                 <Link
                   className={`nav-link text-bg-${((params.id == undefined) || parseInt(params.id as string) === null) ? "primary active" : theme}`} 
@@ -46,6 +47,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   Tous
                 </Link>
               </li>
+              <Suspense fallback={<Loading />}>
               { categories.data.filter(el => el.id != null && el.id != 5).map((category, i) => (
                 <li key={i} className="nav-item">
                   <Link
@@ -56,6 +58,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   </Link>
                 </li>
               ))}
+              </Suspense>
             </ul>
           </div>
           <div className="col-md-3">
@@ -83,6 +86,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               >
                 Tous
               </button>
+              <Suspense fallback={<Loading />}>
               { tags.data.map((tag, j) => (
                 <button
                   key={j}
@@ -94,6 +98,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <span className='text-truncate'>{tag.name}</span>
                 </button>
               ))}
+              </Suspense>
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { findItem, useCartStore } from "@/stores/cartStore";
 import { useFilterStore } from "@/stores/filterStore";
 import { useEffect } from "react";
@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 import ArticleRepository from "@/repositories/articleRepository";
 import { Meta } from "@/core/types";
 import LightBox from "@/components/widgets/LightBox";
+import Loading from "./loading";
 
 const Page: React.FC = () => {
   const { selected } = useFilterStore();
@@ -43,6 +44,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <Suspense fallback={<Loading />}>
       {
         articles.data.filter(el => el.categoryId != null && el.categoryId != 5).map((article: IArticle, i) => (
           <div 
@@ -59,6 +61,7 @@ const Page: React.FC = () => {
           </div>
         ))
       }
+      </Suspense>
     </div>
   );
 };
