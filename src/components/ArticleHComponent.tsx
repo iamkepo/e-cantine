@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { Article } from '../core/types';
 import { categoryRender, formatDate, tagRender } from '../helpers/functions';
@@ -14,7 +14,12 @@ interface ArticleHComponentProps {
 
 const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem, removeItem, choose }) => {
   const { theme } = useThemeStore();
-  
+  const [isSelected, setIsSelected] = useState(false);
+
+  useEffect(() => {
+    setIsSelected(choose);
+  }, [choose]);
+
   return (
     <div className={`card text-bg-${theme}`}>
       <div className="row g-0">
@@ -35,7 +40,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
               <h5 className="col col-md-8 text-danger text-nowrap">{article.price} XOF</h5>
               <div className="col col-md-4">
                 {
-                  (choose && removeItem) ? 
+                  (isSelected && removeItem) ? 
                   <button
                     type="button"
                     className="btn btn-danger float-end"
@@ -44,7 +49,7 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
                     Retirer
                   </button>
                   :
-                  (addItem && !choose) ?
+                  (addItem && !isSelected) ?
                   <button
                     type="button"
                     className="btn btn-warning float-end"

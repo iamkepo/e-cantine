@@ -30,19 +30,20 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       <div className={`col col-lg-${user ? '8' : '4'} fixed-bottom mx-auto`}>
         <div className={`card text-bg-${theme} shadow-lg mb-md-3 mb-0 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
-            <Link className={`btn btn-${route == '/' ? 'primary' : 'outline-secondary'}`} href={'/'+lang}>
+            {/* <Link className={`btn btn-${route == '/' ? 'primary' : 'outline-secondary'}`} href={'/'+lang}>
               <i className={`bi bi-house fs-6`}></i> 
               <span className='d-none d-md-inline-block ms-2'>Accueil</span>
-            </Link>
+            </Link> */}
             <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang+'/filter'}>
               <i className={`bi bi-list fs-6`}></i> 
-              <span className='d-none d-md-inline-block ms-2'>Menu</span>
+              <span className='d-none d-md-inline-block ms-2'>Accueil</span>
             </Link>
             {
               cart.length > 0 ?
               <Link className={`btn btn-${routeMatch('cart') ? 'primary' : 'outline-secondary'} position-relative`} href={'/'+lang+'/cart'}>
                 <i className={`bi bi-cart fs-6`}></i>
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span className='d-none d-md-inline-block ms-2'>Panier</span>
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {cart.length}
                   <span className="visually-hidden">unread messages</span>
                 </span>

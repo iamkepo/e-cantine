@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThemeStore } from '../stores/themeStore';
 import { Article } from '../core/types';
 import { categoryRender, tagRender } from '../helpers/functions';
@@ -17,9 +17,14 @@ interface ArticleVComponentProps {
 const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, choose, addItem, removeItem }) => {
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
+  const [isSelected, setIsSelected] = useState(false);
+
+  useEffect(() => {
+    setIsSelected(choose);
+  }, [choose]);
 
   return (
-    <div className={`card text-bg-${theme} ${choose ? 'border border-1 border-warning' : ''}`}>
+    <div className={`card text-bg-${theme} ${isSelected ? 'border border-1 border-warning' : ''}`}>
       <img 
         src={article.img} 
         className="card-img-top" 
@@ -49,7 +54,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
         <div className="card-text d-flex justify-content-between">
           <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
           {
-            (choose && removeItem) ? 
+            (isSelected && removeItem) ? 
             <button
               type="button"
               className="btn btn-sm btn-danger"
@@ -58,7 +63,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
               Retirer
             </button>
             : 
-            (addItem && !choose) ?
+            (addItem && !isSelected) ?
             <button
               type="button"
               className="btn btn-sm btn-warning"
