@@ -46,20 +46,27 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
       </li>
       {items.map((sub, i) => (
         <li key={i} className={`list-group-item text-bg-${theme}`}>
-          <div className="row">
-            <div className="col-2">
+          <div className="row g-2">
+            <div className="col-md-3">
               <img
                 src={articles.find(a => a.id === sub.id)?.img}
                 alt={articles.find(a => a.id === sub.id)?.label}
                 className="img-fluid rounded"
+                style={{ maxHeight: '100px', width: '100%', objectFit: 'cover' }}
                 onClick={() => action(sub.id)}
               />
             </div>
-            <div className="col-10 d-flex justify-content-between align-items-center">
+            <div className="col-md-9 d-flex justify-content-between align-items-center">
               <span className="fw-bold text-truncate">{articles.find(a => a.id === sub.id)?.label}</span>
-              <span className="fs-6 text-small">{(articles.find(a => a.id === sub.id)?.price || 0).toFixed(2)} XOF
-                <i className="bi bi-trash text-danger ms-2" onClick={() => onRemove(sub.id)}></i>
+              <span className="fs-6 text-small text-truncate">
+                {(articles.find(a => a.id === sub.id)?.price || 0)} XOF
               </span>
+              <button
+                className="btn btn-sm btn-outline-danger ms-2"
+                onClick={() => onRemove(sub.id)}
+              >
+                <i className="bi bi-trash" ></i>
+              </button>
             </div>
           </div>
         </li>

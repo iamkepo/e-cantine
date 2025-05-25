@@ -16,7 +16,7 @@ export default function MyLayout({children}: {children: React.ReactNode}) {
 
   return (
     <section className="col-12 h-100">
-      <div className="btn-group position-fixed top-0 start-0 m-3" role="group" style={{ zIndex: '1000'}}>
+      <div className="btn-group position-fixed top-0 start-0 m-3 shadow" role="group" style={{ zIndex: '1000'}}>
         <button
           type="button"
           className={`btn btn-${theme} border-1 border-secondary d-block d-md-none`}

@@ -23,12 +23,13 @@ const ArticleHComponent: React.FC<ArticleHComponentProps> = ({ article, addItem,
   return (
     <div className={`card text-bg-${theme}`}>
       <div className="row g-0">
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
           <img 
             src={article.img} 
             className="img-fluid rounded-start" 
             alt={article.label} 
-            style={{ objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+
           />
         </div>
         <div className="col-12 col-md-6">

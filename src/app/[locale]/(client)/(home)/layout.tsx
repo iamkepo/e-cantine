@@ -30,7 +30,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <li key={i} className="nav-item">
                   <Link
                     className={`nav-link text-bg-${((params.id == undefined && category.id == null) || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
-                    href={'/'+lang+'/'+ (category.id != null ? "filter/"+category.id : 'filter')}
+                    href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
                   >
                     {category.label}
                   </Link>

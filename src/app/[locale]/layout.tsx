@@ -29,7 +29,7 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
 
   return (
     <section className="container-fluid vh-100 p-0">
-      <div className="btn-group position-fixed top-0 end-0 m-3 shadow-lg" role="group" style={{ zIndex: '10000'}}>
+      <div className="btn-group position-fixed top-0 end-0 m-3 shadow" role="group" style={{ zIndex: '10000'}}>
         <button type="button" className={`btn btn-${theme} border-1 border-secondary`} onClick={toggleTheme}>
           <i className={`bi bi-${theme === "dark" ? "moon" : "sun"} fs-6`}></i>
         </button>

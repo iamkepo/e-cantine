@@ -24,6 +24,7 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
           src={item.img}
           alt={item.label}
           className="img-fluid rounded"
+          style={{ maxHeight: '150px', width: '100%', objectFit: 'cover' }}
           onClick={() => modal.open(
             <ArticleHComponent
               article={item}
@@ -35,11 +36,11 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
           )}
         />
       </div>
-      <div className="col-md-7">
-        <h5 className="card-title">
-          {item.label}
-          <span className="float-end fs-6 text-small">
-            {(item.price || 0).toFixed(2)} XOF
+      <div className="col-md-8">
+        <h5 className="card-title d-flex justify-content-between mb-2">
+          <span className='text-truncate'>{item.label}</span>
+          <span className="fs-6 text-small text-truncate">
+            {(item.price || 0)} XOF
           </span>
         </h5>
         {cartItem && (
@@ -55,11 +56,11 @@ const CartItem: React.FC<{ item: Article }> = ({ item }) => {
         )}
       </div>
 
-      <div className="col-md-3 text-end">
-        <h6 className="card-title">
+      <div className="col-md-2 text-end">
+        <h6 className="card-title text-truncate">
           { cartItem ?
             ((item.price || 0) 
-            + priceAccomp(articlesSupplement, cartItem as Cart)).toFixed(2)
+            + priceAccomp([...articlesSupplement, ...articlesBoisson], cartItem as Cart))
           : 0} XOF
         </h6>
         <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeItemCart(item.id as number)}>
