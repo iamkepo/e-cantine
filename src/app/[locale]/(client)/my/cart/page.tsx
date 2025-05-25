@@ -1,15 +1,18 @@
 "use client";
-import React from "react";
-import { clearCart, priceAccomp, priceBoisson, useCartStore } from "@/stores/cartStore";
+import React, { useState, useMemo } from "react";
+import { clearCart, priceAccomp, useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { articlesBoisson, articlesPrincipal, articlesSupplement, categories } from "@/core/constants";
+import { meta } from "@/core/constants";
 import CartItem from "@/components/widgets/CartItem";
-import { Article } from "@/core/types";
+import { Meta } from "@/core/types";
 import { modal } from "@/stores/appStore";
+import ArticleRepository from "@/repositories/articleRepository";
+import CategoryRepository from "@/repositories/categoryRepository";
+import { IArticle, ICategory } from "@/core/interfaces";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -17,18 +20,32 @@ const Page: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const { lang } = useLangStore();
   const { cart } = useCartStore();
-  const [missingCategories, setMissingCategories] = React.useState<{ id: number; name: string; checked: boolean }[]>([]);
+  const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
+  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const [articlesAccompagnement, setArticlesAccompagnement] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const articleRepository = useMemo(() => new ArticleRepository(), []);
+  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
+  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+
   useEffect(() => {
-    const updated = categories
+    articleRepository.fetchArticles({take: 100, categoryId: 5})
+    .then(data => setArticlesAccompagnement(data || {data: [], meta: meta}));
+    articleRepository.fetchArticles({take: 100})
+    .then(data => setArticlesPrincipal(data || {data: [], meta: meta}));
+    categoryRepository.fetchCategories({take: 100});
+  }, [articleRepository, categoryRepository]);
+  
+  useEffect(() => {
+    const updated = categories.data
       .filter((category) => category.id != null)
       .map((category) => ({ 
         id: category.id as number, 
-        name: category.label, 
-        checked: cart.filter(el => articlesPrincipal.find(a => a.id === el.id)?.category === category.id).length > 0 
+        name: category.name, 
+        checked: cart.filter(el => articlesPrincipal.data.find(a => a.id === el.id)?.categoryId === category.id).length > 0 
       }));
       
     setMissingCategories(updated);
-  }, [cart]);
+  }, [cart, articlesPrincipal, categories]);
 
   const handleValidateCart = () => {
     if (!isAuthenticated) {
@@ -46,13 +63,13 @@ const Page: React.FC = () => {
     router.push('/' + lang);
   };
   const filterCartByCategory = (category: number) => {
-    return cart.filter((item) => articlesPrincipal.find(a => a.id === item.id)?.category === category); // Ensure `category` exists on items
+    return cart.filter((item) => articlesPrincipal.data.find(a => a.id === item.id)?.categoryId === category); // Ensure `category` exists on items
   };
 
   const ignoreCategory = (category: number) => {
     modal.open(
       <div className="text-center">
-        <p>Êtes-vous sûr de vouloir ignorer le {categories.find(c => c.id === category)?.label} ?</p>
+        <p>Êtes-vous sûr de vouloir ignorer le {categories.data.find(c => c.id === category)?.name} ?</p>
         <div className="d-flex justify-content-between">
           <button type="button" className="btn btn-outline-danger" onClick={() => modal.close()}>Non</button>
           <button type="button" className="btn btn-outline-success" onClick={() => {
@@ -70,13 +87,17 @@ const Page: React.FC = () => {
     <div className="row">
       <div className="col-lg-8 mb-3 mb-lg-0">
         { cart.length > 0 ?
-          categories.map((category) =>
+          categories.data.map((category) =>
             filterCartByCategory(category.id as number).length > 0 ? (
               <div key={category.id} className={`card mb-3 text-bg-${theme}`}>
                 <div className="card-body">
-                  <h5 className="card-title mb-3">{category.label}</h5>
+                  <h5 className="card-title mb-3">{category.name}</h5>
                   {filterCartByCategory(category.id as number).map((item) => (
-                    <CartItem key={item.id} item={articlesPrincipal.find(a => a.id === item.id) as Article} />
+                    <CartItem 
+                      key={item.id} 
+                      item={articlesPrincipal.data.find(a => a.id === item.id) as IArticle} 
+                      articles={articlesAccompagnement.data}
+                    />
                   ))}
                 </div>
               </div>
@@ -135,9 +156,8 @@ const Page: React.FC = () => {
             Total :
             { cart.length > 0 ?
               cart.reduce((sum, item) => {
-                return sum + ((articlesPrincipal.find(a => a.id === item.id)?.price || 0) 
-                + priceAccomp(articlesSupplement, item) 
-                + priceBoisson(articlesBoisson, item))
+                return sum + ((articlesPrincipal.data.find(a => a.id === item.id)?.price || 0) 
+                + priceAccomp(articlesAccompagnement.data, item))
               }, 0).toFixed(2)
             : 0} XOF
           </p>

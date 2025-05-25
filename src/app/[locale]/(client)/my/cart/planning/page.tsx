@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { articlesPrincipal, days } from "@/core/constants";
+import React, { useMemo, useState } from "react";
+import { days, meta } from "@/core/constants";
 import { generatePlanning, removeEvent, setCheckedDays, setDates, setEvents, setItemCount, setStartDate, setWeeks } from "@/stores/cartStore";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
@@ -15,6 +15,10 @@ import { generateDates } from "@/helpers/planner";
 import { modal } from "@/stores/appStore";
 import { formatDate } from "@/helpers/functions";
 import { EventDropArg } from "@fullcalendar/core/index.js";
+import ArticleRepository from "@/repositories/articleRepository";
+import { IArticle, ICategory } from "@/core/interfaces";
+import { Meta } from "@/core/types";
+import CategoryRepository from "@/repositories/categoryRepository";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -23,6 +27,15 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
+  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const articleRepository = useMemo(() => new ArticleRepository(setArticlesPrincipal), []);
+  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
+  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+  
+  useEffect(() => {
+    articleRepository.fetchArticles({take: 100,});
+    categoryRepository.fetchCategories({take: 100});
+  }, [articleRepository, categoryRepository]);
 
   const toggleDay = (day: string) => {
     const updatedDays = checkedDays.includes(day)
@@ -39,9 +52,9 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if(dates && dates.length > 0){
-      setEvents(generatePlanning(dates, articlesPrincipal));
+      setEvents(generatePlanning(dates, articlesPrincipal.data, categories.data));
     }
-  }, [dates]);
+  }, [dates, articlesPrincipal.data, categories.data]);
 
   function handleCheckout(): void {
     if (!isAuthenticated) {

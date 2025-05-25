@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import AddPersonModal from "@/components/AddPersonModal";
 import LoaderComponent from "@/components/LoaderComponent";
-import { articlesBoisson, articlesPrincipal, articlesSupplement, methods, SHIPPING_RATE, TAX } from "@/core/constants";
+import { meta, methods, SHIPPING_RATE, TAX } from "@/core/constants";
 import { modal, toast } from "@/stores/appStore";
-import { clearCart, priceAccomp, priceBoisson, removePerson, setPerson, setSubtotal } from "@/stores/cartStore";
+import { clearCart, priceAccomp, removePerson, setPerson, setSubtotal } from "@/stores/cartStore";
 import { createCommand, createHistory } from "@/stores/historyStore";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -14,7 +14,9 @@ import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from "next/navigation";
 import Accordion from "@/components/widgets/Accordion";
 import { categoryRender } from "@/helpers/functions";
-import { Cart } from "@/core/types";
+import { Cart, Meta } from "@/core/types";
+import { IArticle } from "@/core/interfaces";
+import ArticleRepository from "@/repositories/articleRepository";
 
 const Page:React.FC = () => {
   const { theme } = useThemeStore();
@@ -23,6 +25,9 @@ const Page:React.FC = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const [articlesAccompagnement, setArticlesAccompagnement] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const articleRepository = useMemo(() => new ArticleRepository(), []);
 
   const [form, setForm] = useState({
     paymentMethod: '',
@@ -30,6 +35,14 @@ const Page:React.FC = () => {
     address: '',
     persons: persons || [],
   });
+  
+  useEffect(() => {
+    articleRepository.fetchArticles({take: 100})
+    .then(data => setArticlesPrincipal(data || {data: [], meta: meta}));
+    articleRepository.fetchArticles({take: 100, categoryId: 5})
+    .then(data => setArticlesAccompagnement(data || {data: [], meta: meta}));
+  }, [articleRepository]);
+
   const handlePay = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -65,8 +78,8 @@ const Page:React.FC = () => {
   }, [user?.email, persons]);
 
   useEffect(() => {
-    setSubtotal(articlesPrincipal, articlesSupplement, articlesBoisson);
-  }, [cart]);
+    setSubtotal(articlesPrincipal.data, articlesAccompagnement.data);
+  }, [cart, articlesPrincipal.data, articlesAccompagnement.data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -92,17 +105,18 @@ const Page:React.FC = () => {
                 {cart.map((item, idx) => (
                   <li key={idx} className={`list-group-item d-flex justify-content-between align-items-center text-bg-${theme}`}>
                     <span className="text-truncate text-wrap">
-                      {categoryRender(articlesPrincipal.find(a => a.id === item.id)?.category || 0)} 
+                      {categoryRender(articlesPrincipal.data.find(a => a.id === item.id)?.categoryId || 0)} 
                     </span>
                     <span>
                       {item.count} x 
-                      {'( '+(articlesPrincipal.find(a => a.id === item.id)?.price || 0).toFixed(2)+' XOF'}
-                      {priceAccomp(articlesSupplement, item as Cart) > 0 ? ('+ '+ (priceAccomp(articlesSupplement, item as Cart) || 0).toFixed(2) + ' XOF') : ''} 
-                      {priceBoisson(articlesBoisson, item as Cart) > 0 ? ('+ '+ (priceBoisson(articlesBoisson, item as Cart) || 0).toFixed(2)+ ' XOF )') : ' )'}  =
+                      {(articlesPrincipal.data.find(a => a.id === item.id)?.price || 0).toFixed(2)+' XOF'}
+                      {priceAccomp(articlesAccompagnement.data, item as Cart) > 0 ? 
+                      ('+ '+ (priceAccomp(articlesAccompagnement.data, item as Cart) || 0).toFixed(2) + ' XOF')
+                       : ''}
+                       =
                       {item ?
-                        (((articlesPrincipal.find(a => a.id === item.id)?.price || 0) 
-                        + (priceAccomp(articlesSupplement, item as Cart) || 0) 
-                        + (priceBoisson(articlesBoisson, item as Cart) || 0)) * item.count).toFixed(2)
+                        (((articlesPrincipal.data.find(a => a.id === item.id)?.price || 0) 
+                        + (priceAccomp(articlesAccompagnement.data, item as Cart) || 0)) * item.count).toFixed(2)
                       : 0} XOF
                     </span>
                   </li>

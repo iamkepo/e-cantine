@@ -1,13 +1,16 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
 import { useLangStore } from '@/stores/langStore';
 import Link from 'next/link';
-import { categories, tags } from '@/core/constants';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { ICategory, ITag } from '@/core/interfaces';
+import { Meta } from '@/core/types';
+import TagRepository from '@/repositories/tagRepository';
+import CategoryRepository from '@/repositories/categoryRepository';
+import { meta } from '@/core/constants';
 
 const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { theme } = useThemeStore();
@@ -15,9 +18,18 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const params = useParams();
   const { lang } = useLangStore();
   const route = usePathname();
+  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
+  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+  const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
+  const tagRepository = useMemo(() => new TagRepository(setTags), []);
 
   useEffect(() => {
-  }, [selected, route]);
+    categoryRepository.fetchCategories({});
+    tagRepository.fetchTags({take: 100});
+  }, [categoryRepository, tagRepository]);
+
+  useEffect(() => {
+  }, [selected, route, params]);
   
 
   return (
@@ -26,13 +38,21 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="row mb-3">
           <div className="col-md-9 mb-3 mb-md-0">
             <ul className="nav nav-tabs">
-              { categories.map((category, i) => (
+              <li>
+                <Link
+                  className={`nav-link text-bg-${((params.id == undefined) || parseInt(params.id as string) === null) ? "primary active" : theme}`} 
+                  href={'/'+lang}
+                >
+                  Tous
+                </Link>
+              </li>
+              { categories.data.map((category, i) => (
                 <li key={i} className="nav-item">
                   <Link
-                    className={`nav-link text-bg-${((params.id == undefined && category.id == null) || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
+                    className={`nav-link text-bg-${(category.id == null || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
                     href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
                   >
-                    {category.label}
+                    {category.name}
                   </Link>
                 </li>
               ))}
@@ -55,18 +75,26 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>
           <div className="filter-group">
             <h6 className="mb-3">Filter by Tag:</h6>
-            <p>
-              { tags.map((tag, j) => (
-                <span
+            <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll'>
+              <button
+                type="button"
+                className={`btn btn-sm btn-${selected.tagIds === null ? "primary" : "outline-primary"}`}
+                onClick={() => tagSelect(null)}
+              >
+                Tous
+              </button>
+              { tags.data.map((tag, j) => (
+                <button
                   key={j}
-                  className={`badge cursor-pointer me-2 mb-2 text-bg-${selected.tag === tag.id ? "primary" : "secondary"}`}
-                  onClick={() => tagSelect(tag.id)}
-                  title={tag.description} // Added tooltip
+                  type="button"
+                  className={`btn btn-sm btn-${selected.tagIds?.includes(tag.id as number) ? "primary" : "outline-primary"}`}
+                  onClick={() => tagSelect(tag.id as number)}
+                  title={tag.name}
                 >
-                  {tag.label}
-                </span>
+                  {tag.name}
+                </button>
               ))}
-            </p>
+            </div>
           </div>
 
           <div className="filter-group">

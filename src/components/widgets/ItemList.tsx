@@ -1,16 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React from 'react';
-import { Article, CItem } from '@/core/types';
+import { CItem } from '@/core/types';
 import ArticleHComponent from '@/components/ArticleHComponent';
 import { modal } from '@/stores/appStore';
 import { useThemeStore } from '@/stores/themeStore';
 import AddModalButton from './AddModalButton';
+import { IArticle } from '@/core/interfaces';
 
 type ItemListProps = {
   label: string;
   items: CItem[];
-  articles: Article[];
+  articles: IArticle[];
   findFn: (subId: number) => unknown;
   addFn: (subId: number) => void;
   removeFn: (subId: number) => void;
@@ -22,7 +23,7 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
   const action = (subId: number) => {
     modal.open(
       <ArticleHComponent
-        article={articles.find(a => a.id === subId) as Article}
+        article={articles.find(a => a.id === subId) as IArticle}
         choose={findFn(subId) != undefined}
         addItem={(id) => {addFn(id); action(id);}}
         removeItem={(id) => {removeFn(id); action(id);}}
@@ -49,15 +50,15 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
           <div className="row g-2">
             <div className="col-md-3">
               <img
-                src={articles.find(a => a.id === sub.id)?.img}
-                alt={articles.find(a => a.id === sub.id)?.label}
+                src={articles.find(a => a.id === sub.id)?.image}
+                alt={articles.find(a => a.id === sub.id)?.name}
                 className="img-fluid rounded"
                 style={{ maxHeight: '100px', width: '100%', objectFit: 'cover' }}
                 onClick={() => action(sub.id)}
               />
             </div>
             <div className="col-md-9 d-flex justify-content-between align-items-center">
-              <span className="fw-bold text-truncate">{articles.find(a => a.id === sub.id)?.label}</span>
+              <span className="fw-bold text-truncate">{articles.find(a => a.id === sub.id)?.name}</span>
               <span className="fs-6 text-small text-truncate">
                 {(articles.find(a => a.id === sub.id)?.price || 0)} XOF
               </span>

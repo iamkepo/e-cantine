@@ -4,21 +4,33 @@
 import { useThemeStore } from "@/stores/themeStore";
 import { getHistoryByDate, getHistoryCommand, removeCommand, useHistoryStore } from "@/stores/historyStore";
 import { useEffect, useState } from "react";
-import { articlesPrincipal } from "@/core/constants";
 import { capitalize, statusColorRender, statusRender } from "@/helpers/functions";
 import { formatDate } from "@/helpers/functions";
 import { modal } from "@/stores/appStore";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { Article, History } from "@/core/types";
+import { History } from "@/core/types";
 import ArticleHComponent from "@/components/ArticleHComponent";
+import { IArticle } from "@/core/interfaces";
+import ArticleRepository from "@/repositories/articleRepository";
+import { Meta } from "@/core/types";
+import { useMemo } from "react";
+import { meta } from "@/core/constants";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const { commands, history } = useHistoryStore();
   const [ listEvent, setListEvent ] = useState<History>([]);
   const [ selectedCommand, setSelectedCommand ] = useState<number>(0);
+  const [articles, setArticles] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const repository = useMemo(() => new ArticleRepository(setArticles), []);
+
+  useEffect(() => {
+    repository.fetchArticles({
+      take: 100,
+    });
+  }, [repository]);
 
   const handleDateClick = (info: DateClickArg) => {
     if (getHistoryByDate(info.dateStr)) {
@@ -33,14 +45,14 @@ const Page: React.FC = () => {
                     <div className="row">
                       <div className="col-2">
                         <img
-                          src={articlesPrincipal.find(a => a.id === event.plat_id)?.img}
-                          alt={articlesPrincipal.find(a => a.id === event.plat_id)?.label}
+                          src={articles.data.find(a => a.id === event.plat_id)?.image}
+                          alt={articles.data.find(a => a.id === event.plat_id)?.name}
                           className="img-fluid rounded"
                           onClick={() => action(event.plat_id)}
                         />
                       </div>
                       <div className="col-10 d-flex justify-content-between align-items-center">
-                        <span className="fw-bold text-truncate">{articlesPrincipal.find(a => a.id === event.plat_id)?.label}</span>
+                        <span className="fw-bold text-truncate">{articles.data.find(a => a.id === event.plat_id)?.name}</span>
                         <button type="button" className="btn btn-sm btn-outline-primary">
                           <i className="bi bi-arrow-clockwise"></i> Modifier
                         </button>
@@ -62,7 +74,7 @@ const Page: React.FC = () => {
   const action = (subId: number) => {
     modal.open(
       <ArticleHComponent
-        article={articlesPrincipal.find(a => a.id === subId) as Article}
+        article={articles.data.find(a => a.id === subId) as IArticle}
         choose={true}
       />,
       "xl"
@@ -127,7 +139,7 @@ const Page: React.FC = () => {
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
               events={(listEvent?.length > 0 ? listEvent : history)?.map(event => ({
-                title: articlesPrincipal.find(a => a.id === event.plat_id)?.label || 'Unknown',
+                title: articles.data.find(a => a.id === event.plat_id)?.name || 'Unknown',
                 date: event.date,
                 allDay: true,
               }))}

@@ -1,13 +1,14 @@
 "use client";
 import React from 'react';
-import { Article, CItem } from '@/core/types';
+import { CItem } from '@/core/types';
 import ArticleVComponent from '@/components/ArticleVComponent';
 import { modal } from '@/stores/appStore';
+import { IArticle } from '@/core/interfaces';
 
 type AddModalButtonProps = {
   label: string;
   items: CItem[];
-  articles: Article[];
+  articles: IArticle[];
   findFn: (subId: number) => unknown;
   addFn: (subId: number) => void;
   removeFn: (subId: number) => void;
@@ -21,9 +22,9 @@ const AddModalButton: React.FC<AddModalButtonProps> = ({ label, items, articles,
           <div key={j} className="col">
             <ArticleVComponent
               article={article}
-              choose={findFn(article.id) != undefined}
-              addItem={() => {addFn(article.id); action();}}
-              removeItem={() => {removeFn(article.id); action();}}
+              choose={findFn(article.id as number) != undefined}
+              addItem={() => {addFn(article.id as number); action();}}
+              removeItem={() => {removeFn(article.id as number); action();}}
             />
           </div>
         ))}

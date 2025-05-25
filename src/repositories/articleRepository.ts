@@ -13,7 +13,7 @@ class ArticleRepository extends Repository<IArticle> {
     super(setArticles);
   }
 
-  async fetchArticles(params: ParamsQuery) {
+  async fetchArticles(params: ParamsQuery & {categoryId?: number, typeId?: number}) {
     return this.fetchAll(() => articlesService.fetchArticles(params) as Promise<{data: IArticle[], meta: Meta}>);
   }
 

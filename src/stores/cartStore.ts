@@ -1,7 +1,8 @@
 import { create, StateCreator } from "zustand";
-import { Article, Cart, PlanningEvent } from '../core/types';
+import { Cart, PlanningEvent } from '../core/types';
 import { persist } from "zustand/middleware";
-import { categories, days } from "../core/constants";
+import { days } from "../core/constants";
+import { IArticle, ICategory } from "@/core/interfaces";
 
 type CartApp = {
   cart: Array<Cart>;
@@ -213,16 +214,16 @@ export const setItemCount = (count: number) => {
     }))
   }));
 };
-export const setSubtotal = (articles: Article[], supplements: Article[], boissons: Article[])=>{
+export const setSubtotal = (articles: IArticle[], supplements: IArticle[])=>{
   useCartStore.setState((state) => ({
-    subtotal: state.cart.reduce((sum, item) => sum + item.count * (articles.find(a => a.id === item.id)?.price || 0) + priceAccomp(supplements, item) + priceBoisson(boissons, item), 0)
+    subtotal: state.cart.reduce((sum, item) => sum + item.count * (articles.find(a => a.id === item.id)?.price || 0) + priceAccomp(supplements, item), 0)
   }));
 }
 
-export const priceAccomp = (articles: Article[], item: Cart) => {
+export const priceAccomp = (articles: IArticle[], item: Cart) => {
   return item.accompanement.reduce((sum, accomp) => sum + accomp.count * (articles.find(a => a.id === accomp.id)?.price || 0), 0);
 }
-export const priceBoisson = (articles: Article[], item: Cart) => {
+export const priceBoisson = (articles: IArticle[], item: Cart) => {
   return item.boisson.reduce((sum, boisson) => sum + boisson.count * (articles.find(a => a.id === boisson.id)?.price || 0), 0);
 }
 export const setDates = (dates: Date[]) => {
@@ -275,7 +276,8 @@ export const removeEvent = (index: number) => {
 
 export function generatePlanning(
   dates: Date[],
-  articles: Article[]
+  articles: IArticle[],
+  categories: ICategory[]
 ): PlanningEvent[] {
   const { cart } = useCartStore.getState();
   const events: PlanningEvent[] = [];
@@ -283,7 +285,7 @@ export function generatePlanning(
   // Pour chaque catégorie
   categories.filter(c => c.id != null).forEach(category => {
     // Récupère tous les plats de cette catégorie
-    const categoryItems = cart.filter(item => articles.find(a => a.id === item.id)?.category === category.id);
+    const categoryItems = cart.filter(item => articles.find(a => a.id === item.id)?.categoryId === category.id);
     if (categoryItems.length === 0) return;
 
     // Pour chaque date, attribue un plat en bouclant sur la liste des plats (round-robin)
@@ -292,9 +294,9 @@ export function generatePlanning(
       const dateStr = new Date(date).toISOString().split("T")[0];
       events.push({
         id: item.id || 0,
-        title: articles.find(a => a.id === item.id)?.label + " (" + category.label + ")",
+        title: articles.find(a => a.id === item.id)?.name + " (" + category.name + ")",
         date: dateStr,
-        slot: category.hour
+        slot: category.name
       });
     });
   });
