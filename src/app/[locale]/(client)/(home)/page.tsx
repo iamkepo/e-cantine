@@ -43,26 +43,26 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <Suspense fallback={<Loading />}>
-      {
-        articles.data.filter(el => el.categoryId != null && el.categoryId != 5).map((article: IArticle, i) => (
-          <div 
-            key={i} 
-            className="col"
-          >
-            <ArticleVComponent 
-              article={article}
-              action={() => openLightBox(article, i)}
-              choose={findItem(article.id as number) != undefined}
-              addItem={(id) => addItemCart(id)}
-              removeItem={(id) => removeItemCart(id)}
-            />
-          </div>
-        ))
-      }
-      </Suspense>
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {
+          articles.data.filter(el => el.categoryId != null && el.categoryId != 5).map((article: IArticle, i) => (
+            <div 
+              key={i} 
+              className="col"
+            >
+              <ArticleVComponent 
+                article={article}
+                action={() => openLightBox(article, i)}
+                choose={findItem(article.id as number) != undefined}
+                addItem={(id) => addItemCart(id)}
+                removeItem={(id) => removeItemCart(id)}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </Suspense>
   );
 };
 
