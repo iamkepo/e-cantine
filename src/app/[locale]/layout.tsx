@@ -19,6 +19,7 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
     if (rootElement) {
       rootElement.classList = theme + '-theme';
     }
+
     translateElements()
   }, [theme, lang]);
 
@@ -45,8 +46,8 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
       <div className="col-12 h-100">
         {children}
       </div>
-        <ModalComponent />
-        <ToastComponent />
+      <ModalComponent />
+      <ToastComponent />
     </section>
   );
 }

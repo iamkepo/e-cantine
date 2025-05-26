@@ -40,6 +40,7 @@ body {
 }
 .container-fluid {
   overflow-x: hidden;
+  max-width: 1800px;
 }
 
 .btn-primary {
@@ -393,6 +394,13 @@ a:hover {
   to {
     --progress: 100;
   }
+}
+.skeleton-img {
+  height: 150px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f8f8f8 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
 }
 .skeleton-title {
   height: 20px;

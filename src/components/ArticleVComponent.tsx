@@ -51,7 +51,7 @@ const ArticleVComponent: React.FC<ArticleVComponentProps> = ({ article, action, 
             false
           } */}
         </p>
-        <div className="card-text d-flex justify-content-between">
+        <div className="card-text d-flex flex-wrap justify-content-between">
           <h5 className="text-danger text-nowrap me-3">{article.price} XOF</h5>
           {
             (isSelected && removeItem) ? 

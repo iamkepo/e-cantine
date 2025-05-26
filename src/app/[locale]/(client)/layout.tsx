@@ -22,7 +22,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
   };
   
   return (
-    <div className="col-12 col-md-8 col-lg-10 mx-auto p-3">
+    <div className="col-12 col-md-10 col-lg-10 mx-auto p-3">
       <div className={`col-12 mb-3 ${routeMatch('my') ? 'text-center text-lg-start' : 'text-start'}`}>
         <Link className="fs-1" href={'/'+lang}>
           <span className="text-primary">E</span>-
