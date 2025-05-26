@@ -36,7 +36,7 @@ const Page: React.FC = () => {
 
   const openLightBox = (article: IArticle, i: number) => {
     modal.open(
-      <LightBox list={articles.data} index={i} open={openLightBox} >  
+      <LightBox list={articles.data.filter(el => el.categoryId != null && el.categoryId != 5)} index={i} open={openLightBox} >  
         <ArticleHComponent 
           article={article} 
           choose={findItem(article.id as number) != undefined} 
