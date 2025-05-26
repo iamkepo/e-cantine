@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo, Suspense } from 'react';
+import React, { useEffect, useState, useMemo, Suspense, lazy } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
@@ -11,7 +11,10 @@ import { Meta } from '@/core/types';
 import TagRepository from '@/repositories/tagRepository';
 import CategoryRepository from '@/repositories/categoryRepository';
 import { meta } from '@/core/constants';
-import Loading from './loading';
+import BlockSkeleton from '@/components/widgets/BlockSkeleton';
+
+const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
+const LazyCategoriesNavBlock = lazy(() => import("@/components/blocks/CategoriesNavBlock"));
 
 const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { theme } = useThemeStore();
@@ -47,17 +50,11 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   Tous
                 </Link>
               </li>
-              <Suspense fallback={<Loading />}>
-              { categories.data.filter(el => el.id != null && el.id != 5).map((category, i) => (
-                <li key={i} className="nav-item">
-                  <Link
-                    className={`nav-link text-truncate text-bg-${(category.id == null || parseInt(params.id as string) === category.id) ? "primary active" : theme}`} 
-                    href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
+              <Suspense fallback={<BlockSkeleton count={10} className="nav-item" />}>
+                <LazyCategoriesNavBlock 
+                  categories={categories.data.filter(el => el.id != null && el.id != 5)} 
+                  id={params.id ? parseInt(params.id as string) : undefined} 
+                />
               </Suspense>
             </ul>
           </div>
@@ -86,18 +83,8 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               >
                 Tous
               </button>
-              <Suspense fallback={<Loading />}>
-              { tags.data.map((tag, j) => (
-                <button
-                  key={j}
-                  type="button"
-                  className={`btn btn-sm btn-${selected.tagIds?.includes(tag.id as number) ? "primary" : "outline-primary"}`}
-                  onClick={() => tagSelect(tag.id as number)}
-                  title={tag.name}
-                >
-                  <span className='text-truncate'>{tag.name}</span>
-                </button>
-              ))}
+              <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
+                <LazyTagsBlock tags={tags.data} tagIds={selected.tagIds ?? undefined} tagSelect={tagSelect} />
               </Suspense>
             </div>
           </div>

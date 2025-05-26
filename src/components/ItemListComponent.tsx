@@ -5,8 +5,8 @@ import { CItem } from '@/core/types';
 import ArticleHComponent from '@/components/ArticleHComponent';
 import { modal } from '@/stores/appStore';
 import { useThemeStore } from '@/stores/themeStore';
-import AddModalButton from './AddModalButton';
 import { IArticle } from '@/core/interfaces';
+import ArticleVComponent from './ArticleVComponent';
 
 type ItemListProps = {
   label: string;
@@ -18,16 +18,35 @@ type ItemListProps = {
   onRemove: (subId: number) => void;
 };
 
-const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addFn, removeFn, onRemove }) => {
+const ItemListComponent: React.FC<ItemListProps> = ({ label, items, articles,findFn, addFn, removeFn, onRemove }) => {
   const { theme } = useThemeStore();
-  const action = (subId: number) => {
+  const actionOpen = (subId: number) => {
     modal.open(
       <ArticleHComponent
         article={articles.find(a => a.id === subId) as IArticle}
         choose={findFn(subId) != undefined}
-        addItem={(id) => {addFn(id); action(id);}}
-        removeItem={(id) => {removeFn(id); action(id);}}
+        addItem={(id) => {addFn(id); actionOpen(id);}}
+        removeItem={(id) => {removeFn(id); actionOpen(id);}}
       />,
+      "xl"
+    );
+  };
+
+  const actionChoose = () => {
+    modal.open(
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+        {(articles || []).map((article, j) => (
+          <div key={j} className="col">
+            <ArticleVComponent
+              article={article}
+              choose={findFn(article.id as number) != undefined}
+              addItem={() => {addFn(article.id as number); actionChoose();}}
+              removeItem={() => {removeFn(article.id as number); actionChoose();}}
+            />
+          </div>
+        ))}
+        
+      </div>,
       "xl"
     );
   };
@@ -36,14 +55,14 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
     <ul className="list-group mb-2">
       <li className={`list-group-item text-bg-${theme} d-flex justify-content-between align-items-center`}> 
         {items.length > 1 ? `${label}s` : label}
-        <AddModalButton
-          label={label}
-          items={items}
-          articles={articles}
-          findFn={findFn}
-          addFn={addFn}
-          removeFn={removeFn}
-        />
+        <button
+          type="button"
+          className={`btn btn-sm btn-outline-primary ${items?.length > 0 ? "ms-2" : "me-2 mb-2"}`}
+          onClick={() => actionChoose()}
+        >
+          <i className="bi bi-plus"></i>
+          {items?.length > 0 ? "" : label}
+        </button>
       </li>
       {items.map((sub, i) => (
         <li key={i} className={`list-group-item text-bg-${theme}`}>
@@ -54,7 +73,7 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
                 alt={articles.find(a => a.id === sub.id)?.name}
                 className="img-fluid rounded"
                 style={{ maxHeight: '100px', width: '100%', objectFit: 'cover' }}
-                onClick={() => action(sub.id)}
+                onClick={() => actionOpen(sub.id)}
               />
             </div>
             <div className="col-md-9 d-flex justify-content-between align-items-center">
@@ -74,14 +93,14 @@ const ItemList: React.FC<ItemListProps> = ({ label, items, articles,findFn, addF
       ))}
     </ul>
     : 
-    <AddModalButton
-      label={label}
-      items={items}
-      articles={articles}
-      findFn={findFn}
-      addFn={addFn}
-      removeFn={removeFn}
-    />
+    <button
+      type="button"
+      className={`btn btn-sm btn-outline-primary ${items?.length > 0 ? "ms-2" : "me-2 mb-2"}`}
+      onClick={() => actionChoose()}
+    >
+      <i className="bi bi-plus"></i>
+      {items?.length > 0 ? "" : label}
+    </button>
   );
 };
-export default ItemList;
+export default ItemListComponent;

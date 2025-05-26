@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useThemeStore } from "@/stores/themeStore";
 import TagRepository from "@/repositories/tagRepository";
 import { useMemo } from "react";
@@ -7,7 +7,10 @@ import { useCheckList } from "@/hooks/useCheckList";
 import { Meta } from "@/core/types";
 import { ITag } from "@/core/interfaces";
 import { meta } from "@/core/constants";
+import BlockSkeleton from "@/components/widgets/BlockSkeleton";
 // import PreferencesRepository from "@/repositories/preferenceRepository";
+
+const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -39,17 +42,9 @@ const Page: React.FC = () => {
         </div>
         <hr />
         <div className="d-flex flex-wrap gap-2">
-          {
-            tags.data.map(tag => (
-              <button 
-                key={tag.id} 
-                className={`btn btn-${checkList.includes(tag.id as number) ? 'primary' : 'outline-primary'}`}
-                onClick={() => handleCheckList(tag.id as number)}
-              >
-                {tag.name}
-              </button>
-            ))
-          }
+          <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
+            <LazyTagsBlock tags={tags.data} tagSelect={handleCheckList} tagIds={checkList} />
+          </Suspense>
         </div>
       </div>
     </div>

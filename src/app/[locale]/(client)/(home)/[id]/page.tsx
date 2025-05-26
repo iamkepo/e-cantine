@@ -3,17 +3,18 @@
 import { useParams } from "next/navigation";
 import { findItem, useCartStore } from "@/stores/cartStore";
 import { useFilterStore } from "@/stores/filterStore";
-import { useEffect, useState, useMemo, Suspense } from "react";
+import { useEffect, useState, useMemo, Suspense, lazy } from "react";
 import ArticleHComponent from "@/components/ArticleHComponent";
 import { addItemCart, removeItemCart } from "@/stores/cartStore";
 import LightBox from "@/components/widgets/LightBox";
 import { modal } from "@/stores/appStore";
-import ArticleVComponent from "@/components/ArticleVComponent";
 import ArticleRepository from "@/repositories/articleRepository";
 import { Meta } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
 import { meta } from "@/core/constants";
-import Loading from "../loading";
+import BlockSkeleton from "@/components/widgets/BlockSkeleton";
+
+const LazyArticlesBlock = lazy(() => import("@/components/blocks/ArticlesBlock"));
 
 const Page: React.FC = () => {
   const { id } = useParams();
@@ -52,23 +53,14 @@ const Page: React.FC = () => {
   return (
 
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <Suspense fallback={<Loading />}>
-      {
-        articles.data.filter(el => el.categoryId != null && el.categoryId != 5).map((article: IArticle, i) => (
-          <div 
-            key={i} 
-            className="col"
-          >
-            <ArticleVComponent 
-              article={article}
-              action={() => openLightBox(article, i)}
-              choose={findItem(article.id as number) != undefined}
-              addItem={(id) => addItemCart(id)}
-              removeItem={(id) => removeItemCart(id)}
-            />
-          </div>
-        ))
-      }
+      <Suspense fallback={<BlockSkeleton multiple className="col" count={10} />}>
+        <LazyArticlesBlock
+          articles={articles.data.filter(el => el.categoryId != null && el.categoryId != 5)} 
+          openLightBox={openLightBox} 
+          findItem={findItem}
+          addItem={addItemCart}
+          removeItem={removeItemCart}
+        />
       </Suspense>
     </div>
   );

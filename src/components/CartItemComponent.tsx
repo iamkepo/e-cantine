@@ -6,11 +6,11 @@ import { addAccompanement, addItemCart, findAccompanement, findItem, priceAccomp
 import ArticleHComponent from '@/components/ArticleHComponent';
 import { useEffect, useState } from 'react';
 import { Cart } from '@/core/types';
-import ItemList from '@/components/widgets/ItemList';
+import ItemListComponent from '@/components/ItemListComponent';
 import { IArticle } from '@/core/interfaces';
 
 // --- Main CartItem ---
-const CartItem: React.FC<{ item: IArticle, articles: IArticle[] }> = ({ item, articles }) => {
+const CartItemComponent: React.FC<{ item: IArticle, articles: IArticle[] }> = ({ item, articles }) => {
   const [cartItem, setCartItem] = useState<Cart | undefined>(undefined);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const CartItem: React.FC<{ item: IArticle, articles: IArticle[] }> = ({ item, ar
           </span>
         </h5>
         {cartItem && (
-          <ItemList
+          <ItemListComponent
             label="Accompagnement"
             items={cartItem.accompanement}
             articles={articles}
@@ -71,4 +71,4 @@ const CartItem: React.FC<{ item: IArticle, articles: IArticle[] }> = ({ item, ar
   );
 };
 
-export default CartItem;
+export default CartItemComponent;
