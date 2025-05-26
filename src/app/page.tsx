@@ -22,7 +22,7 @@ export default function Page() {
         <span className="text-primary">E</span>-
         <span className="text-secondary">Cantine</span>
       </Link>
-      <div className="mt-3">
+      <div className="w-50 mt-3">
         <LoaderComponent 
           counter={1000} 
           callback={() => router.push('/'+lang)} 

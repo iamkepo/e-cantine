@@ -9,7 +9,7 @@ export default function Page() {
   const { lang } = useLangStore();
 
   return (
-    <section className={`min-vh-100 vw-100 text-bg-${theme}`}>
+    <section className={`min-vh-100 text-bg-${theme}`}>
       <div className="col-11 col-lg-10 mx-auto py-5 px-2 px-lg-3 mb-5">
         <h1 className="fs-1 text-primary mb-3 my-md-4">
           <Link href={'/'+lang} style={{ fontSize: '4rem' }}>
@@ -24,9 +24,12 @@ export default function Page() {
             <p className="fs-5 mb-3">Créez votre propre calendrier de restauration sur mesure, des plats sains et savoureux avec notre plateforme de gestion des repas.</p>
             
             <div className="my-5">
-              <button className="btn btn-lg px-4 py-2 btn-primary text-uppercase" onClick={() => document.getElementById('newsletter')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Link href={'/'+lang} className="btn btn-lg px-4 py-2 btn-primary">
                 Commencer
-              </button>
+              </Link>
+              <Link href={'/'+lang+'/login'} className="btn btn-lg px-4 py-2 btn-outline-primary ms-3">
+                Se connecter
+              </Link>
             </div>
 
             <hr />
@@ -127,7 +130,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div id="newsletter" className="col-11 col-lg-10 mx-auto p-5 p-lg-3 text-bg-secondary">
+      <div id="newsletter" className="col-11 col-lg-10 mx-auto py-5 px-2 px-lg-3 border rounded">
         <h4 className="fw-bold mb-3">Abonnez-vous à notre newsletter</h4>
         <p className="mb-4">
           Recevez les dernières nouveautés, promotions et conseils nutritionnels chaque semaine.
