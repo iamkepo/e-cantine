@@ -24,8 +24,7 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
   const { cart } = useCartStore();
   const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
-  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
-  const [articlesAccompagnement, setArticlesAccompagnement] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
+  const [articles, setArticles] = useState<{ principal: IArticle[], accompagnement: IArticle[] }>({ principal: [], accompagnement: [] });
   const articleRepository = useMemo(() => new ArticleRepository(), []);
   const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
   const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
@@ -33,8 +32,10 @@ const Page: React.FC = () => {
   useEffect(() => {
     articleRepository.fetchArticles({take: 100})
     .then(data => {
-      setArticlesAccompagnement(data ? {data: data.data.filter(el => el.id == 5), meta: data.meta} : {data: [], meta: meta});
-      setArticlesPrincipal(data ? {data: data.data.filter(el => el.id != 5), meta: data.meta} : {data: [], meta: meta});
+      setArticles(data ? {
+        principal: data.data.filter(el => el.categoryId != 5),
+        accompagnement: data.data.filter(el => el.categoryId == 5)
+      } : {principal: [], accompagnement: []});
     });
     categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
   }, [articleRepository, categoryRepository]);
@@ -46,11 +47,11 @@ const Page: React.FC = () => {
       .map((category) => ({ 
         id: category.id as number, 
         name: category.name, 
-        checked: cart.filter(el => articlesPrincipal.data.find(a => a.id === el.id)?.categoryId === category.id).length > 0 
+        checked: cart.filter(el => articles.principal.find(a => a.id === el.id)?.categoryId === category.id).length > 0 
       }));
       
     setMissingCategories(updated);
-  }, [cart, articlesPrincipal, categories]);
+  }, [cart, articles, categories]);
 
   const handleCategory = (id: number): void => {
     router.push('/' + lang + '/' + id)
@@ -85,8 +86,8 @@ const Page: React.FC = () => {
             <LazyCartItemsBlock 
               items={cart} 
               categories={categories.data} 
-              articlesPrincipal={articlesPrincipal.data} 
-              articlesAccompagnement={articlesAccompagnement.data} 
+              articlesPrincipal={articles.principal} 
+              articlesAccompagnement={articles.accompagnement} 
             />
           </Suspense>
           :
@@ -126,8 +127,8 @@ const Page: React.FC = () => {
             Total :
             { cart.length > 0 ?
               cart.reduce((sum, item) => {
-                return sum + ((articlesPrincipal.data.find(a => a.id === item.id)?.price || 0) 
-                + priceAccomp(articlesAccompagnement.data, item))
+                return sum + ((articles.principal.find(a => a.id === item.id)?.price || 0) 
+                + priceAccomp(articles.accompagnement, item))
               }, 0).toFixed(2)
             : 0} XOF
           </p>
