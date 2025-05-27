@@ -11,7 +11,7 @@ export default class PreferencesRepository extends Repository<IPreference> {
     super(setPreferences as unknown as ({data, meta}: {data: IPreference[], meta: Meta}) => void);
   }
 
-  async fetchPreferences(params: ParamsQuery) {
+  async fetchPreferences(params: ParamsQuery & {clientId: number, tagId?: number}) {
     return this.fetchAll(() => preferencesService.fetchPreferences(params) as Promise<{data: IPreference[], meta: Meta}>);
   }
 

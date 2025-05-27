@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo, Suspense, lazy } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
-import { priceSelect, setSearchQuery, useFilterStore } from '@/stores/filterStore';
+import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { ICategory, ITag } from '@/core/interfaces';
@@ -38,7 +38,6 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="col-12 clearfix mb-3 mb-md-0">
         <div className="row g-2 mb-3">
           <div className="col-md-9 mb-3 mb-md-0">
-            {categoryRepository.error.fetchAll ? <p className="text-danger">{categoryRepository.error.fetchAll}</p> : null}
             <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <Suspense fallback={<BlockSkeleton count={5} className="nav-item" />}>
                 <LazyCategoriesNavBlock 
@@ -63,11 +62,11 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>
           <div className="filter-group">
             <h6 className="mb-3">Filter by Tag:</h6>
-            {tagRepository.error.fetchAll ? <p className="text-danger">{tagRepository.error.fetchAll}</p> : null}
             <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
               <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
                 <LazyTagsBlock 
                   tags={tags.data} 
+                  onSelect={tagSelect}
                   tagIds={selected.tagIds ?? undefined} 
                 />
               </Suspense>

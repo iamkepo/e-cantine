@@ -3,7 +3,7 @@ import { toast } from "@/stores/appStore";
 import { useState } from "react";
 
 export const useHandleError = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
 
   const handleError = (err: any) => {

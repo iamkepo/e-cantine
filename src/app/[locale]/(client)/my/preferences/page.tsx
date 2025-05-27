@@ -3,12 +3,12 @@ import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useThemeStore } from "@/stores/themeStore";
 import TagRepository from "@/repositories/tagRepository";
 import { useMemo } from "react";
-import { useCheckList } from "@/hooks/useCheckList";
 import { Meta } from "@/core/types";
-import { ITag } from "@/core/interfaces";
+import { ITag, IPreference } from "@/core/interfaces";
 import { meta } from "@/core/constants";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
-// import PreferencesRepository from "@/repositories/preferenceRepository";
+import PreferencesRepository from "@/repositories/preferenceRepository";
+import { toast } from "@/stores/appStore";
 
 const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 
@@ -16,16 +16,13 @@ const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
   const tagRepository = useMemo(() => new TagRepository(setTags), []);
-  // const [preferences, setPreferences] = useState<{ data: IPreference[], meta: Meta }>({ data: [], meta});
-  // const preferenceRepository = useMemo(() => new PreferencesRepository(setPreferences), []);
-  const { checkList, handleCheckList } = useCheckList(tags.data.map(tag => tag.id as number));
-
+  const [preferences, setPreferences] = useState<{ data: IPreference[], meta: Meta }>({ data: [], meta});
+  const preferenceRepository = useMemo(() => new PreferencesRepository(setPreferences), []);
 
   useEffect(() => {
     tagRepository.fetchTags({take: 100});
-    // preferenceRepository.fetchPreferences({});
-  }, [tagRepository]);
-
+    preferenceRepository.fetchPreferences({clientId: 1, take: 100});
+  }, [tagRepository, preferenceRepository]);
 
   return (
     <div className={`card text-bg-${theme} mb-3`}>
@@ -43,7 +40,15 @@ const Page: React.FC = () => {
         <hr />
         <div className="d-flex flex-wrap gap-2">
           <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
-            <LazyTagsBlock tags={tags.data} tagSelect={handleCheckList} tagIds={checkList} />
+            <LazyTagsBlock 
+              tags={tags.data} 
+              tagIds={preferences.data.map(preference => preference.tagId as number)} 
+              onSelect={(id) => {
+                preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference)
+                .then(() => preferenceRepository.fetchPreferences({clientId: 1, take: 100}))
+                .catch((error) => toast.danger(error.response?.data?.error));
+              }}
+            />
           </Suspense>
         </div>
       </div>
