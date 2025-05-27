@@ -32,7 +32,7 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
       <div className={`col col-lg-${user ? '8' : '4'} fixed-bottom mx-auto`}>
         <div className={`card text-bg-${theme} shadow-lg mb-md-3 mb-0 p-3`}>
           <div className={`d-flex align-items-center justify-content-around`}>
-            <Link className={`btn btn-${routeMatch('filter') ? 'primary' : theme} border-1 border-primary`} href={'/'+lang}>
+            <Link className={`btn btn-${route === '/'+lang ? 'primary' : theme} border-1 border-primary`} href={'/'+lang}>
               <i className={`bi bi-list fs-6`}></i> 
               <span className='d-none d-md-inline-block ms-2'>Accueil</span>
             </Link>
