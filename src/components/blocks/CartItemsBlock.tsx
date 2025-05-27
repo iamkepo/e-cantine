@@ -1,3 +1,4 @@
+"use client";
 import { Cart } from "@/core/types";
 import { IArticle, ICategory } from "@/core/interfaces";
 import CartItemComponent from "../CartItemComponent";

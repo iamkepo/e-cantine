@@ -17,16 +17,13 @@ export default function Page() {
   }, [theme, lang]);
 
   return (
-    <div className='vh-100 vw-100 d-flex flex-column align-items-center justify-content-center'>
+    <div className={`vh-100 vw-100 d-flex flex-column align-items-center justify-content-center text-bg-${theme}`}>
       <Link href={'/'+lang} style={{ fontSize: '4rem' }}>
         <span className="text-primary">E</span>-
         <span className="text-secondary">Cantine</span>
       </Link>
       <div className="w-50 mt-3">
-        <LoaderComponent 
-          counter={1000} 
-          callback={() => router.push('/'+lang)} 
-        />
+        <LoaderComponent counter={4000} callback={() => router.replace('/'+lang)} />
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
+import Link from "next/link";
 
 const LazyCartItemsBlock = lazy(() => import("@/components/blocks/CartItemsBlock"));
 const LazyCategoriesListBlock = lazy(() => import("@/components/blocks/CategoriesListBlock"));
@@ -30,10 +31,11 @@ const Page: React.FC = () => {
   const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
 
   useEffect(() => {
-    articleRepository.fetchArticles({take: 100, categoryId: 5})
-    .then(data => setArticlesAccompagnement(data || {data: [], meta: meta}));
     articleRepository.fetchArticles({take: 100})
-    .then(data => setArticlesPrincipal(data || {data: [], meta: meta}));
+    .then(data => {
+      setArticlesAccompagnement(data ? {data: data.data.filter(el => el.id == 5), meta: data.meta} : {data: [], meta: meta});
+      setArticlesPrincipal(data ? {data: data.data.filter(el => el.id != 5), meta: data.meta} : {data: [], meta: meta});
+    });
     categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
   }, [articleRepository, categoryRepository]);
   
@@ -50,14 +52,6 @@ const Page: React.FC = () => {
     setMissingCategories(updated);
   }, [cart, articlesPrincipal, categories]);
 
-  const handleValidateCart = () => {
-    if (!isAuthenticated) {
-      router.push('/' + lang + '/login');
-    } else {
-      router.push('/' + lang + '/my/cart/planning');
-    }
-  };
-
   const handleCategory = (id: number): void => {
     router.push('/' + lang + '/' + id)
   }
@@ -72,7 +66,7 @@ const Page: React.FC = () => {
         <p>Êtes-vous sûr de vouloir ignorer la catégorie {categories.data.find(c => c.id === category)?.name} ?</p>
         <div className="d-flex justify-content-between">
           <button type="button" className="btn btn-outline-danger" onClick={() => modal.close()}>Non</button>
-          <button type="button" className="btn btn-outline-success" onClick={() => {
+          <button type="button" className="btn btn-outline-primary" onClick={() => {
             setMissingCategories((prev) =>
               prev.map((item) => item.id === category ? { ...item, checked: true } : item)
             );
@@ -139,14 +133,18 @@ const Page: React.FC = () => {
           </p>
           <div className="d-flex justify-content-between">
             <button type="button" className="btn btn-secondary" onClick={() => router.back()}>Retour</button>
-            <button
-              type="button"
-              className="btn btn-success"
-              disabled={cart.length === 0}
-              onClick={handleValidateCart}
-            >
-              Suivant
-            </button>
+            {cart.length > 0 ?
+              <Link
+                href={'/'+lang+(isAuthenticated ? '/my/cart/planning' : '/login')}
+                className="btn btn-primary"
+              >
+                Suivant
+              </Link>
+              :
+              <button type="button" className="btn btn-primary" disabled>
+                Suivant
+              </button>
+            }
           </div>
         </div>
       </div>

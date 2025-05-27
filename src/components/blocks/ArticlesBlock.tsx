@@ -1,3 +1,4 @@
+"use client";
 import { IArticle } from "@/core/interfaces";
 import ArticleVComponent from "../ArticleVComponent";
 import { Cart } from "@/core/types";

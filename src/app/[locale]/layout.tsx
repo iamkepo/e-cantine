@@ -6,6 +6,7 @@ import { capitalize } from "@/helpers/functions";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import ModalComponent from "@/components/ModalComponent";
 import ToastComponent from "@/components/ToastComponent";
+import NextTopLoader from "nextjs-toploader";
 
 export default function LocaleLayout({children}: {children: React.ReactNode}) {
   const { theme } = useThemeStore();
@@ -44,6 +45,15 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
         </button>
       </div>
       <div className="col-12 h-100">
+        <NextTopLoader 
+          color="var(--bs-primary)"           
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          showSpinner={false}
+          easing="ease"
+          speed={300}
+        />
         {children}
       </div>
       <ModalComponent />

@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState, useMemo, Suspense, lazy } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
-import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
+import { priceSelect, setSearchQuery, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
-import { useLangStore } from '@/stores/langStore';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ICategory, ITag } from '@/core/interfaces';
 import { Meta } from '@/core/types';
@@ -20,7 +18,6 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
   const params = useParams();
-  const { lang } = useLangStore();
   const route = usePathname();
   const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
   const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
@@ -41,16 +38,9 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="col-12 clearfix mb-3 mb-md-0">
         <div className="row g-2 mb-3">
           <div className="col-md-9 mb-3 mb-md-0">
+            {categoryRepository.error.fetchAll ? <p className="text-danger">{categoryRepository.error.fetchAll}</p> : null}
             <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
-              <li>
-                <Link
-                  className={`nav-link text-bg-${((params.id == undefined) || parseInt(params.id as string) === null) ? "primary active" : theme}`} 
-                  href={'/'+lang}
-                >
-                  Tous
-                </Link>
-              </li>
-              <Suspense fallback={<BlockSkeleton count={10} className="nav-item" />}>
+              <Suspense fallback={<BlockSkeleton count={5} className="nav-item" />}>
                 <LazyCategoriesNavBlock 
                   categories={categories.data.filter(el => el.id != null && el.id != 5)} 
                   id={params.id ? parseInt(params.id as string) : undefined} 
@@ -59,15 +49,13 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </ul>
           </div>
           <div className="col-md-3">
-            <div className="float-md-end">
-              <input 
-                className={`form-control text-bg-${theme}`} 
-                type="search" 
-                placeholder="Search" 
-                aria-label="Search" 
-                onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
-              />
-            </div>
+            <input 
+              className={`form-control text-bg-${theme}`} 
+              type="search" 
+              placeholder="Rechercher" 
+              aria-label="Rechercher" 
+              onChange={(e) => setSearchQuery(e.target.value)} // Added search functionality
+            />
           </div>
         </div>
       </div>
@@ -75,16 +63,13 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className={`card sticky-lg-top text-bg-${theme} p-2 p-md-3 shadow-sm`}>
           <div className="filter-group">
             <h6 className="mb-3">Filter by Tag:</h6>
+            {tagRepository.error.fetchAll ? <p className="text-danger">{tagRepository.error.fetchAll}</p> : null}
             <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
-              <button
-                type="button"
-                className={`btn btn-sm btn-${selected.tagIds === null ? "primary" : "outline-primary"}`}
-                onClick={() => tagSelect(null)}
-              >
-                Tous
-              </button>
               <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
-                <LazyTagsBlock tags={tags.data} tagIds={selected.tagIds ?? undefined} tagSelect={tagSelect} />
+                <LazyTagsBlock 
+                  tags={tags.data} 
+                  tagIds={selected.tagIds ?? undefined} 
+                />
               </Suspense>
             </div>
           </div>

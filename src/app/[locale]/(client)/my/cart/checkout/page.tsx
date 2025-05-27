@@ -61,7 +61,7 @@ const Page:React.FC = () => {
       cart: cart,
     });
     createHistory(commandId, events || []);
-    modal.open(<LoaderComponent counter={1500} callback={() => {
+    modal.open(<LoaderComponent counter={2000} callback={() => {
       toast.success('Commande effectuée avec succès');
       setLoading(false)
       clearCart();

@@ -8,33 +8,40 @@ interface LoaderComponentProps {
 
 const LoaderComponent: React.FC<LoaderComponentProps> = ({ counter = 2000, callback }) => {
   const [time, setTime] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const step = counter / 100;
     const interval = setInterval(() => {
-      setTime((prev) => {
-        if (prev >= 100) {
+      setTime((prevTime) => {
+        if (prevTime >= 100) {
           clearInterval(interval);
-          callback(); // ✅ Appelé ici à la fin
+          setDone(true); // ✅ Séparer le moment de l'appel
           return 100;
         }
-        return prev + 1;
+        return prevTime + 1;
       });
-    }, step);
+    }, counter / 100);
 
-    return () => clearInterval(interval); // Nettoyage classique
-  }, [callback, counter]);
+    return () => clearInterval(interval);
+  }, [counter]);
+
+  useEffect(() => {
+    if (done) {
+      callback(); // ✅ Appelé une fois que le rendu est fini
+    }
+  }, [done, callback]);
+
 
   return (
-    <div className="progress">
+    <div className="progress" style={{ height: '8px' }}>
       <div 
-        className="progress-bar bg-primary progress-bar-striped progress-bar-animated" 
+        className="progress-bar bg-primary" 
         role="progressbar" 
         aria-valuenow={time} 
         aria-valuemin={0} 
         aria-valuemax={100} 
         style={{width: `${time}%`}}
-      ></div>
+      />
     </div>
   );
 };

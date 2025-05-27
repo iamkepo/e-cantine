@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { listStep } from "@/core/constants";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
 
 const CartLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
   const { subtotal } = useCartStore();
@@ -15,14 +16,7 @@ const CartLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   useEffect(() => {
   }, [subtotal, router, route]);
-  
-  const handleValidateCart = (path: string) => {
-    if (!isAuthenticated) {
-      router.push('/' + lang + '/login');
-    } else {
-      router.push('/' + lang + '/' + path);
-    }
-  };
+
   return (
     <div className="col-12">
       <div className="steps-horizontal mx-auto">
@@ -31,9 +25,9 @@ const CartLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             key={item.id}
             className={`step-horizontal ${route.includes(item.path)  ? 'active' : ''}`} // Pass list to updateSteps
           >
-            <button type="button" className={`step-icon`} onClick={() => handleValidateCart(item.path)}>
+            <Link href={'/'+lang+'/'+ isAuthenticated ? item.path : 'login'} className={`step-icon`}>
               <i className={`bi bi-${item.icon}`}></i>
-            </button>
+            </Link>
             <div className={`${route.includes(item.path) ? 'text-primary' : 'step-description'}`}>
               {item.label}
             </div>

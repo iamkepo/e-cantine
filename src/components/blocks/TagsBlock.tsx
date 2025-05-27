@@ -1,13 +1,13 @@
+"use client";
 import { ITag } from "@/core/interfaces";
+import { tagSelect } from "@/stores/filterStore";
 
 interface Props {
   tags: ITag[];
   tagIds?: number[];  
-  tagSelect: (id: number) => void;
 }
 
-const TagsBlock: React.FC<Props> = ({ tags, tagIds, tagSelect }) => {
-
+const TagsBlock: React.FC<Props> = ({ tags, tagIds }) => {
   return (
     tags.map((tag, j) => (
       <button
