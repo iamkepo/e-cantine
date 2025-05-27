@@ -10,7 +10,7 @@ export const useDataForm = <T extends (params?: any)=> Promise<any>>(req: T) => 
   // Fonction pour gérer la soumission du formulaire
   const on = async () => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       const res = await req();
       setData(res)
