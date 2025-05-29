@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 import { useEffect } from "react";
 import { generateDates } from "@/helpers/planner";
 import { modal } from "@/stores/appStore";
@@ -19,7 +19,6 @@ import ArticleRepository from "@/repositories/articleRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import { Meta } from "@/core/types";
 import CategoryRepository from "@/repositories/categoryRepository";
-import Link from "next/link";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -84,7 +83,13 @@ const Page: React.FC = () => {
     };
     setEvents(arr);
   }
-
+  const goToNext = (): void => {
+    if (!isAuthenticated) {
+      router.push('/' + lang+ '/login');
+    } else {
+      router.push('/' + lang+ '/my/cart/checkout');
+    }
+  }
   return (
     <div className="row">
       <div className="col-lg-8 mb-3 mb-lg-0">
@@ -152,19 +157,14 @@ const Page: React.FC = () => {
             <hr />
             <div className="d-flex justify-content-between">
               <button type="button" className="btn btn-secondary" onClick={() => router.back()}>Retour</button>
-              {
-                events && events.length > 0 ?
-                <Link
-                  href={'/'+lang+(isAuthenticated ? '/my/cart/checkout' : '/login')}
-                  className="btn btn-primary"
-                >
-                  Suivant
-                </Link>
-                :
-                <button type="button" className="btn btn-primary" disabled>
-                  Suivant
-                </button>
-              }
+              <button 
+                type="button" 
+                className="btn btn-primary" 
+                disabled={events && events.length == 0}
+                onClick={goToNext}
+              >
+                Suivant
+              </button>
             </div>
           </div>
         </div>

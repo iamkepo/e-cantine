@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect, lazy, Suspense } from "react";
 import { clearCart, priceAccomp, useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 import { useAuthStore } from "@/stores/useAuthStore";
 import { meta } from "@/core/constants";
 import { Meta } from "@/core/types";
@@ -12,7 +12,6 @@ import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
-import Link from "next/link";
 
 const LazyCartItemsBlock = lazy(() => import("@/components/blocks/CartItemsBlock"));
 const LazyCategoriesListBlock = lazy(() => import("@/components/blocks/CategoriesListBlock"));
@@ -78,6 +77,13 @@ const Page: React.FC = () => {
     )
   }
 
+  const goToNext = (): void => {
+    if (!isAuthenticated) {
+      router.push('/' + lang+ '/login');
+    } else {
+      router.push('/' + lang+ '/my/cart/planning');
+    }
+  }
   return (
     <div className="row">
       <div className="col-lg-8 mb-3 mb-lg-0">
@@ -134,18 +140,14 @@ const Page: React.FC = () => {
           </p>
           <div className="d-flex justify-content-between">
             <button type="button" className="btn btn-secondary" onClick={() => router.back()}>Retour</button>
-            {cart.length > 0 ?
-              <Link
-                href={'/'+lang+(isAuthenticated ? '/my/cart/planning' : '/login')}
-                className="btn btn-primary"
-              >
-                Suivant
-              </Link>
-              :
-              <button type="button" className="btn btn-primary" disabled>
-                Suivant
-              </button>
-            }
+            <button 
+              type="button" 
+              className="btn btn-primary" 
+              disabled={cart.length == 0}
+              onClick={goToNext}
+            >
+              Suivant
+            </button>
           </div>
         </div>
       </div>

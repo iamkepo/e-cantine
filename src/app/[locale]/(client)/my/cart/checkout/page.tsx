@@ -11,7 +11,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 import Accordion from "@/components/widgets/Accordion";
 import { categoryRender } from "@/helpers/functions";
 import { Cart, Meta } from "@/core/types";
