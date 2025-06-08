@@ -1,76 +1,51 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import notificationsService from "@/services/notificationsService";
-import Repository from "@/repositories/repository";
 import * as yup from 'yup';
 import { NotificationType, StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { INotification, IUser } from "@/core/interfaces";
+import NotificationsService from '@/services/notificationsService';
+import { SetData } from "@/core/types";
 
-export default class NotificationsRepository extends Repository<INotification> {
-  constructor(setNotifications?: ({data, meta}: {data: INotification[], meta: Meta}) => void) {
-    super(setNotifications as unknown as ({data, meta}: {data: INotification[], meta: Meta}) => void);
-  }
-
-  async fetchNotifications(params: ParamsQuery) {
-    return this.fetchAll(() => notificationsService.fetchNotifications(params) as Promise<{data: INotification[], meta: Meta}>);
-  }
-
-  async fetchNotification(id: number) {
-    return this.fetchOne(notificationsService.fetchNotification as (id: number) => Promise<INotification>, id);
-  }
-
-  async createNotification(payload: INotification) {
-    return this.create(notificationsService.createNotification as (payload: INotification) => Promise<INotification>, payload);
-  }
-
-  async patchNotification(id: number, payload: {attr: string, val: any}) {
-    return this.patch(notificationsService.patchNotification as (id: number, payload: {attr: string, val: any}) => Promise<INotification>, id, payload);
-  }
-
-  async updateNotification(id: number, payload: INotification) {
-    return this.update(notificationsService.updateNotification as (id: number, payload: INotification) => Promise<INotification>, id, payload);
-  }
-
-  async deleteNotification(id: number) {
-    return this.delete(notificationsService.deleteNotification as (id: number) => Promise<INotification>, id);
-  }
-
-  async deleteNotifications(ids: number[]) {
-    return this.deleteList(notificationsService.deleteNotifications as (ids: number[]) => Promise<any>, ids);
+export default class NotificationsRepository extends NotificationsService {
+  constructor(setNotification: SetData<INotification>) {
+    super(setNotification);
   }
 
   formCreateNotification(users: IUser[]) {
     return [
-      { id: "title", type: "text", label: "Titre", required: true, colSize: "col-12" },
-      { id: "content", type: "textarea", label: "Contenu", required: true, colSize: "col-12" },
+      { id: "message", type: "text", label: "Message", required: true, colSize: "col-12" },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })) },
+      { id: "type", type: "select", label: "Type", required: true, colSize: "col-12", options: Object.values(NotificationType).map(type => ({ label: type, value: type })) },
+      { id: "seen", type: "checkbox", label: "Vu", required: true, colSize: "col-12" },
     ]
   }
 
   formUpdateNotification(notification: INotification, users: IUser[]) {
     return [
       { id: "message", type: "text", label: "Message", required: true, colSize: "col-12", value: notification.message },
-      { id: "type", type: "select", label: "Type", required: true, colSize: "col-12", options: Object.values(NotificationType).map((type) => ({ label: type, value: type })), value: notification.type },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: notification.userId },
+      { id: "type", type: "select", label: "Type", required: true, colSize: "col-12", options: Object.values(NotificationType).map(type => ({ label: type, value: type })), value: notification.type },
+      { id: "seen", type: "checkbox", label: "Vu", required: true, colSize: "col-12", value: notification.seen },
     ]
   }
 
   formFilterNotification() {
     return [
-      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
-      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "type", type: "select", placeholder: "Type", colSize: "col-12 col-md-2", options: Object.values(NotificationType).map(type => ({ label: type, value: type })) },
+      { id: "seen", type: "select", placeholder: "Vu", colSize: "col-12 col-md-2", options: [{ label: "Oui", value: true }, { label: "Non", value: false }] },
     ]
   }
 
   tableHeadNotification = [
-    {label: 'Titre', key: 'title'},
-    {label: 'Contenu', key: 'content'},
+    {label: 'Message', key: 'message'},
+    {label: 'Type', key: 'type'},
     {label: 'Utilisateur', key: 'userId'},
-    {label: 'Status', key: 'status'}
+    {label: 'Status', key: 'status'},
+    {label: 'Vu', key: 'seen'},
   ]
 
-  filterNotification = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterNotification = { take: 10, search: "", status: "", type: "", seen: null, page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeleteNotification = {
     title: "Supprimer la notification", 
@@ -84,18 +59,22 @@ export default class NotificationsRepository extends Repository<INotification> {
 
   confirmChangeStatusNotification = {
     title: "Changer le status", 
-    description: "Voulez-vous vraiment changer le status de ce notification ?",
+    description: "Voulez-vous vraiment changer le status de la notification ?",
   }
 
   notificationSchema = yup.object({
     id: yup.number().optional(),
-    title: yup.string().required('Titre est requis'),
-    content: yup.string().required('Contenu est requis'),
+    message: yup.string().required('Message est requis'),
     userId: yup.number().required('Utilisateur est requis'),
+    type: yup.string().required('Type est requis').oneOf(Object.values(NotificationType)),
+    seen: yup.boolean().required('Vu est requis'),
+    status: yup.string().optional(),
   })
 
   notificationFilterSchema = yup.object({
     search: yup.string().optional(),
     status: yup.string().optional(),
+    type: yup.string().optional(),
+    seen: yup.boolean().optional(),
   })
 }

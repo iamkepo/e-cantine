@@ -1,21 +1,28 @@
-import { HttpRequestType } from "@/enums/http-request.enum";
-import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/services/request";
+import { ParamsQuery, SetData } from "@/core/types";
+import Request from "@/configs/request";
+import { IStatistics } from "@/core/interfaces";
 
-const statisticsService = {
-  getStatistics() {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append('/statistics')
-        .method(HttpRequestType.GET)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-};
+class StatisticsService extends Request<IStatistics> {
+  setData: SetData<IStatistics>;
 
-export default statisticsService;
+  constructor(setStatistics: SetData<IStatistics>) {
+    super();
+    this.setData = setStatistics;
+  }
+
+  async fetchStatistics(params?: ParamsQuery) {
+    this.setData('get', 'loading', true);
+    await this.get('/statistics', params || {})
+      .then(data => {
+        this.setData('get', 'data', data as IStatistics);
+      })
+      .catch(error => {
+        this.setData('get', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('get', 'loading', false);
+      });
+  }
+}
+
+export default StatisticsService;

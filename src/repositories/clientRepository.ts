@@ -1,50 +1,43 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import clientsService from "@/services/clientsService";
-import Repository from "@/repositories/repository";
+import ClientsService from "@/services/clientsService";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IClient, IUser } from "@/core/interfaces";
+import { SetData } from "@/core/types";
 
-export default class ClientRepository extends Repository<IClient> {
-  constructor(setClients?: ({data, meta}: {data: IClient[], meta: Meta}) => void) {
-    super(setClients as unknown as ({data, meta}: {data: IClient[], meta: Meta}) => void);
+export default class ClientRepository extends ClientsService {
+  constructor(setClient: SetData<IClient>) {
+    super(setClient);
   }
 
-  async fetchClients(params: ParamsQuery) {
-    return this.fetchAll(() => clientsService.fetchClients(params) as Promise<{data: IClient[], meta: Meta}>);
+  // Table configuration
+  tableHeadClient = [
+    { id: 'name', label: 'Nom' },
+    { id: 'phone', label: 'Téléphone' },
+    { id: 'status', label: 'Status' }
+  ]
+
+  // Filter configuration
+  filterClient = {
+    take: 10,
+    search: "",
+    status: "",
+    page: 1,
+    orderBy: "createdAt",
+    order: "desc"
   }
 
-  async fetchClient(id: number) {
-    return this.fetchOne(clientsService.fetchClient as (id: number) => Promise<IClient>, id);
-  }
-
-  async createClient(payload: IClient) {
-    return this.create(clientsService.createClient as (payload: IClient) => Promise<IClient>, payload);
-  }
-
-  async patchClient(id: number, payload: {attr: string, val: any}) {
-    return this.patch(clientsService.patchClient as (id: number, payload: {attr: string, val: any}) => Promise<IClient>, id, payload);
-  }
-
-  async updateClient(id: number, payload: IClient) {
-    return this.update(clientsService.updateClient as (id: number, payload: IClient) => Promise<IClient>, id, payload);
-  }
-
-  async deleteClient(id: number) {
-    return this.delete(clientsService.deleteClient as (id: number) => Promise<IClient>, id);
-  }
-
-  async deleteClients(ids: number[]) {
-    return this.deleteList(clientsService.deleteClients as (ids: number[]) => Promise<any>, ids);
-  }
-
+  // Form methods
   formCreateClient(users: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })) },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
+        options: users.map((user: IUser) => ({
+          label: user.name,
+          value: user.id
+        }))
+      },
     ]
   }
 
@@ -52,40 +45,29 @@ export default class ClientRepository extends Repository<IClient> {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: client.name },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: client.phone },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: client.userId },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
+        options: users.map((user: IUser) => ({
+          label: user.name,
+          value: user.id
+        })),
+        value: client.userId
+      },
     ]
   }
 
   formFilterClient() {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
-      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3",
+        options: Object.values(StatusActivation).map((status) => ({
+          label: statusRender(status),
+          value: status
+        }))
+      },
     ]
   }
 
-  tableHeadClient = [
-    {label: 'Nom', key: 'name'},
-    {label: 'Téléphone', key: 'phone'},
-    {label: 'Status', key: 'status'}
-  ]
-
-  filterClient = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
-
-  confirmDeleteClient = {
-    title: "Supprimer le client", 
-    description: "Voulez-vous vraiment supprimer le client ?",
-  }
-
-  confirmDeleteClients = {
-    title: "Supprimer les clients", 
-    description: "Voulez-vous vraiment supprimer les clients ?",
-  }
-
-  confirmChangeStatusClient = {
-    title: "Changer le status", 
-    description: "Voulez-vous vraiment changer le status de ce client ?",
-  }
-
+  // Validation schemas
   clientSchema = yup.object({
     id: yup.number().optional(),
     name: yup.string().required('Nom est requis'),
@@ -97,4 +79,20 @@ export default class ClientRepository extends Repository<IClient> {
     search: yup.string().optional(),
     status: yup.string().optional(),
   })
+
+  // Confirmation dialogs
+  confirmDeleteClient = {
+    title: "Supprimer le client",
+    description: "Voulez-vous vraiment supprimer le client ?",
+  }
+
+  confirmDeleteClients = {
+    title: "Supprimer les clients",
+    description: "Voulez-vous vraiment supprimer les clients ?",
+  }
+
+  confirmChangeStatusClient = {
+    title: "Changer le status",
+    description: "Voulez-vous vraiment changer le status de ce client ?",
+  }
 }

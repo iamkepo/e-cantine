@@ -10,17 +10,17 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import TableComponent from "@/components/TableComponent";
-import { meta } from "@/core/constants";
 import { Meta, IField } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
+import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
-  const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(StatusActivation);
-  const tagRepository = useMemo(() => new TagRepository(setTags), []);
+  const tags = useDataFetch<ITag>();
+  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
   const [params, setParams] = useState(tagRepository.filterTag);
-  const { checkList, checkAllList, handleCheckList } = useCheckList(tags.data.map(tag => tag.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList((tags.state.get?.data as {data: ITag[], meta: Meta})?.data.map(tag => tag.id as number));
 
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={tagRepository.tableHeadTag}
-          list={tags.data}
+          list={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ITag) => modal.open(
             <SubmitComponent 
@@ -136,7 +136,7 @@ const Page: React.FC = () => {
         
         <PaginationComponent 
           page={params.page}
-          total={tags.meta.pageCount}
+          total={(tags.state.get?.data as {data: ITag[], meta: Meta})?.meta.pageCount}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

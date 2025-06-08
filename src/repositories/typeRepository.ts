@@ -1,44 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import typesService from "@/services/typesService";
 import * as yup from 'yup';
-import Repository from "@/repositories/repository";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IType } from "@/core/interfaces";
+import TypesService from "@/services/typesService";
+import { SetData } from "@/core/types";
 
-class TypeRepository extends Repository<IType> {
-
-  constructor(setTypes?: ({data, meta}: {data: IType[], meta: Meta}) => void) {
-    super(setTypes as unknown as ({data, meta}: {data: IType[], meta: Meta}) => void);
-  }
-
-  async fetchTypes(params: ParamsQuery) {
-    return this.fetchAll(() => typesService.fetchTypes(params) as Promise<{data: IType[], meta: Meta}>);
-  }
-
-  async fetchType(id: number) {
-    return this.fetchOne(typesService.fetchType as (id: number) => Promise<IType>, id);
-  }
-
-  async createType(payload: IType) {
-    return this.create(typesService.createType as (payload: IType) => Promise<IType>, payload);
+class TypeRepository extends TypesService {
+  constructor(setType: SetData<IType>) {
+    super(setType);
   }
 
   async changeStatusType(id: number, status: string) {
-    return this.patch(typesService.patchType as (id: number, payload: {attr: string, val: any}) => Promise<IType>, id, { attr: 'status', val: status });
-  }
-
-  async updateType(id: number, payload: IType) {
-    return this.update(typesService.updateType as (id: number, payload: IType) => Promise<IType>, id, payload);
-  }
-
-  async deleteType(id: number) {
-    return this.delete(typesService.deleteType as (id: number) => Promise<IType>, id);
-  }
-
-  async deleteTypes(ids: number[]) {
-    return this.deleteList(typesService.deleteTypes as (ids: number[]) => Promise<IType>, ids);
+    return await this.patchType(id, { attr: "status", val: status });
   }
 
   formCreateType() {
@@ -84,7 +57,8 @@ class TypeRepository extends Repository<IType> {
 
   typeSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom du type est requis'),
+    name: yup.string().required('Nom est requis'),
+    status: yup.string().optional(),
   })
 
   typeFilterSchema = yup.object({

@@ -1,31 +1,43 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { useHandleError } from "./useHandleError";
+import { RequestState, RequestType, Meta } from "@/core/types";
+import { useCallback, useState } from "react";
 
-export const useDataForm = <T extends (params?: any)=> Promise<any>>(req: T) => {
-  const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const {error, setError, handleError} = useHandleError();
 
-  // Fonction pour gérer la soumission du formulaire
-  const on = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await req();
-      setData(res)
-    } catch (err: any) {
-      handleError(err)
-    } finally {
-      setLoading(false);
-    }
-  };
+
+const useDataFetch = <T>() => {
+  const [state, setState] = useState<Record<RequestType, RequestState<T>>>({
+    get: { data: null, loading: false, error: null },
+    getById: { data: null, loading: false, error: null },
+    post: { data: null, loading: false, error: null },
+    put: { data: null, loading: false, error: null },
+    patch: { data: null, loading: false, error: null },
+    delete: { data: null, loading: false, error: null },
+    deleteMany: { data: null, loading: false, error: null }
+  });
+
+  const handleData = useCallback((
+    rep: RequestType,
+    key: keyof RequestState<T>,
+    data: T | T[] | { data: T[], meta: Meta } | boolean | string | null
+  ): void => {
+    setState(prevState => {
+      // Compare with previous state to prevent unnecessary updates
+      if (prevState[rep]?.[key] === data) {
+        return prevState;
+      }
+      return {
+        ...prevState,
+        [rep]: {
+          ...prevState[rep],
+          [key]: data
+        }
+      };
+    });
+  }, []); // No dependencies needed as we're using the setState updater function
 
   return { 
-    data, 
-    setData,
-    on, 
-    loading, 
-    error, 
+    state,
+    handleData
   };
 };
+
+export default useDataFetch;

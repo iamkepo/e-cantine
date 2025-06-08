@@ -1,13 +1,18 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/services/request";
+import AxiosCustom from "@/configs/AxiosCustom";
 
-const base = '/api/v1/';
-const authService = {
+class AuthService {
+  constructor() {
+    // Initialization if needed
+  }
+  
+  logout() {}
+
   login(credentials: object) {
     return new Promise((resolve, reject) => {
-      new Request()
-        .append(base+'auth/login')
+      new AxiosCustom()
+        .append('/auth/login')
         .setData(credentials)
         .method(HttpRequestType.POST)
         .then(async (response: AxiosResponse) => {
@@ -17,12 +22,12 @@ const authService = {
           reject(error);
         });
     });
-  },
+  }
 
   register(data: object) {
     return new Promise((resolve, reject) => {
-      new Request()
-        .append(base+'auth/register')
+      new AxiosCustom()
+        .append('/auth/register')
         .method(HttpRequestType.POST)
         .setData(data)
         .then(async (response: AxiosResponse) => {
@@ -32,12 +37,12 @@ const authService = {
           reject(error);
         });
     });
-  },
+  }
 
   fetchCurrentUser() {
     return new Promise((resolve, reject) => {
-      new Request()
-        .append(base+'auth/me')
+      new AxiosCustom()
+        .append('/auth/me')
         .method(HttpRequestType.GET)
         .then(async (response: AxiosResponse) => {
           resolve(response.data);
@@ -49,4 +54,4 @@ const authService = {
   }
 };
 
-export default authService;
+export default AuthService;

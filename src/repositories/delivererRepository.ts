@@ -1,43 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import deliverersService from "@/services/deliverersService";
-import Repository from "@/repositories/repository";
+import DeliverersService from "@/services/deliverersService";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IDeliverer, IUser } from "@/core/interfaces";
+import { SetData } from "@/core/types";
 
-export default class DelivererRepository extends Repository<IDeliverer> {
-  constructor(setDeliverers?: ({data, meta}: {data: IDeliverer[], meta: Meta}) => void) {
-    super(setDeliverers as unknown as ({data, meta}: {data: IDeliverer[], meta: Meta}) => void);
-  }
-
-  async fetchDeliverers(params: ParamsQuery) {
-    return this.fetchAll(() => deliverersService.fetchDeliverers(params) as Promise<{data: IDeliverer[], meta: Meta}>);
-  }
-
-  async fetchDeliverer(id: number) {
-    return this.fetchOne(deliverersService.fetchDeliverer as (id: number) => Promise<IDeliverer>, id);
-  }
-
-  async createDeliverer(payload: IDeliverer) {
-    return this.create(deliverersService.createDeliverer as (payload: IDeliverer) => Promise<IDeliverer>, payload);
-  }
-
-  async patchDeliverer(id: number, payload: {attr: string, val: any}) {
-    return this.patch(deliverersService.patchDeliverer as (id: number, payload: {attr: string, val: any}) => Promise<IDeliverer>, id, payload);
-  }
-
-  async updateDeliverer(id: number, payload: IDeliverer) {
-    return this.update(deliverersService.updateDeliverer as (id: number, payload: IDeliverer) => Promise<IDeliverer>, id, payload);
-  }
-
-  async deleteDeliverer(id: number) {
-    return this.delete(deliverersService.deleteDeliverer as (id: number) => Promise<IDeliverer>, id);
-  }
-
-  async deleteDeliverers(ids: number[]) {
-    return this.deleteList(deliverersService.deleteDeliverers as (ids: number[]) => Promise<any>, ids);
+export default class DelivererRepository extends DeliverersService {
+  constructor(setDeliverer: SetData<IDeliverer>) {
+    super(setDeliverer);
   }
 
   formCreateDeliverer(users: IUser[]) {

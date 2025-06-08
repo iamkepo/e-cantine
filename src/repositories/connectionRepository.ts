@@ -1,44 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import connectionsService from "@/services/connectionsService";
+import ConnectionsService from "@/services/connectionsService";
 import * as yup from 'yup';
-import Repository from "@/repositories/repository";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IArticle, IConnection, ITag } from "@/core/interfaces";
+import { SetData } from "@/core/types";
 
-class ConnectionRepository extends Repository<IConnection> {
-
-  constructor(setConnections?: ({data, meta}: {data: IConnection[], meta: Meta}) => void) {     
-    super(setConnections as unknown as ({data, meta}: {data: IConnection[], meta: Meta}) => void);
-  }
-
-  async fetchConnections(params: ParamsQuery) {
-    return this.fetchAll(() => connectionsService.fetchConnections(params) as Promise<{data: IConnection[], meta: Meta}>);
-  }
-
-  async fetchConnection(id: number) {
-    return this.fetchOne(connectionsService.fetchConnection as (id: number) => Promise<IConnection>, id);
-  }
-
-  async createConnection(payload: IConnection) {
-    return this.create(connectionsService.createConnection as (payload: IConnection) => Promise<IConnection>, payload);
-  }
-
-  async changeStatusConnection(id: number, status: string) {
-    return this.patch(connectionsService.patchConnection as (id: number, payload: {attr: string, val: any}) => Promise<IConnection>, id, { attr: 'status', val: status });
-  }
-
-  async updateConnection(id: number, payload: IConnection) {
-    return this.update(connectionsService.updateConnection as (id: number, payload: IConnection) => Promise<IConnection>, id, payload);
-  }
-
-  async deleteConnection(id: number) {
-    return this.delete(connectionsService.deleteConnection as (id: number) => Promise<IConnection>, id);
-  }
-
-  async deleteConnections(ids: number[]) {
-    return this.deleteList(connectionsService.deleteConnections as (ids: number[]) => Promise<IConnection>, ids);
+class ConnectionRepository extends ConnectionsService {
+  constructor(setConnection: SetData<IConnection>) {
+    super(setConnection);
   }
 
   formCreateConnection(articles: IArticle[], tags: ITag[]) {

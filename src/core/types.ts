@@ -75,8 +75,21 @@ export interface Meta {
   pageCount: number;
   limit: number;
 }
+export type RequestType = "get" | "getById" | "post" | "put" | "patch" | "delete" | "deleteMany";
+
+export type RequestState<T> = {
+  data: T | T[] | { data: T[], meta: Meta } | boolean | string | null;
+  loading: boolean;
+  error: string | null;
+};
+export type SetData<T> = (
+  rep: RequestType,
+  key: keyof RequestState<T>,
+  data: T | T[] | { data: T[], meta: Meta } | boolean | string | null
+) => void;
+
 export interface IField {
-  type: 'section' | 'text' | 'email' | 'tel' | 'number'| 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search'  | 'datetime' | 'hidden';
+  type: 'section' | 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search' | 'datetime' | 'hidden';
   id: string;
   label?: string;
   placeholder?: string;  

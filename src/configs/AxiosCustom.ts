@@ -6,7 +6,7 @@ import { HttpRequestContentType, HttpRequestType } from '../enums';
 import authLocal from "../helpers/authLocal";
 
 export const client = axios.create();
-class Request {   
+class AxiosCustom {   
   public config: any;
 
   constructor() {
@@ -167,4 +167,4 @@ class Request {
   }
 }
 
-export default Request;
+export default AxiosCustom;

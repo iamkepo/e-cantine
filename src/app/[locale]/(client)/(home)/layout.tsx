@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo, Suspense, lazy } from 'react';
+import React, { useEffect, useMemo, Suspense, lazy } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
@@ -8,8 +8,8 @@ import { ICategory, ITag } from '@/core/interfaces';
 import { Meta } from '@/core/types';
 import TagRepository from '@/repositories/tagRepository';
 import CategoryRepository from '@/repositories/categoryRepository';
-import { meta } from '@/core/constants';
 import BlockSkeleton from '@/components/widgets/BlockSkeleton';
+import useDataFetch from '@/hooks/useDataForm';
 
 const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 const LazyCategoriesNavBlock = lazy(() => import("@/components/blocks/CategoriesNavBlock"));
@@ -19,10 +19,10 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { selected } = useFilterStore();
   const params = useParams();
   const route = usePathname();
-  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
-  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
-  const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
-  const tagRepository = useMemo(() => new TagRepository(setTags), []);
+  const categories = useDataFetch<ICategory>(); 
+  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
+  const tags = useDataFetch<ITag>();
+  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
 
   useEffect(() => {
     categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
@@ -41,7 +41,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <Suspense fallback={<BlockSkeleton count={5} className="nav-item" />}>
                 <LazyCategoriesNavBlock 
-                  categories={categories.data.filter(el => el.id != null && el.id != 5)} 
+                  categories={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.filter(el => el.id != null && el.id != 5)} 
                   id={params.id ? parseInt(params.id as string) : undefined} 
                 />
               </Suspense>
@@ -65,7 +65,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
               <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
                 <LazyTagsBlock 
-                  tags={tags.data} 
+                  tags={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data.filter(el => el.id != null)} 
                   onSelect={tagSelect}
                   tagIds={selected.tagIds ?? undefined} 
                 />

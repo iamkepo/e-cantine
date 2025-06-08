@@ -1,44 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import tagsService from "@/services/tagsService";
 import * as yup from 'yup';
-import Repository from "@/repositories/repository";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { ITag } from "@/core/interfaces";
+import TagsService from "@/services/tagsService";
+import { SetData } from "@/core/types";
 
-class TagRepository extends Repository<ITag> {
-
-  constructor(setTags?: ({data, meta}: {data: ITag[], meta: Meta}) => void) {
-    super(setTags as unknown as ({data, meta}: {data: ITag[], meta: Meta}) => void);
-  }
-
-  async fetchTags(params: ParamsQuery) {
-    return this.fetchAll(() => tagsService.fetchTags(params) as Promise<{data: ITag[], meta: Meta}>);
-  }
-
-  async fetchTag(id: number) {
-    return this.fetchOne(tagsService.fetchTag as (id: number) => Promise<ITag>, id);
-  }
-
-  async createTag(payload: ITag) {
-    return this.create(tagsService.createTag as (payload: ITag) => Promise<ITag>, payload);
+class TagRepository extends TagsService {
+  constructor(setTag: SetData<ITag>) {
+    super(setTag);
   }
 
   async changeStatusTag(id: number, status: string) {
-    return this.patch(tagsService.patchTag as (id: number, payload: {attr: string, val: any}) => Promise<ITag>, id, { attr: 'status', val: status });
-  }
-
-  async updateTag(id: number, payload: ITag) {
-    return this.update(tagsService.updateTag as (id: number, payload: ITag) => Promise<ITag>, id, payload);
-  }
-
-  async deleteTag(id: number) {
-    return this.delete(tagsService.deleteTag as (id: number) => Promise<ITag>, id);
-  }
-
-  async deleteTags(ids: number[]) {
-    return this.deleteList(tagsService.deleteTags as (ids: number[]) => Promise<ITag>, ids);
+    return await this.patchTag(id, { attr: "status", val: status });
   }
 
   formCreateTag() {
@@ -84,7 +57,8 @@ class TagRepository extends Repository<ITag> {
 
   tagSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom du tag est requis'),
+    name: yup.string().required('Nom est requis'),
+    status: yup.string().optional(),
   })
 
   tagFilterSchema = yup.object({

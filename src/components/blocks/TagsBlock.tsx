@@ -2,14 +2,14 @@
 import { ITag } from "@/core/interfaces";
 
 interface Props {
-  tags: ITag[];
+  tags: ITag[] | null;
   tagIds?: number[];  
   onSelect: (id: number | null) => void;
 }
 
 const TagsBlock: React.FC<Props> = ({ tags, tagIds, onSelect }) => {
   return (
-    tags.map((tag, j) => (
+    tags?.map((tag, j) => (
       <button
         key={j}
         type="button"

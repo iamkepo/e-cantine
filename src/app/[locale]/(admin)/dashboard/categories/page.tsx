@@ -13,15 +13,15 @@ import { useCheckList } from "@/hooks/useCheckList";
 import { Meta, IField } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
-import { meta } from "@/core/constants";
+import useDataFetch from "@/hooks/useDataForm";
 
 
 const Page: React.FC = () => {
-  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(StatusActivation);
-  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+  const categories = useDataFetch<ICategory>(); 
+  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
   const [params, setParams] = useState(categoryRepository.filterCategory);
-  const { checkList, checkAllList, handleCheckList } = useCheckList(categories.data.map(category => category.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList((categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.map(category => category.id as number));
 
   useEffect(() => {
     categoryRepository.fetchCategories(params);
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={categoryRepository.tableHeadCategory}
-          list={categories.data}
+          list={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ICategory) => modal.open(
             <SubmitComponent 
@@ -136,7 +136,7 @@ const Page: React.FC = () => {
         
         <PaginationComponent
           page={params.page}
-          total={categories.meta.pageCount}
+          total={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.meta.pageCount}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

@@ -225,3 +225,8 @@ export interface IDelivery {
   commandId: number;
   delivererId?: number;
 }
+
+export interface IStatistics {
+  label: string;
+  value: number;
+}

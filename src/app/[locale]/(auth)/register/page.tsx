@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from "next/navigation";
-import authService from '@/services/authService';
+import AuthService from '@/services/authService';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const Page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    authService.register(form)
+    new AuthService().register(form)
       .then((response) => {
         console.log(response);
         router.push('/' + lang + '/login');

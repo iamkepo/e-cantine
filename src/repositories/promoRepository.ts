@@ -1,100 +1,78 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import promosService from "@/services/promosService";
-import Repository from "@/repositories/repository";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IPromo } from "@/core/interfaces";
+import PromosService from '@/services/promosService';
+import { SetData } from "@/core/types";
 
-export default class PromosRepository extends Repository<IPromo> {
-  constructor(setPromos?: ({data, meta}: {data: IPromo[], meta: Meta}) => void) {
-    super(setPromos as unknown as ({data, meta}: {data: IPromo[], meta: Meta}) => void);
-  }
-
-  async fetchPromos(params: ParamsQuery) {
-    return this.fetchAll(() => promosService.fetchPromos(params) as Promise<{data: IPromo[], meta: Meta}>);
-  }
-
-  async fetchPromo(id: number) {
-    return this.fetchOne(promosService.fetchPromo as (id: number) => Promise<IPromo>, id);
-  }
-
-  async createPromo(payload: IPromo) {
-    return this.create(promosService.createPromo as (payload: IPromo) => Promise<IPromo>, payload);
-  }
-
-  async patchPromo(id: number, payload: {attr: string, val: any}) {
-    return this.patch(promosService.patchPromo as (id: number, payload: {attr: string, val: any}) => Promise<IPromo>, id, payload);
-  }
-
-  async updatePromo(id: number, payload: IPromo) {
-    return this.update(promosService.updatePromo as (id: number, payload: IPromo) => Promise<IPromo>, id, payload);
-  }
-
-  async deletePromo(id: number) {
-    return this.delete(promosService.deletePromo as (id: number) => Promise<IPromo>, id);
-  }
-
-  async deletePromos(ids: number[]) {
-    return this.deleteList(promosService.deletePromos as (ids: number[]) => Promise<any>, ids);
+export default class PromoRepository extends PromosService {
+  constructor(setPromo: SetData<IPromo>) {
+    super(setPromo);
   }
 
   formCreatePromo() {
     return [
-      { id: "code", type: "text", label: "Code", required: true, colSize: "col-12" },
-      { id: "discount", type: "number", label: "Discount", required: true, colSize: "col-12" },
-      { id: "maxUsage", type: "number", label: "Max Usage", required: true, colSize: "col-12" },
-      { id: "startDate", type: "date", label: "Start Date", required: true, colSize: "col-12" },
-      { id: "endDate", type: "date", label: "End Date", required: true, colSize: "col-12" },
+      { id: "code", type: "text", label: "Code", required: true, colSize: "col-12 col-md-2" },
+      { id: "discount", type: "number", label: "Réduction", required: true, colSize: "col-12 col-md-2" },
+      { id: "maxUsage", type: "number", label: "Utilisation max", required: true, colSize: "col-12 col-md-2" },
+      { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12 col-md-3" },
+      { id: "endDate", type: "date", label: "Date de fin", required: true, colSize: "col-12 col-md-3" },
     ]
   }
 
   formUpdatePromo(promo: IPromo) {
     return [
-      { id: "code", type: "text", label: "Code", required: true, colSize: "col-12", value: promo.code },
-      { id: "discount", type: "number", label: "Discount", required: true, colSize: "col-12", value: promo.discount },
-      { id: "maxUsage", type: "number", label: "Max Usage", required: true, colSize: "col-12", value: promo.maxUsage },
-      { id: "startDate", type: "date", label: "Start Date", required: true, colSize: "col-12", value: promo.startDate },
-      { id: "endDate", type: "date", label: "End Date", required: true, colSize: "col-12", value: promo.endDate },
+      { id: "code", type: "text", label: "Code", required: true, colSize: "col-12 col-md-2", value: promo.code },
+      { id: "discount", type: "number", label: "Réduction", required: true, colSize: "col-12 col-md-2", value: promo.discount },
+      { id: "maxUsage", type: "number", label: "Utilisation max", required: true, colSize: "col-12 col-md-2", value: promo.maxUsage },
+      { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12 col-md-3", value: promo.startDate },
+      { id: "endDate", type: "date", label: "Date de fin", required: true, colSize: "col-12 col-md-3", value: promo.endDate },
     ]
   }
 
   formFilterPromo() {
     return [
-      { id: "search", type: "text", label: "Rechercher", colSize: "col-12 col-md-9" },
-      { id: "status", type: "select", label: "Status", colSize: "col-12 col-md-3", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
+      { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-9" },
+      { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-3", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }
 
   tableHeadPromo = [
     {label: 'Code', key: 'code'},
-    {label: 'Discount', key: 'discount'},
-    {label: 'Max Usage', key: 'maxUsage'},
-    {label: 'Start Date', key: 'startDate'},
-    {label: 'End Date', key: 'endDate'},
-    {label: 'Status', key: 'status'},
+    {label: 'Réduction', key: 'discount'},
+    {label: 'Utilisation max', key: 'maxUsage'},
+    {label: 'Utilisation courante', key: 'countUsage'},
+    {label: 'Date de début', key: 'startDate'},
+    {label: 'Date de fin', key: 'endDate'},
+    {label: 'Status', key: 'status'}
   ]
 
-  filterPromo = { take: 10, status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterPromo = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
 
   confirmDeletePromo = {
-    title: "Supprimer la promo",
+    title: "Supprimer la promo", 
     description: "Voulez-vous vraiment supprimer la promo ?",
   }
 
   confirmDeletePromos = {
-    title: "Supprimer les promos",
+    title: "Supprimer les promos", 
     description: "Voulez-vous vraiment supprimer les promos ?",
+  }
+
+  confirmChangeStatusPromo = {
+    title: "Changer le status", 
+    description: "Voulez-vous vraiment changer le status de la promo ?",
   }
 
   promoSchema = yup.object({
     id: yup.number().optional(),
     code: yup.string().required('Code est requis'),
-    discount: yup.number().required('Discount est requis'),
-    maxUsage: yup.number().required('Max Usage est requis'),
-    startDate: yup.date().required('Start Date est requis'),
-    endDate: yup.date().required('End Date est requis'),
+    discount: yup.number().required('Réduction est requise').min(0, 'Réduction doit être positive').max(100, 'Réduction ne peut pas dépasser 100%'),
+    maxUsage: yup.number().required('Utilisation max est requise').min(1, 'Utilisation max doit être au moins 1'),
+    startDate: yup.date().required('Date de début est requise'),
+    endDate: yup.date().required('Date de fin est requise').min(yup.ref('startDate'), 'Date de fin doit être après la date de début'),
+    countUsage: yup.number().optional(),
+    status: yup.string().optional(),
   })
 
   promoFilterSchema = yup.object({

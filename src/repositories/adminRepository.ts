@@ -1,43 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Meta, ParamsQuery } from "@/core/types";
-import adminsService from "@/services/adminsService";
-import Repository from "@/repositories/repository";
+import AdminsService from "@/services/adminsService";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IAdmin, IUser } from "@/core/interfaces";
+import { SetData } from "@/core/types";
 
-export default class AdminRepository extends Repository<IAdmin> {
-  constructor(setAdmins?: ({data, meta}: {data: IAdmin[], meta: Meta}) => void) {
-    super(setAdmins as unknown as ({data, meta}: {data: IAdmin[], meta: Meta}) => void);
-  }
-
-  async fetchAdmins(params: ParamsQuery) {
-    return this.fetchAll(() => adminsService.fetchAdmins(params) as Promise<{data: IAdmin[], meta: Meta}>);
-  }
-
-  async fetchAdmin(id: number) {
-    return this.fetchOne(adminsService.fetchAdmin as (id: number) => Promise<IAdmin>, id);
-  }
-
-  async createAdmin(payload: IAdmin) {
-    return this.create(adminsService.createAdmin as (payload: IAdmin) => Promise<IAdmin>, payload);
-  }
-
-  async patchAdmin(id: number, payload: {attr: string, val: any}) {
-    return this.patch(adminsService.patchAdmin as (id: number, payload: {attr: string, val: any}) => Promise<IAdmin>, id, payload);
-  }
-
-  async updateAdmin(id: number, payload: IAdmin) {
-    return this.update(adminsService.updateAdmin as (id: number, payload: IAdmin) => Promise<IAdmin>, id, payload);
-  }
-
-  async deleteAdmin(id: number) {
-    return this.delete(adminsService.deleteAdmin as (id: number) => Promise<IAdmin>, id);
-  }
-
-  async deleteAdmins(ids: number[]) {
-    return this.deleteList(adminsService.deleteAdmins as (ids: number[]) => Promise<any>, ids);
+export default class AdminRepository extends AdminsService {
+  constructor(setAdmin: SetData<IAdmin>) {
+    super(setAdmin);
   }
 
   formCreateAdmin(users: IUser[]) {

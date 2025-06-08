@@ -2,9 +2,9 @@
 import React, { useMemo } from "react";
 import AddPersonModal from "@/components/AddPersonModal";
 import LoaderComponent from "@/components/LoaderComponent";
-import { meta, methods, SHIPPING_RATE, TAX } from "@/core/constants";
+import { methods, SHIPPING_RATE, TAX } from "@/core/constants";
 import { modal, toast } from "@/stores/appStore";
-import { clearCart, priceAccomp, removePerson, setPerson, setSubtotal } from "@/stores/cartStore";
+import { clearCart, removePerson, setPerson, setSubtotal } from "@/stores/cartStore";
 import { createCommand, createHistory } from "@/stores/historyStore";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -13,10 +13,10 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from 'nextjs-toploader/app';
 import Accordion from "@/components/widgets/Accordion";
-import { categoryRender } from "@/helpers/functions";
-import { Cart, Meta } from "@/core/types";
+import { Meta } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
 import ArticleRepository from "@/repositories/articleRepository";
+import useDataFetch from "@/hooks/useDataForm";
 
 const Page:React.FC = () => {
   const { theme } = useThemeStore();
@@ -25,9 +25,8 @@ const Page:React.FC = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
-  const [articlesAccompagnement, setArticlesAccompagnement] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
-  const articleRepository = useMemo(() => new ArticleRepository(), []);
+  const articles = useDataFetch<IArticle>(); 
+  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
 
   const [form, setForm] = useState({
     paymentMethod: '',
@@ -37,10 +36,7 @@ const Page:React.FC = () => {
   });
   
   useEffect(() => {
-    articleRepository.fetchArticles({take: 100})
-    .then(data => setArticlesPrincipal(data || {data: [], meta: meta}));
-    articleRepository.fetchArticles({take: 100, categoryId: 5})
-    .then(data => setArticlesAccompagnement(data || {data: [], meta: meta}));
+    articleRepository.fetchArticles({take: 100});
   }, [articleRepository]);
 
   const handlePay = (e: React.FormEvent) => {
@@ -78,8 +74,8 @@ const Page:React.FC = () => {
   }, [user?.email, persons]);
 
   useEffect(() => {
-    setSubtotal(articlesPrincipal.data, articlesAccompagnement.data);
-  }, [cart, articlesPrincipal.data, articlesAccompagnement.data]);
+    setSubtotal((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5), (articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId == 5));
+  }, [cart, articles.state.get?.data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -98,32 +94,6 @@ const Page:React.FC = () => {
             <span>Nombre de livrasons</span>
             <span>{events?.length || 0}</span>
           </div>
-          <Accordion 
-            title={"Plats sélectionnés" + ` (${cart.length || 0})`}
-            content={
-              <ul className="list-group mb-3">
-                {cart.map((item, idx) => (
-                  <li key={idx} className={`list-group-item d-flex justify-content-between align-items-center text-bg-${theme}`}>
-                    <span className="text-truncate text-wrap">
-                      {categoryRender(articlesPrincipal.data.find(a => a.id === item.id)?.categoryId || 0)} 
-                    </span>
-                    <span>
-                      {item.count} x 
-                      {(articlesPrincipal.data.find(a => a.id === item.id)?.price || 0).toFixed(2)+' XOF'}
-                      {priceAccomp(articlesAccompagnement.data, item as Cart) > 0 ? 
-                      ('+ '+ (priceAccomp(articlesAccompagnement.data, item as Cart) || 0).toFixed(2) + ' XOF')
-                       : ''}
-                       =
-                      {item ?
-                        (((articlesPrincipal.data.find(a => a.id === item.id)?.price || 0) 
-                        + (priceAccomp(articlesAccompagnement.data, item as Cart) || 0)) * item.count).toFixed(2)
-                      : 0} XOF
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            }
-          />
           <Accordion 
             title={"Participants" + (persons && persons.length > 0 ? ` (${persons.length})` : '')}
             content={

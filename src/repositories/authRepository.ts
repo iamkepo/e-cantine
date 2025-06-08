@@ -1,30 +1,16 @@
+import * as yup from "yup";
+import AuthService from "@/services/authService";
 import { IUser } from "@/core/interfaces";
-import authService from "@/services/authService";
-import Repository from "@/repositories/repository";
-import { Meta } from "@/core/types";
 
-class AuthRepository extends Repository<IUser> {
+class AuthRepository extends AuthService {
+  setData: (rep: string, key: string, data: IUser | null | { token: string } | boolean | string) => void;
 
-  constructor(setUsers?: ({data, meta}: {data: IUser[], meta: Meta}) => void) {
-    super(setUsers as unknown as ({data, meta}: {data: IUser[], meta: Meta}) => void);
+  constructor(setAuth: (rep: string, key: string, data: IUser | null | { token: string } | boolean | string) => void) {
+    super();
+    this.setData = setAuth;
   }
 
-  async login(payload: { email: string, password: string }) {
-    return authService.login(payload);
-  }
-
-  async register(payload: { name: string, phone: string, password: string, confirmPassword: string }) {
-    return authService.register(payload);
-  }
-
-  async fetchCurrentUser() {
-    return authService.fetchCurrentUser();
-  }
-
-  async logout() {
-    // return authService.logout();
-  }
-
+  // Form methods
   formLogin() {
     return [
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
@@ -47,12 +33,101 @@ class AuthRepository extends Repository<IUser> {
       { id: "code", type: "text", label: "Code", required: true, colSize: "col-12" },
     ]
   }
+
   formResetPassword() {
     return [
       { id: "oldPassword", type: "password", label: "Ancien mot de passe", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Nouveau mot de passe", required: true, colSize: "col-12" },
       { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
     ]
+  }
+
+  formForgotPassword() {
+    return [
+      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
+    ]
+  }
+
+  formChangePassword() {
+    return [
+      { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
+      { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
+    ]
+  }
+
+  // Validation schemas
+  loginSchema = yup.object({
+    email: yup.string().email('Email invalide').required('Email est requis'),
+    password: yup.string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .required('Mot de passe est requis'),
+  })
+
+  registerSchema = yup.object({
+    name: yup.string().required('Nom est requis'),
+    phone: yup.string().required('Téléphone est requis'),
+    password: yup.string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .required('Mot de passe est requis'),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
+      .required('Confirmer le mot de passe est requis'),
+  })
+
+  codeConfirmSchema = yup.object({
+    phone: yup.string().required('Téléphone est requis'),
+    code: yup.string().required('Code est requis'),
+  })
+
+  resetPasswordSchema = yup.object({
+    oldPassword: yup.string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .required('Ancien mot de passe est requis'),
+    password: yup.string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .required('Nouveau mot de passe est requis'),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
+      .required('Confirmer le mot de passe est requis'),
+  })
+
+  forgotPasswordSchema = yup.object({
+    phone: yup.string().required('Téléphone est requis'),
+  })
+
+  changePasswordSchema = yup.object({
+    password: yup.string()
+      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .required('Mot de passe est requis'),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
+      .required('Confirmer le mot de passe est requis'),
+  })
+
+  // Confirmation dialogs
+  confirmLogout = {
+    title: "Déconnexion",
+    description: "Voulez-vous vraiment vous déconnecter ?",
+  }
+
+  confirmDeleteAccount = {
+    title: "Supprimer le compte",
+    description: "Voulez-vous vraiment supprimer votre compte ?",
+  }
+
+  confirmChangePassword = {
+    title: "Changer le mot de passe",
+    description: "Voulez-vous vraiment changer votre mot de passe ?",
+  }
+
+  confirmResetPassword = {
+    title: "Réinitialiser le mot de passe",
+    description: "Voulez-vous vraiment réinitialiser votre mot de passe ?",
+  }
+
+  confirmForgotPassword = {
+    title: "Mot de passe oublié",
+    description: "Voulez-vous vraiment réinitialiser votre mot de passe ?",
   }
 }
 

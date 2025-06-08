@@ -1,6 +1,6 @@
 "use client";
-import React, { useMemo, useState } from "react";
-import { days, meta } from "@/core/constants";
+import React, { useMemo } from "react";
+import { days } from "@/core/constants";
 import { generatePlanning, removeEvent, setCheckedDays, setDates, setEvents, setItemCount, setStartDate, setWeeks } from "@/stores/cartStore";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
@@ -19,6 +19,7 @@ import ArticleRepository from "@/repositories/articleRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import { Meta } from "@/core/types";
 import CategoryRepository from "@/repositories/categoryRepository";
+import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
@@ -27,10 +28,10 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
-  const [articlesPrincipal, setArticlesPrincipal] = useState<{ data: IArticle[], meta: Meta }>({ data: [], meta});
-  const articleRepository = useMemo(() => new ArticleRepository(setArticlesPrincipal), []);
-  const [categories, setCategories] = useState<{ data: ICategory[], meta: Meta }>({ data: [], meta});
-  const categoryRepository = useMemo(() => new CategoryRepository(setCategories), []);
+  const articles = useDataFetch<IArticle>(); 
+  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
+  const categories = useDataFetch<ICategory>(); 
+  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
   
   useEffect(() => {
     articleRepository.fetchArticles({take: 100,});
@@ -52,9 +53,9 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if(dates && dates.length > 0){
-      setEvents(generatePlanning(dates, articlesPrincipal.data, categories.data));
+      setEvents(generatePlanning(dates, (articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5), (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data));
     }
-  }, [dates, articlesPrincipal.data, categories.data]);
+  }, [dates, articles.state.get?.data, categories.state.get?.data]);
 
   const handleDateClick = (info: DateClickArg) => {
     if (events?.filter(event => event.date === info.dateStr)) {

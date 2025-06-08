@@ -11,16 +11,16 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import TableComponent from "@/components/TableComponent";
-import { meta } from "@/core/constants";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
+import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
-  const [types, setTypes] = useState<{ data: IType[], meta: Meta }>({ data: [], meta});
   const statusOptions = Object.values(StatusActivation);
-  const typeRepository = useMemo(() => new TypeRepository(setTypes), []);
+  const types = useDataFetch<IType>(); 
+  const typeRepository = useMemo(() => new TypeRepository(types.handleData), [types.handleData]);
   const [params, setParams] = useState(typeRepository.filterType);
-  const { checkList, checkAllList, handleCheckList } = useCheckList(types.data.map(type => type.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList((types.state.get?.data as {data: IType[], meta: Meta})?.data.map(type => type.id as number));
 
   useEffect(() => {
     typeRepository.fetchTypes(params);
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={typeRepository.tableHeadType}
-          list={types.data}
+          list={(types.state.get?.data as {data: IType[], meta: Meta})?.data}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: IType) => modal.open(
             <SubmitComponent 
@@ -136,7 +136,7 @@ const Page: React.FC = () => {
 
         <PaginationComponent 
           page={params.page}
-          total={types.meta.pageCount}
+          total={(types.state.get?.data as {data: IType[], meta: Meta})?.meta.pageCount}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

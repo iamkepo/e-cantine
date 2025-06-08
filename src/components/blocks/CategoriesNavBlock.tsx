@@ -5,7 +5,7 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 
 interface Props {
-  categories: ICategory[];
+  categories: ICategory[] | null;
   id?: number;
 }
 
@@ -23,7 +23,7 @@ const CategoriesNavBlock: React.FC<Props> = ({ categories, id }) => {
           Tous les catégories
         </Link>
       </li>
-      {categories.map((category, i) => (
+      {categories?.map((category, i) => (
         <li key={i} className="nav-item">
           <Link
             className={`nav-link text-truncate text-bg-${(category.id == null || id === category.id) ? "primary active" : theme}`} 

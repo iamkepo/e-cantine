@@ -1,23 +1,22 @@
 "use client";
-import React, { useEffect, useState, Suspense, lazy } from "react";
+import React, { useEffect, useMemo, Suspense, lazy } from "react";
 import { useThemeStore } from "@/stores/themeStore";
 import TagRepository from "@/repositories/tagRepository";
-import { useMemo } from "react";
-import { Meta } from "@/core/types";
 import { ITag, IPreference } from "@/core/interfaces";
-import { meta } from "@/core/constants";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
 import PreferencesRepository from "@/repositories/preferenceRepository";
 import { toast } from "@/stores/appStore";
+import useDataFetch from "@/hooks/useDataForm";
+import { Meta } from "@/core/types";
 
 const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const [tags, setTags] = useState<{ data: ITag[], meta: Meta }>({ data: [], meta});
-  const tagRepository = useMemo(() => new TagRepository(setTags), []);
-  const [preferences, setPreferences] = useState<{ data: IPreference[], meta: Meta }>({ data: [], meta});
-  const preferenceRepository = useMemo(() => new PreferencesRepository(setPreferences), []);
+  const tags = useDataFetch<ITag>(); 
+  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
+  const preferences = useDataFetch<IPreference>(); 
+  const preferenceRepository = useMemo(() => new PreferencesRepository(preferences.handleData), [preferences.handleData]);
 
   useEffect(() => {
     tagRepository.fetchTags({take: 100});
@@ -41,8 +40,8 @@ const Page: React.FC = () => {
         <div className="d-flex flex-wrap gap-2">
           <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
             <LazyTagsBlock 
-              tags={tags.data} 
-              tagIds={preferences.data.map(preference => preference.tagId as number)} 
+              tags={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data} 
+              tagIds={(preferences.state.get?.data as {data: IPreference[], meta: Meta})?.data.map(preference => preference.tagId as number)} 
               onSelect={(id) => {
                 preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference)
                 .then(() => preferenceRepository.fetchPreferences({clientId: 1, take: 100}))

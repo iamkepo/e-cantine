@@ -1,112 +1,111 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpRequestType } from "@/enums/http-request.enum";
-import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/services/request";
-import { ParamsQuery } from "@/core/types";
+import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { IClient } from "@/core/interfaces";
+import Request from "@/configs/request";
 
-const clientsService = {
-  createClient(data: object) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append('/client/create')
-        .setData(data)
-        .method(HttpRequestType.POST)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  fetchClients(params: ParamsQuery) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append('/client/list')
-        .params(params)
-        .method(HttpRequestType.GET)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  fetchClient(id: number) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/client/${id}`)
-        .method(HttpRequestType.GET)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  patchClient(id: number, patch: { attr: string, val: any }) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/client/${id}`)
-        .setData({ attr: patch.attr, val: patch.val })
-        .method(HttpRequestType.PATCH)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  updateClient(id: number, data: object) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/client/${id}`)
-        .setData(data)
-        .method(HttpRequestType.PUT)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  deleteClient(id: number) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/client/${id}`)
-        .method(HttpRequestType.DELETE)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  deleteClients(ids: number[]) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/client/list`)
-        .setData({ ids })
-        .method(HttpRequestType.DELETE)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
+class ClientsService extends Request<IClient> {
+  setData: SetData<IClient>;
+  constructor(setClient: SetData<IClient>) {
+    super();
+    this.setData = setClient;
   }
-};
 
-export default clientsService;
+  async createClient(data: IClient) {
+    this.setData('post', 'loading', true);
+    await this.post('/client/create', data)
+      .then(data => {
+        this.setData('post', 'data', data as IClient);
+      })
+      .catch(error => {
+        this.setData('post', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('post', 'loading', false);
+      });
+  }
+
+  async fetchClients(params: ParamsQuery) {
+    this.setData('get', 'loading', true);
+    await this.get('/client/list', params)
+      .then(data => {
+        this.setData('get', 'data', data as { data: IClient[], meta: Meta });
+      })
+      .catch(error => {
+        this.setData('get', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('get', 'loading', false);
+      });
+  }
+
+  async fetchClient(id: number) {
+    this.setData('getById', 'loading', true);
+    await this.getById('/client', id)
+      .then(data => {
+        this.setData('getById', 'data', data as IClient);
+      })
+      .catch(error => {
+        this.setData('getById', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('getById', 'loading', false);
+      });
+  }
+
+  async patchClient(id: number, patch: { attr: string, val: unknown }) {
+    this.setData('patch', 'loading', true);
+    await this.patch('/client', id, patch)
+      .then(data => {
+        this.setData('patch', 'data', data as IClient);
+      })
+      .catch(error => {
+        this.setData('patch', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('patch', 'loading', false);
+      });
+  }
+
+  async updateClient(id: number, data: IClient) {
+    this.setData('put', 'loading', true);
+    await this.put('/client', id, data)
+      .then(data => {
+        this.setData('put', 'data', data as IClient);
+      })
+      .catch(error => {
+        this.setData('put', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('put', 'loading', false);
+      });
+  }
+
+  async deleteClient(id: number) {
+    this.setData('delete', 'loading', true);
+    await this.delete('/client', id)
+      .then(data => {
+        this.setData('delete', 'data', data as IClient);
+      })
+      .catch(error => {
+        this.setData('delete', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('delete', 'loading', false);
+      });
+  }
+
+  async deleteClients(ids: number[]) {
+    this.setData('deleteMany', 'loading', true);
+    await this.deleteMany('/client/list', ids)
+      .then(data => {
+        this.setData('deleteMany', 'data', data as IClient[]);
+      })
+      .catch(error => {
+        this.setData('deleteMany', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('deleteMany', 'loading', false);
+      });
+  }
+}
+
+export default ClientsService;

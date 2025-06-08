@@ -1,112 +1,112 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpRequestType } from "@/enums/http-request.enum";
-import { AxiosError, AxiosResponse } from "axios";
-import Request from "@/services/request";
-import { ParamsQuery } from "@/core/types";
+import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { IDeliverer } from "@/core/interfaces";
+import Request from "@/configs/request";
 
-const deliverersService = {
-  createDeliverer(data: object) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append('/deliverer/create')
-        .setData(data)
-        .method(HttpRequestType.POST)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
+class DeliverersService extends Request<IDeliverer> {
+  setData: SetData<IDeliverer>;
 
-  fetchDeliverers(params: ParamsQuery) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append('/deliverer/list')
-        .params(params)
-        .method(HttpRequestType.GET)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  fetchDeliverer(id: number) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/deliverer/${id}`)
-        .method(HttpRequestType.GET)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  patchDeliverer(id: number, patch: { attr: string, val: any }) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/deliverer/${id}`)
-        .setData({ attr: patch.attr, val: patch.val })
-        .method(HttpRequestType.PATCH)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  updateDeliverer(id: number, data: object) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/deliverer/${id}`)
-        .setData(data)
-        .method(HttpRequestType.PUT)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  deleteDeliverer(id: number) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/deliverer/${id}`)
-        .method(HttpRequestType.DELETE)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
-  },
-
-  deleteDeliverers(ids: number[]) {
-    return new Promise((resolve, reject) => {
-      new Request()
-        .append(`/deliverer/list`)
-        .setData({ ids })
-        .method(HttpRequestType.DELETE)
-        .then(async (response: AxiosResponse) => {
-          resolve(response.data.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error);
-        });
-    });
+  constructor(setDeliverer: SetData<IDeliverer>) {
+    super();
+    this.setData = setDeliverer;
   }
-};
 
-export default deliverersService;
+  async createDeliverer(data: IDeliverer) {
+    this.setData('post', 'loading', true);
+    await this.post('/deliverer/create', data)
+      .then(data => {
+        this.setData('post', 'data', data as IDeliverer);
+      })
+      .catch(error => {
+        this.setData('post', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('post', 'loading', false);
+      });
+  }
+
+  async fetchDeliverers(params: ParamsQuery) {
+    this.setData('get', 'loading', true);
+    await this.get('/deliverer/list', params)
+      .then(data => {
+        this.setData('get', 'data', data as { data: IDeliverer[], meta: Meta });
+      })
+      .catch(error => {
+        this.setData('get', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('get', 'loading', false);
+      });
+  }
+
+  async fetchDeliverer(id: number) {
+    this.setData('getById', 'loading', true);
+    await this.getById('/deliverer', id)
+      .then(data => {
+        this.setData('getById', 'data', data as IDeliverer);
+      })
+      .catch(error => {
+        this.setData('getById', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('getById', 'loading', false);
+      });
+  }
+
+  async patchDeliverer(id: number, patch: { attr: string, val: unknown }) {
+    this.setData('patch', 'loading', true);
+    await this.patch('/deliverer', id, patch)
+      .then(data => {
+        this.setData('patch', 'data', data as IDeliverer);
+      })
+      .catch(error => {
+        this.setData('patch', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('patch', 'loading', false);
+      });
+  }
+
+  async updateDeliverer(id: number, data: IDeliverer) {
+    this.setData('put', 'loading', true);
+    await this.put('/deliverer', id, data)
+      .then(data => {
+        this.setData('put', 'data', data as IDeliverer);
+      })
+      .catch(error => {
+        this.setData('put', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('put', 'loading', false);
+      });
+  }
+
+  async deleteDeliverer(id: number) {
+    this.setData('delete', 'loading', true);
+    await this.delete('/deliverer', id)
+      .then(data => {
+        this.setData('delete', 'data', data as IDeliverer);
+      })
+      .catch(error => {
+        this.setData('delete', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('delete', 'loading', false);
+      });
+  }
+
+  async deleteDeliverers(ids: number[]) {
+    this.setData('deleteMany', 'loading', true);
+    await this.deleteMany('/deliverer/list', ids)
+      .then(data => {
+        this.setData('deleteMany', 'data', data as IDeliverer[]);
+      })
+      .catch(error => {
+        this.setData('deleteMany', 'error', JSON.stringify(error));
+      })
+      .finally(() => {
+        this.setData('deleteMany', 'loading', false);
+      });
+  }
+}
+
+export default DeliverersService;
