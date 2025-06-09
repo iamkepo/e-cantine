@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import RestaurantsService from '@/services/restaurantsService';
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class RestaurantsRepository extends RestaurantsService {
-  constructor(setRestaurant: SetData<IRestaurant>) {
-    super(setRestaurant);
+  constructor(restaurants: {state: Record<RequestType, RequestState<IRestaurant>>, handleData: SetData<IRestaurant>}) {
+    super(restaurants.handleData);
   }
 
   // Table configuration

@@ -26,7 +26,7 @@ const Page:React.FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const articles = useDataFetch<IArticle>(); 
-  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
 
   const [form, setForm] = useState({
     paymentMethod: '',

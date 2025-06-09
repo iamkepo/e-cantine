@@ -20,17 +20,17 @@ const Page: React.FC = () => {
   const { id } = useParams();
   const { selected } = useFilterStore();
   const { cart } = useCartStore();
-  const articles = useDataFetch<IArticle>(); 
-  const repository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
+  const articles = useDataFetch<IArticle>();  
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
 
 
   useEffect(() => {
-    repository.fetchArticles({
+    articleRepository.fetchArticles({
       take: 100,
       search: selected.query,
       categoryId: parseInt(id as string)
     });
-  }, [selected, cart, repository, id]);
+  }, [selected, cart, articleRepository, id]);
 
 
 

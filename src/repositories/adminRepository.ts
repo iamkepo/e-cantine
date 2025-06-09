@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IAdmin, IUser } from "@/core/interfaces";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class AdminRepository extends AdminsService {
-  constructor(setAdmin: SetData<IAdmin>) {
-    super(setAdmin);
+  constructor(admins: {state: Record<RequestType, RequestState<IAdmin>>, handleData: SetData<IAdmin>}) {
+    super(admins.handleData);
   }
 
   formCreateAdmin(users: IUser[]) {

@@ -75,6 +75,21 @@ export interface Meta {
   pageCount: number;
   limit: number;
 }
+
+export interface RepositoryResponse<T> {
+  data: T[];
+  meta: Meta;
+}
+
+export type RepositorySetData<T> = (response: RepositoryResponse<T>) => void;
+
+export interface RepositoryState<T> {
+  data: T[];
+  meta: Meta;
+  loading: boolean;
+  error: any;
+}
+
 export type RequestType = "get" | "getById" | "post" | "put" | "patch" | "delete" | "deleteMany";
 
 export type RequestState<T> = {
@@ -88,7 +103,7 @@ export type SetData<T> = (
   data: T | T[] | { data: T[], meta: Meta } | boolean | string | null
 ) => void;
 
-export interface IField {
+export interface Field {
   type: 'section' | 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search' | 'datetime' | 'hidden';
   id: string;
   label?: string;

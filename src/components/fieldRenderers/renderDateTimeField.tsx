@@ -1,9 +1,9 @@
 "use client";
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
-export const renderDateTimeField = (field: IField, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>, theme: string) => (
+export const renderDateTimeField = (field: Field, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>, theme: string) => (
   <>
     {field.label ? <label htmlFor={field.id} className='form-label'>{field.label}</label> : false}
     <Controller

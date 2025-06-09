@@ -8,7 +8,7 @@ import { IStatistics } from "@/core/interfaces";
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
   const statistics = useDataFetch<IStatistics>(); 
-  const statisticRepository = useMemo(() => new StatisticRepository(statistics.handleData), [statistics.handleData]);
+  const statisticRepository = useMemo(() => new StatisticRepository(statistics), [statistics]);
 
 
   useEffect(() => {

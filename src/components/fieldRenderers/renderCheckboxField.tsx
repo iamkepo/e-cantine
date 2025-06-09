@@ -1,9 +1,9 @@
 "use client";
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
-export const renderCheckboxField = (field: IField, control: unknown, errors: FieldErrors<FieldValues>) => (
+export const renderCheckboxField = (field: Field, control: unknown, errors: FieldErrors<FieldValues>) => (
   <>
     <Controller
       name={field.id}

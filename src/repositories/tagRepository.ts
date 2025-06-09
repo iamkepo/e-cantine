@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { ITag } from "@/core/interfaces";
 import TagsService from "@/services/tagsService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class TagRepository extends TagsService {
-  constructor(setTag: SetData<ITag>) {
-    super(setTag);
+  constructor(tags: {state: Record<RequestType, RequestState<ITag>>, handleData: SetData<ITag>}) {
+    super(tags.handleData);
   }
 
   async changeStatusTag(id: number, status: string) {

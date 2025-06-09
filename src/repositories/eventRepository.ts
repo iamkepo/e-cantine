@@ -4,11 +4,11 @@ import { IDate, IEvent } from "@/core/interfaces";
 import { IArticle } from "@/core/interfaces";
 import { Slot, StatusActivation } from "@/enums";
 import EventsService from "@/services/eventsService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class EventRepository extends EventsService {
-  constructor(setEvent: SetData<IEvent>) {
-    super(setEvent);
+  constructor(events: {state: Record<RequestType, RequestState<IEvent>>, handleData: SetData<IEvent>}) {
+    super(events.handleData);
   }
 
   tableHeadEvent = [

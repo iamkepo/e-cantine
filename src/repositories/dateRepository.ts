@@ -3,11 +3,11 @@ import { IDate, ILocation, ISubscription } from "@/core/interfaces";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DateRepository extends DatesService {
-  constructor(setDate: SetData<IDate>) {
-    super(setDate);
+  constructor(dates: {state: Record<RequestType, RequestState<IDate>>, handleData: SetData<IDate>}) {
+    super(dates.handleData);
   }
 
   // Table configuration

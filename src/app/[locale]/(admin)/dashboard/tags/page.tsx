@@ -10,7 +10,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import TableComponent from "@/components/TableComponent";
-import { Meta, IField } from "@/core/types";
+import { Meta, Field } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import useDataFetch from "@/hooks/useDataForm";
@@ -18,13 +18,16 @@ import useDataFetch from "@/hooks/useDataForm";
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
   const tags = useDataFetch<ITag>();
-  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
+  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
   const [params, setParams] = useState(tagRepository.filterTag);
-  const { checkList, checkAllList, handleCheckList } = useCheckList((tags.state.get?.data as {data: ITag[], meta: Meta})?.data.map(tag => tag.id as number));
-
+  const { checkList, checkAllList, handleCheckList } = useCheckList(
+    (tags.state.get?.data as {data: ITag[], meta: Meta})?.data?.map(tag => tag.id as number) || []
+  );
 
   useEffect(() => {
-    tagRepository.fetchTags(params);
+    if (tagRepository) {
+      tagRepository.fetchTags(params);
+    }
   }, [tagRepository, params]);
 
 
@@ -39,7 +42,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-8">
               <FilterComponent 
-                fields={tagRepository.formFilterTag() as unknown as IField[]}
+                fields={tagRepository.formFilterTag() as unknown as Field[]}
                 schema={tagRepository.tagFilterSchema}
                 onSubmit={(data: {search: string, status: string}) => {
                   setParams({
@@ -69,7 +72,7 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer un tag",
                     btn:"Creer",
-                    fields:tagRepository.formCreateTag() as unknown as IField[],
+                    fields:tagRepository.formCreateTag() as unknown as Field[],
                     schema:tagRepository.tagSchema
                   }}
                   onSubmit={ (data: ITag) => tagRepository.createTag(data)
@@ -97,7 +100,7 @@ const Page: React.FC = () => {
           edit={(e: ITag) => modal.open(
             <SubmitComponent 
               title={"Modifier le tag"} 
-              fields={tagRepository.formUpdateTag(e) as unknown as IField[]} 
+              fields={tagRepository.formUpdateTag(e) as unknown as Field[]} 
               schema={tagRepository.tagSchema} 
               btn="Modifier" 
               onSubmit={(data) => tagRepository.updateTag(e.id as number, data)

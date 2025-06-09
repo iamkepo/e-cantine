@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IClient, IPreference, ITag } from "@/core/interfaces";
 import PreferencesService from "@/services/preferencesService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class PreferencesRepository extends PreferencesService {
-  constructor(setPreference: SetData<IPreference>) {
-    super(setPreference);
+  constructor(preferences: {state: Record<RequestType, RequestState<IPreference>>, handleData: SetData<IPreference>}) {
+    super(preferences.handleData);
   }
 
   // Table configuration

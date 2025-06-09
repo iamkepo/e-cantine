@@ -3,7 +3,7 @@
 import React from 'react';
 import { modal } from '@/stores/appStore';
 import SubmitComponent from './SubmitComponent';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
 interface BtnSubmitComponentProps {
   btn: {
@@ -13,7 +13,7 @@ interface BtnSubmitComponentProps {
   }
   submit: {
     title?: string;
-    fields: (IField | IField[])[];
+    fields: (Field | Field[])[];
     schema?: any;
     btn: string;
   }
@@ -28,7 +28,7 @@ const BtnSubmitComponent: React.FC<BtnSubmitComponentProps> = ({ btn, onSubmit, 
       onClick={() => modal.open(
         <SubmitComponent 
           title={submit.title}
-          fields={submit.fields as unknown as IField[]}
+          fields={submit.fields as unknown as Field[]}
           schema={submit.schema}
           btn={submit.btn}
           onSubmit={onSubmit}

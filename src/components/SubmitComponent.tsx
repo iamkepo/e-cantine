@@ -5,11 +5,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useThemeStore } from "../stores/themeStore";
 import { modal } from "../stores/appStore";
-import { IField } from "@/core/types";
+import { Field } from "@/core/types";
 
 interface SubmitComponentProps {
   title?: string;
-  fields: (IField | IField[])[];
+  fields: (Field | Field[])[];
   schema?: any;
   btn: string;
   onSubmit: (data: any) => void;
@@ -41,7 +41,7 @@ const SubmitComponent: React.FC<SubmitComponentProps> = ({
 
           {title ? <h3 className="text-center mb-3">{title}</h3> : false}
 
-          <FormComponent fields={fields as (IField | IField[])[]} />
+          <FormComponent fields={fields as (Field | Field[])[]} />
 
           <div className="d-flex align-items-center justify-content-between">
             <button className={`btn btn-${theme}`} onClick={modal.close}>Annuler</button>

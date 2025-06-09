@@ -1,13 +1,11 @@
 import * as yup from "yup";
 import AuthService from "@/services/authService";
-import { IUser } from "@/core/interfaces";
+import { IAuth } from "@/core/interfaces";
+import { RequestState, RequestType, SetData } from "@/core";
 
 class AuthRepository extends AuthService {
-  setData: (rep: string, key: string, data: IUser | null | { token: string } | boolean | string) => void;
-
-  constructor(setAuth: (rep: string, key: string, data: IUser | null | { token: string } | boolean | string) => void) {
-    super();
-    this.setData = setAuth;
+  constructor(auth: {state: Record<RequestType, RequestState<IAuth>>, handleData: SetData<IAuth>}) {
+    super(auth.handleData);
   }
 
   // Form methods

@@ -3,11 +3,11 @@ import * as yup from "yup";
 import { statusRender } from "@/helpers/functions";
 import { StatusTransaction } from "@/enums";
 import TransactionsService from "@/services/transactionsService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class TransactionsRepository extends TransactionsService {
-  constructor(setTransaction: SetData<ITransaction>) {
-    super(setTransaction);
+  constructor(transactions: {state: Record<RequestType, RequestState<ITransaction>>, handleData: SetData<ITransaction>}) {
+    super(transactions.handleData);
   }
 
   // Table configuration

@@ -3,11 +3,11 @@ import ArticlesService from "@/services/articlesService";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class ArticleRepository extends ArticlesService {
-  constructor(setArticle: SetData<IArticle>) {
-    super(setArticle);
+  constructor(articles: {state: Record<RequestType, RequestState<IArticle>>, handleData: SetData<IArticle>}) {
+    super(articles.handleData);
   }
 
   async changeStatusArticle(id: number, status: string) {

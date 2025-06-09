@@ -3,11 +3,11 @@ import { ICommand, IEvent, IRestaurant } from "@/core/interfaces";
 import * as yup from 'yup';
 import { statusRender } from "@/helpers/functions";
 import { StatusActivation } from "@/enums";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class CommandRepository extends CommandsService {
-  constructor(setCommand: SetData<ICommand>) {
-    super(setCommand);
+  constructor(commands: {state: Record<RequestType, RequestState<ICommand>>, handleData: SetData<ICommand>}) {
+    super(commands.handleData);
   }
 
   // Table configuration

@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IUser } from "@/core/interfaces";
 import UsersService from "@/services/usersService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class UserRepository extends UsersService {
-  constructor(setUser: SetData<IUser>) {
-    super(setUser);
+  constructor(users: {state: Record<RequestType, RequestState<IUser>>, handleData: SetData<IUser>}) {
+    super(users.handleData);
   }
 
   // Table configuration

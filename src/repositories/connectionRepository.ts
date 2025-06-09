@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IArticle, IConnection, ITag } from "@/core/interfaces";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class ConnectionRepository extends ConnectionsService {
-  constructor(setConnection: SetData<IConnection>) {
-    super(setConnection);
+  constructor(connections: {state: Record<RequestType, RequestState<IConnection>>, handleData: SetData<IConnection>}) {
+    super(connections.handleData);
   }
 
   formCreateConnection(articles: IArticle[], tags: ITag[]) {

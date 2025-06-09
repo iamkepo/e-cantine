@@ -23,10 +23,11 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
   const { cart } = useCartStore();
   const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
-  const articles = useDataFetch<IArticle>(); 
-  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
-  const categories = useDataFetch<ICategory>(); 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
+  const articles = useDataFetch<IArticle>();
+  const categories = useDataFetch<ICategory>();
+  
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
+  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
 
   useEffect(() => {
     articleRepository.fetchArticles({take: 100});

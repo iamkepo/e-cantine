@@ -29,10 +29,10 @@ const Page: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
   const articles = useDataFetch<IArticle>(); 
-  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
   const categories = useDataFetch<ICategory>(); 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
-  
+  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
+
   useEffect(() => {
     articleRepository.fetchArticles({take: 100,});
     categoryRepository.fetchCategories({take: 100});

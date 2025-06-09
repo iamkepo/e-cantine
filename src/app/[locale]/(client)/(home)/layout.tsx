@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useMemo, Suspense, lazy } from 'react';
+import React, { useEffect, useMemo, Suspense, lazy, useState } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
-import { usePathname } from 'next/navigation';
 import { ICategory, ITag } from '@/core/interfaces';
 import { Meta } from '@/core/types';
 import TagRepository from '@/repositories/tagRepository';
@@ -18,19 +17,26 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme } = useThemeStore();
   const { selected } = useFilterStore();
   const params = useParams();
-  const route = usePathname();
-  const categories = useDataFetch<ICategory>(); 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
+  
+  const categories = useDataFetch<ICategory>();
   const tags = useDataFetch<ITag>();
-  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
+
+  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
+  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
+
+  const [isInitialLoad] = useState(true);
 
   useEffect(() => {
-    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
-    tagRepository.fetchTags({take: 100});
-  }, [categoryRepository, tagRepository]);
-
-  useEffect(() => {
-  }, [selected, route, params]);
+    if (isInitialLoad && categoryRepository && tagRepository) {
+      const loadData = async () => {
+        await Promise.all([
+          categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }),
+          tagRepository.fetchTags({take: 100})
+        ]);
+      };
+      loadData();
+    }
+  }, [categoryRepository, tagRepository, isInitialLoad]);
   
 
   return (

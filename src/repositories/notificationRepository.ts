@@ -3,11 +3,11 @@ import { NotificationType, StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { INotification, IUser } from "@/core/interfaces";
 import NotificationsService from '@/services/notificationsService';
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class NotificationsRepository extends NotificationsService {
-  constructor(setNotification: SetData<INotification>) {
-    super(setNotification);
+  constructor(notifications: {state: Record<RequestType, RequestState<INotification>>, handleData: SetData<INotification>}) {
+    super(notifications.handleData);
   }
 
   formCreateNotification(users: IUser[]) {

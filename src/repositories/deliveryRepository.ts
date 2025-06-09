@@ -3,11 +3,11 @@ import { statusRender } from "@/helpers/functions";
 import { IDelivery, ICommand, IDeliverer } from "@/core/interfaces";
 import { StatusActivation } from "@/enums";
 import DeliveriesService from "@/services/deliveriesService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DeliveryRepository extends DeliveriesService {
-  constructor(setDelivery: SetData<IDelivery>) {
-    super(setDelivery);
+  constructor(deliveries: {state: Record<RequestType, RequestState<IDelivery>>, handleData: SetData<IDelivery>}) {
+    super(deliveries.handleData);
   }
 
   // Table configuration

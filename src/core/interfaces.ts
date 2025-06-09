@@ -230,3 +230,9 @@ export interface IStatistics {
   label: string;
   value: number;
 }
+export interface IAuth {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}

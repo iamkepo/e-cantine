@@ -13,10 +13,11 @@ const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const tags = useDataFetch<ITag>(); 
-  const tagRepository = useMemo(() => new TagRepository(tags.handleData), [tags.handleData]);
-  const preferences = useDataFetch<IPreference>(); 
-  const preferenceRepository = useMemo(() => new PreferencesRepository(preferences.handleData), [preferences.handleData]);
+  const tags = useDataFetch<ITag>();
+  const preferences = useDataFetch<IPreference>();
+  
+  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
+  const preferenceRepository = useMemo(() => new PreferencesRepository(preferences), [preferences]);
 
   useEffect(() => {
     tagRepository.fetchTags({take: 100});

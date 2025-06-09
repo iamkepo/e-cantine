@@ -1,9 +1,9 @@
 "use client";
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
-export const renderRadioField = (field: IField, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>) => (
+export const renderRadioField = (field: Field, control: Control<FieldValues> | undefined, errors: FieldErrors<FieldValues>) => (
   <>
     {field.label ? <label className='form-label'>{field.label}</label> : false}
     <div>

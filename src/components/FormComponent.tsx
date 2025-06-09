@@ -11,17 +11,17 @@ import { renderCheckboxField } from './fieldRenderers/renderCheckboxField';
 import { renderRadioField } from './fieldRenderers/renderRadioField';
 import { renderFileField } from './fieldRenderers/renderFileField';
 import { renderDateTimeField } from './fieldRenderers/renderDateTimeField';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
 interface FormComponentProps {
-  fields: (IField | IField[])[];
+  fields: (Field | Field[])[];
 };
 
 const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
   const { control, formState: { errors } } = useFormContext(); // Access the form context and errors
   const { theme } = useThemeStore();
   
-  const renderField = (field: IField, index: number) => {
+  const renderField = (field: Field, index: number) => {
     switch (field.type) {
       case 'section':
         return (
@@ -112,7 +112,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
             </div>
           );
         }
-        return renderField(fieldGroup as IField, index);
+        return renderField(fieldGroup as Field, index);
       })}
     </div>
   );

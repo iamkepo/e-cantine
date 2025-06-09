@@ -1,7 +1,5 @@
-import { RequestState, RequestType, Meta } from "@/core/types";
+import { RequestState, RequestType } from "@/core/types";
 import { useCallback, useState } from "react";
-
-
 
 const useDataFetch = <T>() => {
   const [state, setState] = useState<Record<RequestType, RequestState<T>>>({
@@ -14,14 +12,15 @@ const useDataFetch = <T>() => {
     deleteMany: { data: null, loading: false, error: null }
   });
 
+  // Memoize handleData to prevent unnecessary re-renders and state updates
   const handleData = useCallback((
     rep: RequestType,
     key: keyof RequestState<T>,
-    data: T | T[] | { data: T[], meta: Meta } | boolean | string | null
+    data: RequestState<T>[keyof RequestState<T>]
   ): void => {
-    setState(prevState => {
-      // Compare with previous state to prevent unnecessary updates
-      if (prevState[rep]?.[key] === data) {
+    setState((prevState) => {
+      // Skip state update if the value hasn't changed
+      if (prevState[rep][key] === data) {
         return prevState;
       }
       return {
@@ -32,7 +31,7 @@ const useDataFetch = <T>() => {
         }
       };
     });
-  }, []); // No dependencies needed as we're using the setState updater function
+  }, []);
 
   return { 
     state,

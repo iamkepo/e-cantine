@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IType } from "@/core/interfaces";
 import TypesService from "@/services/typesService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class TypeRepository extends TypesService {
-  constructor(setType: SetData<IType>) {
-    super(setType);
+  constructor(types: {state: Record<RequestType, RequestState<IType>>, handleData: SetData<IType>}) {
+    super(types.handleData);
   }
 
   async changeStatusType(id: number, status: string) {

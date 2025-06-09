@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IClient, IUser } from "@/core/interfaces";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class ClientRepository extends ClientsService {
-  constructor(setClient: SetData<IClient>) {
-    super(setClient);
+  constructor(clients: {state: Record<RequestType, RequestState<IClient>>, handleData: SetData<IClient>}) {
+    super(clients.handleData);
   }
 
   // Table configuration

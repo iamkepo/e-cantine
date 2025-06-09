@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IDeliverer, IUser } from "@/core/interfaces";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DelivererRepository extends DeliverersService {
-  constructor(setDeliverer: SetData<IDeliverer>) {
-    super(setDeliverer);
+  constructor(deliverers: {state: Record<RequestType, RequestState<IDeliverer>>, handleData: SetData<IDeliverer>}) {
+    super(deliverers.handleData);
   }
 
   formCreateDeliverer(users: IUser[]) {

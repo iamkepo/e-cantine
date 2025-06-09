@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
 import { useThemeStore } from '@/stores/themeStore';
 
 export const renderSearchSelectField = (
-  field: IField,
+  field: Field,
   control: unknown,
   errors: FieldErrors<FieldValues>
 ) => (
@@ -18,7 +18,7 @@ export const renderSearchSelectField = (
 );
 
 const SearchSelectFieldInternal: React.FC<{
-  field: IField,
+  field: Field,
   control: unknown,
   errors: FieldErrors<FieldValues>
 }> = ({ field, control, errors }) => {

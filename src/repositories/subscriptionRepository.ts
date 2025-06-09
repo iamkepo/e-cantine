@@ -3,11 +3,11 @@ import { Day, StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import * as yup from 'yup';
 import SubscriptionsService from "@/services/subscriptionsService";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class SubscriptionsRepository extends SubscriptionsService {
-  constructor(setSubscription: SetData<ISubscription>) {
-    super(setSubscription);
+  constructor(subscriptions: {state: Record<RequestType, RequestState<ISubscription>>, handleData: SetData<ISubscription>}) {
+    super(subscriptions.handleData);
   }
 
   formCreateSubscription(clients: IClient[]) {

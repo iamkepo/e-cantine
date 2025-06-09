@@ -23,13 +23,15 @@ const Page: React.FC = () => {
   const { commands, history } = useHistoryStore();
   const [ listEvent, setListEvent ] = useState<History>([]);
   const [ selectedCommand, setSelectedCommand ] = useState<number>(0);
-  const articles = useDataFetch<IArticle>(); 
-  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
+  const articles = useDataFetch<IArticle>();
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
 
   useEffect(() => {
-    articleRepository.fetchArticles({
-      take: 100,
-    });
+    if (articleRepository) {
+      articleRepository.fetchArticles({
+        take: 100,
+      });
+    }
   }, [articleRepository]);
 
   const handleDateClick = (info: DateClickArg) => {

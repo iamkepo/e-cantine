@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import LocationsService from "@/services/locationsService";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class LocationsRepository extends LocationsService {
-  constructor(setLocation: SetData<ILocation>) {
-    super(setLocation);
+  constructor(locations: {state: Record<RequestType, RequestState<ILocation>>, handleData: SetData<ILocation>}) {
+    super(locations.handleData);
   }
 
   // Table configuration

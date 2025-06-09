@@ -3,11 +3,11 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { ICategory } from "@/core/interfaces";
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 class CategoryRepository extends CategoriesService {
-  constructor(setCategory: SetData<ICategory>) {
-    super(setCategory);
+  constructor(categories: {state: Record<RequestType, RequestState<ICategory>>, handleData: SetData<ICategory>}) {
+    super(categories.handleData);
   }
 
   async changeStatusCategory(id: number, status: string) {

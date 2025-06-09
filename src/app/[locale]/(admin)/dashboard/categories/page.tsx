@@ -10,7 +10,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import TableComponent from "@/components/TableComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { Meta, IField } from "@/core/types";
+import { Meta, Field } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import useDataFetch from "@/hooks/useDataForm";
@@ -19,7 +19,7 @@ import useDataFetch from "@/hooks/useDataForm";
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
   const categories = useDataFetch<ICategory>(); 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
+  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
   const [params, setParams] = useState(categoryRepository.filterCategory);
   const { checkList, checkAllList, handleCheckList } = useCheckList((categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.map(category => category.id as number));
 
@@ -39,7 +39,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-8">
               <FilterComponent 
-                fields={categoryRepository.formFilterCategory() as unknown as IField[]}
+                fields={categoryRepository.formFilterCategory() as unknown as Field[]}
                 schema={categoryRepository.categoryFilterSchema}
                 onSubmit={(data: {search: string, status: string}) => {
                   setParams({
@@ -69,7 +69,7 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer une categorie",
                     btn:"Creer",
-                    fields:categoryRepository.formCreateCategory() as unknown as IField[],
+                    fields:categoryRepository.formCreateCategory() as unknown as Field[],
                     schema:categoryRepository.categorySchema
                   }}
                   onSubmit={ (data: ICategory) => categoryRepository.createCategory(data)
@@ -97,7 +97,7 @@ const Page: React.FC = () => {
           edit={(e: ICategory) => modal.open(
             <SubmitComponent 
               title={"Modifier la categorie"} 
-              fields={categoryRepository.formUpdateCategory(e) as unknown as IField[]} 
+              fields={categoryRepository.formUpdateCategory(e) as unknown as Field[]} 
               schema={categoryRepository.categorySchema} 
               btn="Modifier" 
               onSubmit={(data) => categoryRepository.updateCategory(e.id as number, data)

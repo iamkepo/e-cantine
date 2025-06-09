@@ -2,7 +2,7 @@
 import { modal } from "@/stores/appStore";
 import { useEffect, useMemo, useState } from "react";
 import { IType } from "@/core/interfaces";
-import { Meta, IField } from "@/core/types";
+import { Meta, Field } from "@/core/types";
 import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { StatusActivation } from "@/enums";
@@ -17,13 +17,17 @@ import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
-  const types = useDataFetch<IType>(); 
-  const typeRepository = useMemo(() => new TypeRepository(types.handleData), [types.handleData]);
+  const types = useDataFetch<IType>();
+  const typeRepository = useMemo(() => new TypeRepository(types), [types]);
   const [params, setParams] = useState(typeRepository.filterType);
-  const { checkList, checkAllList, handleCheckList } = useCheckList((types.state.get?.data as {data: IType[], meta: Meta})?.data.map(type => type.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList(
+    (types.state.get?.data as {data: IType[], meta: Meta})?.data?.map(type => type.id as number) || []
+  );
 
   useEffect(() => {
-    typeRepository.fetchTypes(params);
+    if (typeRepository) {
+      typeRepository.fetchTypes(params);
+    }
   }, [typeRepository, params]);
 
 
@@ -39,7 +43,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-8">
               <FilterComponent 
-                fields={typeRepository.formFilterType() as unknown as IField[]}
+                fields={typeRepository.formFilterType() as unknown as Field[]}
                 schema={typeRepository.typeFilterSchema}
                 onSubmit={(data: {search: string, status: string}) => {
                   setParams({
@@ -69,7 +73,7 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer un type",
                     btn:"Creer",
-                    fields:typeRepository.formCreateType() as unknown as IField[],
+                    fields:typeRepository.formCreateType() as unknown as Field[],
                     schema:typeRepository.typeSchema
                   }}
                   onSubmit={ (data: IType) => typeRepository.createType(data)
@@ -97,7 +101,7 @@ const Page: React.FC = () => {
           edit={(e: IType) => modal.open(
             <SubmitComponent 
               title={"Modifier le type"} 
-              fields={typeRepository.formUpdateType(e) as unknown as IField[]} 
+              fields={typeRepository.formUpdateType(e) as unknown as Field[]} 
               schema={typeRepository.typeSchema} 
               btn="Modifier" 
               onSubmit={(data) => typeRepository.updateType(e.id as number, data)

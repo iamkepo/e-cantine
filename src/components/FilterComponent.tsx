@@ -3,10 +3,10 @@
 import FormComponent from "./FormComponent";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 
 interface FilterComponentProps {
-  fields: IField[];
+  fields: Field[];
   schema: any;
   onSubmit: (data: any) => void;
 }
@@ -24,7 +24,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ fields, schema, onSub
   return (
     <FormProvider {...methods}> {/* Provide form context */}
       <form onChange={handleSubmit(submit)} className="col-12">
-        <FormComponent fields={fields as (IField | IField[])[]} />
+        <FormComponent fields={fields as (Field | Field[])[]} />
       </form>
     </FormProvider>
   );

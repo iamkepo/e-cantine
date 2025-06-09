@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IPromo } from "@/core/interfaces";
 import PromosService from '@/services/promosService';
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class PromoRepository extends PromosService {
-  constructor(setPromo: SetData<IPromo>) {
-    super(setPromo);
+  constructor(promos: {state: Record<RequestType, RequestState<IPromo>>, handleData: SetData<IPromo>}) {
+    super(promos.handleData);
   }
 
   formCreatePromo() {

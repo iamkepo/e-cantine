@@ -13,7 +13,7 @@ import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import ArticleComponent from "@/components/ArticleComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { Meta, IField, ParamsQuery } from "@/core/types";
+import { Meta, Field, ParamsQuery } from "@/core/types";
 import useDataFetch from "@/hooks/useDataForm";
 import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
@@ -22,11 +22,12 @@ import TypeRepository from "@/repositories/typeRepository";
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
   const articles = useDataFetch<IArticle>();
-  const articleRepository = useMemo(() => new ArticleRepository(articles.handleData), [articles.handleData]);
   const categories = useDataFetch<ICategory>();
-  const categoryRepository = useMemo(() => new CategoryRepository(categories.handleData), [categories.handleData]);
   const types = useDataFetch<IType>();
-  const typeRepository = useMemo(() => new TypeRepository(types.handleData), [types.handleData]);
+  
+  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
+  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
+  const typeRepository = useMemo(() => new TypeRepository(types), [types]);
   const [params, setParams] = useState<ParamsQuery & { categoryId?: string, typeId?: string }>(articleRepository.filterArticle);
   const { checkList, checkAllList, handleCheckList } = useCheckList((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.map(article => article.id as number));
 
@@ -48,7 +49,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-9">
               <FilterComponent 
-                fields={articleRepository.formFilterArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as IField[]}
+                fields={articleRepository.formFilterArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[]}
                 schema={articleRepository.articleFilterSchema}
                 onSubmit={(data: {search: string, status: string, categoryId: string, typeId: string}) => {
                   setParams({
@@ -80,7 +81,7 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer un article",
                     btn:"Creer",
-                    fields:articleRepository.formCreateArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as IField[],
+                    fields:articleRepository.formCreateArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[],
                     schema:articleRepository.articleSchema
                   }}
                   onSubmit={ (data: IArticle) => articleRepository.createArticle(data)
@@ -117,7 +118,7 @@ const Page: React.FC = () => {
           edit={(e: IArticle) => modal.open(
             <SubmitComponent 
               title={"Modifier l'article"} 
-              fields={articleRepository.formUpdateArticle(e, (types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as IField[]} 
+              fields={articleRepository.formUpdateArticle(e, (types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[]} 
               schema={articleRepository.articleSchema} 
               btn="Modifier" 
               onSubmit={(data) => articleRepository.updateArticle(e.id as number, data)

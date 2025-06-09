@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
-import { IField } from '@/core/types';
+import { Field } from '@/core/types';
 import { Control, Controller, FieldErrors, FieldValues } from 'react-hook-form';
 import { useThemeStore } from '@/stores/themeStore';
 
 export const renderInputField = (
-  field: IField,
+  field: Field,
   control: unknown,
   errors: FieldErrors<FieldValues>
 ) => (
@@ -17,7 +17,7 @@ export const renderInputField = (
 );
 
 const InputFieldInternal: React.FC<{
-  field: IField;
+  field: Field;
   control: unknown;
   errors: FieldErrors<FieldValues>;
 }> = ({ field, control, errors }) => {

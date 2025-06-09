@@ -3,11 +3,11 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IMethod } from "@/core/interfaces";
 import MethodsService from '@/services/methodsService';
-import { SetData } from "@/core/types";
+import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class MethodsRepository extends MethodsService {
-  constructor(setMethod: SetData<IMethod>) {
-    super(setMethod);
+  constructor(methods: {state: Record<RequestType, RequestState<IMethod>>, handleData: SetData<IMethod>}) {
+    super(methods.handleData);
   }
 
   formCreateMethod() {
