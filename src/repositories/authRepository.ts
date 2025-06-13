@@ -1,11 +1,9 @@
 import * as yup from "yup";
 import AuthService from "@/services/authService";
-import { IAuth } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core";
 
 class AuthRepository extends AuthService {
-  constructor(auth: {state: Record<RequestType, RequestState<IAuth>>, handleData: SetData<IAuth>}) {
-    super(auth.handleData);
+  constructor() {
+    super();
   }
 
   // Form methods

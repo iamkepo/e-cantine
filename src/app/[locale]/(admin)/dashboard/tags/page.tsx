@@ -1,5 +1,5 @@
 "use client";
-import { modal } from "@/stores/appStore";
+import { modal, toast } from "@/stores/appStore";
 import { ITag } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import TagRepository from "@/repositories/tagRepository";
@@ -10,24 +10,21 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import TableComponent from "@/components/TableComponent";
-import { Meta, Field } from "@/core/types";
+import { MetaResponse, Field } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
-import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
-  const tags = useDataFetch<ITag>();
-  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
+  const [tags, setTags] = useState<MetaResponse<ITag>>();
+  const tagRepository = useMemo(() => new TagRepository(), []);
   const [params, setParams] = useState(tagRepository.filterTag);
   const { checkList, checkAllList, handleCheckList } = useCheckList(
-    (tags.state.get?.data as {data: ITag[], meta: Meta})?.data?.map(tag => tag.id as number) || []
+    (tags?.data as ITag[])?.map(tag => tag.id as number) || []
   );
 
   useEffect(() => {
-    if (tagRepository) {
-      tagRepository.fetchTags(params);
-    }
+    tagRepository.fetchTags(params, setTags);
   }, [tagRepository, params]);
 
 
@@ -59,11 +56,13 @@ const Page: React.FC = () => {
                 <BtnConfirmComponent 
                   btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={tagRepository.confirmDeleteTags}
-                  onConfirm={() => tagRepository.deleteTags(checkList)
-                    .then(() => tagRepository.fetchTags(params))
-                    .then(() => checkAllList())
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onConfirm={() => tagRepository.deleteTags(checkList,
+                    () => {
+                      toast.success("Tags supprimees"); 
+                      tagRepository.fetchTags(params, setTags); 
+                      checkAllList(); 
+                      modal.close()
+                    })
                   }
                 />
                :
@@ -75,10 +74,12 @@ const Page: React.FC = () => {
                     fields:tagRepository.formCreateTag() as unknown as Field[],
                     schema:tagRepository.tagSchema
                   }}
-                  onSubmit={ (data: ITag) => tagRepository.createTag(data)
-                    .then(() => tagRepository.fetchTags(params))
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onSubmit={ (data: ITag) => tagRepository.createTag(data,
+                    () => {
+                      toast.success("Tag cree"); 
+                      tagRepository.fetchTags(params, setTags); 
+                      modal.close()
+                    })
                   }
                 />
               }
@@ -95,7 +96,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={tagRepository.tableHeadTag}
-          list={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data}
+          list={(tags?.data as ITag[])}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ITag) => modal.open(
             <SubmitComponent 
@@ -103,10 +104,12 @@ const Page: React.FC = () => {
               fields={tagRepository.formUpdateTag(e) as unknown as Field[]} 
               schema={tagRepository.tagSchema} 
               btn="Modifier" 
-              onSubmit={(data) => tagRepository.updateTag(e.id as number, data)
-                .then(() => tagRepository.fetchTags(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onSubmit={(data) => tagRepository.updateTag(e.id as number, data,
+                () => {
+                  toast.success("Tag modifie"); 
+                  tagRepository.fetchTags(params, setTags); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -114,10 +117,12 @@ const Page: React.FC = () => {
             <ConfirmComponent 
               title={tagRepository.confirmDeleteTag.title}
               description={tagRepository.confirmDeleteTag.description}
-              onConfirm={() => tagRepository.deleteTag(id)
-                .then(() => tagRepository.fetchTags(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onConfirm={() => tagRepository.deleteTag(id,
+                () => {
+                  toast.success("Tag supprime"); 
+                  tagRepository.fetchTags(params, setTags); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -127,10 +132,12 @@ const Page: React.FC = () => {
               <ConfirmComponent 
                 title={tagRepository.confirmChangeStatusTag.title}
                 description={tagRepository.confirmChangeStatusTag.description}
-                onConfirm={ () => tagRepository.changeStatusTag(id, status)
-                  .then(() => tagRepository.fetchTags(params))
-                  .catch((error) => console.error(error))
-                  .finally(() => modal.close())
+                onConfirm={ () => tagRepository.changeStatusTag(id, status,
+                  () => {
+                    toast.success("Tag modifie"); 
+                    tagRepository.fetchTags(params, setTags); 
+                    modal.close()
+                  })
                 }
               />
             )}
@@ -139,7 +146,7 @@ const Page: React.FC = () => {
         
         <PaginationComponent 
           page={params.page}
-          total={(tags.state.get?.data as {data: ITag[], meta: Meta})?.meta.pageCount}
+          total={(tags?.meta.pageCount as number)}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

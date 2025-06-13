@@ -1,6 +1,6 @@
 "use client";
 
-import { modal } from "@/stores/appStore";
+import { modal, toast } from "@/stores/appStore";
 import { IArticle, ICategory, IType } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
@@ -13,28 +13,27 @@ import BtnSubmitComponent from "@/components/BtnSubmitComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import ArticleComponent from "@/components/ArticleComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { Meta, Field, ParamsQuery } from "@/core/types";
-import useDataFetch from "@/hooks/useDataForm";
+import { Field, ParamsQuery, MetaResponse } from "@/core/types";
 import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
 import TypeRepository from "@/repositories/typeRepository";
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
-  const articles = useDataFetch<IArticle>();
-  const categories = useDataFetch<ICategory>();
-  const types = useDataFetch<IType>();
+  const [articles, setArticles] = useState<MetaResponse<IArticle>>();
+  const [categories, setCategories] = useState<MetaResponse<ICategory>>();
+  const [types, setTypes] = useState<MetaResponse<IType>>();
   
-  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
-  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
-  const typeRepository = useMemo(() => new TypeRepository(types), [types]);
+  const articleRepository = useMemo(() => new ArticleRepository(), []);
+  const categoryRepository = useMemo(() => new CategoryRepository(), []);
+  const typeRepository = useMemo(() => new TypeRepository(), []);
   const [params, setParams] = useState<ParamsQuery & { categoryId?: string, typeId?: string }>(articleRepository.filterArticle);
-  const { checkList, checkAllList, handleCheckList } = useCheckList((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.map(article => article.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList((articles?.data as IArticle[])?.map(article => article.id as number));
 
   useEffect(() => {
-    articleRepository.fetchArticles(params as ParamsQuery);
-    categoryRepository.fetchCategories({});
-    typeRepository.fetchTypes({});
+    articleRepository.fetchArticles(params as ParamsQuery, setArticles);
+    categoryRepository.fetchCategories({}, setCategories);
+    typeRepository.fetchTypes({}, setTypes);
   }, [articleRepository, categoryRepository, params, typeRepository]);
 
 
@@ -49,7 +48,7 @@ const Page: React.FC = () => {
           <div className="row">
             <div className="col-12 col-md-9">
               <FilterComponent 
-                fields={articleRepository.formFilterArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[]}
+                fields={articleRepository.formFilterArticle((types?.data as IType[]), (categories?.data as ICategory[])) as unknown as Field[]}
                 schema={articleRepository.articleFilterSchema}
                 onSubmit={(data: {search: string, status: string, categoryId: string, typeId: string}) => {
                   setParams({
@@ -68,11 +67,13 @@ const Page: React.FC = () => {
                 <BtnConfirmComponent 
                   btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={articleRepository.confirmDeleteArticles}
-                  onConfirm={() => articleRepository.deleteArticles(checkList)
-                    .then(() => articleRepository.fetchArticles(params as ParamsQuery))
-                    .then(() => checkAllList())
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onConfirm={() => articleRepository.deleteArticles(checkList,
+                    () => {
+                      toast.success("Articles supprimees"); 
+                      articleRepository.fetchArticles(params as ParamsQuery); 
+                      checkAllList(); 
+                      modal.close()
+                    })
                   }
                 />
                :
@@ -81,13 +82,15 @@ const Page: React.FC = () => {
                   submit={{
                     title:"Creer un article",
                     btn:"Creer",
-                    fields:articleRepository.formCreateArticle((types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[],
+                    fields:articleRepository.formCreateArticle((types?.data as IType[]), (categories?.data as ICategory[])) as unknown as Field[],
                     schema:articleRepository.articleSchema
                   }}
-                  onSubmit={ (data: IArticle) => articleRepository.createArticle(data)
-                    .then(() => articleRepository.fetchArticles(params as ParamsQuery))
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onSubmit={ (data: IArticle) => articleRepository.createArticle(data,
+                    () => {
+                      toast.success("Article cree"); 
+                      articleRepository.fetchArticles(params as ParamsQuery); 
+                      modal.close()
+                    })
                   }
                 />
               }
@@ -103,7 +106,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={articleRepository.tableHeadArticle}
-          list={(articles.state.get.data as {data: IArticle[], meta: Meta})?.data}
+          list={(articles?.data as IArticle[])}
           orderBy={{
             orderBy: params.orderBy || 'createdAt',
             order: params.order || 'desc',
@@ -118,13 +121,15 @@ const Page: React.FC = () => {
           edit={(e: IArticle) => modal.open(
             <SubmitComponent 
               title={"Modifier l'article"} 
-              fields={articleRepository.formUpdateArticle(e, (types.state.get?.data as {data: IType[], meta: Meta})?.data, (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data) as unknown as Field[]} 
+              fields={articleRepository.formUpdateArticle(e, (types?.data as IType[]), (categories?.data as ICategory[])) as unknown as Field[]} 
               schema={articleRepository.articleSchema} 
               btn="Modifier" 
-              onSubmit={(data) => articleRepository.updateArticle(e.id as number, data)
-                .then(() => articleRepository.fetchArticles(params as ParamsQuery))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onSubmit={(data) => articleRepository.updateArticle(e.id as number, data,
+                () => {
+                  toast.success("Article modifie"); 
+                  articleRepository.fetchArticles(params as ParamsQuery); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -132,10 +137,12 @@ const Page: React.FC = () => {
             <ConfirmComponent 
               title={articleRepository.confirmDeleteArticle.title}
               description={articleRepository.confirmDeleteArticle.description}
-              onConfirm={() => articleRepository.deleteArticle(id)
-                .then(() => articleRepository.fetchArticles(params as ParamsQuery))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onConfirm={() => articleRepository.deleteArticle(id,
+                () => {
+                  toast.success("Article supprime"); 
+                  articleRepository.fetchArticles(params as ParamsQuery); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -145,10 +152,12 @@ const Page: React.FC = () => {
               <ConfirmComponent 
                 title={articleRepository.confirmChangeStatusArticle.title}
                 description={articleRepository.confirmChangeStatusArticle.description}
-                onConfirm={ () => articleRepository.changeStatusArticle(id, status)
-                  .then(() => articleRepository.fetchArticles(params as ParamsQuery))
-                  .catch((error) => console.error(error))
-                  .finally(() => modal.close())
+                onConfirm={ () => articleRepository.changeStatusArticle(id, status,
+                  () => {
+                    toast.success("Article modifie"); 
+                    articleRepository.fetchArticles(params as ParamsQuery); 
+                    modal.close()
+                  })
                 }
               />
             )}
@@ -157,7 +166,7 @@ const Page: React.FC = () => {
           
         <PaginationComponent 
           page={params.page || 1}
-          total={(articles.state.get.data as {data: IArticle[], meta: Meta})?.meta.pageCount}
+          total={(articles?.meta.pageCount as number)}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

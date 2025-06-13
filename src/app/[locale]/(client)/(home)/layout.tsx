@@ -4,11 +4,11 @@ import { useThemeStore } from '@/stores/themeStore';
 import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores/filterStore';
 import { useParams } from 'next/navigation';
 import { ICategory, ITag } from '@/core/interfaces';
-import { Meta } from '@/core/types';
+import { MetaResponse } from '@/core/types';
 import TagRepository from '@/repositories/tagRepository';
 import CategoryRepository from '@/repositories/categoryRepository';
 import BlockSkeleton from '@/components/widgets/BlockSkeleton';
-import useDataFetch from '@/hooks/useDataForm';
+import { metaResponse } from '@/core/constants';
 
 const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 const LazyCategoriesNavBlock = lazy(() => import("@/components/blocks/CategoriesNavBlock"));
@@ -18,24 +18,17 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { selected } = useFilterStore();
   const params = useParams();
   
-  const categories = useDataFetch<ICategory>();
-  const tags = useDataFetch<ITag>();
+  const [categories, setCategories] = useState<MetaResponse<ICategory>>(metaResponse);
+  const [tags, setTags] = useState<MetaResponse<ITag>>(metaResponse);
 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
-  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
+  const categoryRepository = useMemo(() => new CategoryRepository(), []);
+  const tagRepository = useMemo(() => new TagRepository(), []);
 
   const [isInitialLoad] = useState(true);
 
   useEffect(() => {
-    if (isInitialLoad && categoryRepository && tagRepository) {
-      const loadData = async () => {
-        await Promise.all([
-          categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }),
-          tagRepository.fetchTags({take: 100})
-        ]);
-      };
-      loadData();
-    }
+    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }, (data) => setCategories(data));
+    tagRepository.fetchTags({take: 100}, (data) => setTags(data));
   }, [categoryRepository, tagRepository, isInitialLoad]);
   
 
@@ -47,7 +40,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <Suspense fallback={<BlockSkeleton count={5} className="nav-item" />}>
                 <LazyCategoriesNavBlock 
-                  categories={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.filter(el => el.id != null && el.id != 5)} 
+                  categories={categories.data.filter(el => el.id != null && el.id != 5)} 
                   id={params.id ? parseInt(params.id as string) : undefined} 
                 />
               </Suspense>
@@ -71,7 +64,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
               <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
                 <LazyTagsBlock 
-                  tags={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data.filter(el => el.id != null)} 
+                  tags={tags.data.filter(el => el.id != null)} 
                   onSelect={tagSelect}
                   tagIds={selected.tagIds ?? undefined} 
                 />

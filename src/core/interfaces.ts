@@ -226,7 +226,7 @@ export interface IDelivery {
   delivererId?: number;
 }
 
-export interface IStatistics {
+export interface IStatistic {
   label: string;
   value: number;
 }

@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { ICommand } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class CommandsService extends Request<ICommand> {
-  setData: SetData<ICommand>;
-
-  constructor(setCommand: SetData<ICommand>) {
+  constructor() {
     super();
-    this.setData = setCommand;
   }
 
-  async createCommand(data: ICommand) {
-    this.setData('post', 'loading', true);
+  async createCommand(data: ICommand, onSuccess?: (data: ICommand) => void, onError?: (error: Error) => void) {
     await this.post('/command/create', data)
       .then(data => {
-        this.setData('post', 'data', data as ICommand);
+        if (onSuccess) {
+          onSuccess(data as ICommand);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchCommands(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchCommands(params: ParamsQuery, onSuccess?: (data: { data: ICommand[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/command/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: ICommand[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: ICommand[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchCommand(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchCommand(id: number, onSuccess?: (data: ICommand) => void, onError?: (error: Error) => void) {
     await this.getById('/command', id)
       .then(data => {
-        this.setData('getById', 'data', data as ICommand);
+        if (onSuccess) {
+          onSuccess(data as ICommand);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchCommand(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchCommand(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: ICommand) => void, onError?: (error: Error) => void) {
     await this.patch('/command', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as ICommand);
+        if (onSuccess) {
+          onSuccess(data as ICommand);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateCommand(id: number, data: ICommand) {
-    this.setData('put', 'loading', true);
+  async updateCommand(id: number, data: ICommand, onSuccess?: (data: ICommand) => void, onError?: (error: Error) => void) {
     await this.put('/command', id, data)
       .then(data => {
-        this.setData('put', 'data', data as ICommand);
+        if (onSuccess) {
+          onSuccess(data as ICommand);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteCommand(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteCommand(id: number, onSuccess?: (data: ICommand) => void, onError?: (error: Error) => void) {
     await this.delete('/command', id)
       .then(data => {
-        this.setData('delete', 'data', data as ICommand);
+        if (onSuccess) {
+          onSuccess(data as ICommand);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteCommands(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteCommands(ids: number[], onSuccess?: (data: ICommand[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/command/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as ICommand[]);
+        if (onSuccess) {
+          onSuccess(data as ICommand[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

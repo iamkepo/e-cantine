@@ -1,15 +1,12 @@
 import { HttpRequestType } from "@/enums/http-request.enum";
 import { AxiosError, AxiosResponse } from "axios";
 import AxiosCustom from "@/configs/AxiosCustom";
-import { IAuth, SetData } from "@/core";
+import { IAuth } from "@/core";
 import Request from "@/configs/request";
 
 class AuthService extends Request<IAuth> {
-  setData: SetData<IAuth>;
-
-  constructor(setUser: SetData<IAuth>) {
+  constructor() {
     super();
-    this.setData = setUser;
   }
   
   

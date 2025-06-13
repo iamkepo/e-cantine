@@ -3,15 +3,14 @@ import ArticlesService from "@/services/articlesService";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 class ArticleRepository extends ArticlesService {
-  constructor(articles: {state: Record<RequestType, RequestState<IArticle>>, handleData: SetData<IArticle>}) {
-    super(articles.handleData);
+  constructor() {
+    super();
   }
 
-  async changeStatusArticle(id: number, status: string) {
-    return await this.patchArticle(id, { attr: "status", val: status });
+  async changeStatusArticle(id: number, status: string, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
+    await this.patchArticle(id, { attr: "status", val: status }, onSuccess, onError);
   }
 
   // Table configuration
@@ -36,20 +35,20 @@ class ArticleRepository extends ArticlesService {
   }
 
   // Form methods
-  formCreateArticle(categories: ICategory[], types: IType[]) {
+  formCreateArticle(categories?: ICategory[], types?: IType[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "price", type: "number", label: "Prix", required: true, colSize: "col-12" },
       { id: "image", type: "text", label: "Image", required: true, colSize: "col-12" },
       { id: "description", type: "textarea", label: "Description", required: true, colSize: "col-12" },
       { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12",
-        options: categories.map((category: ICategory) => ({
+        options: categories?.map((category: ICategory) => ({
           label: category.name,
           value: category.id
         }))
       },
       { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12",
-        options: types.map((type: IType) => ({
+        options: types?.map((type: IType) => ({
           label: type.name,
           value: type.id
         }))
@@ -64,14 +63,14 @@ class ArticleRepository extends ArticlesService {
       { id: "image", type: "text", label: "Image", required: true, colSize: "col-12", value: article.image },
       { id: "description", type: "textarea", label: "Description", required: true, colSize: "col-12", value: article.description },
       { id: "categoryId", type: "select", label: "Categorie", required: true, colSize: "col-12",
-        options: categories.map((category: ICategory) => ({
+        options: categories?.map((category: ICategory) => ({
           label: category.name,
           value: category.id
         })),
         value: article.categoryId
       },
       { id: "typeId", type: "select", label: "Type", required: true, colSize: "col-12",
-        options: types.map((type: IType) => ({
+        options: types?.map((type: IType) => ({
           label: type.name,
           value: type.id
         })),
@@ -84,13 +83,13 @@ class ArticleRepository extends ArticlesService {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
       { id: "typeId", type: "select", placeholder: "Type", colSize: "col-12 col-md-2",
-        options: types.map((type: IType) => ({
+        options: types?.map((type: IType) => ({
           label: type.name,
           value: type.id
         }))
       },
       { id: "categoryId", type: "select", placeholder: "Categorie", colSize: "col-12 col-md-2",
-        options: categories.map((category: ICategory) => ({
+        options: categories?.map((category: ICategory) => ({
           label: category.name,
           value: category.id
         }))

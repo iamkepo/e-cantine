@@ -1,109 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IClient } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class ClientsService extends Request<IClient> {
-  setData: SetData<IClient>;
-  constructor(setClient: SetData<IClient>) {
+  constructor() {
     super();
-    this.setData = setClient;
   }
 
-  async createClient(data: IClient) {
-    this.setData('post', 'loading', true);
+  async createClient(data: IClient, onSuccess?: (data: IClient) => void, onError?: (error: Error) => void) {
     await this.post('/client/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IClient);
+        if (onSuccess) {
+          onSuccess(data as IClient);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchClients(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchClients(params: ParamsQuery, onSuccess?: (data: { data: IClient[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/client/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IClient[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IClient[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchClient(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchClient(id: number, onSuccess?: (data: IClient) => void, onError?: (error: Error) => void) {
     await this.getById('/client', id)
       .then(data => {
-        this.setData('getById', 'data', data as IClient);
+        if (onSuccess) {
+          onSuccess(data as IClient);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchClient(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchClient(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IClient) => void, onError?: (error: Error) => void) {
     await this.patch('/client', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IClient);
+        if (onSuccess) {
+          onSuccess(data as IClient);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateClient(id: number, data: IClient) {
-    this.setData('put', 'loading', true);
+  async updateClient(id: number, data: IClient, onSuccess?: (data: IClient) => void, onError?: (error: Error) => void) {
     await this.put('/client', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IClient);
+        if (onSuccess) {
+          onSuccess(data as IClient);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteClient(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteClient(id: number, onSuccess?: (data: IClient) => void, onError?: (error: Error) => void) {
     await this.delete('/client', id)
       .then(data => {
-        this.setData('delete', 'data', data as IClient);
+        if (onSuccess) {
+          onSuccess(data as IClient);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteClients(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteClients(ids: number[], onSuccess?: (data: IClient[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/client/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IClient[]);
+        if (onSuccess) {
+          onSuccess(data as IClient[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

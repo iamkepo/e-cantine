@@ -1,26 +1,22 @@
-import { ParamsQuery, SetData } from "@/core/types";
 import Request from "@/configs/request";
-import { IStatistics } from "@/core/interfaces";
+import { IStatistic } from "@/core/interfaces";
 
-class StatisticsService extends Request<IStatistics> {
-  setData: SetData<IStatistics>;
-
-  constructor(setStatistics: SetData<IStatistics>) {
+class StatisticsService extends Request<IStatistic> {
+  constructor() {
     super();
-    this.setData = setStatistics;
   }
 
-  async fetchStatistics(params?: ParamsQuery) {
-    this.setData('get', 'loading', true);
-    await this.get('/statistics', params || {})
+  async fetchStatistics(onSuccess?: (data: IStatistic[]) => void, onError?: (error: Error) => void) {
+    await this.get('/statistics', {})
       .then(data => {
-        this.setData('get', 'data', data as IStatistics);
+        if (onSuccess) {
+          onSuccess(data as IStatistic[]);
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

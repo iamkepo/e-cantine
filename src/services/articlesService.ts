@@ -1,110 +1,108 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class ArticlesService extends Request<IArticle> {
-  setData: SetData<IArticle>;
 
-  constructor(setArticle: SetData<IArticle>) {
+  constructor() {
     super();
-    this.setData = setArticle;
   }
 
-  async createArticle(data: IArticle) {
-    this.setData('post', 'loading', true);
+  async createArticle(data: IArticle, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
     await this.post('/article/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IArticle);
+        if (onSuccess) {
+          onSuccess(data as IArticle);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchArticles(params: ParamsQuery & { categoryId?: number, typeId?: number }) {
-    this.setData('get', 'loading', true);
+  async fetchArticles(params: ParamsQuery & { categoryId?: number, typeId?: number }, onSuccess?: (data: { data: IArticle[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/article/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IArticle[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IArticle[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchArticle(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchArticle(id: number, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
     await this.getById('/article', id)
       .then(data => {
-        this.setData('getById', 'data', data as IArticle);
+        if (onSuccess) {
+          onSuccess(data as IArticle);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchArticle(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchArticle(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
     await this.patch('/article', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IArticle);
+        if (onSuccess) {
+          onSuccess(data as IArticle);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateArticle(id: number, data: IArticle) {
-    this.setData('put', 'loading', true);
+  async updateArticle(id: number, data: IArticle, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
     await this.put('/article', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IArticle);
+        if (onSuccess) {
+          onSuccess(data as IArticle);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteArticle(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteArticle(id: number, onSuccess?: (data: IArticle) => void, onError?: (error: Error) => void) {
     await this.delete('/article', id)
       .then(data => {
-        this.setData('delete', 'data', data as IArticle);
+        if (onSuccess) {
+          onSuccess(data as IArticle);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteArticles(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteArticles(ids: number[], onSuccess?: (data: IArticle[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/article/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IArticle[]);
+        if (onSuccess) {
+          onSuccess(data as IArticle[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

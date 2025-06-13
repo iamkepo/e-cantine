@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IAdmin } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class AdminService extends Request<IAdmin> {
-  setData: SetData<IAdmin>;
-
-  constructor(setAdmin: SetData<IAdmin>) {
+  constructor() {
     super();
-    this.setData = setAdmin;
   }
 
-  async createAdmin(data: IAdmin) {
-    this.setData('post', 'loading', true);
+  async createAdmin(data: IAdmin, onSuccess?: (data: IAdmin) => void, onError?: (error: Error) => void) {
     await this.post('/admin/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IAdmin);
+        if (onSuccess) {
+          onSuccess(data as IAdmin);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchAdmins(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchAdmins(params: ParamsQuery, onSuccess?: (data: { data: IAdmin[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/admin/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IAdmin[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IAdmin[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchAdmin(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchAdmin(id: number, onSuccess?: (data: IAdmin) => void, onError?: (error: Error) => void) {
     await this.getById('/admin', id)
       .then(data => {
-        this.setData('getById', 'data', data as IAdmin);
+        if (onSuccess) {
+          onSuccess(data as IAdmin);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchAdmin(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchAdmin(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IAdmin) => void, onError?: (error: Error) => void) {
     await this.patch('/admin', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IAdmin);
+        if (onSuccess) {
+          onSuccess(data as IAdmin);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateAdmin(id: number, data: IAdmin) {
-    this.setData('put', 'loading', true);
+  async updateAdmin(id: number, data: IAdmin, onSuccess?: (data: IAdmin) => void, onError?: (error: Error) => void) {
     await this.put('/admin', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IAdmin);
+        if (onSuccess) {
+          onSuccess(data as IAdmin);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteAdmin(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteAdmin(id: number, onSuccess?: (data: IAdmin) => void, onError?: (error: Error) => void) {
     await this.delete('/admin', id)
       .then(data => {
-        this.setData('delete', 'data', data as IAdmin);
+        if (onSuccess) {
+          onSuccess(data as IAdmin);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteAdmins(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteAdmins(ids: number[], onSuccess?: (data: IAdmin[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/admin/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IAdmin[]);
+        if (onSuccess) {
+          onSuccess(data as IAdmin[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

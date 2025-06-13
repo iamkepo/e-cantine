@@ -286,6 +286,7 @@ export const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export const meta: Meta = {total: 0, page: 1, pageCount: 1, limit: 10};
 
+export const metaResponse = {data: [], meta: meta};
 // Constants
 export const SHIPPING_RATE = 500.0;
 export const TAX = 20.0;

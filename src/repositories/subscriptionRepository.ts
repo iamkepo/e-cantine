@@ -3,31 +3,30 @@ import { Day, StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import * as yup from 'yup';
 import SubscriptionsService from "@/services/subscriptionsService";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class SubscriptionsRepository extends SubscriptionsService {
-  constructor(subscriptions: {state: Record<RequestType, RequestState<ISubscription>>, handleData: SetData<ISubscription>}) {
-    super(subscriptions.handleData);
+  constructor() {
+    super();
   }
 
-  formCreateSubscription(clients: IClient[]) {
+  formCreateSubscription(clients?: IClient[]) {
     return [
       { id: "weeks", type: "number", label: "Nombre de semaines", required: true, colSize: "col-12" },
       { id: "checkedDays", type: "select", label: "Jours", required: true, colSize: "col-12", isMultiple: true, options: Object.values(Day).map((day) => ({ label: day, value: day })) },
       { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12" },
       { id: "endDate", type: "date", label: "Date de fin", required: false, colSize: "col-12" },
-      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients.map((client: IClient) => ({ label: client.name, value: client.id })) },
+      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.name, value: client.id })) },
       { id: "transactionId", type: "number", label: "Transaction", required: true, colSize: "col-12" },
     ]
   }
 
-  formUpdateSubscription(subscription: ISubscription, clients: IClient[]) {
+  formUpdateSubscription(subscription: ISubscription, clients?: IClient[]) {
     return [
       { id: "weeks", type: "number", label: "Nombre de semaines", required: true, colSize: "col-12", value: subscription.weeks },
       { id: "checkedDays", type: "select", label: "Jours", required: true, colSize: "col-12", isMultiple: true, options: Object.values(Day).map((day) => ({ label: day, value: day })), value: subscription.checkedDays },
       { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12", value: subscription.startDate },
       { id: "endDate", type: "date", label: "Date de fin", required: false, colSize: "col-12", value: subscription.endDate },
-      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients.map((client: IClient) => ({ label: client.name, value: client.id })), value: subscription.clientId },
+      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.name, value: client.id })), value: subscription.clientId },
       { id: "transactionId", type: "number", label: "Transaction", required: true, colSize: "col-12", value: subscription.transactionId },
     ]
   }

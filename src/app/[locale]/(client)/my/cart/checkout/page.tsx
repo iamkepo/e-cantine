@@ -13,10 +13,10 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from 'nextjs-toploader/app';
 import Accordion from "@/components/widgets/Accordion";
-import { Meta } from "@/core/types";
+import { MetaResponse } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
 import ArticleRepository from "@/repositories/articleRepository";
-import useDataFetch from "@/hooks/useDataForm";
+import { metaResponse } from "@/core";
 
 const Page:React.FC = () => {
   const { theme } = useThemeStore();
@@ -25,8 +25,8 @@ const Page:React.FC = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const articles = useDataFetch<IArticle>(); 
-  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
+  const [articles, setArticles] = useState<MetaResponse<IArticle>>(metaResponse); 
+  const articleRepository = useMemo(() => new ArticleRepository(), []);
 
   const [form, setForm] = useState({
     paymentMethod: '',
@@ -36,7 +36,7 @@ const Page:React.FC = () => {
   });
   
   useEffect(() => {
-    articleRepository.fetchArticles({take: 100});
+    articleRepository.fetchArticles({take: 100}, (data) => setArticles(data));
   }, [articleRepository]);
 
   const handlePay = (e: React.FormEvent) => {
@@ -74,8 +74,8 @@ const Page:React.FC = () => {
   }, [user?.email, persons]);
 
   useEffect(() => {
-    setSubtotal((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5), (articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId == 5));
-  }, [cart, articles.state.get?.data]);
+    setSubtotal((articles.data as IArticle[]).filter(el => el.categoryId != 5), (articles.data as IArticle[]).filter(el => el.categoryId == 5));
+  }, [cart, articles.data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: string } }) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));

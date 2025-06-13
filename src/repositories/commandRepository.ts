@@ -3,11 +3,10 @@ import { ICommand, IEvent, IRestaurant } from "@/core/interfaces";
 import * as yup from 'yup';
 import { statusRender } from "@/helpers/functions";
 import { StatusActivation } from "@/enums";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class CommandRepository extends CommandsService {
-  constructor(commands: {state: Record<RequestType, RequestState<ICommand>>, handleData: SetData<ICommand>}) {
-    super(commands.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -30,16 +29,16 @@ export default class CommandRepository extends CommandsService {
   }
 
   // Form methods
-  formCreateCommand(events: IEvent[], restaurants: IRestaurant[]) {
+  formCreateCommand(events?: IEvent[], restaurants?: IRestaurant[]) {
     return [
       { id: "eventId", type: "select", label: "Event", required: true, colSize: "col-12 col-md-2",
-        options: events.map((event: IEvent) => ({
+        options: events?.map((event: IEvent) => ({
           label: event.dateId,
           value: event.id
         }))
       },
       { id: "restaurantId", type: "select", label: "Restaurant", required: true, colSize: "col-12 col-md-2",
-        options: restaurants.map((restaurant: IRestaurant) => ({
+        options: restaurants?.map((restaurant: IRestaurant) => ({
           label: restaurant.name,
           value: restaurant.id
         }))
@@ -47,17 +46,17 @@ export default class CommandRepository extends CommandsService {
     ]
   }
 
-  formUpdateCommand(command: ICommand, events: IEvent[], restaurants: IRestaurant[]) {
+  formUpdateCommand(command: ICommand, events?: IEvent[], restaurants?: IRestaurant[]) {
     return [
       { id: "eventId", type: "select", label: "Event", required: true, colSize: "col-12 col-md-2",
-        options: events.map((event: IEvent) => ({
+        options: events?.map((event: IEvent) => ({
           label: event.dateId,
           value: event.id
         })),
         value: command.eventId
       },
       { id: "restaurantId", type: "select", label: "Restaurant", required: true, colSize: "col-12 col-md-2",
-        options: restaurants.map((restaurant: IRestaurant) => ({
+        options: restaurants?.map((restaurant: IRestaurant) => ({
           label: restaurant.name,
           value: restaurant.id
         })),

@@ -3,26 +3,25 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IDeliverer, IUser } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DelivererRepository extends DeliverersService {
-  constructor(deliverers: {state: Record<RequestType, RequestState<IDeliverer>>, handleData: SetData<IDeliverer>}) {
-    super(deliverers.handleData);
+  constructor() {
+    super();
   }
 
-  formCreateDeliverer(users: IUser[]) {
+  formCreateDeliverer(users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: null },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })), value: null },
     ]
   }
 
-  formUpdateDeliverer(deliverer: IDeliverer, users: IUser[]) {
+  formUpdateDeliverer(deliverer: IDeliverer, users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: deliverer.name },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: deliverer.phone },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: deliverer.userId },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })), value: deliverer.userId },
     ]
   }
 

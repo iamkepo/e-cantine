@@ -3,11 +3,10 @@ import * as yup from "yup";
 import { statusRender } from "@/helpers/functions";
 import { StatusTransaction } from "@/enums";
 import TransactionsService from "@/services/transactionsService";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class TransactionsRepository extends TransactionsService {
-  constructor(transactions: {state: Record<RequestType, RequestState<ITransaction>>, handleData: SetData<ITransaction>}) {
-    super(transactions.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -36,22 +35,22 @@ export default class TransactionsRepository extends TransactionsService {
   }
 
   // Form methods
-  formCreateTransaction(subscriptions: ISubscription[], methods: IMethod[], promos: IPromo[]) {
+  formCreateTransaction(subscriptions?: ISubscription[], methods?: IMethod[], promos?: IPromo[]) {
     return [
       { id: "subscriptionId", type: "select", label: "Abonnement", required: true, colSize: "col-12",
-        options: subscriptions.map((subscription: ISubscription) => ({
+        options: subscriptions?.map((subscription: ISubscription) => ({
           label: String(subscription.clientId),
           value: subscription.id
         }))
       },
       { id: "methodId", type: "select", label: "Méthode", required: true, colSize: "col-12",
-        options: methods.map((method: IMethod) => ({
+        options: methods?.map((method: IMethod) => ({
           label: method.name,
           value: method.id
         }))
       },
       { id: "promoId", type: "select", label: "Promo", required: true, colSize: "col-12",
-        options: promos.map((promo: IPromo) => ({
+        options: promos?.map((promo: IPromo) => ({
           label: promo.code,
           value: promo.id
         }))
@@ -63,24 +62,24 @@ export default class TransactionsRepository extends TransactionsService {
     ]
   }
 
-  formUpdateTransaction(transaction: ITransaction, subscriptions: ISubscription[], methods: IMethod[], promos: IPromo[]) {
+  formUpdateTransaction(transaction: ITransaction, subscriptions?: ISubscription[], methods?: IMethod[], promos?: IPromo[]) {
     return [
       { id: "subscriptionId", type: "select", label: "Abonnement", required: true, colSize: "col-12",
-        options: subscriptions.map((subscription: ISubscription) => ({
+        options: subscriptions?.map((subscription: ISubscription) => ({
           label: String(subscription.clientId),
           value: subscription.id
         })),
         value: transaction.subscriptionId
       },
       { id: "methodId", type: "select", label: "Méthode", required: true, colSize: "col-12",
-        options: methods.map((method: IMethod) => ({
+        options: methods?.map((method: IMethod) => ({
           label: method.name,
           value: method.id
         })),
         value: transaction.methodId
       },
       { id: "promoId", type: "select", label: "Promo", required: true, colSize: "col-12",
-        options: promos.map((promo: IPromo) => ({
+        options: promos?.map((promo: IPromo) => ({
           label: promo.code,
           value: promo.id
         })),

@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { ITag } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class TagsService extends Request<ITag> {
-  setData: SetData<ITag>;
-
-  constructor(setTag: SetData<ITag>) {
+  constructor() {
     super();
-    this.setData = setTag;
   }
 
-  async createTag(data: ITag) {
-    this.setData('post', 'loading', true);
+  async createTag(data: ITag, onSuccess?: (data: ITag) => void, onError?: (error: Error) => void) {
     await this.post('/tag/create', data)
       .then(data => {
-        this.setData('post', 'data', data as ITag);
+        if (onSuccess) {
+          onSuccess(data as ITag);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchTags(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchTags(params: ParamsQuery, onSuccess?: (data: { data: ITag[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/tag/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: ITag[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: ITag[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchTag(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchTag(id: number, onSuccess?: (data: ITag) => void, onError?: (error: Error) => void) {
     await this.getById('/tag', id)
       .then(data => {
-        this.setData('getById', 'data', data as ITag);
+        if (onSuccess) {
+          onSuccess(data as ITag);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchTag(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchTag(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: ITag) => void, onError?: (error: Error) => void) {
     await this.patch('/tag', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as ITag);
+        if (onSuccess) {
+          onSuccess(data as ITag);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateTag(id: number, data: ITag) {
-    this.setData('put', 'loading', true);
+  async updateTag(id: number, data: ITag, onSuccess?: (data: ITag) => void, onError?: (error: Error) => void) {
     await this.put('/tag', id, data)
       .then(data => {
-        this.setData('put', 'data', data as ITag);
+        if (onSuccess) {
+          onSuccess(data as ITag);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteTag(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteTag(id: number, onSuccess?: (data: ITag) => void, onError?: (error: Error) => void) {
     await this.delete('/tag', id)
       .then(data => {
-        this.setData('delete', 'data', data as ITag);
+        if (onSuccess) {
+          onSuccess(data as ITag);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteTags(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteTags(ids: number[], onSuccess?: (data: ITag[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/tag/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as ITag[]);
+        if (onSuccess) {
+          onSuccess(data as ITag[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

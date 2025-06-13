@@ -3,11 +3,10 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IClient, IUser } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class ClientRepository extends ClientsService {
-  constructor(clients: {state: Record<RequestType, RequestState<IClient>>, handleData: SetData<IClient>}) {
-    super(clients.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -28,12 +27,12 @@ export default class ClientRepository extends ClientsService {
   }
 
   // Form methods
-  formCreateClient(users: IUser[]) {
+  formCreateClient(users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
-        options: users.map((user: IUser) => ({
+        options: users?.map((user: IUser) => ({
           label: user.name,
           value: user.id
         }))
@@ -41,12 +40,12 @@ export default class ClientRepository extends ClientsService {
     ]
   }
 
-  formUpdateClient(client: IClient, users: IUser[]) {
+  formUpdateClient(client: IClient, users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: client.name },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: client.phone },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
-        options: users.map((user: IUser) => ({
+        options: users?.map((user: IUser) => ({
           label: user.name,
           value: user.id
         })),

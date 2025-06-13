@@ -3,11 +3,10 @@ import { IDate, ILocation, ISubscription } from "@/core/interfaces";
 import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DateRepository extends DatesService {
-  constructor(dates: {state: Record<RequestType, RequestState<IDate>>, handleData: SetData<IDate>}) {
-    super(dates.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -31,17 +30,17 @@ export default class DateRepository extends DatesService {
   }
 
   // Form methods
-  formCreateDate(subscriptions: ISubscription[], locations: ILocation[]) {
+  formCreateDate(subscriptions?: ISubscription[], locations?: ILocation[]) {
     return [
       { id: "deliveryDate", type: "date", label: "Date de livraison", required: true, colSize: "col-12" },
       { id: "subscriptionId", type: "select", label: "Abonnement", required: true, colSize: "col-12",
-        options: subscriptions.map((subscription: ISubscription) => ({
+        options: subscriptions?.map((subscription: ISubscription) => ({
           label: subscription.clientId,
           value: subscription.id
         }))
       },
       { id: "locationId", type: "select", label: "Lieu", required: true, colSize: "col-12",
-        options: locations.map((location: ILocation) => ({
+        options: locations?.map((location: ILocation) => ({
           label: location.address,
           value: location.id
         }))
@@ -49,18 +48,18 @@ export default class DateRepository extends DatesService {
     ]
   }
 
-  formUpdateDate(date: IDate, subscriptions: ISubscription[], locations: ILocation[]) {
+  formUpdateDate(date: IDate, subscriptions?: ISubscription[], locations?: ILocation[]) {
     return [
       { id: "deliveryDate", type: "date", label: "Date de livraison", required: true, colSize: "col-12", value: date.deliveryDate },
       { id: "subscriptionId", type: "select", label: "Abonnement", required: true, colSize: "col-12",
-        options: subscriptions.map((subscription: ISubscription) => ({
+        options: subscriptions?.map((subscription: ISubscription) => ({
           label: subscription.clientId,
           value: subscription.id
         })),
         value: date.subscriptionId
       },
       { id: "locationId", type: "select", label: "Lieu", required: true, colSize: "col-12",
-        options: locations.map((location: ILocation) => ({
+        options: locations?.map((location: ILocation) => ({
           label: location.address,
           value: location.id
         })),
@@ -69,17 +68,17 @@ export default class DateRepository extends DatesService {
     ]
   }
 
-  formFilterDate(subscriptions: ISubscription[], locations: ILocation[]) {
+  formFilterDate(subscriptions?: ISubscription[], locations?: ILocation[]) {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
       { id: "subscriptionId", type: "select", placeholder: "Abonnement", colSize: "col-12 col-md-2",
-        options: subscriptions.map((subscription: ISubscription) => ({
+        options: subscriptions?.map((subscription: ISubscription) => ({
           label: subscription.clientId,
           value: subscription.id
         }))
       },
       { id: "locationId", type: "select", placeholder: "Lieu", colSize: "col-12 col-md-2",
-        options: locations.map((location: ILocation) => ({
+        options: locations?.map((location: ILocation) => ({
           label: location.address,
           value: location.id
         }))

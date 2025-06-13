@@ -3,11 +3,10 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import RestaurantsService from '@/services/restaurantsService';
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class RestaurantsRepository extends RestaurantsService {
-  constructor(restaurants: {state: Record<RequestType, RequestState<IRestaurant>>, handleData: SetData<IRestaurant>}) {
-    super(restaurants.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -29,12 +28,12 @@ export default class RestaurantsRepository extends RestaurantsService {
   }
 
   // Form methods
-  formCreateRestaurant(users: IUser[]) {
+  formCreateRestaurant(users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
-        options: users.map((user: IUser) => ({
+        options: users?.map((user: IUser) => ({
           label: user.name,
           value: user.id
         }))
@@ -42,12 +41,12 @@ export default class RestaurantsRepository extends RestaurantsService {
     ]
   }
 
-  formUpdateRestaurant(restaurant: IRestaurant, users: IUser[]) {
+  formUpdateRestaurant(restaurant: IRestaurant, users?: IUser[]) {
     return [
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: restaurant.name },
       { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: restaurant.phone },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
-        options: users.map((user: IUser) => ({
+        options: users?.map((user: IUser) => ({
           label: user.name,
           value: user.id
         })),

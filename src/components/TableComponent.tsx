@@ -38,7 +38,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, 
                 className="form-check-input"
                 onChange={ () => checkbox?.checkAllList() } 
                 type="checkbox"
-                checked={list.length == checkbox?.checkList.length}
+                checked={list?.length == checkbox?.checkList?.length}
               />
             </th>
           }
@@ -69,7 +69,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, 
         </tr>
       </thead>
       <tbody>
-        {list.map((item, index) => (
+        {list?.map((item, index) => (
           <tr key={index} className="align-middle">
             {
               checkbox && 
@@ -78,7 +78,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, 
                   className="form-check-input"
                   onChange={()=> checkbox?.handleCheckList(item.id)} 
                   type="checkbox"
-                  checked={checkbox?.checkList.length > 0 ? checkbox?.checkList.includes(item.id) : false}
+                  checked={checkbox?.checkList?.length > 0 ? checkbox?.checkList?.includes(item.id) : false}
                 />
               </td>
             }

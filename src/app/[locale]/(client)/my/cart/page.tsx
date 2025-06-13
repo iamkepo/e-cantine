@@ -5,13 +5,13 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from 'nextjs-toploader/app';
 import { useAuthStore } from "@/stores/useAuthStore";
-import { Meta } from "@/core/types";
+import { MetaResponse } from "@/core/types";
 import { modal } from "@/stores/appStore";
 import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
-import useDataFetch from "@/hooks/useDataForm";
+import { metaResponse } from "@/core";
 
 const LazyCartItemsBlock = lazy(() => import("@/components/blocks/CartItemsBlock"));
 const LazyCategoriesListBlock = lazy(() => import("@/components/blocks/CategoriesListBlock"));
@@ -23,25 +23,25 @@ const Page: React.FC = () => {
   const { lang } = useLangStore();
   const { cart } = useCartStore();
   const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
-  const articles = useDataFetch<IArticle>();
-  const categories = useDataFetch<ICategory>();
+  const [articles, setArticles] = useState<MetaResponse<IArticle>>(metaResponse);
+  const [categories, setCategories] = useState<MetaResponse<ICategory>>(metaResponse);
   
-  const articleRepository = useMemo(() => new ArticleRepository(articles), [articles]);
-  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
+  const articleRepository = useMemo(() => new ArticleRepository(), []);
+  const categoryRepository = useMemo(() => new CategoryRepository(), []);
 
   useEffect(() => {
-    articleRepository.fetchArticles({take: 100});
-    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' });
+    articleRepository.fetchArticles({take: 100}, (data) => setArticles(data));
+    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }, (data) => setCategories(data));
   }, [articleRepository, categoryRepository]);
   
   useEffect(() => {
-    const updated = (categories.state.get?.data as {data: ICategory[], meta: Meta})?.data
+    const updated = categories.data
       .filter((category) => category.id != null)
       .filter((category) => category.id != 5)
       .map((category) => ({ 
         id: category.id as number, 
         name: category.name, 
-        checked: cart.filter(el => (articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5).find(a => a.id === el.id)?.categoryId === category.id).length > 0 
+        checked: cart.filter(el => articles.data.filter(el => el.categoryId != 5).find(a => a.id === el.id)?.categoryId === category.id).length > 0 
       }));
       
     setMissingCategories(updated);
@@ -60,7 +60,7 @@ const Page: React.FC = () => {
       <div className="text-center">
         <p>
           Êtes-vous sûr de vouloir ignorer la catégorie 
-          {(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.find(c => c.id === category)?.name} ?
+          {categories.data.find(c => c.id === category)?.name} ?
         </p>
         <div className="d-flex justify-content-between">
           <button type="button" className="btn btn-outline-danger" onClick={() => modal.close()}>Non</button>
@@ -89,9 +89,9 @@ const Page: React.FC = () => {
           <Suspense fallback={<BlockSkeleton count={1} multiple className={`card mb-3 text-bg-${theme} h-100`} />}>
             <LazyCartItemsBlock 
               items={cart} 
-              categories={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data} 
-              articlesPrincipal={(articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5)} 
-              articlesAccompagnement={(articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId == 5)} 
+              categories={categories.data} 
+              articlesPrincipal={articles.data.filter(el => el.categoryId != 5)} 
+              articlesAccompagnement={articles.data.filter(el => el.categoryId == 5)} 
             />
           </Suspense>
           :
@@ -131,8 +131,8 @@ const Page: React.FC = () => {
             Total :
             { cart.length > 0 ?
               cart.reduce((sum, item) => {
-                return sum + (((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId != 5).find(a => a.id === item.id)?.price || 0) 
-                + priceAccomp((articles.state.get?.data as {data: IArticle[], meta: Meta})?.data.filter(el => el.categoryId == 5), item))
+                return sum + (((articles.data.filter(el => el.categoryId != 5).find(a => a.id === item.id)?.price || 0) 
+                + priceAccomp(articles.data.filter(el => el.categoryId == 5), item)))
               }, 0).toFixed(2)
             : 0} XOF
           </p>

@@ -3,26 +3,25 @@ import { NotificationType, StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { INotification, IUser } from "@/core/interfaces";
 import NotificationsService from '@/services/notificationsService';
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class NotificationsRepository extends NotificationsService {
-  constructor(notifications: {state: Record<RequestType, RequestState<INotification>>, handleData: SetData<INotification>}) {
-    super(notifications.handleData);
+  constructor() {
+    super();
   }
 
-  formCreateNotification(users: IUser[]) {
+  formCreateNotification(users?: IUser[]) {
     return [
       { id: "message", type: "text", label: "Message", required: true, colSize: "col-12" },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })) },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })) },
       { id: "type", type: "select", label: "Type", required: true, colSize: "col-12", options: Object.values(NotificationType).map(type => ({ label: type, value: type })) },
       { id: "seen", type: "checkbox", label: "Vu", required: true, colSize: "col-12" },
     ]
   }
 
-  formUpdateNotification(notification: INotification, users: IUser[]) {
+  formUpdateNotification(notification: INotification, users?: IUser[]) {
     return [
       { id: "message", type: "text", label: "Message", required: true, colSize: "col-12", value: notification.message },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: notification.userId },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })), value: notification.userId },
       { id: "type", type: "select", label: "Type", required: true, colSize: "col-12", options: Object.values(NotificationType).map(type => ({ label: type, value: type })), value: notification.type },
       { id: "seen", type: "checkbox", label: "Vu", required: true, colSize: "col-12", value: notification.seen },
     ]

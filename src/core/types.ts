@@ -75,6 +75,10 @@ export interface Meta {
   pageCount: number;
   limit: number;
 }
+export interface MetaResponse<T> {
+  data: T[];
+  meta: Meta;
+}
 
 export interface RepositoryResponse<T> {
   data: T[];

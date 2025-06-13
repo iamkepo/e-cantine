@@ -3,32 +3,31 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IArticle, IConnection, ITag } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 class ConnectionRepository extends ConnectionsService {
-  constructor(connections: {state: Record<RequestType, RequestState<IConnection>>, handleData: SetData<IConnection>}) {
-    super(connections.handleData);
+  constructor() {
+    super();
   }
 
-  formCreateConnection(articles: IArticle[], tags: ITag[]) {
+  formCreateConnection(articles?: IArticle[], tags?: ITag[]) {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })) },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles?.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags?.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
     ]
   }
 
-  formUpdateConnection(connection: IConnection, articles: IArticle[], tags: ITag[]) {
+  formUpdateConnection(connection: IConnection, articles?: IArticle[], tags?: ITag[]) {
     return [
-      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })), value: connection.articleId },
-      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: connection.tagId },
+      { id: "articleId", type: "searchselect", label: "Article", required: true, colSize: "col-12", options: articles?.map((article: IArticle) => ({ label: article.name, value: article.id })), value: connection.articleId },
+      { id: "tagId", type: "searchselect", label: "Tag", required: true, colSize: "col-12", options: tags?.map((tag: ITag) => ({ label: tag.name, value: tag.id })), value: connection.tagId },
     ]
   }
 
-  formFilterConnection(articles: IArticle[], tags: ITag[]) {
+  formFilterConnection(articles?: IArticle[], tags?: ITag[]) {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
-      { id: "tagId", type: "select", placeholder: "Tag", colSize: "col-12 col-md-2", options: tags.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
-      { id: "articleId", type: "select", placeholder: "Article", colSize: "col-12 col-md-2", options: articles.map((article: IArticle) => ({ label: article.name, value: article.id })) },
+      { id: "tagId", type: "select", placeholder: "Tag", colSize: "col-12 col-md-2", options: tags?.map((tag: ITag) => ({ label: tag.name, value: tag.id })) },
+      { id: "articleId", type: "select", placeholder: "Article", colSize: "col-12 col-md-2", options: articles?.map((article: IArticle) => ({ label: article.name, value: article.id })) },
       { id: "status", type: "select", placeholder: "Status", colSize: "col-12 col-md-2", options: Object.values(StatusActivation).map((status) => ({ label: statusRender(status), value: status })) },
     ]
   }

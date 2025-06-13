@@ -5,9 +5,7 @@ import { useMemo, useState } from "react";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from "next/navigation";
-import useDataFetch from "@/hooks/useDataForm";
 import AuthRepository from "@/repositories/authRepository";
-import { IAuth } from "@/core";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -22,8 +20,7 @@ const Page: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const auth = useDataFetch<IAuth>();
-  const repository = useMemo(() => new AuthRepository(auth), [auth]);
+  const repository = useMemo(() => new AuthRepository(), []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({
       ...prev,

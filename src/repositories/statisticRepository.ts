@@ -1,11 +1,9 @@
-import { IStatistics } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 import StatisticsService from "@/services/statisticsService";
 import * as yup from 'yup';
 
 export default class StatisticRepository extends StatisticsService {
-  constructor(statistics: {state: Record<RequestType, RequestState<IStatistics>>, handleData: SetData<IStatistics>}) {
-    super(statistics.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration (if needed for displaying statistics in a table)

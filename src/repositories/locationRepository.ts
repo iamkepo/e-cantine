@@ -3,11 +3,10 @@ import * as yup from 'yup';
 import LocationsService from "@/services/locationsService";
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class LocationsRepository extends LocationsService {
-  constructor(locations: {state: Record<RequestType, RequestState<ILocation>>, handleData: SetData<ILocation>}) {
-    super(locations.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -34,7 +33,7 @@ export default class LocationsRepository extends LocationsService {
   }
 
   // Form methods
-  formCreateLocation(clients: IClient[]) {
+  formCreateLocation(clients?: IClient[]) {
     return [
       { id: "address", type: "text", label: "Adresse", required: true, colSize: "col-12 col-md-2" },
       { id: "latitude", type: "number", label: "Latitude", required: true, colSize: "col-12 col-md-2" },
@@ -43,7 +42,7 @@ export default class LocationsRepository extends LocationsService {
       { id: "country", type: "text", label: "Pays", required: true, colSize: "col-12 col-md-2" },
       { id: "zipCode", type: "text", label: "Code postal", required: true, colSize: "col-12 col-md-2" },
       { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12 col-md-2",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         }))
@@ -51,7 +50,7 @@ export default class LocationsRepository extends LocationsService {
     ]
   }
 
-  formUpdateLocation(location: ILocation, clients: IClient[]) {
+  formUpdateLocation(location: ILocation, clients?: IClient[]) {
     return [
       { id: "address", type: "text", label: "Adresse", required: true, colSize: "col-12 col-md-2", value: location.address },
       { id: "latitude", type: "number", label: "Latitude", required: true, colSize: "col-12 col-md-2", value: location.latitude },
@@ -60,7 +59,7 @@ export default class LocationsRepository extends LocationsService {
       { id: "country", type: "text", label: "Pays", required: true, colSize: "col-12 col-md-2", value: location.country },
       { id: "zipCode", type: "text", label: "Code postal", required: true, colSize: "col-12 col-md-2", value: location.zipCode },
       { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12 col-md-2",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         })),
@@ -69,11 +68,11 @@ export default class LocationsRepository extends LocationsService {
     ]
   }
 
-  formFilterLocation(clients: IClient[]) {
+  formFilterLocation(clients?: IClient[]) {
     return [
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
       { id: "clientId", type: "select", placeholder: "Client", colSize: "col-12 col-md-3",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         }))

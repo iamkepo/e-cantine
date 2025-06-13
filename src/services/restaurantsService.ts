@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IRestaurant } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class RestaurantsService extends Request<IRestaurant> {
-  setData: SetData<IRestaurant>;
-
-  constructor(setRestaurant: SetData<IRestaurant>) {
+  constructor() {
     super();
-    this.setData = setRestaurant;
   }
 
-  async createRestaurant(data: IRestaurant) {
-    this.setData('post', 'loading', true);
+  async createRestaurant(data: IRestaurant, onSuccess?: (data: IRestaurant) => void, onError?: (error: Error) => void) {
     await this.post('/restaurant/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IRestaurant);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchRestaurants(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchRestaurants(params: ParamsQuery, onSuccess?: (data: { data: IRestaurant[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/restaurant/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IRestaurant[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IRestaurant[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchRestaurant(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchRestaurant(id: number, onSuccess?: (data: IRestaurant) => void, onError?: (error: Error) => void) {
     await this.getById('/restaurant', id)
       .then(data => {
-        this.setData('getById', 'data', data as IRestaurant);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchRestaurant(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchRestaurant(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IRestaurant) => void, onError?: (error: Error) => void) {
     await this.patch('/restaurant', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IRestaurant);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateRestaurant(id: number, data: IRestaurant) {
-    this.setData('put', 'loading', true);
+  async updateRestaurant(id: number, data: IRestaurant, onSuccess?: (data: IRestaurant) => void, onError?: (error: Error) => void) {
     await this.put('/restaurant', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IRestaurant);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteRestaurant(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteRestaurant(id: number, onSuccess?: (data: IRestaurant) => void, onError?: (error: Error) => void) {
     await this.delete('/restaurant', id)
       .then(data => {
-        this.setData('delete', 'data', data as IRestaurant);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteRestaurants(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteRestaurants(ids: number[], onSuccess?: (data: IRestaurant[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/restaurant/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IRestaurant[]);
+        if (onSuccess) {
+          onSuccess(data as IRestaurant[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

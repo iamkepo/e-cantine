@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IPreference } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class PreferencesService extends Request<IPreference> {
-  setData: SetData<IPreference>;
-
-  constructor(setPreference: SetData<IPreference>) {
+  constructor() {
     super();
-    this.setData = setPreference;
   }
 
-  async createPreference(data: IPreference) {
-    this.setData('post', 'loading', true);
+  async createPreference(data: IPreference, onSuccess?: (data: IPreference) => void, onError?: (error: Error) => void) {
     await this.post('/preference/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IPreference);
+        if (onSuccess) {
+          onSuccess(data as IPreference);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchPreferences(params: ParamsQuery & { clientId?: number }) {
-    this.setData('get', 'loading', true);
+  async fetchPreferences(params: ParamsQuery & { clientId?: number }, onSuccess?: (data: { data: IPreference[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/preference/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IPreference[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IPreference[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchPreference(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchPreference(id: number, onSuccess?: (data: IPreference) => void, onError?: (error: Error) => void) {
     await this.getById('/preference', id)
       .then(data => {
-        this.setData('getById', 'data', data as IPreference);
+        if (onSuccess) {
+          onSuccess(data as IPreference);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchPreference(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchPreference(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IPreference) => void, onError?: (error: Error) => void) {
     await this.patch('/preference', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IPreference);
+        if (onSuccess) {
+          onSuccess(data as IPreference);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updatePreference(id: number, data: IPreference) {
-    this.setData('put', 'loading', true);
+  async updatePreference(id: number, data: IPreference, onSuccess?: (data: IPreference) => void, onError?: (error: Error) => void) {
     await this.put('/preference', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IPreference);
+        if (onSuccess) {
+          onSuccess(data as IPreference);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deletePreference(id: number) {
-    this.setData('delete', 'loading', true);
+  async deletePreference(id: number, onSuccess?: (data: IPreference) => void, onError?: (error: Error) => void) {
     await this.delete('/preference', id)
       .then(data => {
-        this.setData('delete', 'data', data as IPreference);
+        if (onSuccess) {
+          onSuccess(data as IPreference);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deletePreferences(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deletePreferences(ids: number[], onSuccess?: (data: IPreference[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/preference/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IPreference[]);
+        if (onSuccess) {
+          onSuccess(data as IPreference[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

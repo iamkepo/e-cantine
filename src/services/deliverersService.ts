@@ -1,110 +1,107 @@
-import { Meta, ParamsQuery, SetData } from "@/core/types";
+import { Meta, ParamsQuery } from "@/core/types";
 import { IDeliverer } from "@/core/interfaces";
 import Request from "@/configs/request";
 
 class DeliverersService extends Request<IDeliverer> {
-  setData: SetData<IDeliverer>;
-
-  constructor(setDeliverer: SetData<IDeliverer>) {
+  constructor() {
     super();
-    this.setData = setDeliverer;
   }
 
-  async createDeliverer(data: IDeliverer) {
-    this.setData('post', 'loading', true);
+  async createDeliverer(data: IDeliverer, onSuccess?: (data: IDeliverer) => void, onError?: (error: Error) => void) {
     await this.post('/deliverer/create', data)
       .then(data => {
-        this.setData('post', 'data', data as IDeliverer);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer);
+        }
       })
       .catch(error => {
-        this.setData('post', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('post', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchDeliverers(params: ParamsQuery) {
-    this.setData('get', 'loading', true);
+  async fetchDeliverers(params: ParamsQuery, onSuccess?: (data: { data: IDeliverer[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/deliverer/list', params)
       .then(data => {
-        this.setData('get', 'data', data as { data: IDeliverer[], meta: Meta });
+        if (onSuccess) {
+          onSuccess(data as { data: IDeliverer[], meta: Meta });
+        }
       })
       .catch(error => {
-        this.setData('get', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('get', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async fetchDeliverer(id: number) {
-    this.setData('getById', 'loading', true);
+  async fetchDeliverer(id: number, onSuccess?: (data: IDeliverer) => void, onError?: (error: Error) => void) {
     await this.getById('/deliverer', id)
       .then(data => {
-        this.setData('getById', 'data', data as IDeliverer);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer);
+        }
       })
       .catch(error => {
-        this.setData('getById', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('getById', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async patchDeliverer(id: number, patch: { attr: string, val: unknown }) {
-    this.setData('patch', 'loading', true);
+  async patchDeliverer(id: number, patch: { attr: string, val: unknown }, onSuccess?: (data: IDeliverer) => void, onError?: (error: Error) => void) {
     await this.patch('/deliverer', id, patch)
       .then(data => {
-        this.setData('patch', 'data', data as IDeliverer);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer);
+        }
       })
       .catch(error => {
-        this.setData('patch', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('patch', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async updateDeliverer(id: number, data: IDeliverer) {
-    this.setData('put', 'loading', true);
+  async updateDeliverer(id: number, data: IDeliverer, onSuccess?: (data: IDeliverer) => void, onError?: (error: Error) => void) {
     await this.put('/deliverer', id, data)
       .then(data => {
-        this.setData('put', 'data', data as IDeliverer);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer);
+        }
       })
       .catch(error => {
-        this.setData('put', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('put', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteDeliverer(id: number) {
-    this.setData('delete', 'loading', true);
+  async deleteDeliverer(id: number, onSuccess?: (data: IDeliverer) => void, onError?: (error: Error) => void) {
     await this.delete('/deliverer', id)
       .then(data => {
-        this.setData('delete', 'data', data as IDeliverer);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer);
+        }
       })
       .catch(error => {
-        this.setData('delete', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('delete', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 
-  async deleteDeliverers(ids: number[]) {
-    this.setData('deleteMany', 'loading', true);
+  async deleteDeliverers(ids: number[], onSuccess?: (data: IDeliverer[]) => void, onError?: (error: Error) => void) {
     await this.deleteMany('/deliverer/list', ids)
       .then(data => {
-        this.setData('deleteMany', 'data', data as IDeliverer[]);
+        if (onSuccess) {
+          onSuccess(data as IDeliverer[]);
+        }
       })
       .catch(error => {
-        this.setData('deleteMany', 'error', JSON.stringify(error));
-      })
-      .finally(() => {
-        this.setData('deleteMany', 'loading', false);
+        if (onError) {
+          onError(error);
+        }
       });
   }
 }

@@ -1,8 +1,8 @@
 "use client";
-import { modal } from "@/stores/appStore";
+import { modal, toast } from "@/stores/appStore";
 import { useEffect, useMemo, useState } from "react";
 import { IType } from "@/core/interfaces";
-import { Meta, Field } from "@/core/types";
+import { MetaResponse, Field } from "@/core/types";
 import TypeRepository from "@/repositories/typeRepository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { StatusActivation } from "@/enums";
@@ -13,21 +13,18 @@ import { useCheckList } from "@/hooks/useCheckList";
 import TableComponent from "@/components/TableComponent";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
-import useDataFetch from "@/hooks/useDataForm";
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
-  const types = useDataFetch<IType>();
-  const typeRepository = useMemo(() => new TypeRepository(types), [types]);
+  const [types, setTypes] = useState<MetaResponse<IType>>();
+  const typeRepository = useMemo(() => new TypeRepository(), []);
   const [params, setParams] = useState(typeRepository.filterType);
   const { checkList, checkAllList, handleCheckList } = useCheckList(
-    (types.state.get?.data as {data: IType[], meta: Meta})?.data?.map(type => type.id as number) || []
+    (types?.data as IType[])?.map(type => type.id as number) || []
   );
 
   useEffect(() => {
-    if (typeRepository) {
-      typeRepository.fetchTypes(params);
-    }
+    typeRepository.fetchTypes(params, setTypes);
   }, [typeRepository, params]);
 
 
@@ -60,11 +57,13 @@ const Page: React.FC = () => {
                 <BtnConfirmComponent 
                   btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={typeRepository.confirmDeleteTypes}
-                  onConfirm={() => typeRepository.deleteTypes(checkList)
-                    .then(() => typeRepository.fetchTypes(params))
-                    .then(() => checkAllList())
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onConfirm={() => typeRepository.deleteTypes(checkList,
+                    () => {
+                      toast.success("Types supprimees"); 
+                      typeRepository.fetchTypes(params, setTypes); 
+                      checkAllList(); 
+                      modal.close()
+                    })
                   }
                 />
                :
@@ -76,10 +75,12 @@ const Page: React.FC = () => {
                     fields:typeRepository.formCreateType() as unknown as Field[],
                     schema:typeRepository.typeSchema
                   }}
-                  onSubmit={ (data: IType) => typeRepository.createType(data)
-                    .then(() => typeRepository.fetchTypes(params))
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onSubmit={ (data: IType) => typeRepository.createType(data,
+                    () => {
+                      toast.success("Type cree"); 
+                      typeRepository.fetchTypes(params, setTypes); 
+                      modal.close()
+                    })
                   }
                 />
               }
@@ -96,7 +97,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={typeRepository.tableHeadType}
-          list={(types.state.get?.data as {data: IType[], meta: Meta})?.data}
+          list={(types?.data as IType[])}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: IType) => modal.open(
             <SubmitComponent 
@@ -104,10 +105,12 @@ const Page: React.FC = () => {
               fields={typeRepository.formUpdateType(e) as unknown as Field[]} 
               schema={typeRepository.typeSchema} 
               btn="Modifier" 
-              onSubmit={(data) => typeRepository.updateType(e.id as number, data)
-                .then(() => typeRepository.fetchTypes(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onSubmit={(data) => typeRepository.updateType(e.id as number, data,
+                () => {
+                  toast.success("Type modifie"); 
+                  typeRepository.fetchTypes(params, setTypes); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -115,10 +118,12 @@ const Page: React.FC = () => {
             <ConfirmComponent 
               title={typeRepository.confirmDeleteType.title}
               description={typeRepository.confirmDeleteType.description}
-              onConfirm={() => typeRepository.deleteType(id)
-                .then(() => typeRepository.fetchTypes(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onConfirm={() => typeRepository.deleteType(id,
+                () => {
+                  toast.success("Type supprime"); 
+                  typeRepository.fetchTypes(params, setTypes); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -128,10 +133,12 @@ const Page: React.FC = () => {
               <ConfirmComponent 
                 title={typeRepository.confirmChangeStatusType.title}
                 description={typeRepository.confirmChangeStatusType.description}
-                onConfirm={ () => typeRepository.changeStatusType(id, status)
-                  .then(() => typeRepository.fetchTypes(params))
-                  .catch((error) => console.error(error))
-                  .finally(() => modal.close())
+                onConfirm={ () => typeRepository.changeStatusType(id, status,
+                  () => {
+                    toast.success("Type modifie"); 
+                    typeRepository.fetchTypes(params, setTypes); 
+                    modal.close()
+                  })
                 }
               />
             )}
@@ -140,7 +147,7 @@ const Page: React.FC = () => {
 
         <PaginationComponent 
           page={params.page}
-          total={(types.state.get?.data as {data: IType[], meta: Meta})?.meta.pageCount}
+          total={(types?.meta?.pageCount as number)}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

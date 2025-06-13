@@ -3,27 +3,26 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IAdmin, IUser } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class AdminRepository extends AdminsService {
-  constructor(admins: {state: Record<RequestType, RequestState<IAdmin>>, handleData: SetData<IAdmin>}) {
-    super(admins.handleData);
+  constructor() {
+    super();
   }
 
-  formCreateAdmin(users: IUser[]) {
+  formCreateAdmin(users?: IUser[]) {
     return [
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })) },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })) },
     ]
   }
 
-  formUpdateAdmin(admin: IAdmin, users: IUser[]) {
+  formUpdateAdmin(admin: IAdmin, users?: IUser[]) {
     return [
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12", value: admin.email },
       { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: admin.name },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users.map((user: IUser) => ({ label: user.name, value: user.id })), value: admin.userId },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })), value: admin.userId },
     ]
   }
 

@@ -1,5 +1,5 @@
 "use client";
-import { modal } from "@/stores/appStore";
+import { modal, toast } from "@/stores/appStore";
 import { ICategory } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
@@ -10,21 +10,20 @@ import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
 import TableComponent from "@/components/TableComponent";
 import { useCheckList } from "@/hooks/useCheckList";
-import { Meta, Field } from "@/core/types";
+import { Field, MetaResponse } from "@/core/types";
 import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import BtnSubmitComponent from "@/components/BtnSubmitComponent";
-import useDataFetch from "@/hooks/useDataForm";
 
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);
-  const categories = useDataFetch<ICategory>(); 
-  const categoryRepository = useMemo(() => new CategoryRepository(categories), [categories]);
+  const [categories, setCategories] = useState<MetaResponse<ICategory>>(); 
+  const categoryRepository = useMemo(() => new CategoryRepository(), []);
   const [params, setParams] = useState(categoryRepository.filterCategory);
-  const { checkList, checkAllList, handleCheckList } = useCheckList((categories.state.get?.data as {data: ICategory[], meta: Meta})?.data.map(category => category.id as number));
+  const { checkList, checkAllList, handleCheckList } = useCheckList((categories?.data as ICategory[])?.map(category => category.id as number));
 
   useEffect(() => {
-    categoryRepository.fetchCategories(params);
+    categoryRepository.fetchCategories(params, setCategories);
   }, [categoryRepository, params]);
 
 
@@ -56,12 +55,14 @@ const Page: React.FC = () => {
                 <BtnConfirmComponent 
                   btn={{ label: `Supprimer (${checkList.length})`, color: "danger", icon: "trash" }}
                   confirm={categoryRepository.confirmDeleteCategories}
-                  onConfirm={() => categoryRepository.deleteCategories(checkList)
-                    .then(() => categoryRepository.fetchCategories(params))
-                    .then(() => checkAllList())
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
-                  }
+                  onConfirm={() => categoryRepository.deleteCategories(checkList,
+                    () => {
+                      toast.success("Categories supprimees"); 
+                      categoryRepository.fetchCategories(params, setCategories); 
+                      checkAllList(); 
+                      modal.close()
+                    }
+                  )}
                 />
                :
                 <BtnSubmitComponent 
@@ -72,10 +73,12 @@ const Page: React.FC = () => {
                     fields:categoryRepository.formCreateCategory() as unknown as Field[],
                     schema:categoryRepository.categorySchema
                   }}
-                  onSubmit={ (data: ICategory) => categoryRepository.createCategory(data)
-                    .then(() => categoryRepository.fetchCategories(params))
-                    .catch((error) => console.error(error))
-                    .finally(() => modal.close())
+                  onSubmit={ (data: ICategory) => categoryRepository.createCategory(data,
+                    () => {
+                      toast.success("Categorie creee"); 
+                      categoryRepository.fetchCategories(params, setCategories); 
+                      modal.close()
+                    })
                   }
                 />
               }
@@ -92,7 +95,7 @@ const Page: React.FC = () => {
         <TableComponent
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={categoryRepository.tableHeadCategory}
-          list={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.data}
+          list={(categories?.data as ICategory[])}
           orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
           edit={(e: ICategory) => modal.open(
             <SubmitComponent 
@@ -100,10 +103,12 @@ const Page: React.FC = () => {
               fields={categoryRepository.formUpdateCategory(e) as unknown as Field[]} 
               schema={categoryRepository.categorySchema} 
               btn="Modifier" 
-              onSubmit={(data) => categoryRepository.updateCategory(e.id as number, data)
-                .then(() => categoryRepository.fetchCategories(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onSubmit={(data) => categoryRepository.updateCategory(e.id as number, data,
+                () => {
+                  toast.success("Categorie modifiee"); 
+                  categoryRepository.fetchCategories(params, setCategories); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -111,10 +116,12 @@ const Page: React.FC = () => {
             <ConfirmComponent 
               title={categoryRepository.confirmDeleteCategory.title}
               description={categoryRepository.confirmDeleteCategory.description}
-              onConfirm={() => categoryRepository.deleteCategory(id)
-                .then(() => categoryRepository.fetchCategories(params))
-                .catch((error) => console.error(error))
-                .finally(() => modal.close())
+              onConfirm={() => categoryRepository.deleteCategory(id,
+                () => {
+                  toast.success("Categorie supprimee");
+                  categoryRepository.fetchCategories(params, setCategories); 
+                  modal.close()
+                })
               } 
             />
           )}
@@ -124,10 +131,12 @@ const Page: React.FC = () => {
               <ConfirmComponent 
                 title={categoryRepository.confirmChangeStatusCategory.title}
                 description={categoryRepository.confirmChangeStatusCategory.description}
-                onConfirm={ () => categoryRepository.changeStatusCategory(id, status)
-                  .then(() => categoryRepository.fetchCategories(params))
-                  .catch((error) => console.error(error))
-                  .finally(() => modal.close())
+                onConfirm={ () => categoryRepository.changeStatusCategory(id, status,
+                  () => {
+                    toast.success("Categorie modifiee"); 
+                    categoryRepository.fetchCategories(params, setCategories); 
+                    modal.close()
+                  })
                 }
               />
             )}
@@ -136,7 +145,7 @@ const Page: React.FC = () => {
         
         <PaginationComponent
           page={params.page}
-          total={(categories.state.get?.data as {data: ICategory[], meta: Meta})?.meta.pageCount}
+          total={(categories?.meta.pageCount as number)}
           onChange={(page) => setParams({ ...params, page })}
         />
       </div>

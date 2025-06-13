@@ -3,15 +3,14 @@ import * as yup from 'yup';
 import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { ICategory } from "@/core/interfaces";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 class CategoryRepository extends CategoriesService {
-  constructor(categories: {state: Record<RequestType, RequestState<ICategory>>, handleData: SetData<ICategory>}) {
-    super(categories.handleData);
+  constructor() {
+    super();
   }
 
-  async changeStatusCategory(id: number, status: string) {
-    return await this.patchCategory(id, { attr: "status", val: status });
+  async changeStatusCategory(id: number, status: string, onSuccess?: (data: ICategory) => void, onError?: (error: Error) => void) {
+    await this.patchCategory(id, { attr: "status", val: status }, onSuccess, onError);
   }
 
   // Table configuration

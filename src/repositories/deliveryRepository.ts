@@ -3,11 +3,10 @@ import { statusRender } from "@/helpers/functions";
 import { IDelivery, ICommand, IDeliverer } from "@/core/interfaces";
 import { StatusActivation } from "@/enums";
 import DeliveriesService from "@/services/deliveriesService";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class DeliveryRepository extends DeliveriesService {
-  constructor(deliveries: {state: Record<RequestType, RequestState<IDelivery>>, handleData: SetData<IDelivery>}) {
-    super(deliveries.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -30,16 +29,16 @@ export default class DeliveryRepository extends DeliveriesService {
   }
 
   // Form methods
-  formCreateDelivery(commands: ICommand[], deliverers: IDeliverer[]) {
+  formCreateDelivery(commands?: ICommand[], deliverers?: IDeliverer[]) {
     return [
       { id: "commandId", type: "select", label: "Commande", required: true, colSize: "col-12 col-md-2",
-        options: commands.map((command: ICommand) => ({
+        options: commands?.map((command: ICommand) => ({
           label: String(command.id),
           value: command.id
         }))
       },
       { id: "delivererId", type: "select", label: "Livreur", required: true, colSize: "col-12 col-md-2",
-        options: deliverers.map((deliverer: IDeliverer) => ({
+        options: deliverers?.map((deliverer: IDeliverer) => ({
           label: deliverer.name,
           value: deliverer.id
         }))
@@ -47,17 +46,17 @@ export default class DeliveryRepository extends DeliveriesService {
     ]
   }
 
-  formUpdateDelivery(delivery: IDelivery, commands: ICommand[], deliverers: IDeliverer[]) {
+  formUpdateDelivery(delivery: IDelivery, commands?: ICommand[], deliverers?: IDeliverer[]) {
     return [
       { id: "commandId", type: "select", label: "Commande", required: true, colSize: "col-12 col-md-2",
-        options: commands.map((command: ICommand) => ({
+        options: commands?.map((command: ICommand) => ({
           label: String(command.id),
           value: command.id
         })),
         value: delivery.commandId
       },
       { id: "delivererId", type: "select", label: "Livreur", required: true, colSize: "col-12 col-md-2",
-        options: deliverers.map((deliverer: IDeliverer) => ({
+        options: deliverers?.map((deliverer: IDeliverer) => ({
           label: deliverer.name,
           value: deliverer.id
         })),

@@ -6,22 +6,23 @@ import { ITag, IPreference } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
 import PreferencesRepository from "@/repositories/preferenceRepository";
 import { toast } from "@/stores/appStore";
-import useDataFetch from "@/hooks/useDataForm";
-import { Meta } from "@/core/types";
+import { MetaResponse } from "@/core/types";
+import { useState } from "react";
+import { metaResponse } from "@/core";
 
 const LazyTagsBlock = lazy(() => import("@/components/blocks/TagsBlock"));
 
 const Page: React.FC = () => {
   const { theme } = useThemeStore();
-  const tags = useDataFetch<ITag>();
-  const preferences = useDataFetch<IPreference>();
+  const [ tags, setTags ] = useState<MetaResponse<ITag>>(metaResponse);
+  const [ preferences, setPreferences ] = useState<MetaResponse<IPreference>>(metaResponse);
   
-  const tagRepository = useMemo(() => new TagRepository(tags), [tags]);
-  const preferenceRepository = useMemo(() => new PreferencesRepository(preferences), [preferences]);
+  const tagRepository = useMemo(() => new TagRepository(), []);
+  const preferenceRepository = useMemo(() => new PreferencesRepository(), []);
 
   useEffect(() => {
-    tagRepository.fetchTags({take: 100});
-    preferenceRepository.fetchPreferences({clientId: 1, take: 100});
+    tagRepository.fetchTags({take: 100}, (data) => setTags(data));
+    preferenceRepository.fetchPreferences({clientId: 1, take: 100}, (data) => setPreferences(data));
   }, [tagRepository, preferenceRepository]);
 
   return (
@@ -41,12 +42,13 @@ const Page: React.FC = () => {
         <div className="d-flex flex-wrap gap-2">
           <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
             <LazyTagsBlock 
-              tags={(tags.state.get?.data as {data: ITag[], meta: Meta})?.data} 
-              tagIds={(preferences.state.get?.data as {data: IPreference[], meta: Meta})?.data.map(preference => preference.tagId as number)} 
+              tags={(tags.data as ITag[])} 
+              tagIds={(preferences.data as IPreference[]).map(preference => preference.tagId as number)} 
               onSelect={(id) => {
-                preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference)
-                .then(() => preferenceRepository.fetchPreferences({clientId: 1, take: 100}))
-                .catch((error) => toast.danger(error.response?.data?.error));
+                preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference,
+                  () => preferenceRepository.fetchPreferences({clientId: 1, take: 100}, (data) => setPreferences(data)),
+                  (error) => toast.danger(JSON.stringify(error))
+                )
               }}
             />
           </Suspense>

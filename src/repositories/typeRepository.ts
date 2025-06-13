@@ -3,15 +3,14 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IType } from "@/core/interfaces";
 import TypesService from "@/services/typesService";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 class TypeRepository extends TypesService {
-  constructor(types: {state: Record<RequestType, RequestState<IType>>, handleData: SetData<IType>}) {
-    super(types.handleData);
+  constructor() {
+    super();
   }
 
-  async changeStatusType(id: number, status: string) {
-    return await this.patchType(id, { attr: "status", val: status });
+  async changeStatusType(id: number, status: string, onSuccess?: (data: IType) => void, onError?: (error: Error) => void) {
+    return await this.patchType(id, { attr: "status", val: status }, onSuccess, onError);
   }
 
   formCreateType() {

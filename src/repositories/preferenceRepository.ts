@@ -3,11 +3,10 @@ import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import { IClient, IPreference, ITag } from "@/core/interfaces";
 import PreferencesService from "@/services/preferencesService";
-import { RequestState, RequestType, SetData } from "@/core/types";
 
 export default class PreferencesRepository extends PreferencesService {
-  constructor(preferences: {state: Record<RequestType, RequestState<IPreference>>, handleData: SetData<IPreference>}) {
-    super(preferences.handleData);
+  constructor() {
+    super();
   }
 
   // Table configuration
@@ -29,7 +28,7 @@ export default class PreferencesRepository extends PreferencesService {
   }
 
   // Form methods
-  formCreatePreference(tags: ITag[], clients: IClient[]) {
+  formCreatePreference(tags?: ITag[], clients?: IClient[]) {
     return [
       { 
         id: "clientId", 
@@ -37,7 +36,7 @@ export default class PreferencesRepository extends PreferencesService {
         label: "Client", 
         required: true, 
         colSize: "col-12",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         }))
@@ -48,7 +47,7 @@ export default class PreferencesRepository extends PreferencesService {
         label: "Tag", 
         required: true, 
         colSize: "col-12",
-        options: tags.map((tag: ITag) => ({
+        options: tags?.map((tag: ITag) => ({
           label: tag.name,
           value: tag.id
         }))
@@ -56,7 +55,7 @@ export default class PreferencesRepository extends PreferencesService {
     ]
   }
 
-  formUpdatePreference(preference: IPreference, tags: ITag[], clients: IClient[]) {
+  formUpdatePreference(preference: IPreference, tags?: ITag[], clients?: IClient[]) {
     return [
       { 
         id: "clientId", 
@@ -64,7 +63,7 @@ export default class PreferencesRepository extends PreferencesService {
         label: "Client", 
         required: true, 
         colSize: "col-12",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         })),
@@ -76,7 +75,7 @@ export default class PreferencesRepository extends PreferencesService {
         label: "Tag", 
         required: true, 
         colSize: "col-12",
-        options: tags.map((tag: ITag) => ({
+        options: tags?.map((tag: ITag) => ({
           label: tag.name,
           value: tag.id
         })),
@@ -97,14 +96,14 @@ export default class PreferencesRepository extends PreferencesService {
     ]
   }
 
-  formFilterPreference(tags: ITag[], clients: IClient[]) {
+  formFilterPreference(tags?: ITag[], clients?: IClient[]) {
     return [
       { 
         id: "clientId", 
         type: "select", 
         placeholder: "Client", 
         colSize: "col-12 col-md-4",
-        options: clients.map((client: IClient) => ({
+        options: clients?.map((client: IClient) => ({
           label: client.name,
           value: client.id
         }))
@@ -114,7 +113,7 @@ export default class PreferencesRepository extends PreferencesService {
         type: "select", 
         placeholder: "Tag", 
         colSize: "col-12 col-md-4",
-        options: tags.map((tag: ITag) => ({
+        options: tags?.map((tag: ITag) => ({
           label: tag.name,
           value: tag.id
         }))
