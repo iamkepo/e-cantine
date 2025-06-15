@@ -46,7 +46,7 @@ export default class PromoRepository extends PromosService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterPromo = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterPromo = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeletePromo = {
     title: "Supprimer la promo", 

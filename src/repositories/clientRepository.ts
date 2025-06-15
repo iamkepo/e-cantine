@@ -23,7 +23,7 @@ export default class ClientRepository extends ClientsService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

@@ -13,8 +13,23 @@ class ArticlesModel extends Model {
     return article;
   }
 
-  getArticles = async (params: ParamsQuery & {typeId?: number, categoryId?: number, price?: number}) => {
-    const where: any = {};
+  getArticlesByTagIds = async (tagIds: number[]) => {
+    const where: any = tagIds.length > 0 ? { 
+      connections: { 
+        some: { 
+          tagId: { 
+            in: tagIds 
+          } 
+        } 
+      } 
+    } : {};
+    const articles = await this.groupBy(['id'], where);
+    return articles.map((article: {id: number}) => article.id);
+  }
+
+  getArticles = async (params: ParamsQuery & {typeId?: number, categoryId?: number, price?: number}, articleIds: number[]) => {
+    const where: any = articleIds.length > 0 ? {id: { in: articleIds }} : {};
+    const include: any = {connections: {select: {tagId: true}}};
     if (params.search) {
       where.OR = [
         { name: { contains: params.search, mode: 'insensitive' } },
@@ -33,7 +48,9 @@ class ArticlesModel extends Model {
     if (params.status) {
       where.status = params.status;
     }
-    const articlesList = await this.getAll(params, where);
+
+    
+    const articlesList = await this.getAll(params, where, include);
     return articlesList;
   }
 

@@ -24,7 +24,7 @@ export default class PreferencesRepository extends PreferencesService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

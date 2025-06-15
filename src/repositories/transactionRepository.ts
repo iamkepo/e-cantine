@@ -31,7 +31,7 @@ export default class TransactionsRepository extends TransactionsService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

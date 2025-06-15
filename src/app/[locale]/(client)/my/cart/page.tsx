@@ -31,7 +31,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     articleRepository.fetchArticles({take: 100}, (data) => setArticles(data));
-    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }, (data) => setCategories(data));
+    categoryRepository.fetchCategories({ orderBy: 'id', sort: 'asc' }, (data) => setCategories(data));
   }, [articleRepository, categoryRepository]);
   
   useEffect(() => {

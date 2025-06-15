@@ -23,11 +23,11 @@ const deliveriesController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const commandId = parseInt(searchParams.get('commandId') || '0', 10);
     const delivererId = parseInt(searchParams.get('delivererId') || '0', 10);
     
-    const params = { take, status, page, orderBy, order, commandId, delivererId };
+    const params = { take, status, page, orderBy, sort, commandId, delivererId };
     try {
       const deliveries = await deliveriesModel.getDeliveries(params);
       return new Response(JSON.stringify({ data: deliveries }), { status: 200 });

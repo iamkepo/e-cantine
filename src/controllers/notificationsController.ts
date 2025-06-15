@@ -26,13 +26,13 @@ const notificationsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const userId = parseInt(searchParams.get('userId') || '0', 10);
     const type = searchParams.get('type') || '';
     const seen = searchParams.get('seen') === 'true' ? true : false;
     const notificationType = type as NotificationType;
 
-    const params = { take, search, status, page, orderBy, order, userId, type: notificationType, seen };
+    const params = { take, search, status, page, orderBy, sort, userId, type: notificationType, seen };
 
     try {
       const notifications = await notificationsModel.getNotifications(params);

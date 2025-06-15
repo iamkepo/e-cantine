@@ -33,7 +33,7 @@ export default class MethodsRepository extends MethodsService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterMethod = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterMethod = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteMethod = {
     title: "Supprimer la méthode", 

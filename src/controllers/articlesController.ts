@@ -28,10 +28,15 @@ const articlesController = {
     const status = searchParams.get('status') || ''; // statut de l'article
     const page = parseInt(searchParams.get('page') || '1', 10); // page
     const orderBy = searchParams.get('orderBy') || 'createdAt'; // champ sur lequel trier
-    const order = searchParams.get('order') || 'desc'; // ordre du tri
+    const sort = searchParams.get('sort') || 'desc'; // ordre du tri
+    const tagIds = searchParams.getAll('tagIds[]').map(id => parseInt(id, 10)) // Récupère tous les IDs de tags et les convertit en nombres    
+    let articleIds: number[] = [];
 
     try {
-      const articles = await articlesModel.getArticles({ typeId, categoryId, take, search, status, page, orderBy, order });
+      if (tagIds && tagIds.length > 0) {
+        articleIds = await articlesModel.getArticlesByTagIds(tagIds);
+      }
+      const articles = await articlesModel.getArticles({ typeId, categoryId, take, search, status, page, orderBy, sort }, articleIds);
       return new Response(JSON.stringify({data: articles}), { status: 200 });
     } catch (error) {
       console.error(error);

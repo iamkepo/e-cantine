@@ -24,13 +24,13 @@ const locationsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const clientId = parseInt(searchParams.get('clientId') || '0', 10);
     const zipCode = searchParams.get('zipCode') || '';
     const latitude = parseFloat(searchParams.get('latitude') || '0');
     const longitude = parseFloat(searchParams.get('longitude') || '0');
 
-    const params = { take, search, status, page, orderBy, order, clientId, zipCode, latitude, longitude };
+    const params = { take, search, status, page, orderBy, sort, clientId, zipCode, latitude, longitude };
     try {
       const locations = await locationsModel.getLocations(params);
       return new Response(JSON.stringify({ data: locations }), { status: 200 });

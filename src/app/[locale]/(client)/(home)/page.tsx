@@ -25,12 +25,15 @@ const Page: React.FC = () => {
     articleRepository.fetchArticles({
       take: 100,
       search: selected.query,
+      tagIds: selected.tagIds || [],
+      typeId: 1,
+      price: selected.price || undefined,
     }, (data) => setArticles(data));
-  }, [articleRepository, selected.query, cart, route]); // Only depend on what we actually use
+  }, [articleRepository, selected, cart, route]); // Only depend on what we actually use
 
   const openLightBox = (article: IArticle, i: number) => {
     modal.open(
-      <LightBox list={articles.data.filter(el => el.categoryId != null && el.categoryId != 5)} index={i} open={openLightBox}>  
+      <LightBox list={articles.data} index={i} open={openLightBox}>  
         <ArticleHComponent 
           article={article} 
           choose={findItem(article.id as number) != undefined} 
@@ -45,7 +48,7 @@ const Page: React.FC = () => {
     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 g-4">
       <Suspense fallback={<BlockSkeleton multiple image className="col" count={10} />}>
         <LazyArticlesBlock
-          articles={articles.data.filter(el => el.categoryId != null && el.categoryId != 5)} 
+          articles={articles.data} 
           openLightBox={openLightBox} 
           findItem={findItem}
           addItem={addItemCart}

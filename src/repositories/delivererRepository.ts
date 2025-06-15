@@ -38,7 +38,7 @@ export default class DelivererRepository extends DeliverersService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterDeliverer = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterDeliverer = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteDeliverer = {
     title: "Supprimer le livreur", 

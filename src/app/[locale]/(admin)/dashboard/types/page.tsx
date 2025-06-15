@@ -98,7 +98,7 @@ const Page: React.FC = () => {
           checkbox={{checkList, checkAllList, handleCheckList: (e: number) => handleCheckList(e)}}
           thead={typeRepository.tableHeadType}
           list={(types?.data as IType[])}
-          orderBy={{orderBy: params.orderBy, order: params.order, onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})}}
+          orderBy={{orderBy: params.orderBy, sort: params.sort, onChange: (orderBy: string, sort: string) => setParams({...params, orderBy, sort})}}
           edit={(e: IType) => modal.open(
             <SubmitComponent 
               title={"Modifier le type"} 

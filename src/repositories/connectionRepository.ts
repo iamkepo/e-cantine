@@ -37,7 +37,7 @@ class ConnectionRepository extends ConnectionsService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterConnection = { take: 10, search: "", status: "", articleId: 0, tagId: 0, page: 1, orderBy: "createdAt", order: "desc" }
+  filterConnection = { take: 10, search: "", status: "", articleId: 0, tagId: 0, page: 1, orderBy: "createdAt", sort:  "desc" }
 
 
   confirmDeleteConnection = {

@@ -2,7 +2,7 @@
 import { ITag } from "@/core/interfaces";
 
 interface Props {
-  tags: ITag[] | null;
+  tags: (ITag&{connections: {articleId: number}[]})[];
   tagIds?: number[];  
   onSelect: (id: number | null) => void;
 }
@@ -18,6 +18,7 @@ const TagsBlock: React.FC<Props> = ({ tags, tagIds, onSelect }) => {
         title={tag.name}
       >
         <span className='text-truncate'>{tag.name}</span>
+        <span className="ms-2 badge bg-secondary">{tag.connections.length}</span>
       </button>
     ))
   );

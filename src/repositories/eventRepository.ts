@@ -26,7 +26,7 @@ export default class EventRepository extends EventsService {
     status: "", 
     page: 1, 
     orderBy: "createdAt", 
-    order: "desc" 
+    sort:  "desc" 
   }
 
   formCreateEvent(dates?: IDate[], articles?: IArticle[]) {

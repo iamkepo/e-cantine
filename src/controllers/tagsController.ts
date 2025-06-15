@@ -22,9 +22,9 @@ const tagsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
 
-    const params = { take, search, status, page, orderBy, order };
+    const params = { take, search, status, page, orderBy, sort };
   
     try {
       const tags = await tagsModel.getTags(params);

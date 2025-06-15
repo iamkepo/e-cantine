@@ -5,7 +5,7 @@ import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 
 interface Props {
-  categories: ICategory[] | null;
+  categories: (ICategory&{articles: {id: number}[]})[] | null;
   id?: number;
 }
 
@@ -20,16 +20,18 @@ const CategoriesNavBlock: React.FC<Props> = ({ categories, id }) => {
           className={`nav-link text-truncate text-bg-${(id == undefined) ? "primary active" : theme}`} 
           href={'/'+lang}
         >
-          Tous les catégories
+          <span className="text-truncate">Tous les catégories</span>
+          <span className={`ms-2 badge bg-${id == undefined ? theme : 'primary'}`}>{categories?.map((category) => category.articles.length).reduce((a, b) => a + b, 0)}</span>
         </Link>
       </li>
       {categories?.map((category, i) => (
         <li key={i} className="nav-item">
           <Link
-            className={`nav-link text-truncate text-bg-${(category.id == null || id === category.id) ? "primary active" : theme}`} 
+            className={`nav-link text-truncate text-bg-${(id == category.id) ? "primary active" : theme}`} 
             href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
           >
-            {category.name}
+            <span className="text-truncate">{category.name}</span>
+            <span className={`ms-2 badge bg-${id == category.id ? theme : 'primary'}`}>{category.articles.length}</span>
           </Link>
         </li>
       ))}

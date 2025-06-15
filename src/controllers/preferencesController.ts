@@ -23,11 +23,11 @@ const preferencesController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const clientId = parseInt(searchParams.get('clientId') || '0', 10);
     const articleId = parseInt(searchParams.get('articleId') || '0', 10);
 
-    const params = { take, status, page, orderBy, order, clientId, articleId };
+    const params = { take, status, page, orderBy, sort, clientId, articleId };
 
     try {
       const preferences = await preferencesModel.getPreferences(params);

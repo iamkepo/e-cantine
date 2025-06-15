@@ -10,7 +10,7 @@ export interface TableComponentProps {
   checkbox?: {checkList: number[], checkAllList: () => void, handleCheckList: (e: number) => void};
   thead: {label: string, key: string}[];
   list: any[];
-  orderBy?: {orderBy: string, order: string, onChange: (orderBy: string, order: string) => void};
+  orderBy?: {orderBy: string, sort: string, onChange: (orderBy: string, sort: string) => void};
   eye?: (e: any) => void;
   edit?: (e: any) => void;
   trash?: (e: number) => void;
@@ -49,7 +49,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ checkbox, thead, list, 
                 className={`py-2 ${el.label == 'Status' ? 'text-center': 'text-truncate'}`}
                 onMouseEnter={()=> setHoverTh(el.label as string)}
                 onMouseLeave={()=> setHoverTh(null)}
-                onClick={()=> orderBy?.onChange(el.key, orderBy.order == 'asc' ? 'desc' : 'asc')}
+                onClick={()=> orderBy?.onChange(el.key, orderBy.sort == 'asc' ? 'desc' : 'asc')}
               >
                 {el.label}
                 <i 

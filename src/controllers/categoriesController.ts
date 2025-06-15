@@ -26,10 +26,10 @@ const categoriesController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
   
     try {
-      const categories = await categoriesModel.getCategories({ take, search, status, page, orderBy, order });
+      const categories = await categoriesModel.getCategories({ take, search, status, page, orderBy, sort });
       return new Response(JSON.stringify({data: categories}), { status: 200 });
     } catch (error) {
       console.error(error);

@@ -24,11 +24,11 @@ const subscriptionsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const clientId = parseInt(searchParams.get('clientId') || '0', 10);
     const transactionId = parseInt(searchParams.get('transactionId') || '0', 10);
 
-    const params = { take, search, status, page, orderBy, order, clientId, transactionId };
+    const params = { take, search, status, page, orderBy, sort, clientId, transactionId };
 
     try {
       const subscriptions = await subscriptionsModel.getSubscriptions(params);

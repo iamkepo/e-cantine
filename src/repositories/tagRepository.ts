@@ -37,7 +37,7 @@ class TagRepository extends TagsService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterTag = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterTag = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteTag = {
     title: "Supprimer le tag", 

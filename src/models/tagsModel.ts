@@ -15,6 +15,7 @@ class TagsModel extends Model {
 
   getTags = async (params: ParamsQuery) => {
     const where: any = {};
+    const include: any = {connections: {select: {articleId: true}}};
     if (params.search) {
       where.OR = [
         { name: { contains: params.search, mode: 'insensitive' } },
@@ -23,7 +24,7 @@ class TagsModel extends Model {
     if (params.status) {
       where.status = params.status;
     }
-    const tagsList = await this.getAll(params, where);
+    const tagsList = await this.getAll(params, where, include);
     return tagsList;
   }
 

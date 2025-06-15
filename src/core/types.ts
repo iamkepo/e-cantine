@@ -60,12 +60,13 @@ export interface ContextParams { params: Promise<Params> };
 
 export interface ParamsQuery { 
   take?: number;
-  search?: string;
   page?: number;
   status?: string;
   orderBy?: string;
-  order?: string;
+  sort?: string;
+  search?: string;
  };
+export interface JoinLien { key: string, value: number[] };
 export interface ResponseData<T> {
   data: T;
 }

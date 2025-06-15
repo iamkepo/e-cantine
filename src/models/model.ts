@@ -22,16 +22,17 @@ class Model {
     }
   }
 
-  getAll = async (params: ParamsQuery & unknown, where?: any) => {
+  getAll = async (params: ParamsQuery, where?: any, include?: any) => {
     try {
-      const { take = 10, page = 1, orderBy = 'createdAt', order = 'desc' } = params;
+      const { take = 10, page = 1, orderBy = 'createdAt', sort = 'desc' } = params;
       const whereModel: any = where ? where : {};
 
       const data = await this.model.findMany({
         where: whereModel,
         skip: (page - 1) * take,
         take,
-        orderBy: { [orderBy]: order },
+        orderBy: { [orderBy]: sort },
+        include: include || {},
       });
       const total = await this.model.count({ where: whereModel });
   
@@ -108,6 +109,19 @@ class Model {
     try {
       const total = await this.model.count({ where });
       return total;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  groupBy = async (by : string[], where?: any) => {
+    try {
+      const data = await this.model.groupBy({
+        by: by || ['id'],
+        where: where,
+      });
+      return data;
     } catch (error) {
       console.error(error);
       throw error;

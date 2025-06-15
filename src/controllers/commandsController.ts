@@ -23,11 +23,11 @@ const commandsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const eventId = parseInt(searchParams.get('eventId') || '0', 10);
     const restaurantId = parseInt(searchParams.get('restaurantId') || '0', 10);
     
-    const params = { take, status, page, orderBy, order, eventId, restaurantId };
+    const params = { take, status, page, orderBy, sort, eventId, restaurantId };
     try {
       const commands = await commandsModel.getCommands(params);
       return new Response(JSON.stringify({ data: commands }), { status: 200 });

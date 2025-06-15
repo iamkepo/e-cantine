@@ -25,7 +25,7 @@ export default class DeliveryRepository extends DeliveriesService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

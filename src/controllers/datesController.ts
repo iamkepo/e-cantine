@@ -24,11 +24,11 @@ const datesController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const subscriptionId = parseInt(searchParams.get('subscriptionId') || '0', 10);
     const locationId = parseInt(searchParams.get('locationId') || '0', 10);
     
-    const params = { take, search, status, page, orderBy, order, subscriptionId, locationId };
+    const params = { take, search, status, page, orderBy, sort, subscriptionId, locationId };
     try {
       const dates = await datesModel.getDates(params);
       return new Response(JSON.stringify({ data: dates }), { status: 200 });

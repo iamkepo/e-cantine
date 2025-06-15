@@ -22,7 +22,7 @@ class UserRepository extends UsersService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

@@ -27,10 +27,10 @@ const connectionsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
   
     try {
-      const connections = await connectionsModel.getConnections({ take, articleId, tagId, status, page, orderBy, order });
+      const connections = await connectionsModel.getConnections({ take, articleId, tagId, status, page, orderBy, sort });
       if (!connections) {
         return new Response(JSON.stringify({ error: 'Connections not found' }), { status: 404 });
       }

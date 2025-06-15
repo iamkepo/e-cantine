@@ -37,7 +37,7 @@ class TypeRepository extends TypesService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterType = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterType = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort: "desc" }
 
   confirmDeleteType = {
     title: "Supprimer le type", 

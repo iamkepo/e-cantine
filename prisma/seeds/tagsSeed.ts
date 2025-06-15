@@ -1,9 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
-const rawTags = [
+export const rawTags = [
   "Végétarien",
   "Vegan",
-  "Sans Gluten",
   "Viande",
   "Rapide",
   "Équilibré",
@@ -18,27 +17,18 @@ const rawTags = [
   "Croquant",
   "Fondant",
   "Moelleux",
-  "Tarte",
-  "Crème",
-  "Glace",
   "Pancake",
   "Pizza",
-  "Burger",
   "Salade",
-  "Soupe",
-  "Sushi",
-  "Kebab",
   "Fruits",
   "Légumes",
   "Poisson",
-  "Pâtes",
-  "Fromage",
   "Œufs"
 ];
 
-const tagsSeed = async (prisma: PrismaClient) => {
+const tagsSeed = async (prisma: PrismaClient, tags: string[]) => {
   await Promise.all(
-    rawTags.map(async (tag) =>
+    tags.map(async (tag) =>
       await prisma.tags.create({
         data: {
           name: tag,

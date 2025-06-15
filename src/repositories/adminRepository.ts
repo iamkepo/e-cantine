@@ -39,7 +39,7 @@ export default class AdminRepository extends AdminsService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterAdmin = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterAdmin = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteAdmin = {
     title: "Supprimer l'admin", 

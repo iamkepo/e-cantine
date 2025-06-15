@@ -26,7 +26,7 @@ class CategoryRepository extends CategoriesService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

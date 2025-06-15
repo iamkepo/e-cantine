@@ -29,7 +29,7 @@ export default class LocationsRepository extends LocationsService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

@@ -42,7 +42,7 @@ const Page: React.FC = () => {
         <div className="d-flex flex-wrap gap-2">
           <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
             <LazyTagsBlock 
-              tags={(tags.data as ITag[])} 
+              tags={(tags.data as (ITag&{connections: {articleId: number}[]})[]).filter(el => el.connections.length > 0)} 
               tagIds={(preferences.data as IPreference[]).map(preference => preference.tagId as number)} 
               onSelect={(id) => {
                 preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference,

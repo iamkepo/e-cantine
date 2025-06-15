@@ -14,7 +14,8 @@ class CategoriesModel extends Model {
   }
 
   getCategories = async (params: ParamsQuery) => {
-    const where: any = {};
+    const where: any = { name: { not: 'uncategorized' } };
+    const include: any = {articles: {select: {id: true}}};
     if (params.search) {
       where.OR = [
         { name: { contains: params.search, mode: 'insensitive' } },
@@ -23,7 +24,7 @@ class CategoriesModel extends Model {
     if (params.status) {
       where.status = params.status;
     }
-    const categoriesList = await this.getAll(params, where);
+    const categoriesList = await this.getAll(params, where, include);
     return categoriesList;
   }
 

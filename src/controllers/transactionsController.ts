@@ -24,12 +24,12 @@ const transactionsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const subscriptionId = parseInt(searchParams.get('subscriptionId') || '0', 10);
     const promoId = parseInt(searchParams.get('promoId') || '0', 10);
     const methodId = parseInt(searchParams.get('methodId') || '0', 10);
 
-    const params = { take, search, status, page, orderBy, order, subscriptionId, promoId, methodId };
+    const params = { take, search, status, page, orderBy, sort, subscriptionId, promoId, methodId };
 
     try {
       const transactions = await transactionsModel.getTransactions(params);

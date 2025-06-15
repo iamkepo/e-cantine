@@ -24,13 +24,13 @@ const eventsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const slot = searchParams.get('slot') || '';
     const articleId = parseInt(searchParams.get('articleId') || '0', 10);
     const dateId = parseInt(searchParams.get('dateId') || '0', 10);
     const subscriptionId = parseInt(searchParams.get('subscriptionId') || '0', 10);
 
-    const params = { take, status, page, orderBy, order, slot: slot as Slot, articleId, dateId, subscriptionId };
+    const params = { take, status, page, orderBy, sort, slot: slot as Slot, articleId, dateId, subscriptionId };
     try {
       const events = await eventsModel.getEvents(params);
       return new Response(JSON.stringify({ data: events }), { status: 200 });

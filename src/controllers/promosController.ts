@@ -25,12 +25,12 @@ const promosController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const discount = parseInt(searchParams.get('discount') || '0', 10);
     const maxUsage = parseInt(searchParams.get('maxUsage') || '0', 10);
     const countUsage = parseInt(searchParams.get('countUsage') || '0', 10);
 
-    const params = { take, search, status, page, orderBy, order, discount, maxUsage, countUsage };
+    const params = { take, search, status, page, orderBy, sort, discount, maxUsage, countUsage };
 
     try {
       const promos = await promosModel.getPromos(params);

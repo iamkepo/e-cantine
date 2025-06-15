@@ -22,7 +22,7 @@ class ArticlesService extends Request<IArticle> {
       });
   }
 
-  async fetchArticles(params: ParamsQuery & { categoryId?: number, typeId?: number }, onSuccess?: (data: { data: IArticle[], meta: Meta }) => void, onError?: (error: Error) => void) {
+  async fetchArticles(params: ParamsQuery & { categoryId?: number, typeId?: number, tagIds?: number[], price?: number }, onSuccess?: (data: { data: IArticle[], meta: Meta }) => void, onError?: (error: Error) => void) {
     await this.get('/article/list', params)
       .then(data => {
         if (onSuccess) {

@@ -26,7 +26,7 @@ export default class DateRepository extends DatesService {
     status: "",
     page: 1,
     orderBy: "createdAt",
-    order: "desc"
+    sort:  "desc"
   }
 
   // Form methods

@@ -44,7 +44,7 @@ export default class NotificationsRepository extends NotificationsService {
     {label: 'Vu', key: 'seen'},
   ]
 
-  filterNotification = { take: 10, search: "", status: "", type: "", seen: null, page: 1, orderBy: "createdAt", order: "desc" }
+  filterNotification = { take: 10, search: "", status: "", type: "", seen: null, page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteNotification = {
     title: "Supprimer la notification", 

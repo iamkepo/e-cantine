@@ -27,7 +27,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isInitialLoad] = useState(true);
 
   useEffect(() => {
-    categoryRepository.fetchCategories({ orderBy: 'id', order: 'asc' }, (data) => setCategories(data));
+    categoryRepository.fetchCategories({ orderBy: 'id', sort: 'asc' }, (data) => setCategories(data));
     tagRepository.fetchTags({take: 100}, (data) => setTags(data));
   }, [categoryRepository, tagRepository, isInitialLoad]);
   
@@ -40,7 +40,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ul className="nav nav-tabs h-85 flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3">
               <Suspense fallback={<BlockSkeleton count={5} className="nav-item" />}>
                 <LazyCategoriesNavBlock 
-                  categories={categories.data.filter(el => el.id != null && el.id != 5)} 
+                  categories={(categories.data as (ICategory&{articles: {id: number}[]})[]).filter(el => el.articles.length > 0)} 
                   id={params.id ? parseInt(params.id as string) : undefined} 
                 />
               </Suspense>
@@ -64,7 +64,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className='d-flex flex-lg-wrap flex-nowrap gap-2 overflow-scroll mb-3'>
               <Suspense fallback={<BlockSkeleton count={10} className="btn btn-sm btn-outline-primary" />}>
                 <LazyTagsBlock 
-                  tags={tags.data.filter(el => el.id != null)} 
+                  tags={(tags.data as (ITag&{connections: {articleId: number}[]})[]).filter(el => el.connections.length > 0)} 
                   onSelect={tagSelect}
                   tagIds={selected.tagIds ?? undefined} 
                 />

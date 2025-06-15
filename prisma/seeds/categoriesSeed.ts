@@ -1,20 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 
-const rawCategories = [
+export const rawCategories = [
   {name: "Petit Déjeuner"},
   {name: "Déjeuner"},
   {name: "Goûter"},
   {name: "Dîner"},
-  {name: "uncategorised"},
+];
+export const rawCategories2 = [
+  {name: "uncategorized"},
 ];
 
 
-const categoriesSeed = async (prisma: PrismaClient) => {
+const categoriesSeed = async (prisma: PrismaClient, categories: {name: string}[]) => {
   await Promise.all(
-    rawCategories.map((cat) =>
+    categories.map((category: {name: string}) =>
       prisma.categories.create({
         data: {
-          name: cat.name,
+          name: category.name,
         },
       })
     )

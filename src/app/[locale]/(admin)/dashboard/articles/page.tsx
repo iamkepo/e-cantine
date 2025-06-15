@@ -70,7 +70,7 @@ const Page: React.FC = () => {
                   onConfirm={() => articleRepository.deleteArticles(checkList,
                     () => {
                       toast.success("Articles supprimees"); 
-                      articleRepository.fetchArticles(params as ParamsQuery); 
+                      articleRepository.fetchArticles(params as ParamsQuery, setArticles); 
                       checkAllList(); 
                       modal.close()
                     })
@@ -88,7 +88,7 @@ const Page: React.FC = () => {
                   onSubmit={ (data: IArticle) => articleRepository.createArticle(data,
                     () => {
                       toast.success("Article cree"); 
-                      articleRepository.fetchArticles(params as ParamsQuery); 
+                      articleRepository.fetchArticles(params as ParamsQuery, setArticles); 
                       modal.close()
                     })
                   }
@@ -109,8 +109,8 @@ const Page: React.FC = () => {
           list={(articles?.data as IArticle[])}
           orderBy={{
             orderBy: params.orderBy || 'createdAt',
-            order: params.order || 'desc',
-            onChange: (orderBy: string, order: string) => setParams({...params, orderBy, order})
+            sort: params.sort || 'desc',
+            onChange: (orderBy: string, sort: string) => setParams({...params, orderBy, sort})
           }}
           eye={(e: IArticle) => modal.open(
             <ArticleComponent
@@ -127,7 +127,7 @@ const Page: React.FC = () => {
               onSubmit={(data) => articleRepository.updateArticle(e.id as number, data,
                 () => {
                   toast.success("Article modifie"); 
-                  articleRepository.fetchArticles(params as ParamsQuery); 
+                  articleRepository.fetchArticles(params as ParamsQuery, setArticles); 
                   modal.close()
                 })
               } 
@@ -140,7 +140,7 @@ const Page: React.FC = () => {
               onConfirm={() => articleRepository.deleteArticle(id,
                 () => {
                   toast.success("Article supprime"); 
-                  articleRepository.fetchArticles(params as ParamsQuery); 
+                  articleRepository.fetchArticles(params as ParamsQuery, setArticles); 
                   modal.close()
                 })
               } 
@@ -155,7 +155,7 @@ const Page: React.FC = () => {
                 onConfirm={ () => articleRepository.changeStatusArticle(id, status,
                   () => {
                     toast.success("Article modifie"); 
-                    articleRepository.fetchArticles(params as ParamsQuery); 
+                    articleRepository.fetchArticles(params as ParamsQuery, setArticles); 
                     modal.close()
                   })
                 }

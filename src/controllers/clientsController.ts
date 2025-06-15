@@ -24,10 +24,10 @@ const clientsController = {
     const status = searchParams.get('status') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const orderBy = searchParams.get('orderBy') || 'createdAt';
-    const order = searchParams.get('order') || 'desc';
+    const sort = searchParams.get('sort') || 'desc';
     const userId = parseInt(searchParams.get('userId') || '0', 10);
 
-    const params = { take, search, status, page, orderBy, order, userId };
+    const params = { take, search, status, page, orderBy, sort, userId };
 
     try {
       const clients = await clientsModel.getClients(params);

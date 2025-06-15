@@ -49,7 +49,7 @@ export default class SubscriptionsRepository extends SubscriptionsService {
     {label: 'Status', key: 'status'}
   ]
 
-  filterSubscription = { take: 10, search: "", status: "", clientId: "", page: 1, orderBy: "createdAt", order: "desc" }
+  filterSubscription = { take: 10, search: "", status: "", clientId: "", page: 1, orderBy: "createdAt", sort:  "desc" }
 
   confirmDeleteSubscription = {
     title: "Supprimer l'abonnement", 
