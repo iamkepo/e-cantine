@@ -1,3 +1,5 @@
+import { Slot } from "@/enums";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Article{  
   id: number;
@@ -125,3 +127,15 @@ export interface Field {
   max?: number;
   step?: number;
 };
+// Cart and planning types
+export interface CartItem {
+  articleId: number;
+  quantity: number;
+  slot: Slot;
+  date: Date; // ISO date string
+}
+
+export interface PlanningDay {
+  date: Date;
+  meals: Record<Slot, CartItem[]>;
+}

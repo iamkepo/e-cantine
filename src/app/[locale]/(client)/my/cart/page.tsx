@@ -6,7 +6,6 @@ import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from 'nextjs-toploader/app';
 import { useAuthStore } from "@/stores/useAuthStore";
 import { MetaResponse } from "@/core/types";
-import { modal } from "@/stores/appStore";
 import ArticleRepository from "@/repositories/articleRepository";
 import CategoryRepository from "@/repositories/categoryRepository";
 import { IArticle, ICategory } from "@/core/interfaces";
@@ -14,7 +13,6 @@ import BlockSkeleton from "@/components/widgets/BlockSkeleton";
 import { metaResponse } from "@/core";
 
 const LazyCartItemsBlock = lazy(() => import("@/components/blocks/CartItemsBlock"));
-const LazyCategoriesListBlock = lazy(() => import("@/components/blocks/CategoriesListBlock"));
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -22,7 +20,6 @@ const Page: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const { lang } = useLangStore();
   const { cart } = useCartStore();
-  const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
   const [articles, setArticles] = useState<MetaResponse<IArticle>>(metaResponse);
   const [categories, setCategories] = useState<MetaResponse<ICategory>>(metaResponse);
   
@@ -35,45 +32,14 @@ const Page: React.FC = () => {
   }, [articleRepository, categoryRepository]);
   
   useEffect(() => {
-    const updated = categories.data
-      .filter((category) => category.id != null)
-      .filter((category) => category.id != 5)
-      .map((category) => ({ 
-        id: category.id as number, 
-        name: category.name, 
-        checked: cart.filter(el => articles.data.filter(el => el.categoryId != 5).find(a => a.id === el.id)?.categoryId === category.id).length > 0 
-      }));
-      
-    setMissingCategories(updated);
-  }, [cart, articles, categories]);
+  }, [cart]);
 
-  const handleCategory = (id: number): void => {
-    router.push('/' + lang + '/' + id)
-  }
+
   const clear = () => {
     clearCart();
     router.push('/' + lang);
   };
 
-  const ignoreCategory = (category: number) => {
-    modal.open(
-      <div className="text-center">
-        <p>
-          Êtes-vous sûr de vouloir ignorer la catégorie 
-          {categories.data.find(c => c.id === category)?.name} ?
-        </p>
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-outline-danger" onClick={() => modal.close()}>Non</button>
-          <button type="button" className="btn btn-outline-primary" onClick={() => {
-            setMissingCategories((prev) =>
-              prev.map((item) => item.id === category ? { ...item, checked: true } : item)
-            );
-            modal.close()
-          }}>Oui</button>
-        </div>
-      </div>
-    )
-  }
 
   const goToNext = (): void => {
     if (!isAuthenticated) {
@@ -83,72 +49,51 @@ const Page: React.FC = () => {
     }
   }
   return (
-    <div className="row">
-      <div className="col-lg-8 mb-3 mb-lg-0">
-        { cart.length > 0 ?
-          <Suspense fallback={<BlockSkeleton count={1} multiple className={`card mb-3 text-bg-${theme} h-100`} />}>
-            <LazyCartItemsBlock 
-              items={cart} 
-              categories={categories.data} 
-              articlesPrincipal={articles.data.filter(el => el.categoryId != 5)} 
-              articlesAccompagnement={articles.data.filter(el => el.categoryId == 5)} 
-            />
-          </Suspense>
-          :
-          <div className={`card mb-3 text-bg-${theme} h-100`}>
-            <div className="card-body text-center">
-              <p className="card-text">Panier vide</p>
-
-              <button type="button" className="btn btn-sm btn-primary mt-3" onClick={() => router.push('/' + lang)}>
-                <i className="bi bi-arrow-left"></i>
-                <span className="d-none d-md-inline-block ms-2 fw-bold">Retour à l&apos;accueil</span>
-              </button>
-            </div>
-          </div>
+    <div className={`card p-3 text-bg-${theme}`}>
+      <div className="d-flex justify-content-between mb-3">
+        <h5 className="card-title text-break">Panier</h5>
+        <p className="fw-normal">
+          Total :
+          { cart.length > 0 ?
+            cart.reduce((sum, item) => {
+              return sum + (((articles.data.filter(el => el.categoryId != 5).find(a => a.id === item.id)?.price || 0) 
+              + priceAccomp(articles.data.filter(el => el.categoryId == 5), item)))
+            }, 0).toFixed(2)
+          : 0} XOF
+        </p>
+        {cart.length > 0 && 
+        <div className="d-flex gap-3">
+          <button type="button" className="btn btn-sm btn-outline-danger" onClick={clear}>
+            <i className="bi bi-trash"></i>
+            <span className="d-none d-md-inline-block ms-2 fw-bold">Vider le panier</span>
+          </button>
+          <button type="button" className="btn btn-sm btn-primary" onClick={goToNext}>
+            <span className="d-none d-md-inline-block fw-bold me-2">Suivant</span>
+            <i className="bi bi-arrow-right"></i>
+          </button>
+        </div>
         }
       </div>
-      <div className="col-lg-4">
-        <div className={`card p-3 text-bg-${theme} sticky-lg-top`}>
-          <div className="d-flex justify-content-between mb-3">
-            <h5 className="card-title text-break">Plats manquants</h5>
-            {cart.length > 0 && 
-            <button type="button" className="btn btn-sm btn-outline-danger" onClick={clear}>
-              <i className="bi bi-trash"></i>
-              <span className="d-none d-md-inline-block ms-2 fw-bold">Vider le panier</span>
-            </button>}
-          </div>
-          <ul className='list-group'>
-            <Suspense fallback={<BlockSkeleton count={4} className={`list-group-item text-bg-${theme}`} />}>
-              <LazyCategoriesListBlock 
-                missingCategories={missingCategories} 
-                handleCategory={handleCategory}
-                ignoreCategory={ignoreCategory}
-              />
-            </Suspense>
-          </ul>
-          <hr />
-          <p className="fw-bold">
-            Total :
-            { cart.length > 0 ?
-              cart.reduce((sum, item) => {
-                return sum + (((articles.data.filter(el => el.categoryId != 5).find(a => a.id === item.id)?.price || 0) 
-                + priceAccomp(articles.data.filter(el => el.categoryId == 5), item)))
-              }, 0).toFixed(2)
-            : 0} XOF
-          </p>
-          <div className="d-flex justify-content-between">
-            <button type="button" className="btn btn-secondary" onClick={() => router.back()}>Retour</button>
-            <button 
-              type="button" 
-              className="btn btn-primary" 
-              disabled={cart.length == 0}
-              onClick={goToNext}
-            >
-              Suivant
+      { cart.length > 0 ?
+        <Suspense fallback={<BlockSkeleton count={1} multiple className={`card mb-3 text-bg-${theme} h-100`} />}>
+          <LazyCartItemsBlock
+            categories={categories.data.filter(el => el.id != 5)} 
+            articlesPrincipal={articles.data.filter(el => el.categoryId != 5)} 
+            articlesAccompagnement={articles.data.filter(el => el.categoryId == 5)} 
+          />
+        </Suspense>
+        :
+        <div className={`card mb-3 text-bg-${theme} h-100`}>
+          <div className="card-body text-center">
+            <p className="card-text">Panier vide</p>
+
+            <button type="button" className="btn btn-sm btn-primary mt-3" onClick={() => router.push('/' + lang)}>
+              <i className="bi bi-arrow-left"></i>
+              <span className="d-none d-md-inline-block ms-2 fw-bold">Retour à l&apos;accueil</span>
             </button>
           </div>
         </div>
-      </div>
+      }
     </div>
   );
 };
