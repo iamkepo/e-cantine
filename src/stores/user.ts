@@ -1,34 +1,35 @@
 // src/store/user.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { User, UserPreferences, Location, StatusActivation, UserRole } from "../lib/types";
+import { IUser, IPreference, ILocation } from "@/core/interfaces";
+import { StatusActivation } from "@/enums";
 
 export interface UserState {
-  user: User | null;
+  user: IUser | null;
   token: string | null;
-  preferences: UserPreferences;
-  locations: Location[];
+  preferences: IPreference;
+  locations: ILocation[];
   error: string | null;
   isLoading: boolean;
   
-  setUser: (user: User | null) => void;
+  setUser: (user: IUser | null) => void;
   setToken: (token: string | null) => void;
-  setPreferences: (preferences: UserPreferences) => void;
-  addLocation: (location: Location) => void;
-  updateLocation: (locationId: number, location: Partial<Location>) => void;
+  setPreferences: (preferences: IPreference) => void;
+  addLocation: (location: ILocation) => void;
+  updateLocation: (locationId: number, location: Partial<ILocation>) => void;
   removeLocation: (locationId: number) => void;
-  setLocations: (locations: Location[]) => void;
+  setLocations: (locations: ILocation[]) => void;
   setError: (error: string | null) => void;
   setLoading: (isLoading: boolean) => void;
   clearUser: () => void;
   isLoggedIn: () => boolean;
-  hasRole: (role: UserRole) => boolean;
+  hasRole: (role: string) => boolean;
 }
 
-const defaultPreferences: UserPreferences = {
-  dietaryRestrictions: [],
-  favoriteCategories: [],
-  favoriteArticles: []
+const defaultPreferences: IPreference = {
+  status: StatusActivation.Pending,
+  tagId: 0,
+  clientId: 0,
 };
 
 export const useUserStore = create<UserState>()(
@@ -96,7 +97,8 @@ export const useUserStore = create<UserState>()(
       // Check if user has a specific role
       hasRole: (role) => {
         const { user } = get();
-        return !!user && user.role === role;
+        // return !!user && user.role === role;
+        return !!user && user.status === role;
       }
     }),
     {

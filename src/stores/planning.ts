@@ -1,18 +1,20 @@
 // src/store/planning.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { PlanningItem, PlanningDay, Slot } from "../lib/types";
+import { CartItem, PlanningDay } from "@/core/types";
+import { Slot } from "@/enums";
+
 
 export interface PlanningState {
   startDate: string; // ISO string
   endDate: string; // ISO string
-  planningItems: PlanningItem[];
+  planningItems: CartItem[];
   
   setPeriod: (startDate: string, endDate: string) => void;
-  addPlanningItem: (item: PlanningItem) => void;
-  removePlanningItem: (id: number) => void;
-  updatePlanningItem: (id: number, updates: Partial<PlanningItem>) => void;
-  getPlanningForDay: (day: string) => Record<Slot, PlanningItem[]>;
+  addPlanningItem: (item: CartItem) => void;
+  removePlanningItem: (articleId: number, date: Date, slot: Slot) => void;
+  updatePlanningItem: (articleId: number, updates: Partial<CartItem>) => void;
+  getPlanningForDay: (date: Date) => Record<Slot, CartItem[]>;
   getPlanningByDay: () => PlanningDay[];
   isPlanningComplete: () => boolean;
   clearPlanning: () => void;
@@ -31,7 +33,7 @@ export const usePlanningStore = create<PlanningState>()(
       // Add an item to the planning
       addPlanningItem: (item) => set(state => {
         const existingItemIndex = state.planningItems.findIndex(
-          i => i.articleId === item.articleId && i.day === item.day && i.slot === item.slot
+          i => i.articleId === item.articleId && i.date === item.date && i.slot === item.slot
         );
         
         if (existingItemIndex > -1) {
@@ -47,25 +49,25 @@ export const usePlanningStore = create<PlanningState>()(
       }),
       
       // Remove an item from the planning
-      removePlanningItem: (id) => set(state => ({
-        planningItems: state.planningItems.filter(item => item.id !== id)
+      removePlanningItem: (articleId, date, slot) => set(state => ({
+        planningItems: state.planningItems.filter(item => item.articleId !== articleId && item.date !== date && item.slot !== slot)
       })),
       
       // Update a planning item
-      updatePlanningItem: (id, updates) => set(state => ({
+      updatePlanningItem: (articleId, updates) => set(state => ({
         planningItems: state.planningItems.map(item =>
-          item.id === id ? { ...item, ...updates } : item
+          item.articleId === articleId ? { ...item, ...updates } : item
         )
       })),
       
       // Get planning items for a specific day organized by slots
-      getPlanningForDay: (day) => {
-        const items = get().planningItems.filter(item => item.day === day);
+      getPlanningForDay: (date: Date) => {
+        const items = get().planningItems.filter(item => item.date === date);
         const result = {
-          [Slot.Breakfast]: [] as PlanningItem[],
-          [Slot.Lunch]: [] as PlanningItem[],
-          [Slot.Dinner]: [] as PlanningItem[],
-          [Slot.Snack]: [] as PlanningItem[]
+          [Slot.Breakfast]: [] as CartItem[],
+          [Slot.Lunch]: [] as CartItem[],
+          [Slot.Dinner]: [] as CartItem[],
+          [Slot.Snack]: [] as CartItem[]
         };
         
         items.forEach(item => {
@@ -84,14 +86,13 @@ export const usePlanningStore = create<PlanningState>()(
         
         // Create array of days between start and end dates
         for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          const dayStr = d.toISOString().split('T')[0];
           days.push({
-            date: dayStr,
+            date: d,
             meals: {
-              [Slot.Breakfast]: planningItems.filter(item => item.day === dayStr && item.slot === Slot.Breakfast),
-              [Slot.Lunch]: planningItems.filter(item => item.day === dayStr && item.slot === Slot.Lunch),
-              [Slot.Dinner]: planningItems.filter(item => item.day === dayStr && item.slot === Slot.Dinner),
-              [Slot.Snack]: planningItems.filter(item => item.day === dayStr && item.slot === Slot.Snack)
+              [Slot.Breakfast]: planningItems.filter(item => item.date === d && item.slot === Slot.Breakfast),
+              [Slot.Lunch]: planningItems.filter(item => item.date === d && item.slot === Slot.Lunch),
+              [Slot.Dinner]: planningItems.filter(item => item.date === d && item.slot === Slot.Dinner),
+              [Slot.Snack]: planningItems.filter(item => item.date === d && item.slot === Slot.Snack)
             }
           });
         }
