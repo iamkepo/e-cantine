@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { modal } from '@/stores/appStore';
@@ -7,10 +8,11 @@ import { useEffect, useState } from 'react';
 import { Cart } from '@/core/types';
 import ItemListComponent from '@/components/ItemListComponent';
 import { IArticle } from '@/core/interfaces';
-import Image from 'next/image';
+import { useThemeStore } from '@/stores/themeStore';
 
 // --- Main CartItem ---
 const CartItemComponent: React.FC<{ item: IArticle, articles: IArticle[] }> = ({ item, articles }) => {
+  const { theme } = useThemeStore();
   const [cartItem, setCartItem] = useState<Cart | undefined>(undefined);
 
   useEffect(() => {
@@ -18,15 +20,13 @@ const CartItemComponent: React.FC<{ item: IArticle, articles: IArticle[] }> = ({
   }, [item]);
 
   return (
-    <div className="row mb-3">
-      <div className="col-md-2 mb-3 mb-md-0">
-        <Image
+    <div className={`row g-2  border border-${theme == 'dark' ? 'light' : 'dark'} p-2 m-2 border-1 rounded-2`}>
+      <div className="col-12 col-md-2 mb-3 mb-md-0"> 
+        <img
           src={item.image}
           alt={item.name}
           className="img-fluid rounded"
-          width={150}
-          height={150}
-          objectFit="cover"
+          style={{ width: '100%', maxHeight: '200px', objectFit: 'cover' }}
           onClick={() => modal.open(
             <ArticleHComponent
               article={item}
@@ -58,7 +58,7 @@ const CartItemComponent: React.FC<{ item: IArticle, articles: IArticle[] }> = ({
         )}
       </div>
 
-      <div className="col-md-2 text-center">
+      <div className="col-6 col-md-2 text-start text-lg-center">
         <h6 className="card-title text-truncate">
           <span className="fw-bold">Total : </span>
           { cartItem ?
@@ -67,7 +67,7 @@ const CartItemComponent: React.FC<{ item: IArticle, articles: IArticle[] }> = ({
           : 0} XOF
         </h6>
       </div>
-      <div className="col-md-2 text-end">
+      <div className="col-6 col-md-2 text-end">
         <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => removeItemCart(item.id as number)}>
           <i className="bi bi-trash"></i>
           <span className="d-none d-md-inline-block ms-2 fw-bold">Supprimer</span>

@@ -20,7 +20,7 @@ const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPri
   const { cart } = useCartStore();
   const router = useRouter();
   const { lang } = useLangStore();
-  const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean }[]>([]);
+  const [missingCategories, setMissingCategories] = useState<{ id: number; name: string; checked: boolean; count: number }[]>([]);
 
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPri
       .map((category) => ({ 
         id: category.id as number, 
         name: category.name, 
+        count: cart.filter(el => articlesPrincipal.filter(el => el.categoryId != 5).find(a => a.id === el.id)?.categoryId === category.id).length || 0,
         checked: cart.filter(el => articlesPrincipal.filter(el => el.categoryId != 5).find(a => a.id === el.id)?.categoryId === category.id).length > 0 
       }));
       
@@ -45,47 +46,56 @@ const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPri
   };
 
   const ignoreCategory = (category: { id: number; name: string; checked: boolean }) => {
-    modal.open(<ConfirmComponent
-      title="Ignorer la catégorie"
-      description={`Êtes-vous sûr de vouloir ignorer la catégorie "${category.name}" ?`}
-      onConfirm={() => {
-        setMissingCategories((prev) =>
-          prev.map((item) => item.id === category.id ? { ...item, checked: true } : item)
-        );
-        modal.close()
-      }}
-    />)
+    modal.open(
+      <ConfirmComponent
+        title="Ignorer la catégorie"
+        description={`Êtes-vous sûr de vouloir ignorer la catégorie "${category.name}" ?`}
+        onConfirm={() => {
+          setMissingCategories((prev) => prev.map((item) => item.id === category.id ? { ...item, checked: true } : item));
+          modal.close()
+        }}
+      />
+    )
   };
 
   return (
     <ul className="list-group">
     {missingCategories.map((category) =>
       <li key={category.id} className={`list-group-item text-bg-${theme}`}>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between align-items-center">
           <h5 className="card-title mb-3">{category.name}</h5>
           { category.checked ? 
-            <i className="bi bi-check2-square"></i> 
+            
+            <button 
+            type="button" 
+            className={`btn btn-sm btn-outline-${category.count > 0 ? 'danger' : 'success'}`}
+            onClick={() => handleCategory(category.id as number)}
+          >
+            <i className={`bi bi-${category.count > 0 ? 'trash' : 'check2-square'}`}></i> 
+            <span className="d-none d-md-inline-block ms-2 fw-bold">{category.count > 0 ? 'Supprimer' : 'Valider'}</span>
+          </button>
             :
-            <div className="">
+            <div className="d-flex gap-2">
               <button 
                 type="button" 
-                className="btn btn-sm btn-outline-success ms-2" 
+                className="btn btn-sm btn-outline-success" 
                 onClick={() => handleCategory(category.id as number)}
               >
-                <i className="bi bi-plus me-2"></i>
-                <span className="d-none d-md-inline-block">Ajouter</span>
+                <i className="bi bi-plus"></i>
+                <span className="d-none d-md-inline-block ms-2 fw-bold">Ajouter</span>
               </button>
               <button 
                 type="button" 
-                className="btn btn-sm btn-outline-secondary ms-2" 
+                className="btn btn-sm btn-outline-secondary" 
                 onClick={() => ignoreCategory(category)}
               >
-                <i className="bi bi-x me-2"></i>
-                <span className="d-none d-md-inline-block">Ignorer</span>
+                <i className="bi bi-x"></i>
+                <span className="d-none d-md-inline-block ms-2 fw-bold">Ignorer</span>
               </button>
             </div>
           }
         </div>
+        <ul className="col-12 list-group">
           {filterCartByCategory(category.id as number).map((item) => (
             <CartItemComponent 
               key={item.id} 
@@ -93,6 +103,7 @@ const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPri
               articles={articlesAccompagnement}
             />
           ))}
+        </ul>
       </li>
     )}
     </ul>

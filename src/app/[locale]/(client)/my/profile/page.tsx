@@ -13,8 +13,8 @@ const Page: React.FC = () => {
   const { user } = useAuthStore();
   
   return (
-    <div className={`card text-bg-${theme} mb-3`}>
-      <div className="card-body">
+    <div className="tab-content mt-3">
+      <div className="tab-pane fade show active">
         <div className="d-flex justify-content-between">
           <h4 className="card-title text-break">Profile</h4>
           {user?.role === "admin" && (

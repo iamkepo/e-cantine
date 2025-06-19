@@ -51,8 +51,7 @@ const Page: React.FC = () => {
   return (
     <div className={`card p-3 text-bg-${theme}`}>
       <div className="d-flex justify-content-between mb-3">
-        <h5 className="card-title text-break">Panier</h5>
-        <p className="fw-normal">
+        <h5 className="card-title text-break">
           Total :
           { cart.length > 0 ?
             cart.reduce((sum, item) => {
@@ -60,7 +59,7 @@ const Page: React.FC = () => {
               + priceAccomp(articles.data.filter(el => el.categoryId == 5), item)))
             }, 0).toFixed(2)
           : 0} XOF
-        </p>
+        </h5>
         {cart.length > 0 && 
         <div className="d-flex gap-3">
           <button type="button" className="btn btn-sm btn-outline-danger" onClick={clear}>

@@ -21,7 +21,7 @@ const CategoriesNavBlock: React.FC<Props> = ({ categories, id }) => {
           href={'/'+lang}
         >
           <span className="text-truncate">Tous les catégories</span>
-          <span className={`ms-2 badge bg-${id == undefined ? theme : 'primary'}`}>{categories?.map((category) => category.articles.length).reduce((a, b) => a + b, 0)}</span>
+          <span className={`ms-2 badge bg-${id == undefined ? 'secondary' : 'primary'}`}>{categories?.map((category) => category.articles.length).reduce((a, b) => a + b, 0)}</span>
         </Link>
       </li>
       {categories?.map((category, i) => (
@@ -31,7 +31,7 @@ const CategoriesNavBlock: React.FC<Props> = ({ categories, id }) => {
             href={'/'+lang+'/'+ (category.id != null ? category.id : '')}
           >
             <span className="text-truncate">{category.name}</span>
-            <span className={`ms-2 badge bg-${id == category.id ? theme : 'primary'}`}>{category.articles.length}</span>
+            <span className={`ms-2 badge bg-${id == category.id ? 'secondary' : 'primary'}`}>{category.articles.length}</span>
           </Link>
         </li>
       ))}

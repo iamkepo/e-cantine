@@ -13,7 +13,7 @@ const TagsBlock: React.FC<Props> = ({ tags, tagIds, onSelect }) => {
       <button
         key={j}
         type="button"
-        className={`btn btn-sm btn-${tagIds?.includes(tag.id as number) ? "primary" : "outline-primary"}`}
+        className={`btn btn-sm btn-${tagIds?.includes(tag.id as number) ? "primary" : "outline-primary"} text-nowrap`}
         onClick={() => onSelect(tag.id as number)}
         title={tag.name}
       >

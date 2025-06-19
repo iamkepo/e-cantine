@@ -12,6 +12,7 @@
       }
     ],
     "axe/aria": "off",
-    "axe/forms": "off"
+    "axe/forms": "off",
+    "axe/structure": "off"
   }
 }

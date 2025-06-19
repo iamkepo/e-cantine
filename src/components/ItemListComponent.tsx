@@ -72,7 +72,7 @@ const ItemListComponent: React.FC<ItemListProps> = ({ label, items, articles,fin
                 src={articles.find(a => a.id === sub.id)?.image}
                 alt={articles.find(a => a.id === sub.id)?.name}
                 className="img-fluid rounded"
-                style={{ maxHeight: '100px', width: '100%', objectFit: 'cover' }}
+                style={{ maxHeight: '150px', width: '100%', objectFit: 'cover' }}
                 onClick={() => actionOpen(sub.id)}
               />
             </div>
