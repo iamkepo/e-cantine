@@ -26,8 +26,8 @@ const Page: React.FC = () => {
   }, [tagRepository, preferenceRepository]);
 
   return (
-    <div className={`card text-bg-${theme} mb-3`}>
-      <div className="card-body">
+    <div className="tab-content mt-3">
+      <div className="tab-pane fade show active">
         <div className="d-flex justify-content-between">
           <h4 className="card-title text-break">Choisissez vos préférences</h4>
           <button 
@@ -42,7 +42,7 @@ const Page: React.FC = () => {
         <div className="d-flex flex-wrap gap-2">
           <Suspense fallback={<BlockSkeleton count={10} className={`list-group-item text-bg-${theme}`} />}>
             <LazyTagsBlock 
-              tags={(tags.data as (ITag&{connections: {articleId: number}[]})[]).filter(el => el.connections.length > 0)} 
+              tags={(tags.data as (ITag&{connections: {articleId: number}[]})[])} 
               tagIds={(preferences.data as IPreference[]).map(preference => preference.tagId as number)} 
               onSelect={(id) => {
                 preferenceRepository.createPreference({ tagId: id, clientId: 1 } as IPreference,
