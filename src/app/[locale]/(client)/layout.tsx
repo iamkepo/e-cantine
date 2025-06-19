@@ -62,10 +62,6 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 </div>
                 <div className="btn-group" role="group">
-                  <Link className={`btn btn-${routeMatch('friends') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/friends'}>
-                    <i className="bi bi-people"></i>
-                    <span className='d-none d-md-inline-block ms-2'>Amis</span>
-                  </Link>
                   <Link className={`btn btn-${routeMatch('profile') ? 'primary' : 'outline-secondary'}`} href={'/'+lang+'/my/profile'}>
                     <i className={`bi bi-person fs-6`}></i>
                     <span className='d-none d-md-inline-block ms-2'>Profil</span>
