@@ -1,5 +1,5 @@
 "use server";
-import methodsController from '@/controllers/methodsController';
+import methodsController from '@/backend/controllers/methods.controller';
 
 
 /**

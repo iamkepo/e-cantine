@@ -1,5 +1,5 @@
 "use server";
-import locationsController from '@/controllers/locationsController';
+import locationsController from '@/backend/controllers/locations.controller';
 
 /**
  * @swagger

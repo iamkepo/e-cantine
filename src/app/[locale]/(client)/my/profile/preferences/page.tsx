@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useMemo, Suspense, lazy } from "react";
 import { useThemeStore } from "@/stores/themeStore";
-import TagRepository from "@/repositories/tagRepository";
+import TagRepository from "@/frontend/repositories/tag.repository";
 import { ITag, IPreference } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";
-import PreferencesRepository from "@/repositories/preferenceRepository";
+import PreferenceRepository from "@/frontend/repositories/preference.repository";
 import { toast } from "@/stores/appStore";
 import { MetaResponse } from "@/core/types";
 import { useState } from "react";
@@ -18,7 +18,7 @@ const Page: React.FC = () => {
   const [ preferences, setPreferences ] = useState<MetaResponse<IPreference>>(metaResponse);
   
   const tagRepository = useMemo(() => new TagRepository(), []);
-  const preferenceRepository = useMemo(() => new PreferencesRepository(), []);
+  const preferenceRepository = useMemo(() => new PreferenceRepository(), []);
 
   useEffect(() => {
     tagRepository.fetchTags({take: 100}, (data) => setTags(data));

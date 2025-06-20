@@ -14,9 +14,9 @@ import BtnConfirmComponent from "@/components/BtnConfirmComponent";
 import ArticleComponent from "@/components/ArticleComponent";
 import { useCheckList } from "@/hooks/useCheckList";
 import { Field, ParamsQuery, MetaResponse } from "@/core/types";
-import ArticleRepository from "@/repositories/articleRepository";
-import CategoryRepository from "@/repositories/categoryRepository";
-import TypeRepository from "@/repositories/typeRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
+import CategoryRepository from "@/frontend/repositories/category.repository";
+import TypeRepository from "@/frontend/repositories/type.repository";
 
 const Page: React.FC = () => {
   const statusOptions = Object.values(StatusActivation);

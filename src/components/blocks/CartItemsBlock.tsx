@@ -1,13 +1,13 @@
 "use client";
 import { IArticle, ICategory } from "@/core/interfaces";
 import CartItemComponent from "../CartItemComponent";
-import { useThemeStore } from "@/stores/themeStore";
 import { useCartStore } from "@/stores/cartStore";
 import { modal } from "@/stores/appStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import { useLangStore } from "@/stores/langStore";
 import ConfirmComponent from "../ConfirmComponent";
+import Accordion from "../widgets/Accordion";
 
 interface CartItemsBlockProps {
   categories: ICategory[];
@@ -16,7 +16,6 @@ interface CartItemsBlockProps {
 }
 
 const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPrincipal, articlesAccompagnement }) => {
-  const { theme } = useThemeStore();
   const { cart } = useCartStore();
   const router = useRouter();
   const { lang } = useLangStore();
@@ -59,54 +58,58 @@ const CartItemsBlock: React.FC<CartItemsBlockProps> = ({ categories, articlesPri
   };
 
   return (
-    <ul className="list-group">
-    {missingCategories.map((category) =>
-      <li key={category.id} className={`list-group-item text-bg-${theme}`}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h5 className="card-title mb-3">{category.name}</h5>
-          { category.checked ? 
-            
-            <button 
-            type="button" 
-            className={`btn btn-sm btn-outline-${category.count > 0 ? 'danger' : 'success'}`}
-            onClick={() => handleCategory(category.id as number)}
-          >
-            <i className={`bi bi-${category.count > 0 ? 'trash' : 'check2-square'}`}></i> 
-            <span className="d-none d-md-inline-block ms-2 fw-bold">{category.count > 0 ? 'Supprimer' : 'Valider'}</span>
-          </button>
-            :
-            <div className="d-flex gap-2">
-              <button 
-                type="button" 
-                className="btn btn-sm btn-outline-success" 
-                onClick={() => handleCategory(category.id as number)}
-              >
-                <i className="bi bi-plus"></i>
-                <span className="d-none d-md-inline-block ms-2 fw-bold">Ajouter</span>
-              </button>
-              <button 
-                type="button" 
-                className="btn btn-sm btn-outline-secondary" 
-                onClick={() => ignoreCategory(category)}
-              >
-                <i className="bi bi-x"></i>
-                <span className="d-none d-md-inline-block ms-2 fw-bold">Ignorer</span>
-              </button>
+    missingCategories.map((category) =>
+      <div key={category.id} className="p-2">
+          <Accordion
+            title={category.name}
+            checked={category.count > 0}
+            badge={category.count > 0 ? category.count.toString() : ''}
+            content={
+              <div key={category.id}>
+                <div className="text-end">
+                { category.checked ? 
+                  <button 
+                  type="button" 
+                  className={`btn btn-sm btn-outline-${category.count > 0 ? 'danger' : 'success'}`}
+                  onClick={() => handleCategory(category.id as number)}
+                >
+                  <i className={`bi bi-${category.count > 0 ? 'trash' : 'check2-square'}`}></i> 
+                  <span className="d-none d-md-inline-block ms-2 fw-bold">{category.count > 0 ? 'Supprimer' : 'Valider'}</span>
+                </button>
+                  :
+                  <div className="d-flex gap-2 justify-content-end">
+                    <button 
+                      type="button" 
+                      className="btn btn-sm btn-outline-success" 
+                      onClick={() => handleCategory(category.id as number)}
+                    >
+                      <i className="bi bi-plus"></i>
+                      <span className="d-none d-md-inline-block ms-2 fw-bold">Ajouter</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-sm btn-outline-secondary" 
+                      onClick={() => ignoreCategory(category)}
+                    >
+                      <i className="bi bi-x"></i>
+                      <span className="d-none d-md-inline-block ms-2 fw-bold">Ignorer</span>
+                    </button>
+                  </div>
+                }
+              </div>
+              {filterCartByCategory(category.id as number).map((item) => (
+                  <CartItemComponent 
+                    key={item.id} 
+                    item={articlesPrincipal.find(a => a.id === item.id) as IArticle} 
+                    articles={articlesAccompagnement}
+                  />
+                ))
+              }
             </div>
           }
-        </div>
-        <ul className="col-12 list-group">
-          {filterCartByCategory(category.id as number).map((item) => (
-            <CartItemComponent 
-              key={item.id} 
-              item={articlesPrincipal.find(a => a.id === item.id) as IArticle} 
-              articles={articlesAccompagnement}
-            />
-          ))}
-        </ul>
-      </li>
-    )}
-    </ul>
+        />
+      </div>
+    )
   );
 };
 

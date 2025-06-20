@@ -1,6 +1,6 @@
 "use server";
 
-import connectionsController from "@/controllers/connectionsController";
+import connectionsController from "@/backend/controllers/connections.controller";
 
 /**
  * @swagger

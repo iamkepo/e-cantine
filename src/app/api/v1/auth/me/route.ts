@@ -1,7 +1,7 @@
 "use server";
 
 import { NextRequest } from "next/server";
-import authController from "@/controllers/authController";
+import authController from "@/backend/controllers/auth.controller";
 
 /**
  * @swagger

@@ -2,7 +2,7 @@
 import { modal, toast } from "@/stores/appStore";
 import { ITag } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
-import TagRepository from "@/repositories/tagRepository";
+import TagRepository from "@/frontend/repositories/tag.repository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { StatusActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";

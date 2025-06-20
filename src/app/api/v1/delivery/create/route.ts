@@ -1,5 +1,5 @@
 "use server";
-import deliveriesController from '@/controllers/deliveriesController';
+import deliveriesController from '@/backend/controllers/deliveries.controller';
 
 /**
  * @swagger

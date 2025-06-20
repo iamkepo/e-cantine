@@ -15,10 +15,10 @@ import { generateDates } from "@/helpers/planner";
 import { modal } from "@/stores/appStore";
 import { formatDate } from "@/helpers/functions";
 import { EventDropArg } from "@fullcalendar/core/index.js";
-import ArticleRepository from "@/repositories/articleRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
 import { IArticle, ICategory } from "@/core/interfaces";
 import { MetaResponse } from "@/core/types";
-import CategoryRepository from "@/repositories/categoryRepository";
+import CategoryRepository from "@/frontend/repositories/category.repository";
 import { metaResponse } from "@/core";
 
 const Page: React.FC = () => {

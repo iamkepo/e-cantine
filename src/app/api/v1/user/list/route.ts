@@ -1,6 +1,6 @@
 "use server";
 
-import usersController from "@/controllers/usersController";
+import usersController from "@/backend/controllers/users.controller";
 /**
  * @swagger
  * tags:

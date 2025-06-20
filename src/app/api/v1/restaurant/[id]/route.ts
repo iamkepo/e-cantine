@@ -1,5 +1,5 @@
 "use server";
-import restaurantsController from '@/controllers/restaurantsController';
+import restaurantsController from '@/backend/controllers/restaurants.controller';
 import { ContextParams } from '@/core/types';
 import { NextRequest } from 'next/server';
 

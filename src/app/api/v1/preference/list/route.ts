@@ -1,5 +1,5 @@
 "use server";
-import preferencesController from '@/controllers/preferencesController';
+import preferencesController from '@/backend/controllers/preferences.controller';
 
 /**
  * @swagger

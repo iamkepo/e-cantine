@@ -1,5 +1,5 @@
 "use server";
-import datesController from '@/controllers/datesController';
+import datesController from '@/backend/controllers/dates.controller';
 
 /**
  * @swagger

@@ -1,6 +1,6 @@
 "use server";
 
-import tagsController from "@/controllers/tagsController";
+import tagsController from "@/backend/controllers/tags.controller";
 
 /**
  * @swagger

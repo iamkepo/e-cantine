@@ -3,7 +3,7 @@ import { modal, toast } from "@/stores/appStore";
 import { useEffect, useMemo, useState } from "react";
 import { IType } from "@/core/interfaces";
 import { MetaResponse, Field } from "@/core/types";
-import TypeRepository from "@/repositories/typeRepository";
+import TypeRepository from "@/frontend/repositories/type.repository";
 import SubmitComponent from "@/components/SubmitComponent";
 import { StatusActivation } from "@/enums";
 import ConfirmComponent from "@/components/ConfirmComponent";

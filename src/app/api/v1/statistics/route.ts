@@ -1,6 +1,6 @@
 "use server";
 
-import statisticsController from "@/controllers/statisticsController";
+import statisticsController from "@/backend/controllers/statistics.controller";
 
 /**
  * @swagger

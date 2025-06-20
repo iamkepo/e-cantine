@@ -13,7 +13,7 @@ import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { History } from "@/core/types";
 import ArticleHComponent from "@/components/ArticleHComponent";
 import { IArticle } from "@/core/interfaces";
-import ArticleRepository from "@/repositories/articleRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
 import { MetaResponse } from "@/core/types";
 import { metaResponse } from "@/core";
 

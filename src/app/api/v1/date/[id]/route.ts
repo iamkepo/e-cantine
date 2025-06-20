@@ -1,6 +1,6 @@
 "use server";
 
-import datesController from '@/controllers/datesController';
+import datesController from '@/backend/controllers/dates.controller';
 import { NextRequest } from 'next/server';
 import { ContextParams } from '@/core/types';
 

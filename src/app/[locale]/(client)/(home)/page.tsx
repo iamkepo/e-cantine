@@ -6,7 +6,7 @@ import { IArticle } from "@/core/interfaces";
 import { MetaResponse } from "@/core/types";
 import { metaResponse } from "@/core/constants";
 import { usePathname } from "next/navigation";
-import ArticleRepository from "@/repositories/articleRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
 import LightBox from "@/components/widgets/LightBox";
 import ArticleHComponent from "@/components/ArticleHComponent";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";

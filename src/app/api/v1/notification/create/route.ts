@@ -1,5 +1,5 @@
 "use server";
-import notificationsController from '@/controllers/notificationsController';
+import notificationsController from '@/backend/controllers/notifications.controller';
 
 /**
  * @swagger
