@@ -1,6 +1,6 @@
 "use server";
 
-import articlesController from "@/controllers/articlesController";
+import articlesController from "@/backend/controllers/articles.controller";
 
 /**
  * @swagger

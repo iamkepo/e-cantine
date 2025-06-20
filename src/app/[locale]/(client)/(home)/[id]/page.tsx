@@ -8,7 +8,7 @@ import ArticleHComponent from "@/components/ArticleHComponent";
 import { addItemCart, removeItemCart } from "@/stores/cartStore";
 import LightBox from "@/components/widgets/LightBox";
 import { modal } from "@/stores/appStore";
-import ArticleRepository from "@/repositories/articleRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
 import { MetaResponse } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
 import BlockSkeleton from "@/components/widgets/BlockSkeleton";

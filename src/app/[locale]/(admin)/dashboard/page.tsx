@@ -1,7 +1,7 @@
 "use client";
 import { useThemeStore } from "@/stores/themeStore";
 import { useEffect, useMemo } from "react";
-import StatisticRepository from "@/repositories/statisticRepository";
+import StatisticRepository from "@/frontend/repositories/statistic.repository";
 import { IStatistic } from "@/core/interfaces";
 import { useState } from "react";
 

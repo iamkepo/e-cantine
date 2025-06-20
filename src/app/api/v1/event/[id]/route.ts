@@ -1,5 +1,5 @@
 "use server";
-import eventsController from '@/controllers/eventsController';
+import eventsController from '@/backend/controllers/events.controller';
 import { NextRequest } from 'next/server';
 import { ContextParams } from '@/core/types';
 

@@ -1,5 +1,5 @@
 "use server";
-import clientsController from '@/controllers/clientsController';
+import clientsController from '@/backend/controllers/clients.controller';
 import { ContextParams } from '@/core/types';
 import { NextRequest } from 'next/server';
 

@@ -15,7 +15,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import Accordion from "@/components/widgets/Accordion";
 import { MetaResponse } from "@/core/types";
 import { IArticle } from "@/core/interfaces";
-import ArticleRepository from "@/repositories/articleRepository";
+import ArticleRepository from "@/frontend/repositories/article.repository";
 import { metaResponse } from "@/core";
 
 const Page:React.FC = () => {

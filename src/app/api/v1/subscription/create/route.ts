@@ -1,5 +1,5 @@
 "use server";
-import subscriptionsController from '@/controllers/subscriptionsController';
+import subscriptionsController from '@/backend/controllers/subscriptions.controller';
 
 /**
  * @swagger

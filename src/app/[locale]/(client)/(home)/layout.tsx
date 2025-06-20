@@ -5,8 +5,8 @@ import { priceSelect, setSearchQuery, tagSelect, useFilterStore } from '@/stores
 import { useParams } from 'next/navigation';
 import { ICategory, ITag } from '@/core/interfaces';
 import { MetaResponse } from '@/core/types';
-import TagRepository from '@/repositories/tagRepository';
-import CategoryRepository from '@/repositories/categoryRepository';
+import TagRepository from '@/frontend/repositories/tag.repository';
+import CategoryRepository from '@/frontend/repositories/category.repository';
 import BlockSkeleton from '@/components/widgets/BlockSkeleton';
 import { metaResponse } from '@/core/constants';
 

@@ -1,5 +1,5 @@
 "use server";
-import promosController from '@/controllers/promosController';
+import promosController from '@/backend/controllers/promos.controller';
 import { NextRequest } from 'next/server';
 import { ContextParams } from '@/core/types';
 

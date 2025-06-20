@@ -1,5 +1,5 @@
 "use server";
-import transactionsController from '@/controllers/transactionsController';
+import transactionsController from '@/backend/controllers/transactions.controller';
 import { ContextParams } from '@/core/types';
 import { NextRequest } from 'next/server';
 

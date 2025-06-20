@@ -1,6 +1,6 @@
 "use server";
 
-import authController from "@/controllers/authController";
+import authController from "@/backend/controllers/auth.controller";
 
 /**
  * @swagger

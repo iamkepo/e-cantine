@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useLangStore } from "@/stores/langStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { useRouter } from "next/navigation";
-import AuthRepository from "@/repositories/authRepository";
+import AuthRepository from "@/frontend/repositories/auth.repository";
 
 const Page: React.FC = () => {
   const router = useRouter();

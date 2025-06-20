@@ -1,6 +1,6 @@
 "use server";
 
-import typesController from "@/controllers/typesController";
+import typesController from "@/backend/controllers/types.controller";
 import { NextRequest } from "next/server";
 import { ContextParams } from "@/core/types";
 

@@ -1,5 +1,5 @@
 "use server";
-import eventsController from '@/controllers/eventsController';
+import eventsController from '@/backend/controllers/events.controller';
 
 /**
  * @swagger

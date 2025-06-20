@@ -1,5 +1,5 @@
 "use server";
-import commandsController from '@/controllers/commandsController';
+import commandsController from '@/backend/controllers/commands.controller';
 
 /**
  * @swagger

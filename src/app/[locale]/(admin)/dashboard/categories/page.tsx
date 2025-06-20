@@ -4,7 +4,7 @@ import { ICategory } from "@/core/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { StatusActivation } from "@/enums";
 import SubmitComponent from "@/components/SubmitComponent";
-import CategoryRepository from "@/repositories/categoryRepository";
+import CategoryRepository from "@/frontend/repositories/category.repository";
 import ConfirmComponent from "@/components/ConfirmComponent";
 import PaginationComponent from "@/components/PaginationComponent";
 import FilterComponent from "@/components/FilterComponent";
