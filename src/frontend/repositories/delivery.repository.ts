@@ -39,7 +39,7 @@ export default class DeliveryRepository extends DeliveriesService {
       },
       { id: "delivererId", type: "select", label: "Livreur", required: true, colSize: "col-12 col-md-2",
         options: deliverers?.map((deliverer: IDeliverer) => ({
-          label: deliverer.name,
+          label: deliverer.firstname + " " + deliverer.lastname,
           value: deliverer.id
         }))
       },
@@ -57,7 +57,7 @@ export default class DeliveryRepository extends DeliveriesService {
       },
       { id: "delivererId", type: "select", label: "Livreur", required: true, colSize: "col-12 col-md-2",
         options: deliverers?.map((deliverer: IDeliverer) => ({
-          label: deliverer.name,
+          label: deliverer.firstname + " " + deliverer.lastname,
           value: deliverer.id
         })),
         value: delivery.delivererId
@@ -83,7 +83,7 @@ export default class DeliveryRepository extends DeliveriesService {
       },
       { id: "delivererId", type: "select", placeholder: "Livreur", colSize: "col-12 col-md-2",
         options: deliverers.map((deliverer: IDeliverer) => ({
-          label: deliverer.name,
+          label: deliverer.firstname + " " + deliverer.lastname,
           value: deliverer.id
         }))
       },

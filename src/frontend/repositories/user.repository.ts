@@ -11,7 +11,8 @@ class UserRepository extends UsersService {
 
   // Table configuration
   tableHeadUser = [
-    { id: 'name', label: 'Nom' },
+    { id: 'username', label: 'Nom d\'utilisateur' },
+    { id: 'email', label: 'Email' },
     { id: 'status', label: 'Status' }
   ]
 
@@ -28,15 +29,15 @@ class UserRepository extends UsersService {
   // Form methods
   formCreateUser() {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
-      { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
+      { id: "username", type: "text", label: "Nom d'utilisateur", required: true, colSize: "col-12" },
+      { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
     ]
   }
 
   formUpdateUser(user: IUser) {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: user.name },
-      { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12", value: user.password },
+      { id: "username", type: "text", label: "Nom d'utilisateur", required: true, colSize: "col-12", value: user.username },
+      { id: "email", type: "email", label: "Email", required: true, colSize: "col-12", value: user.email },
     ]
   }
 
@@ -55,8 +56,8 @@ class UserRepository extends UsersService {
   // Validation schemas
   userSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom est requis'),
-    password: yup.string().required('Mot de passe est requis'),
+    username: yup.string().required('Nom d\'utilisateur est requis'),
+    email: yup.string().required('Email est requis'),
     status: yup.string().optional(),
   })
 

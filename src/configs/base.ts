@@ -1,9 +1,11 @@
 import { ParamsQuery } from "@/core/types";
+import { PrismaClient } from "@prisma/client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-class Base {
+class Base extends PrismaClient {
   model: any;
   constructor(model: any) {
+    super()
     this.model = model;
   }
 

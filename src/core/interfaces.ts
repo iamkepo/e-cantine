@@ -4,14 +4,14 @@ import {
   StatusDelivery, 
   StatusTransaction, 
   Slot,
-  Day,
   NotificationType
 } from "@/enums";
 
 export interface IUser {
   id?: number;
+  email: string;
   password: string;
-  name: string;
+  username: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -28,10 +28,20 @@ export interface INotification {
   userId: number;
 }
 
+export interface IPhone {
+  id?: number;
+  indicator: string;
+  number: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  userId: number;
+}
+
 export interface IAdmin {
   id?: number;
-  email: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -61,8 +71,7 @@ export interface IMethod {
 
 export interface IRestaurant {
   id?: number;
-  phone: string;
-  name: string;
+  fullname: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -71,8 +80,8 @@ export interface IRestaurant {
 
 export interface IDeliverer {
   id?: number;
-  phone: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -81,8 +90,8 @@ export interface IDeliverer {
 
 export interface IClient {
   id?: number;
-  phone: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
@@ -158,10 +167,34 @@ export interface IPreference {
   clientId: number;
 }
 
+export interface IAllergen {
+  id?: number;
+  name: string;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IAllergy {
+  id?: number;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  allergenId: number;
+  clientId: number;
+}
+
+export interface IUnconnection {
+  id?: number;
+  status: StatusActivation;
+  createdAt?: Date;
+  updatedAt?: Date;
+  allergenId: number;
+  articleId: number;
+}
+
 export interface ISubscription {
   id?: number;
-  weeks: number;
-  checkedDays: Day[];
   startDate: Date;
   endDate?: Date;
   transactionId: number;

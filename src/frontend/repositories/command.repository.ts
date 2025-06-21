@@ -39,7 +39,7 @@ export default class CommandRepository extends CommandsService {
       },
       { id: "restaurantId", type: "select", label: "Restaurant", required: true, colSize: "col-12 col-md-2",
         options: restaurants?.map((restaurant: IRestaurant) => ({
-          label: restaurant.name,
+          label: restaurant.fullname,
           value: restaurant.id
         }))
       },
@@ -57,7 +57,7 @@ export default class CommandRepository extends CommandsService {
       },
       { id: "restaurantId", type: "select", label: "Restaurant", required: true, colSize: "col-12 col-md-2",
         options: restaurants?.map((restaurant: IRestaurant) => ({
-          label: restaurant.name,
+          label: restaurant.fullname,
           value: restaurant.id
         })),
         value: command.restaurantId
@@ -76,7 +76,7 @@ export default class CommandRepository extends CommandsService {
       },
       { id: "restaurantId", type: "select", placeholder: "Restaurant", colSize: "col-12 col-md-2",
         options: restaurants.map((restaurant: IRestaurant) => ({
-          label: restaurant.name,
+          label: restaurant.fullname,
           value: restaurant.id
         }))
       },

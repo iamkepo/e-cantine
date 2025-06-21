@@ -12,22 +12,23 @@ async function clearDatabase() {
     await prisma.events.deleteMany(); // 3
     await prisma.dates.deleteMany(); // 4
     await prisma.transactions.deleteMany(); // 5
-    await prisma.subscriptions.deleteMany(); // 8
-    await prisma.preferences.deleteMany(); // 9
-    await prisma.connections.deleteMany(); // 10
-    await prisma.tags.deleteMany(); // 11
-    await prisma.articles.deleteMany(); // 12
-    await prisma.categories.deleteMany(); // 13
-    await prisma.types.deleteMany(); // 14
-    await prisma.locations.deleteMany(); // 15
-    await prisma.clients.deleteMany(); // 16
-    await prisma.deliverers.deleteMany(); // 17
-    await prisma.restaurants.deleteMany(); // 18
-    await prisma.methods.deleteMany(); // 19
-    await prisma.promos.deleteMany(); // 20
-    await prisma.admins.deleteMany(); // 21
-    await prisma.notifications.deleteMany(); // 22
-    await prisma.users.deleteMany(); // 23
+    await prisma.subscriptions.deleteMany(); // 6
+    await prisma.preferences.deleteMany(); // 7
+    await prisma.connections.deleteMany(); // 8
+    await prisma.tags.deleteMany(); // 9
+    await prisma.articles.deleteMany(); // 10
+    await prisma.categories.deleteMany(); // 11
+    await prisma.types.deleteMany(); // 12
+    await prisma.locations.deleteMany(); // 13
+    await prisma.clients.deleteMany(); // 14
+    await prisma.deliverers.deleteMany(); // 15
+    await prisma.restaurants.deleteMany(); // 16
+    await prisma.methods.deleteMany(); // 17
+    await prisma.promos.deleteMany(); // 18
+    await prisma.admins.deleteMany(); // 19
+    await prisma.notifications.deleteMany(); // 20
+    await prisma.phones.deleteMany(); // 21
+    await prisma.users.deleteMany(); // 22
 
     // Réactiver les contraintes FK
     await prisma.$executeRawUnsafe(`SET session_replication_role = DEFAULT;`);

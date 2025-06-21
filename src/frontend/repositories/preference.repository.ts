@@ -37,7 +37,7 @@ export default class PreferenceRepository extends PreferencesService {
         required: true, 
         colSize: "col-12",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         }))
       },
@@ -64,7 +64,7 @@ export default class PreferenceRepository extends PreferencesService {
         required: true, 
         colSize: "col-12",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         })),
         value: preference.clientId
@@ -104,7 +104,7 @@ export default class PreferenceRepository extends PreferencesService {
         placeholder: "Client", 
         colSize: "col-12 col-md-4",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         }))
       },

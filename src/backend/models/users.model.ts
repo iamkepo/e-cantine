@@ -37,6 +37,11 @@ class UsersModel extends Base {
     return usersList;
   }
 
+  getUserByEmail = async (email: string) => {
+    const user = await this.getOne('email', email);
+    return user;
+  }
+
   getUser = async (id: number) => {
     const user = await this.getOne('id', id);
     return user;

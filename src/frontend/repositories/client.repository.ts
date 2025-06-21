@@ -11,9 +11,9 @@ export default class ClientRepository extends ClientsService {
 
   // Table configuration
   tableHeadClient = [
-    { id: 'name', label: 'Nom' },
-    { id: 'phone', label: 'Téléphone' },
-    { id: 'status', label: 'Status' }
+    { key: 'firstname', label: 'Prénom' },
+    { key: 'lastname', label: 'Nom' },
+    { key: 'status', label: 'Status' }
   ]
 
   // Filter configuration
@@ -29,11 +29,11 @@ export default class ClientRepository extends ClientsService {
   // Form methods
   formCreateClient(users?: IUser[]) {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
-      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
+      { id: "firstname", type: "text", label: "Prénom", required: true, colSize: "col-12" },
+      { id: "lastname", type: "text", label: "Nom", required: true, colSize: "col-12" },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
         options: users?.map((user: IUser) => ({
-          label: user.name,
+          label: user.username,
           value: user.id
         }))
       },
@@ -42,11 +42,11 @@ export default class ClientRepository extends ClientsService {
 
   formUpdateClient(client: IClient, users?: IUser[]) {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: client.name },
-      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: client.phone },
+      { id: "firstname", type: "text", label: "Prénom", required: true, colSize: "col-12", value: client.firstname },
+      { id: "lastname", type: "text", label: "Nom", required: true, colSize: "col-12", value: client.lastname },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
         options: users?.map((user: IUser) => ({
-          label: user.name,
+          label: user.username,
           value: user.id
         })),
         value: client.userId
@@ -69,8 +69,8 @@ export default class ClientRepository extends ClientsService {
   // Validation schemas
   clientSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom est requis'),
-    phone: yup.string().required('Téléphone est requis'),
+    firstname: yup.string().required('Prénom est requis'),
+    lastname: yup.string().required('Nom est requis'),
     status: yup.string().required('Status est requis'),
   })
 

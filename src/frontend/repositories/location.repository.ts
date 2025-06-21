@@ -43,7 +43,7 @@ export default class LocationRepository extends LocationsService {
       { id: "zipCode", type: "text", label: "Code postal", required: true, colSize: "col-12 col-md-2" },
       { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12 col-md-2",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         }))
       },
@@ -60,7 +60,7 @@ export default class LocationRepository extends LocationsService {
       { id: "zipCode", type: "text", label: "Code postal", required: true, colSize: "col-12 col-md-2", value: location.zipCode },
       { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12 col-md-2",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         })),
         value: location.clientId
@@ -73,7 +73,7 @@ export default class LocationRepository extends LocationsService {
       { id: "search", type: "text", placeholder: "Rechercher", colSize: "col-12 col-md-6" },
       { id: "clientId", type: "select", placeholder: "Client", colSize: "col-12 col-md-3",
         options: clients?.map((client: IClient) => ({
-          label: client.name,
+          label: client.firstname + " " + client.lastname,
           value: client.id
         }))
       },

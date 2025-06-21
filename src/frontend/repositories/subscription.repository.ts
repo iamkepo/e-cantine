@@ -1,5 +1,5 @@
 import { IClient, ISubscription } from "@/core/interfaces";
-import { Day, StatusActivation } from "@/enums";
+import { StatusActivation } from "@/enums";
 import { statusRender } from "@/helpers/functions";
 import * as yup from 'yup';
 import SubscriptionsService from "@/frontend/services/subscriptions.service";
@@ -11,22 +11,18 @@ export default class SubscriptionRepository extends SubscriptionsService {
 
   formCreateSubscription(clients?: IClient[]) {
     return [
-      { id: "weeks", type: "number", label: "Nombre de semaines", required: true, colSize: "col-12" },
-      { id: "checkedDays", type: "select", label: "Jours", required: true, colSize: "col-12", isMultiple: true, options: Object.values(Day).map((day) => ({ label: day, value: day })) },
       { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12" },
       { id: "endDate", type: "date", label: "Date de fin", required: false, colSize: "col-12" },
-      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.name, value: client.id })) },
+      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.firstname+" "+client.lastname, value: client.id })) },
       { id: "transactionId", type: "number", label: "Transaction", required: true, colSize: "col-12" },
     ]
   }
 
   formUpdateSubscription(subscription: ISubscription, clients?: IClient[]) {
     return [
-      { id: "weeks", type: "number", label: "Nombre de semaines", required: true, colSize: "col-12", value: subscription.weeks },
-      { id: "checkedDays", type: "select", label: "Jours", required: true, colSize: "col-12", isMultiple: true, options: Object.values(Day).map((day) => ({ label: day, value: day })), value: subscription.checkedDays },
       { id: "startDate", type: "date", label: "Date de début", required: true, colSize: "col-12", value: subscription.startDate },
       { id: "endDate", type: "date", label: "Date de fin", required: false, colSize: "col-12", value: subscription.endDate },
-      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.name, value: client.id })), value: subscription.clientId },
+      { id: "clientId", type: "select", label: "Client", required: true, colSize: "col-12", options: clients?.map((client: IClient) => ({ label: client.firstname + " " + client.lastname, value: client.id })), value: subscription.clientId },
       { id: "transactionId", type: "number", label: "Transaction", required: true, colSize: "col-12", value: subscription.transactionId },
     ]
   }
@@ -40,13 +36,11 @@ export default class SubscriptionRepository extends SubscriptionsService {
   }
 
   tableHeadSubscription = [
-    {label: 'Nombre de semaines', key: 'weeks'},
-    {label: 'Jours', key: 'checkedDays'},
-    {label: 'Date de début', key: 'startDate'},
-    {label: 'Date de fin', key: 'endDate'},
-    {label: 'Client', key: 'clientId'},
-    {label: 'Transaction', key: 'transactionId'},
-    {label: 'Status', key: 'status'}
+    { key: 'startDate', label: 'Date de début' },
+    { key: 'endDate', label: 'Date de fin' },
+    { key: 'clientId', label: 'Client' },
+    { key: 'transactionId', label: 'Transaction' },
+    { key: 'status', label: 'Status' }
   ]
 
   filterSubscription = { take: 10, search: "", status: "", clientId: "", page: 1, orderBy: "createdAt", sort:  "desc" }
@@ -68,8 +62,6 @@ export default class SubscriptionRepository extends SubscriptionsService {
 
   subscriptionSchema = yup.object({
     id: yup.number().optional(),
-    weeks: yup.number().required('Nombre de semaines est requis').min(1, 'Nombre de semaines doit être au moins 1'),
-    checkedDays: yup.array().of(yup.string().oneOf(Object.values(Day))).required('Jours sont requis'),
     startDate: yup.date().required('Date de début est requise'),
     endDate: yup.date().optional(),
     transactionId: yup.number().required('Transaction est requise'),

@@ -11,18 +11,17 @@ export default class AdminRepository extends AdminsService {
 
   formCreateAdmin(users?: IUser[]) {
     return [
-      { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
-      { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })) },
+      { id: "firstname", type: "text", label: "Prénom", required: true, colSize: "col-12" },
+      { id: "lastname", type: "text", label: "Nom", required: true, colSize: "col-12" },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.username, value: user.id })) },
     ]
   }
 
   formUpdateAdmin(admin: IAdmin, users?: IUser[]) {
     return [
-      { id: "email", type: "email", label: "Email", required: true, colSize: "col-12", value: admin.email },
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: admin.name },
-      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.name, value: user.id })), value: admin.userId },
+      { id: "firstname", type: "text", label: "Prénom", required: true, colSize: "col-12", value: admin.firstname },
+      { id: "lastname", type: "text", label: "Nom", required: true, colSize: "col-12", value: admin.lastname },
+      { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12", options: users?.map((user: IUser) => ({ label: user.username, value: user.id })), value: admin.userId },
     ]
   }
 
@@ -34,9 +33,9 @@ export default class AdminRepository extends AdminsService {
   }
 
   tableHeadAdmin = [
-    {label: 'Nom', key: 'name'},
-    {label: 'Email', key: 'email'},
-    {label: 'Status', key: 'status'}
+    { key: 'firstname', label: 'Prénom' },
+    { key: 'lastname', label: 'Nom' },
+    { key: 'status', label: 'Status' }
   ]
 
   filterAdmin = { take: 10, search: "", status: "", page: 1, orderBy: "createdAt", sort:  "desc" }
@@ -59,8 +58,8 @@ export default class AdminRepository extends AdminsService {
   adminSchema = yup.object({
     id: yup.number().optional(),
     email: yup.string().required('Email est requis'),
-    name: yup.string().required('Nom est requis'),
-    password: yup.string().required('Mot de passe est requis'),
+    firstname: yup.string().required('Prénom est requis'),
+    lastname: yup.string().required('Nom est requis'),
     status: yup.string().required('Status est requis'),
   })
 

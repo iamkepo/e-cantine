@@ -7,51 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id            Int              @id @default(autoincrement())
-  password      String
-  name          String
-  status        StatusActivation @default(pending) @map("status")
-  createdAt     DateTime         @default(now()) @map("created_at")
-  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
-  admins        admins[]
-  clients       clients[]
-  deliverers    deliverers[]
-  notifications notifications[]
-  restaurants   restaurants[]
-
-  @@index([status])
-  @@index([name])
-}
-
-model notifications {
-  id        Int              @id @default(autoincrement())
-  message   String
-  seen      Boolean          @default(false)
-  type      NotificationType
-  status    StatusActivation @default(pending) @map("status")
-  createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId    Int              @map("user_id")
-  user      users            @relation(fields: [userId], references: [id])
-
-  @@index([status])
-  @@index([userId])
-}
-
-model admins {
-  id        Int              @id @default(autoincrement())
-  email     String           @unique
-  name      String
-  status    StatusActivation @default(pending) @map("status")
-  createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId    Int              @map("user_id")
-  user      users            @relation(fields: [userId], references: [id])
-
-  @@index([status])
-  @@index([userId])
-}
 
 model promos {
   id           Int              @id @default(autoincrement())
@@ -80,54 +35,119 @@ model methods {
   @@index([status])
 }
 
+model users {
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
+  username      String           @unique
+  password      String
+  status        StatusActivation @default(pending) @map("status")
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
+  phones        phones[]
+  admins        admins[]
+  clients       clients[]
+  deliverers    deliverers[]
+  restaurants   restaurants[]
+  notifications notifications[]
+
+  @@index([status])
+}
+
+model phones {
+  id        Int              @id @default(autoincrement())
+  indicator String           @default("+229")
+  number    String           
+  status    StatusActivation @default(pending) @map("status")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  userId    Int              @map("user_id")
+  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([indicator, number])
+  @@index([status])
+  @@index([indicator])
+  @@index([number])
+  @@index([userId])
+}
+
+model notifications {
+  id        Int              @id @default(autoincrement())
+  message   String
+  seen      Boolean          @default(false)
+  type      NotificationType
+  status    StatusActivation @default(pending) @map("status")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  userId    Int              @map("user_id")
+  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([userId])
+}
+
+model admins {
+  id        Int              @id @default(autoincrement())
+  firstname     String           @default("")
+  lastname      String           @default("")
+  status    StatusActivation @default(pending) @map("status")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  userId    Int              @map("user_id")
+  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([userId])
+}
+
 model restaurants {
   id        Int              @id @default(autoincrement())
-  phone     String           @unique
-  name      String
+  fullname  String        @default("")
+  firstname     String           @default("")
+  lastname      String           @default("")
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
   updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
   userId    Int              @map("user_id")
   commands  commands[]
-  user      users            @relation(fields: [userId], references: [id])
+  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
-  @@index([name])
 }
 
 model deliverers {
   id         Int              @id @default(autoincrement())
-  phone      String           @unique
-  name       String
+  firstname     String           @default("")
+  lastname      String           @default("")
   status     StatusActivation @default(pending) @map("status")
   createdAt  DateTime         @default(now()) @map("created_at")
   updatedAt  DateTime         @default(now()) @updatedAt @map("updated_at")
   userId     Int              @map("user_id")
-  user       users            @relation(fields: [userId], references: [id])
+  user       users            @relation(fields: [userId], references: [id], onDelete: Cascade)
   deliveries deliveries[]
 
   @@index([status])
   @@index([userId])
-  @@index([name])
 }
 
 model clients {
   id            Int              @id @default(autoincrement())
-  phone         String           @unique
-  name          String
+  firstname     String           @default("")
+  lastname      String           @default("")
   status        StatusActivation @default(pending) @map("status")
   createdAt     DateTime         @default(now()) @map("created_at")
   updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
+  
   userId        Int              @map("user_id")
-  user          users            @relation(fields: [userId], references: [id])
+  user          users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   locations     locations[]
   preferences   preferences[]
   subscriptions subscriptions[]
 
   @@index([status])
   @@index([userId])
-  @@index([name])
 }
 
 model locations {
@@ -142,8 +162,8 @@ model locations {
   createdAt DateTime         @default(now()) @map("created_at")
   updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
   clientId  Int              @map("client_id")
+  client    clients          @relation(fields: [clientId], references: [id], onDelete: Cascade)
   dates     dates[]
-  client    clients          @relation(fields: [clientId], references: [id])
 
   @@unique([address, latitude, longitude, city, country, zipCode, clientId])
   @@index([status])
@@ -186,8 +206,8 @@ model articles {
   categoryId  Int              @map("category_id")
   category    categories       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   type        types            @relation(fields: [typeId], references: [id], onDelete: Cascade)
-  connections connections[]
   events      events[]
+  connections connections[]
 
   @@unique([name, image, price])
   @@index([status])
@@ -246,8 +266,6 @@ model subscriptions {
   id           Int              @id @default(autoincrement())
   startDate    DateTime         @map("start_date")
   endDate      DateTime         @map("end_date")
-  weeks        Int
-  checkedDays  Day[]            @default([monday, tuesday, wednesday, thursday, friday, saturday, sunday]) @map("checked_days")
   status       StatusActivation @default(pending) @map("status")
   createdAt    DateTime         @default(now()) @map("created_at")
   updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at")
@@ -279,6 +297,7 @@ model transactions {
   @@index([status])
   @@index([promoId])
   @@index([methodId])
+  @@index([subscriptionId])
 }
 
 model dates {
@@ -297,6 +316,7 @@ model dates {
   @@index([subscriptionId])
   @@index([deliveryDate])
   @@index([locationId])
+  @@index([status])
 }
 
 model events {
@@ -308,10 +328,11 @@ model events {
   updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
   dateId    Int              @map("date_id")
   articleId Int              @map("article_id")
-  commands  commands?
   article   articles         @relation(fields: [articleId], references: [id], onDelete: Cascade)
   date      dates            @relation(fields: [dateId], references: [id], onDelete: Cascade)
 
+  commands commands[]
+  
   @@unique([articleId, dateId, slot])
   @@index([slot])
   @@index([status])
@@ -327,11 +348,13 @@ model commands {
   eventId      Int           @unique @map("event_id")
   restaurantId Int           @map("restaurant_id")
   event        events        @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  restaurant   restaurants   @relation(fields: [restaurantId], references: [id])
-  deliveries   deliveries?
+  restaurant   restaurants   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  deliveries   deliveries[]
 
   @@index([eventId])
   @@index([restaurantId])
+  @@index([status])
 }
 
 model deliveries {
@@ -342,10 +365,11 @@ model deliveries {
   commandId   Int            @unique @map("command_id")
   delivererId Int            @map("deliverer_id")
   command     commands       @relation(fields: [commandId], references: [id], onDelete: Cascade)
-  deliverer   deliverers     @relation(fields: [delivererId], references: [id])
+  deliverer   deliverers     @relation(fields: [delivererId], references: [id], onDelete: Cascade)
 
   @@index([commandId])
   @@index([delivererId])
+  @@index([status])
 }
 
 enum StatusActivation {
@@ -382,16 +406,6 @@ enum Slot {
   lunch
   dinner
   snack
-}
-
-enum Day {
-  monday
-  tuesday
-  wednesday
-  thursday
-  friday
-  saturday
-  sunday
 }
 
 enum NotificationType {

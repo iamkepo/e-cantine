@@ -11,10 +11,9 @@ export default class RestaurantRepository extends RestaurantsService {
 
   // Table configuration
   tableHeadRestaurant = [
-    { id: 'name', label: 'Nom' },
-    { id: 'phone', label: 'Téléphone' },
-    { id: 'userId', label: 'Utilisateur' },
-    { id: 'status', label: 'Status' }
+    { key: 'fullname', label: 'Nom Commercial' },
+    { key: 'userId', label: 'Utilisateur' },
+    { key: 'status', label: 'Status' }
   ]
 
   // Filter configuration
@@ -30,11 +29,10 @@ export default class RestaurantRepository extends RestaurantsService {
   // Form methods
   formCreateRestaurant(users?: IUser[]) {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
-      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
+      { id: "fullname", type: "text", label: "Nom Commercial", required: true, colSize: "col-12" },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
         options: users?.map((user: IUser) => ({
-          label: user.name,
+          label: user.username,
           value: user.id
         }))
       },
@@ -43,11 +41,10 @@ export default class RestaurantRepository extends RestaurantsService {
 
   formUpdateRestaurant(restaurant: IRestaurant, users?: IUser[]) {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12", value: restaurant.name },
-      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12", value: restaurant.phone },
+      { id: "fullname", type: "text", label: "Nom Commercial", required: true, colSize: "col-12", value: restaurant.fullname },
       { id: "userId", type: "select", label: "Utilisateur", required: true, colSize: "col-12",
         options: users?.map((user: IUser) => ({
-          label: user.name,
+          label: user.username,
           value: user.id
         })),
         value: restaurant.userId
@@ -70,8 +67,7 @@ export default class RestaurantRepository extends RestaurantsService {
   // Validation schemas
   restaurantSchema = yup.object({
     id: yup.number().optional(),
-    name: yup.string().required('Nom est requis'),
-    phone: yup.string().required('Téléphone est requis'),
+    fullname: yup.string().required('Nom Commercial est requis'),
     userId: yup.number().required('Utilisateur est requis'),
     status: yup.string().required('Status est requis'),
   })
