@@ -64,6 +64,16 @@ class Base extends PrismaClient {
     }
   }
 
+  findInfo = async (where: any, include?: any) => {
+    try {
+      const model = await this.model.findUnique({ where, include });
+      return model;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   checkAttribute = (attributes: string[], att: string) => {
     return attributes.includes(att);
   }

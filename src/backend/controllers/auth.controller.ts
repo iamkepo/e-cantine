@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { generateAccessToken, generateRefreshToken } from "@/libs/jwt";
+import { generateAccessToken, generateRefreshToken, middlewareToken } from "@/libs/jwt";
 import jwt from "jsonwebtoken";
 import UsersModel from "@/backend/models/users.model";
 import ClientsModel from "@/backend/models/clients.model";
 import AdminsModel from "@/backend/models/admins.model";
 import DeliverersModel from "@/backend/models/deliverers.model";
 import RestaurantsModel from "@/backend/models/restaurants.model";
+import { NextRequest } from "next/server";
 
 const usersModel = new UsersModel();
 const adminsModel = new AdminsModel();
@@ -47,7 +48,8 @@ const authController = {
       if (userExists) {
         return new Response(JSON.stringify({ error: 'User already exists' }), { status: 400 });
       }
-      const newUser = await usersModel.createUser({email, password, firstname, lastname});
+      const username = firstname.toLowerCase() + lastname.toLowerCase();
+      const newUser = await usersModel.createUser({email, password, firstname, lastname, username});
       if (!newUser) {
         return new Response(JSON.stringify({ error: 'User not created' }), { status: 400 });
       }
@@ -111,9 +113,12 @@ const authController = {
       return new Response(JSON.stringify({ error: 'Refresh token failed: Internal Server Error' }), { status: 500 });
     }
   },
-  me: (req: Request) => {
+  me: async (req: NextRequest) => {
     try {
-      const user = req.headers.get("user");
+      const user = await middlewareToken(req);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 400 });
+      }
       return new Response(JSON.stringify({data: user}), { status: 200 });
     } catch (error: any) {
       return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });

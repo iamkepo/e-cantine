@@ -27,6 +27,21 @@ class AuthService extends Request<IAuth> {
     });
   }
 
+  loginAdmin(credentials: object) {
+    return new Promise((resolve, reject) => {
+      new AxiosCustom()
+        .append('/auth/login/admin')
+        .setData(credentials)
+        .method(HttpRequestType.POST)
+        .then(async (response: AxiosResponse) => {
+          resolve(response.data);
+        })
+        .catch((error: AxiosError) => {
+          reject(error);
+        });
+    });
+  }
+
   register(data: object) {
     return new Promise((resolve, reject) => {
       new AxiosCustom()

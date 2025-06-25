@@ -46,6 +46,24 @@ class UsersModel extends Base {
     const user = await this.getOne('id', id);
     return user;
   }
+  getUserInfo = async (id: number, scope: string) => {
+    const where = { id };
+    const include: any = {};
+    if (scope === 'client') {
+      include.clients = true; 
+    }
+    if (scope === 'admin') {
+      include.admins = true;
+    }
+    if (scope === 'deliverer') {
+      include.deliverers = true;
+    }
+    if (scope === 'restaurant') {
+      include.restaurants = true;
+    }
+    const user = await this.findInfo(where, include);
+    return user;
+  }
 
   checkAttributeUser = (att: string) => {
     return this.checkAttribute(['name', 'password', 'status'], att);

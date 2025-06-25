@@ -81,7 +81,7 @@ const Page: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="col-12 col-md-8 col-lg-9">
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 g-4 mb-4">
         <Suspense fallback={<BlockSkeleton multiple image className="col" count={10} />}>
           <LazyArticlesBlock
@@ -98,7 +98,7 @@ const Page: React.FC = () => {
 
       {/* Target element for infinite scroll */}
       <div ref={observerRef} style={{ height: 1 }} /> 
-    </>
+    </div>
   );
 };
 

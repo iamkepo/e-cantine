@@ -20,3 +20,6 @@ export const toggleTheme = () => {
   const newTheme = theme === "dark" ? "light" : "dark";
   useThemeStore.setState({ theme: newTheme });
 };
+export const inverseTheme = (currentTheme: string) => {
+  return currentTheme == 'dark' ? 'light' : 'dark';
+}

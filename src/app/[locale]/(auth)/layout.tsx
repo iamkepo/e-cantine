@@ -13,10 +13,10 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   useEffect(() => {
     if (isAuthenticated) {
-      if (user?.role === 'admin') {
+      if (user?.scope === 'admin') {
         router.push('/'+lang+'/dashboard');
       } else {
-        router.push('/'+lang+'/orders');
+        router.push('/'+lang);
       }
     }
   }, [theme, router, lang, isAuthenticated, user]);

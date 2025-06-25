@@ -90,9 +90,7 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
       </div>
 
-      <div className="col-12 col-md-8 col-lg-9">
-        {children}
-      </div>
+      {children}
     </div>
   );
 };
