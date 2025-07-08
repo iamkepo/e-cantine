@@ -24,12 +24,11 @@ const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const categoryRepository = useMemo(() => new CategoryRepository(), []);
   const tagRepository = useMemo(() => new TagRepository(), []);
 
-  const [isInitialLoad] = useState(true);
 
   useEffect(() => {
     categoryRepository.fetchCategories({ orderBy: 'id', sort: 'asc' }, (data) => setCategories(data));
     tagRepository.fetchTags({take: 100}, (data) => setTags(data));
-  }, [categoryRepository, tagRepository, isInitialLoad]);
+  }, [categoryRepository, tagRepository]);
   
 
   return (
