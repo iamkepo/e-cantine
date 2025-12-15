@@ -1,51 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from "yup";
 import AuthService from "@/frontend/services/auth.service";
-import { signIn, signUp } from "@/libs/auth-client";
 
 class AuthRepository extends AuthService {
   constructor() {
     super();
-  }
-  async signIn(credentials: {email: string, password: string}) {
-    return await signIn.email(
-      {
-        email: credentials.email,
-        password: credentials.password
-      },
-      {
-        onRequest: (ctx: any) => {
-          console.log(ctx);
-        },
-        onResponse: (ctx: any) => {
-          console.log(ctx);
-        },
-      },
-    );
-  }
-
-  async signUp(data: {email: string, password: string, firstname: string, lastname: string}) {
-    return await signUp.email(
-      {
-        email: data.email,
-        password: data.password,
-        name: data.firstname + '_' + data.lastname,
-      },
-      {
-        onRequest: (ctx: any) => {
-          console.log(ctx);
-        },
-        onResponse: (ctx: any) => {
-          console.log(ctx);
-        },
-      },
-    );
   }
   // Form methods
   formLogin() {
     return [
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
+      { id: "submit", type: "submit", label: "Login", color: "primary", colSize: "col-12" }
     ]
   }
 
@@ -56,6 +22,7 @@ class AuthRepository extends AuthService {
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
       { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
+      { id: "submit", type: "submit", label: "Register", color: "primary", colSize: "col-12" }
     ]
   }
 
@@ -84,6 +51,14 @@ class AuthRepository extends AuthService {
     return [
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
       { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
+    ]
+  }
+  formSocial(color: string) {
+    return [
+      { id: "google", type: "social", label: "Google", value: () => false, colSize: "col-6", icon: "google", color: color, disabled: true },
+      { id: "github", type: "social", label: "Github", value: () => false, colSize: "col-6", icon: "github", color: color, disabled: true },
+      { id: "apple", type: "social", label: "Apple", value: () => false, colSize: "col-6", icon: "apple", color: color, disabled: true },
+      { id: "facebook", type: "social", label: "Facebook", value: () => false, colSize: "col-6", icon: "facebook", color: color, disabled: true },
     ]
   }
 

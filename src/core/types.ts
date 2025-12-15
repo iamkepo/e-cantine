@@ -109,14 +109,39 @@ export type SetData<T> = (
   key: keyof RequestState<T>,
   data: T | T[] | { data: T[], meta: Meta } | boolean | string | null
 ) => void;
-
+enum TypeInput {
+  social = 'social',
+  section = 'section',
+  text = 'text',
+  email = 'email',
+  tel = 'tel',
+  number = 'number',
+  textarea = 'textarea',
+  file = 'file',
+  date = 'date',
+  checkbox = 'checkbox',
+  select = 'select',
+  searchSelect = 'searchSelect',
+  radio = 'radio',
+  password = 'password',
+  button = 'button',
+  submit = 'submit',
+  reset = 'reset',
+  range = 'range',
+  time = 'time',
+  datetimeLocal = 'datetime-local',
+  month = 'month',
+  week = 'week',
+  search = 'search',
+  datetime = 'datetime',
+  hidden = 'hidden'
+}
 export interface Field {
-  type: 'section' | 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'file' | 'date' | 'checkbox' | 'select' | 'searchSelect' | 'radio' | 'password' | 'button' | 'submit' | 'reset' | 'range' | 'time' | 'datetime-local' | 'month' | 'week' | 'search' | 'datetime' | 'hidden';
+  type: TypeInput;
   id: string;
   label?: string;
   placeholder?: string;  
   colSize: string;
-  color?: string;
   options?: { label: string; value: string }[];  
   isChecked?: boolean;  
   multiple?: boolean;  

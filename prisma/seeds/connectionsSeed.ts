@@ -15,7 +15,7 @@ const connectionsSeed = async (
 
   await Promise.all(
     tags.map(async (tagId) =>
-      await prisma.connections.create({
+      await prisma.connection.create({
         data: {
           articleId,
           tagId,

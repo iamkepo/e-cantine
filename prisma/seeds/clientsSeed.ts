@@ -22,7 +22,7 @@ const clientsSeed = async (prisma: PrismaClient, clientUser: {firstname: string,
     number: clientPhone.number+user.id,
     userId: user.id,
   });
-  const client = await prisma.clients.create({
+  const client = await prisma.client.create({
     data: {
       firstname: clientUser.firstname,
       lastname: clientUser.lastname,

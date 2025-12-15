@@ -22,7 +22,7 @@ const deliverersSeed = async (prisma: PrismaClient, delivererUser: {firstname: s
     number: delivererPhone.number+user.id,
     userId: user.id,
   });
-  const deliverer = await prisma.deliverers.create({
+  const deliverer = await prisma.deliverer.create({
     data: {
       firstname: delivererUser.firstname,
       lastname: delivererUser.lastname,

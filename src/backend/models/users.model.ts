@@ -6,7 +6,7 @@ import { ParamsQuery } from "@/core/types";
 
 class UsersModel extends Base {
   constructor() {
-    super(prisma.users);
+    super(prisma.user);
   }
 
   cryptPassword = async (password: string) => {
@@ -38,7 +38,8 @@ class UsersModel extends Base {
   }
 
   getUserByEmail = async (email: string) => {
-    const user = await this.getOne('email', email);
+    const include: any = {accounts: {select: {password: true}}};
+    const user = await this.getOne('email', email, include);
     return user;
   }
 
@@ -90,8 +91,18 @@ class UsersModel extends Base {
   }
 
   checkPassword = async (password: string, user: any) => {  
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    return isPasswordValid;
+    if (!user.accounts || user.accounts.length === 0) {
+      return false;
+    }
+    
+    // Vérifier si l'un des mots de passe correspond
+    for (const account of user.accounts) {
+      if (account.password && bcrypt.compareSync(password, account.password)) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 }
 

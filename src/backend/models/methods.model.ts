@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class MethodsModel extends Base {
   constructor() {
-    super(prisma.methods);
+    super(prisma.method);
   }
 
   createMethod = async (credentials: any) => {

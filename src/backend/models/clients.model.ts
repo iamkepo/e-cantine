@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class ClientsModel extends Base {
   constructor() {
-    super(prisma.clients);
+    super(prisma.client);
   }
 
   createClient = async (newUser: any) => {
@@ -36,9 +36,17 @@ class ClientsModel extends Base {
     return clientsList;
   }
 
-  getClient = async (id: number) => {
-    const client = await this.getOne('id', id);
-    return client;
+  getClient = async (id: number | string) => {
+    try {
+      const client = await this.model.findFirst({
+        where: { userId: String(id) },
+        include: { user: true }
+      });
+      return client;
+    } catch (error) {
+      console.error('Error in getClient:', error);
+      throw error;
+    }
   }
 
   checkAttributeClient = (att: string) => {

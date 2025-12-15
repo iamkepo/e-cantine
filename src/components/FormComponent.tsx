@@ -12,6 +12,10 @@ import { renderRadioField } from './fieldRenderers/renderRadioField';
 import { renderFileField } from './fieldRenderers/renderFileField';
 import { renderDateTimeField } from './fieldRenderers/renderDateTimeField';
 import { Field } from '@/core/types';
+import { renderButtonField } from './fieldRenderers/renderButtonField';
+import { renderSubmitField } from './fieldRenderers/renderSubmitField';
+import { renderResetField } from './fieldRenderers/renderResetField';
+import { renderSocialField } from './fieldRenderers/renderSocialField';
 
 interface FormComponentProps {
   fields: (Field | Field[])[];
@@ -94,6 +98,33 @@ const FormComponent: React.FC<FormComponentProps> = ({ fields }) => {
             {renderRadioField(field, control, errors)}
           </div>
         );
+
+      case 'button':
+        return (
+          <div key={index} className={`${field.colSize} mb-2`}>
+            {renderButtonField(field)}
+          </div>
+        );
+      case 'submit':
+        return (
+          <div key={index} className={`${field.colSize} mb-2`}>
+            {renderSubmitField(field)}
+          </div>
+        );
+      case 'reset':
+        return (
+          <div key={index} className={`${field.colSize} mb-2`}>
+            {renderResetField(field)}
+          </div>
+        );
+
+      case 'social':
+        return (
+          <div key={index} className={`${field.colSize}`}>
+            {renderSocialField(field)}
+          </div>
+        );
+        
       default:
         return null;
     }

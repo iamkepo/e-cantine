@@ -11,6 +11,11 @@ interface ConfirmComponentProps {
 
 const ConfirmComponent: React.FC<ConfirmComponentProps> = ({ title, description, onConfirm }) => {
   const { theme } = useThemeStore();
+
+  // const validate = () => {
+  //   onConfirm()
+  //   modal.close()
+  // }
   return (
     <div className="text-center">
       <h3>{title}</h3>

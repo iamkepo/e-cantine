@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class CommandsModel extends Base {
   constructor() {
-    super(prisma.commands);
+    super(prisma.command);
   }
 
   createCommand = async (credentials: any) => {

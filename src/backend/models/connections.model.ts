@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class ConnectionsModel extends Base {
   constructor() {
-    super(prisma.connections);
+    super(prisma.connection);
   }
 
   createConnection = async (credentials: any) => {

@@ -12,8 +12,8 @@ export const delivererPhoneExample = {
   indicator: "+229",
   number: "0104",
 };
-const phonesSeed = async (prisma: PrismaClient, phone: {indicator: string, number: string, userId: number}) => {
-  const newPhone = await prisma.phones.create({
+const phonesSeed = async (prisma: PrismaClient, phone: {indicator: string, number: string, userId: string}) => {
+  const newPhone = await prisma.phone.create({
     data: {
       indicator: phone.indicator,
       number: phone.number,

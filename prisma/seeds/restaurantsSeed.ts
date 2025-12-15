@@ -23,7 +23,7 @@ const restaurantsSeed = async (prisma: PrismaClient, restaurantUser: {fullname: 
     number: restaurantPhone.number+user.id,
     userId: user.id,
   });
-  const restaurant = await prisma.restaurants.create({
+  const restaurant = await prisma.restaurant.create({
     data: {
       fullname: restaurantUser.fullname,
       firstname: restaurantUser.firstname,

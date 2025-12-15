@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class TagsModel extends Base {
   constructor() {
-    super(prisma.tags);
+    super(prisma.tag);
   }
 
   createTag = async (credentials: any) => {

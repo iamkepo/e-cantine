@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class AdminsModel extends Base {
   constructor() {
-    super(prisma.admins);
+    super(prisma.admin);
   }
 
   createAdmin = async (newUser: any) => {

@@ -29,7 +29,7 @@ export const rawTags = [
 const tagsSeed = async (prisma: PrismaClient, tags: string[]) => {
   await Promise.all(
     tags.map(async (tag) =>
-      await prisma.tags.create({
+      await prisma.tag.create({
         data: {
           name: tag,
         },

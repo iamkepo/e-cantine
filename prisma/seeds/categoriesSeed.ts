@@ -14,7 +14,7 @@ export const rawCategories2 = [
 const categoriesSeed = async (prisma: PrismaClient, categories: {name: string, hours: string}[]) => {
   await Promise.all(
     categories.map((category: {name: string, hours: string}) =>
-      prisma.categories.create({
+      prisma.category.create({
         data: {
           name: category.name,
           hours: category.hours,

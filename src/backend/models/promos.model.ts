@@ -6,7 +6,7 @@ import { ParamsQuery } from "@/core/types";
 
 class PromosModel extends Base {
   constructor() {
-    super(prisma.promos);
+    super(prisma.promo);
   }
 
   createPromo = async (credentials: any) => {

@@ -29,6 +29,7 @@ const authController = {
         return new Response(JSON.stringify({ error: 'Invalid password' }), { status: 400 });
       }
       const client = await clientsModel.getClient(user.id);
+      console.log(client);
       if (!client) {
         return new Response(JSON.stringify({ error: 'Client not found' }), { status: 400 });
       }

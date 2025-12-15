@@ -8,7 +8,7 @@ import {
 } from "@/enums";
 
 export interface IUser {
-  id?: number;
+  id?: string;
   email: string;
   password: string;
   username: string;
@@ -25,7 +25,7 @@ export interface INotification {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface IPhone {
@@ -35,7 +35,7 @@ export interface IPhone {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface IAdmin {
@@ -45,7 +45,7 @@ export interface IAdmin {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface IPromo {
@@ -75,7 +75,7 @@ export interface IRestaurant {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface IDeliverer {
@@ -85,7 +85,7 @@ export interface IDeliverer {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface IClient {
@@ -95,7 +95,7 @@ export interface IClient {
   status: StatusActivation;
   createdAt?: Date;
   updatedAt?: Date;
-  userId: number;
+  userId: string;
 }
 
 export interface ILocation {

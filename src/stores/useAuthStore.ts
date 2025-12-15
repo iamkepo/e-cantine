@@ -86,3 +86,6 @@ export const hasRole = (role: string) => {
   return !!user && user.status === role;
 }
 
+export const logout = () => useAuthStore.setState({
+  ...initState
+})

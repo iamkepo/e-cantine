@@ -1,14 +1,13 @@
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-
-model promos {
+model Promo {
   id           Int              @id @default(autoincrement())
   code         String           @unique
   discount     Float
@@ -18,51 +17,113 @@ model promos {
   endDate      DateTime?
   status       StatusActivation @default(pending) @map("status")
   createdAt    DateTime         @default(now()) @map("created_at")
-  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at")
-  transactions transactions[]
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  transactions Transaction[]
 
   @@index([status])
 }
 
-model methods {
+model Method {
   id           Int              @id @default(autoincrement())
   name         String           @unique
   status       StatusActivation @default(pending) @map("status")
   createdAt    DateTime         @default(now()) @map("created_at")
-  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at")
-  transactions transactions[]
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  transactions Transaction[]
 
   @@index([status])
 }
 
-model users {
-  id            Int              @id @default(autoincrement())
-  email         String           @unique
-  username      String           @unique
-  password      String
-  status        StatusActivation @default(pending) @map("status")
+model User {
+  id            String           @id @default(cuid())
+  name          String
+  email         String
+  emailVerified Boolean          @default(false)
+  image         String?
   createdAt     DateTime         @default(now()) @map("created_at")
-  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
-  phones        phones[]
-  admins        admins[]
-  clients       clients[]
-  deliverers    deliverers[]
-  restaurants   restaurants[]
-  notifications notifications[]
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+  
+  sessions      Session[]
+  accounts      Account[]
+  twoFactors    TwoFactor[]
+  phones        Phone[]
+  admins        Admin[]
+  clients       Client[]
+  deliverers    Deliverer[]
+  restaurants   Restaurant[]
+  notifications Notification[]
 
-  @@index([status])
+  @@unique([email])
+  @@map("user")
 }
 
-model phones {
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String           @id @default(cuid())
+  accountId             String
+  providerId            String
+  accessToken           String?          @db.Text
+  refreshToken          String?          @db.Text
+  idToken               String?          @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+  userId                String
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, providerId])
+  @@map("account")
+}
+
+model Verification {
+  id         String           @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  @@map("verification")
+}
+
+model TwoFactor {
+  id          String   @id @default(cuid())
+  secret      String
+  backupCodes String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("two_factor")
+}
+
+model Phone {
   id        Int              @id @default(autoincrement())
   indicator String           @default("+229")
-  number    String           
+  number    String
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
 
-  userId    Int              @map("user_id")
-  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String           @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([indicator, number])
   @@index([status])
@@ -71,86 +132,85 @@ model phones {
   @@index([userId])
 }
 
-model notifications {
+model Notification {
   id        Int              @id @default(autoincrement())
   message   String
   seen      Boolean          @default(false)
   type      NotificationType
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId    Int              @map("user_id")
-  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  userId    String           @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
 }
 
-model admins {
+model Admin {
   id        Int              @id @default(autoincrement())
-  firstname     String           @default("")
-  lastname      String           @default("")
+  firstname String           @default("")
+  lastname  String           @default("")
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId    Int              @map("user_id")
-  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  userId    String           @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
 }
 
-model restaurants {
+model Restaurant {
   id        Int              @id @default(autoincrement())
-  fullname  String        @default("")
-  firstname     String           @default("")
-  lastname      String           @default("")
+  fullname  String           @default("")
+  firstname String           @default("")
+  lastname  String           @default("")
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId    Int              @map("user_id")
-  commands  commands[]
-  user      users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  userId    String           @map("user_id")
+  commands  Command[]
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
 }
 
-model deliverers {
+model Deliverer {
   id         Int              @id @default(autoincrement())
-  firstname     String           @default("")
-  lastname      String           @default("")
+  firstname  String           @default("")
+  lastname   String           @default("")
   status     StatusActivation @default(pending) @map("status")
   createdAt  DateTime         @default(now()) @map("created_at")
-  updatedAt  DateTime         @default(now()) @updatedAt @map("updated_at")
-  userId     Int              @map("user_id")
-  user       users            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deliveries deliveries[]
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+  userId     String           @map("user_id")
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries Delivery[]
 
   @@index([status])
   @@index([userId])
 }
 
-model clients {
-  id            Int              @id @default(autoincrement())
-  firstname     String           @default("")
-  lastname      String           @default("")
-  status        StatusActivation @default(pending) @map("status")
-  createdAt     DateTime         @default(now()) @map("created_at")
-  updatedAt     DateTime         @default(now()) @updatedAt @map("updated_at")
-  
-  userId        Int              @map("user_id")
-  user          users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Client {
+  id        Int              @id @default(autoincrement())
+  firstname String           @default("")
+  lastname  String           @default("")
+  status    StatusActivation @default(pending) @map("status")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  userId    String           @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  locations     locations[]
-  preferences   preferences[]
-  subscriptions subscriptions[]
+  locations     Location[]
+  preferences   Preference[]
+  subscriptions Subscription[]
 
   @@index([status])
   @@index([userId])
 }
 
-model locations {
+model Location {
   id        Int              @id @default(autoincrement())
   address   String
   latitude  Float
@@ -160,40 +220,40 @@ model locations {
   zipCode   String
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
   clientId  Int              @map("client_id")
-  client    clients          @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  dates     dates[]
+  client    Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  dates     Date[]
 
   @@unique([address, latitude, longitude, city, country, zipCode, clientId])
   @@index([status])
   @@index([clientId])
 }
 
-model types {
+model Type {
   id        Int              @id @default(autoincrement())
   name      String           @unique
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  articles  articles[]
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  articles  Article[]
 
   @@index([status])
 }
 
-model categories {
+model Category {
   id        Int              @id @default(autoincrement())
   name      String           @unique
   hours     String
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
-  articles  articles[]
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  articles  Article[]
 
   @@index([status])
 }
 
-model articles {
+model Article {
   id          Int              @id @default(autoincrement())
   name        String
   price       Float
@@ -201,44 +261,40 @@ model articles {
   image       String
   status      StatusActivation @default(pending) @map("status")
   createdAt   DateTime         @default(now()) @map("created_at")
-  updatedAt   DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
   typeId      Int              @map("type_id")
   categoryId  Int              @map("category_id")
-  category    categories       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  type        types            @relation(fields: [typeId], references: [id], onDelete: Cascade)
-  events      events[]
-  connections connections[]
+  category    Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  type        Type             @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  events      Event[]
+  connections Connection[]
 
   @@unique([name, image, price])
   @@index([status])
-  @@index([name])
   @@index([price])
-  @@index([typeId])
-  @@index([categoryId])
-  @@index([description])
 }
 
-model tags {
+model Tag {
   id          Int              @id @default(autoincrement())
   name        String           @unique
   status      StatusActivation @default(pending) @map("status")
   createdAt   DateTime         @default(now()) @map("created_at")
-  updatedAt   DateTime         @default(now()) @updatedAt @map("updated_at")
-  connections connections[]
-  preferences preferences[]
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  connections Connection[]
+  preferences Preference[]
 
   @@index([status])
 }
 
-model connections {
+model Connection {
   id        Int              @id @default(autoincrement())
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
   tagId     Int              @map("tag_id")
   articleId Int              @map("article_id")
-  article   articles         @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  tag       tags             @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  article   Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag             @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@unique([tagId, articleId])
   @@index([tagId])
@@ -246,15 +302,15 @@ model connections {
   @@index([status])
 }
 
-model preferences {
+model Preference {
   id        Int              @id @default(autoincrement())
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
   tagId     Int              @map("tag_id")
   clientId  Int              @map("client_id")
-  client    clients          @relation(fields: [clientId], references: [id])
-  tag       tags             @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  client    Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  tag       Tag             @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@unique([tagId, clientId])
   @@index([tagId])
@@ -262,23 +318,22 @@ model preferences {
   @@index([status])
 }
 
-model subscriptions {
+model Subscription {
   id           Int              @id @default(autoincrement())
   startDate    DateTime         @map("start_date")
   endDate      DateTime         @map("end_date")
   status       StatusActivation @default(pending) @map("status")
   createdAt    DateTime         @default(now()) @map("created_at")
-  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
   clientId     Int              @map("client_id")
-  dates        dates[]
-  client       clients          @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  transactions transactions?
+  dates        Date[]
+  client       Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
 
-  @@index([status])
   @@index([clientId])
 }
 
-model transactions {
+model Transaction {
   id             Int               @id @default(autoincrement())
   subtotal       Float
   shipping       Float
@@ -286,13 +341,13 @@ model transactions {
   total          Float
   status         StatusTransaction @default(pending) @map("status")
   createdAt      DateTime          @default(now()) @map("created_at")
-  updatedAt      DateTime          @default(now()) @updatedAt @map("updated_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
   promoId        Int?              @map("promo_id")
-  subscriptionId Int               @unique @map("subscription_id")
+  subscriptionId Int               @map("subscription_id")
   methodId       Int               @map("method_id")
-  method         methods           @relation(fields: [methodId], references: [id], onDelete: Cascade)
-  promo          promos?           @relation(fields: [promoId], references: [id], onDelete: Cascade)
-  subscription   subscriptions     @relation(fields: [subscriptionId], references: [id])
+  method         Method            @relation(fields: [methodId], references: [id], onDelete: Cascade)
+  promo          Promo?            @relation(fields: [promoId], references: [id], onDelete: Cascade)
+  subscription   Subscription      @relation(fields: [subscriptionId], references: [id])
 
   @@index([status])
   @@index([promoId])
@@ -300,17 +355,17 @@ model transactions {
   @@index([subscriptionId])
 }
 
-model dates {
+model Date {
   id             Int              @id @default(autoincrement())
   deliveryDate   DateTime         @map("delivery_date")
   status         StatusActivation @default(pending) @map("status")
   createdAt      DateTime         @default(now()) @map("created_at")
-  updatedAt      DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
   subscriptionId Int              @map("subscription_id")
   locationId     Int              @map("location_id")
-  location       locations        @relation(fields: [locationId], references: [id])
-  subscription   subscriptions    @relation(fields: [subscriptionId], references: [id])
-  events         events[]
+  location       Location        @relation(fields: [locationId], references: [id])
+  subscription   Subscription    @relation(fields: [subscriptionId], references: [id])
+  events         Event[]
 
   @@unique([deliveryDate, subscriptionId])
   @@index([subscriptionId])
@@ -319,20 +374,20 @@ model dates {
   @@index([status])
 }
 
-model events {
+model Event {
   id        Int              @id @default(autoincrement())
   count     Int              @default(1)
   slot      Slot
   status    StatusActivation @default(pending) @map("status")
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
   dateId    Int              @map("date_id")
   articleId Int              @map("article_id")
-  article   articles         @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  date      dates            @relation(fields: [dateId], references: [id], onDelete: Cascade)
+  article   Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  date      Date            @relation(fields: [dateId], references: [id], onDelete: Cascade)
 
-  commands commands[]
-  
+  commands Command[]
+
   @@unique([articleId, dateId, slot])
   @@index([slot])
   @@index([status])
@@ -340,32 +395,32 @@ model events {
   @@index([articleId])
 }
 
-model commands {
+model Command {
   id           Int           @id @default(autoincrement())
   status       StatusCommand @default(pending) @map("status")
   createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
   eventId      Int           @unique @map("event_id")
   restaurantId Int           @map("restaurant_id")
-  event        events        @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  restaurant   restaurants   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  event        Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
-  deliveries   deliveries[]
+  deliveries Delivery[]
 
   @@index([eventId])
   @@index([restaurantId])
   @@index([status])
 }
 
-model deliveries {
+model Delivery {
   id          Int            @id @default(autoincrement())
   status      StatusDelivery @default(pending) @map("status")
   createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @default(now()) @updatedAt @map("updated_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
   commandId   Int            @unique @map("command_id")
   delivererId Int            @map("deliverer_id")
-  command     commands       @relation(fields: [commandId], references: [id], onDelete: Cascade)
-  deliverer   deliverers     @relation(fields: [delivererId], references: [id], onDelete: Cascade)
+  command     Command       @relation(fields: [commandId], references: [id], onDelete: Cascade)
+  deliverer   Deliverer     @relation(fields: [delivererId], references: [id], onDelete: Cascade)
 
   @@index([commandId])
   @@index([delivererId])

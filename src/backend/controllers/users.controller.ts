@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { prisma } from "@/libs/prisma";
 import UsersModel from "@/backend/models/users.model";
 import { Params } from "@/core/types";
 import { NextRequest } from "next/server";
@@ -17,7 +16,7 @@ const usersController = {
         updatedAt: new Date(),
       };
 
-      const newUser = await prisma.users.create({ data: credentialsUser });
+      const newUser = await usersModel.createUser({ data: credentialsUser });
 
       return new Response(JSON.stringify({user: newUser}), { status: 201 });
 

@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class CategoriesModel extends Base {
   constructor() {
-    super(prisma.categories);
+    super(prisma.category);
   }
 
   createCategory = async (credentials: any) => {
