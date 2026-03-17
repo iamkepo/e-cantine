@@ -6,7 +6,7 @@ import { NotificationType } from "@/enums";
 
 class NotificationsModel extends Base {
   constructor() {
-    super(prisma.notifications);
+    super(prisma.notification);
   }
 
   createNotification = async (credentials: any) => {

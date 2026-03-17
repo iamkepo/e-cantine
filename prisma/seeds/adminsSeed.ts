@@ -18,7 +18,7 @@ const adminsSeed = async (prisma: PrismaClient, adminUser: {firstname: string, l
   });
 
   // Check if admin already exists for this user
-  const existingAdmin = await prisma.admins.findFirst({
+  const existingAdmin = await prisma.admin.findFirst({
     where: { userId: user.id },
   });
 
@@ -28,7 +28,7 @@ const adminsSeed = async (prisma: PrismaClient, adminUser: {firstname: string, l
   }
 
   // If admin doesn't exist, create a new one
-  const admin = await prisma.admins.create({
+  const admin = await prisma.admin.create({
     data: {
       firstname: adminUser.firstname,
       lastname: adminUser.lastname,

@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class DatesModel extends Base {
   constructor() {
-    super(prisma.dates);
+    super(prisma.date);
   }
 
   createDate = async (credentials: any) => {

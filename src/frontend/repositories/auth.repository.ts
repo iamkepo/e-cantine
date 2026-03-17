@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from "yup";
 import AuthService from "@/frontend/services/auth.service";
 
@@ -5,21 +6,23 @@ class AuthRepository extends AuthService {
   constructor() {
     super();
   }
-
   // Form methods
   formLogin() {
     return [
       { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
+      { id: "submit", type: "submit", label: "Login", color: "primary", colSize: "col-12" }
     ]
   }
 
   formRegister() {
     return [
-      { id: "name", type: "text", label: "Nom", required: true, colSize: "col-12" },
-      { id: "phone", type: "text", label: "Téléphone", required: true, colSize: "col-12" },
+      { id: "firstname", type: "text", label: "Prénom", required: true, colSize: "col-12" },
+      { id: "lastname", type: "text", label: "Nom", required: true, colSize: "col-12" },
+      { id: "email", type: "email", label: "Email", required: true, colSize: "col-12" },
       { id: "password", type: "password", label: "Mot de passe", required: true, colSize: "col-12" },
       { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
+      { id: "submit", type: "submit", label: "Register", color: "primary", colSize: "col-12" }
     ]
   }
 
@@ -50,20 +53,29 @@ class AuthRepository extends AuthService {
       { id: "confirmPassword", type: "password", label: "Confirmer le mot de passe", required: true, colSize: "col-12" },
     ]
   }
+  formSocial(color: string) {
+    return [
+      { id: "google", type: "social", label: "Google", value: () => false, colSize: "col-6", icon: "google", color: color, disabled: true },
+      { id: "github", type: "social", label: "Github", value: () => false, colSize: "col-6", icon: "github", color: color, disabled: true },
+      { id: "apple", type: "social", label: "Apple", value: () => false, colSize: "col-6", icon: "apple", color: color, disabled: true },
+      { id: "facebook", type: "social", label: "Facebook", value: () => false, colSize: "col-6", icon: "facebook", color: color, disabled: true },
+    ]
+  }
 
   // Validation schemas
   loginSchema = yup.object({
     email: yup.string().email('Email invalide').required('Email est requis'),
     password: yup.string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .min(5, 'Le mot de passe doit contenir au moins 5 caractères')
       .required('Mot de passe est requis'),
   })
 
   registerSchema = yup.object({
-    name: yup.string().required('Nom est requis'),
-    phone: yup.string().required('Téléphone est requis'),
+    firstname: yup.string().required('Prénom est requis'),
+    lastname: yup.string().required('Nom est requis'),
+    email: yup.string().required('Email est requis'),
     password: yup.string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .min(5, 'Le mot de passe doit contenir au moins 5 caractères')
       .required('Mot de passe est requis'),
     confirmPassword: yup.string()
       .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
@@ -77,10 +89,10 @@ class AuthRepository extends AuthService {
 
   resetPasswordSchema = yup.object({
     oldPassword: yup.string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .min(5, 'Le mot de passe doit contenir au moins 5 caractères')
       .required('Ancien mot de passe est requis'),
     password: yup.string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .min(5, 'Le mot de passe doit contenir au moins 5 caractères')
       .required('Nouveau mot de passe est requis'),
     confirmPassword: yup.string()
       .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
@@ -93,7 +105,7 @@ class AuthRepository extends AuthService {
 
   changePasswordSchema = yup.object({
     password: yup.string()
-      .min(6, 'Le mot de passe doit contenir au moins 6 caractères')
+      .min(5, 'Le mot de passe doit contenir au moins 5 caractères')
       .required('Mot de passe est requis'),
     confirmPassword: yup.string()
       .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')

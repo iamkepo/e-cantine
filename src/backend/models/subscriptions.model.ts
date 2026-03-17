@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class SubscriptionsModel extends Base {
   constructor() {
-    super(prisma.subscriptions);
+    super(prisma.subscription);
   }
 
   createSubscription = async (credentials: any) => {

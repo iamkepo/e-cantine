@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class PreferencesModel extends Base {
   constructor() {
-    super(prisma.preferences);
+    super(prisma.preference);
   }
 
   createPreference = async (credentials: any) => {

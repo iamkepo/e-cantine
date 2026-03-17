@@ -16,7 +16,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   useEffect(() => {
     if (isAuthenticated) {
-      if (user?.role !== 'admin') {
+      if (user?.scope !== 'admin') {
         router.push('/'+lang+'/orders');
       }
     } else {

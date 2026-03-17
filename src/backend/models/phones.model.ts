@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class PhonesModel extends Base {
   constructor() {
-    super(prisma.phones);
+    super(prisma.phone);
   }
 
   createPhone = async (credentials: any) => {

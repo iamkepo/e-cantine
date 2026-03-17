@@ -52,7 +52,7 @@ export const rawArticles2 = [
 const articlesSeed = async (prisma: PrismaClient, articles: {id: number, label: string, img: string, tags: number[], category: number, type: number, description: string, price: number}[]) => {
   await Promise.all(
     articles.map(async (article) => {
-      const createdArticle = await prisma.articles.create({
+      const createdArticle = await prisma.article.create({
         data: {
           name: article.label || "",
           image: article.img || "",

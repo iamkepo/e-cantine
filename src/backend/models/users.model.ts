@@ -6,7 +6,7 @@ import { ParamsQuery } from "@/core/types";
 
 class UsersModel extends Base {
   constructor() {
-    super(prisma.users);
+    super(prisma.user);
   }
 
   cryptPassword = async (password: string) => {
@@ -38,12 +38,31 @@ class UsersModel extends Base {
   }
 
   getUserByEmail = async (email: string) => {
-    const user = await this.getOne('email', email);
+    const include: any = {accounts: {select: {password: true}}};
+    const user = await this.getOne('email', email, include);
     return user;
   }
 
   getUser = async (id: number) => {
     const user = await this.getOne('id', id);
+    return user;
+  }
+  getUserInfo = async (id: number, scope: string) => {
+    const where = { id };
+    const include: any = {};
+    if (scope === 'client') {
+      include.clients = true; 
+    }
+    if (scope === 'admin') {
+      include.admins = true;
+    }
+    if (scope === 'deliverer') {
+      include.deliverers = true;
+    }
+    if (scope === 'restaurant') {
+      include.restaurants = true;
+    }
+    const user = await this.findInfo(where, include);
     return user;
   }
 
@@ -72,8 +91,18 @@ class UsersModel extends Base {
   }
 
   checkPassword = async (password: string, user: any) => {  
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    return isPasswordValid;
+    if (!user.accounts || user.accounts.length === 0) {
+      return false;
+    }
+    
+    // Vérifier si l'un des mots de passe correspond
+    for (const account of user.accounts) {
+      if (account.password && bcrypt.compareSync(password, account.password)) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 }
 

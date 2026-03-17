@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class DeliveriesModel extends Base {
   constructor() {
-    super(prisma.deliveries);
+    super(prisma.delivery);
   }
 
   createDelivery = async (credentials: any) => {

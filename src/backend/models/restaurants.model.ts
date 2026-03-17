@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class RestaurantsModel extends Base {
   constructor() {
-    super(prisma.restaurants);
+    super(prisma.restaurant);
   }
 
   createRestaurant = async (credentials: any) => {

@@ -3,7 +3,7 @@
 
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import { HttpRequestContentType, HttpRequestType } from '../enums';
-import authLocal from "../helpers/authLocal";
+import { clearUser, getRefreshToken, getToken, setToken } from '@/stores/useAuthStore';
 
 export const client = axios.create();
 class AxiosCustom {   
@@ -22,7 +22,7 @@ class AxiosCustom {
   }
 
   private async handleRequest(config: any): Promise<any> {
-    const accessToken = await authLocal.getAccessToken();
+    const accessToken = getToken();
     
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -49,10 +49,10 @@ class AxiosCustom {
       if (originalRequest?._retry !== true && error.config.baseURL != process.env.NEXT_PUBLIC_API_URL+'/auth/refresh') {
 
         originalRequest._retry = true;
-        const refreshToken = await authLocal.getRefreshToken();
+        const refreshToken = getRefreshToken();
         
         if (!refreshToken) {
-          await authLocal.removeTokens()
+          clearUser()
           return Promise.reject(error);
         }
 
@@ -61,11 +61,10 @@ class AxiosCustom {
           client.defaults.headers.common['authorization'] = `Bearer ${response.data.accessToken}`;
           originalRequest.headers['authorization'] = `Bearer ${response.data.accessToken}`;
           
-          await authLocal.setAccessToken(response.data.accessToken);
-          await authLocal.setRefreshToken(response.data.refreshToken)
-        }).catch(async (err: { response: { status: number; }; }) => {
+          setToken(response.data.accessToken);
+        }).catch((err: { response: { status: number; }; }) => {
           if (err?.response?.status == 401) {
-            await authLocal.removeTokens();
+            clearUser();
           }
 
           return Promise.reject(err);

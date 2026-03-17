@@ -10,7 +10,7 @@ export const rawTypes = [
 const typesSeed = async (prisma: PrismaClient, types: string[]) => {
   await Promise.all(
     types.map(async (type) =>
-      await prisma.types.create({
+      await prisma.type.create({
         data: {
           name: type,
         },

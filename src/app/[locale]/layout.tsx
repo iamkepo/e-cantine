@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { toggleTheme, useThemeStore } from "@/stores/themeStore";
 import { translateElements, useLangStore, changeLang } from "@/stores/langStore";
 import { capitalize } from "@/helpers/functions";
@@ -7,6 +8,8 @@ import { useParams, useRouter, usePathname } from "next/navigation";
 import ModalComponent from "@/components/ModalComponent";
 import ToastComponent from "@/components/ToastComponent";
 import NextTopLoader from "nextjs-toploader";
+import AuthRepository from "@/frontend/repositories/auth.repository";
+import { useAuthStore, setUser } from "@/stores/useAuthStore";
 
 export default function LocaleLayout({children}: {children: React.ReactNode}) {
   const { theme } = useThemeStore();
@@ -14,6 +17,9 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
   const params = useParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated } = useAuthStore();
+  const repository = useMemo(() => new AuthRepository(), []);
+
 
   useEffect(() => {
     const rootElement = document.getElementById("root");
@@ -28,6 +34,18 @@ export default function LocaleLayout({children}: {children: React.ReactNode}) {
     changeLang(value);
     router.replace(pathname.replace(`${params?.locale}`, value))
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    repository.fetchCurrentUser().then((response: any) => {
+      console.log(response.data);
+      setUser(response.data);
+    }).catch((error: any) => {
+      console.log(error);
+    });
+    
+    
+  }, [repository, isAuthenticated]);
 
   return (
     <section className="container-fluid vh-100 p-0">

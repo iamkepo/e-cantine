@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class LocationsModel extends Base {
   constructor() {
-    super(prisma.locations);
+    super(prisma.location);
   }
 
   createLocation = async (credentials: any) => {

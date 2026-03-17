@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class ArticlesModel extends Base {
   constructor() {
-    super(prisma.articles);
+    super(prisma.article);
   }
 
   createArticle = async (credentials: any) => {

@@ -5,7 +5,7 @@ import { ParamsQuery } from "@/core/types";
 
 class TransactionsModel extends Base {
   constructor() {
-    super(prisma.transactions);
+    super(prisma.transaction);
   }
 
   createTransaction = async (credentials: any) => {

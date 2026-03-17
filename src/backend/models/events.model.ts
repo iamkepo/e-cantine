@@ -6,7 +6,7 @@ import { Slot } from "@/enums";
 
 class EventsModel extends Base {
   constructor() {
-    super(prisma.events);
+    super(prisma.event);
   }
 
   createEvent = async (credentials: any) => {

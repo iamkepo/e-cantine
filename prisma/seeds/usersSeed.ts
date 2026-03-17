@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const usersSeed = async (prisma: PrismaClient, user: {email: string, username: string, password: string}) => {
   // Check if user already exists
-  const existingUser = await prisma.users.findUnique({
+  const existingUser = await prisma.user.findUnique({
     where: { email: user.email },
   });
 
@@ -14,14 +14,21 @@ const usersSeed = async (prisma: PrismaClient, user: {email: string, username: s
 
   // If user doesn't exist, create a new one
   const hashPassword = await bcrypt.hash(user.password, 10);
-  const newUser = await prisma.users.create({
+  const newUser = await prisma.user.create({
     data: {
       email: user.email,
-      username: user.username,
+      name: user.username,
+      emailVerified: false,
+    },
+  });
+  await prisma.account.create({
+    data: {
+      userId: newUser.id,
+      providerId: "email",
+      accountId: newUser.id,
       password: hashPassword,
     },
   });
-
   console.log("Created user:", newUser.id);
   return newUser;
 };
